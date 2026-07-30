@@ -1,22 +1,12 @@
-# Elysium TTRPG
+# Hello World GitHub Pages Site
 
-A static public webpage for the Elysium TTRPG project.
+A simple public webpage for GitHub Pages.
 
 Expected GitHub Pages URL after Pages is enabled:
 
 ```text
 https://nyanir12332-art.github.io/ElysiumTTRPG/
 ```
-
-## View Locally
-
-Open `index.html` in a browser, or run a simple local server from this folder:
-
-```powershell
-python -m http.server 8000
-```
-
-Then visit `http://localhost:8000`.
 
 ## Publish With GitHub Pages
 
