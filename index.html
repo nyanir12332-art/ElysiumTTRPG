@@ -6,15 +6,223 @@
     <link rel="icon" type="image/png" href="Images/ElysiumIcon.png">
     <title>Elysium</title>
     <style>
+      :root {
+        --black: #030704;
+        --panel: #071108;
+        --green: #39ff88;
+        --green-soft: #94ffc1;
+        --green-dim: #1a8f4c;
+        --line: rgba(57, 255, 136, 0.28);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
       body {
         margin: 0;
-        background: white;
-        color: black;
-        font-family: Arial, sans-serif;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at center, rgba(26, 143, 76, 0.16), transparent 58%),
+          var(--black);
+        color: var(--green-soft);
+        font-family: "Courier New", monospace;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 10;
+        background:
+          linear-gradient(rgba(57, 255, 136, 0.07) 50%, rgba(0, 0, 0, 0.2) 50%),
+          radial-gradient(circle at center, transparent 42%, rgba(0, 0, 0, 0.42) 100%);
+        background-size: 100% 4px, 100% 100%;
+        mix-blend-mode: screen;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 11;
+        border: 18px solid rgba(0, 0, 0, 0.34);
+        box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.9);
+      }
+
+      .screen {
+        min-height: 100vh;
+        padding: clamp(18px, 4vw, 44px);
+      }
+
+      header {
+        align-items: end;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 20px;
+        text-shadow: 0 0 10px rgba(57, 255, 136, 0.74);
+      }
+
+      .brand h1 {
+        color: var(--green);
+        font-size: clamp(2rem, 6vw, 4.7rem);
+        font-weight: 400;
+        letter-spacing: 0;
+        line-height: 0.95;
+        margin: 0;
+        text-transform: uppercase;
+      }
+
+      .brand p,
+      nav a,
+      .status {
+        color: var(--green-soft);
+        font-size: 0.95rem;
+        letter-spacing: 0;
+        margin: 10px 0 0;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+
+      nav {
+        display: flex;
+        gap: 22px;
+      }
+
+      main {
+        padding-top: clamp(38px, 8vw, 84px);
+      }
+
+      .hero {
+        max-width: 980px;
+      }
+
+      .prompt {
+        color: var(--green);
+        font-size: clamp(2.1rem, 7vw, 5.6rem);
+        font-weight: 400;
+        line-height: 1.05;
+        margin: 0 0 24px;
+        text-shadow:
+          0 0 8px rgba(57, 255, 136, 0.8),
+          0 0 26px rgba(57, 255, 136, 0.35);
+        text-transform: uppercase;
+      }
+
+      .intro {
+        color: var(--green-soft);
+        font-size: clamp(1rem, 2vw, 1.35rem);
+        line-height: 1.65;
+        max-width: 780px;
+        margin: 0 0 52px;
+      }
+
+      .terminal-line {
+        border-left: 3px solid var(--green);
+        color: var(--green);
+        margin-bottom: 34px;
+        padding-left: 16px;
+        text-transform: uppercase;
+      }
+
+      .categories {
+        border-top: 1px solid var(--line);
+        display: grid;
+        gap: 18px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        padding-top: 26px;
+      }
+
+      .category {
+        background: rgba(7, 17, 8, 0.82);
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        color: var(--green);
+        display: grid;
+        min-height: 150px;
+        padding: 22px;
+        place-items: center;
+        position: relative;
+        text-align: center;
+        text-decoration: none;
+        text-shadow: 0 0 12px rgba(57, 255, 136, 0.65);
+        text-transform: uppercase;
+      }
+
+      .category::before {
+        content: "> ";
+        color: var(--green-soft);
+      }
+
+      .category:hover,
+      .category:focus-visible {
+        background: rgba(26, 143, 76, 0.2);
+        border-color: var(--green);
+        outline: none;
+      }
+
+      footer {
+        border-top: 1px solid var(--line);
+        color: var(--green-dim);
+        margin-top: clamp(44px, 8vw, 92px);
+        padding-top: 18px;
+        text-transform: uppercase;
+      }
+
+      @media (max-width: 760px) {
+        header {
+          align-items: start;
+          flex-direction: column;
+          gap: 18px;
+        }
+
+        nav {
+          flex-wrap: wrap;
+        }
+
+        .categories {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
   <body>
-    <p>hello world</p>
+    <div class="screen">
+      <header>
+        <div class="brand">
+          <h1>Elysium</h1>
+          <p>community archive</p>
+        </div>
+        <nav aria-label="Primary navigation">
+          <a href="#home">Home</a>
+          <a href="#categories">Index</a>
+          <a href="#status">Status</a>
+        </nav>
+      </header>
+
+      <main id="home">
+        <section class="hero" aria-labelledby="page-title">
+          <p class="terminal-line">signal acquired</p>
+          <h2 class="prompt" id="page-title">Welcome to Elysium</h2>
+          <p class="intro">
+            A black box of rules, records, and transmissions. Select a category below to begin browsing the archive.
+          </p>
+        </section>
+
+        <section class="categories" id="categories" aria-label="Categories">
+          <a class="category" href="#">SAMPLE</a>
+          <a class="category" href="#">SAMPLE</a>
+          <a class="category" href="#">SAMPLE</a>
+        </section>
+      </main>
+
+      <footer id="status">
+        <p class="status">crt display mode // standby</p>
+      </footer>
+    </div>
   </body>
 </html>
