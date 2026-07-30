@@ -114,6 +114,7 @@
       }
 
       .class-list {
+        align-items: start;
         border-top: 1px solid var(--line);
         display: grid;
         gap: 18px;
@@ -124,6 +125,7 @@
       }
 
       .class-entry {
+        align-self: start;
         background: rgba(7, 17, 8, 0.82);
         border: 1px solid var(--line);
         border-radius: 3px;
@@ -167,10 +169,13 @@
       .class-context {
         border-bottom: 1px solid var(--line);
         color: var(--green-soft);
-        display: none;
+        display: -webkit-box;
         font-style: italic;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
         line-height: 1.6;
         margin: 0 0 14px;
+        overflow: hidden;
         padding-bottom: 14px;
         text-transform: none;
       }
@@ -182,9 +187,14 @@
         padding: 0;
       }
 
-      .class-entry.open .class-context,
       .class-entry.open ul {
         display: block;
+      }
+
+      .class-entry.open .class-context {
+        display: block;
+        -webkit-line-clamp: unset;
+        overflow: visible;
       }
 
       .class-entry li {
