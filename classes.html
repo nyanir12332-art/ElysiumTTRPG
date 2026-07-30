@@ -64,7 +64,7 @@
       }
 
       .topbar {
-        align-items: center;
+        align-items: baseline;
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
@@ -75,7 +75,7 @@
         border: 1px solid transparent;
         color: var(--green-soft);
         display: inline-flex;
-        min-height: 42px;
+        min-height: 34px;
         padding: 8px 10px;
         text-decoration: none;
         text-shadow: 0 0 10px rgba(57, 255, 136, 0.58);
@@ -83,8 +83,11 @@
       }
 
       .topbar .home-link {
+        border: 0;
         color: var(--green);
-        font-size: 1.35rem;
+        font-size: 1.65rem;
+        min-height: auto;
+        padding: 0 4px 0 0;
       }
 
       .topbar a:hover,
@@ -92,6 +95,11 @@
         border-color: var(--line);
         color: var(--green);
         outline: none;
+      }
+
+      .topbar .home-link:hover,
+      .topbar .home-link:focus-visible {
+        border-color: transparent;
       }
 
       .topbar .active {
