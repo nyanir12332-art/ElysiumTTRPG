@@ -127,22 +127,47 @@
         background: rgba(7, 17, 8, 0.82);
         border: 1px solid var(--line);
         border-radius: 3px;
+        cursor: pointer;
         min-height: 150px;
         padding: 22px;
         text-shadow: 0 0 12px rgba(57, 255, 136, 0.55);
       }
 
+      .class-entry.open {
+        background: rgba(26, 143, 76, 0.12);
+        border-color: var(--green);
+      }
+
+      .class-entry:focus-visible {
+        border-color: var(--green);
+        outline: none;
+      }
+
       .class-entry h3 {
+        align-items: center;
         color: var(--green);
+        display: flex;
         font-size: clamp(1.35rem, 2.4vw, 2.05rem);
         font-weight: 400;
+        justify-content: space-between;
         margin: 0 0 14px;
         text-transform: uppercase;
+      }
+
+      .class-entry h3::after {
+        content: "+";
+        color: var(--green-soft);
+        font-size: 1.35rem;
+      }
+
+      .class-entry.open h3::after {
+        content: "-";
       }
 
       .class-context {
         border-bottom: 1px solid var(--line);
         color: var(--green-soft);
+        display: none;
         font-style: italic;
         line-height: 1.6;
         margin: 0 0 14px;
@@ -151,9 +176,15 @@
       }
 
       .class-entry ul {
+        display: none;
         list-style: none;
         margin: 0;
         padding: 0;
+      }
+
+      .class-entry.open .class-context,
+      .class-entry.open ul {
+        display: block;
       }
 
       .class-entry li {
@@ -458,5 +489,25 @@
         </ul>
       </main>
     </div>
+    <script>
+      document.querySelectorAll(".class-entry").forEach((entry) => {
+        entry.tabIndex = 0;
+        entry.setAttribute("role", "button");
+        entry.setAttribute("aria-expanded", "false");
+
+        const toggleEntry = () => {
+          const isOpen = entry.classList.toggle("open");
+          entry.setAttribute("aria-expanded", String(isOpen));
+        };
+
+        entry.addEventListener("click", toggleEntry);
+        entry.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            toggleEntry();
+          }
+        });
+      });
+    </script>
   </body>
 </html>
