@@ -175,8 +175,9 @@
         -webkit-line-clamp: 3;
         line-height: 1.6;
         margin: 0 0 14px;
+        max-height: 4.8em;
         overflow: hidden;
-        padding-bottom: 14px;
+        padding-bottom: 0;
         text-transform: none;
       }
 
@@ -195,7 +196,9 @@
         border-bottom: 1px solid var(--line);
         display: block;
         -webkit-line-clamp: unset;
+        max-height: none;
         overflow: visible;
+        padding-bottom: 14px;
       }
 
       .class-entry li {
