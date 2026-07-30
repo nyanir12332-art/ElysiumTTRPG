@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="Images/ElysiumIcon.png">
+    <title>Classes - Fable</title>
+    <style>
+      :root {
+        --black: #030704;
+        --panel: #071108;
+        --green: #39ff88;
+        --green-soft: #94ffc1;
+        --green-dim: #1a8f4c;
+        --line: rgba(57, 255, 136, 0.28);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at center, rgba(26, 143, 76, 0.16), transparent 58%),
+          var(--black);
+        color: var(--green-soft);
+        font-family: "Courier New", monospace;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 10;
+        background:
+          linear-gradient(rgba(57, 255, 136, 0.07) 50%, rgba(0, 0, 0, 0.2) 50%),
+          radial-gradient(circle at center, transparent 42%, rgba(0, 0, 0, 0.42) 100%);
+        background-size: 100% 4px, 100% 100%;
+        mix-blend-mode: screen;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 11;
+        box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.9);
+      }
+
+      .screen {
+        min-height: 100vh;
+        padding: clamp(18px, 4vw, 44px);
+      }
+
+      header {
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 20px;
+        text-shadow: 0 0 10px rgba(57, 255, 136, 0.74);
+      }
+
+      .topbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .topbar a {
+        border: 1px solid transparent;
+        color: var(--green-soft);
+        padding: 8px 10px;
+        text-decoration: none;
+        text-shadow: 0 0 10px rgba(57, 255, 136, 0.58);
+        text-transform: uppercase;
+      }
+
+      .topbar a:hover,
+      .topbar a:focus-visible {
+        border-color: var(--line);
+        color: var(--green);
+        outline: none;
+      }
+
+      .topbar .active {
+        background: rgba(57, 255, 136, 0.14);
+        border-color: var(--green);
+        color: var(--green);
+        box-shadow: inset 0 0 18px rgba(57, 255, 136, 0.12);
+      }
+
+      main {
+        padding-top: clamp(22px, 5vw, 52px);
+      }
+
+      .prompt {
+        color: var(--green);
+        font-size: clamp(2.1rem, 7vw, 5.6rem);
+        font-weight: 400;
+        line-height: 1.05;
+        margin: 0 0 28px;
+        text-shadow:
+          0 0 8px rgba(57, 255, 136, 0.8),
+          0 0 26px rgba(57, 255, 136, 0.35);
+        text-transform: uppercase;
+      }
+
+      .class-list {
+        border-top: 1px solid var(--line);
+        display: grid;
+        gap: 18px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        list-style: none;
+        margin: 0;
+        padding: 26px 0 0;
+      }
+
+      .class-entry {
+        background: rgba(7, 17, 8, 0.82);
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        min-height: 150px;
+        padding: 22px;
+        text-shadow: 0 0 12px rgba(57, 255, 136, 0.55);
+      }
+
+      .class-entry h3 {
+        color: var(--green);
+        font-size: clamp(1.35rem, 2.4vw, 2.05rem);
+        font-weight: 400;
+        margin: 0 0 14px;
+        text-transform: uppercase;
+      }
+
+      .class-entry ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .class-entry li {
+        color: var(--green-soft);
+        line-height: 1.6;
+        text-transform: uppercase;
+      }
+
+      .class-entry li::before {
+        content: "- ";
+        color: var(--green-dim);
+      }
+
+      @media (max-width: 900px) {
+        .class-list {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 620px) {
+        .class-list {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="screen">
+      <header>
+        <nav class="topbar" aria-label="Section navigation">
+          <a href="index.html">Fable</a>
+          <a class="active" href="classes.html" aria-current="page">Classes</a>
+          <a href="#">Races</a>
+          <a href="#">Backgrounds</a>
+          <a href="#">Spells</a>
+          <a href="#">Items</a>
+          <a href="#">Feats</a>
+          <a href="#">Systems</a>
+          <a href="#">Lore</a>
+          <a href="#">Records</a>
+        </nav>
+      </header>
+
+      <main>
+        <h1 class="prompt">Classes</h1>
+        <ul class="class-list">
+          <li class="class-entry">
+            <h3>Artificer</h3>
+            <ul>
+              <li>Alchemist</li>
+              <li>Armorer</li>
+              <li>Artillerist</li>
+              <li>Battle Smith</li>
+              <li>Infusions</li>
+            </ul>
+          </li>
+          <li class="class-entry">
+            <h3>Barbarian</h3>
+          </li>
+          <li class="class-entry">
+            <h3>Bard</h3>
+          </li>
+          <li class="class-entry">
+            <h3>Blood Hunter</h3>
+          </li>
+          <li class="class-entry">
+            <h3>Cleric</h3>
+          </li>
+          <li class="class-entry">
+            <h3>Druid</h3>
+          </li>
+          <li class="class-entry">
+            <h3>Fighter</h3>
+          </li>
+          <li class="class-entry">
+            <h3>Monk</h3>
+          </li>
+          <li class="class-entry">
+            <h3>Mystic</h3>
+          </li>
+          <li class="class-entry">
+            <h3>Paladin</h3>
+          </li>
+          <li class="class-entry">
+            <h3>Ranger</h3>
+          </li>
+          <li class="class-entry">
+            <h3>Rogue</h3>
+          </li>
+          <li class="class-entry">
+            <h3>Sorcerer</h3>
+          </li>
+          <li class="class-entry">
+            <h3>Warlock</h3>
+          </li>
+          <li class="class-entry">
+            <h3>Wizard</h3>
+          </li>
+        </ul>
+      </main>
+    </div>
+  </body>
+</html>
