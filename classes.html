@@ -224,6 +224,16 @@
         color: var(--green-dim);
       }
 
+      .class-title-link {
+        color: var(--green);
+        text-decoration: none;
+      }
+
+      .class-title-link:hover,
+      .class-title-link:focus-visible {
+        text-decoration: underline;
+      }
+
       @media (max-width: 900px) {
         .class-list {
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -258,7 +268,7 @@
         <h1 class="prompt">Classes</h1>
         <ul class="class-list">
           <li class="class-entry">
-            <h3>Artificer</h3>
+            <h3><a class="class-title-link" href="artificer.html">Artificer</a></h3>
             <p class="class-context">Makers of magic-infused objects, artificers are defined by their inventive nature. They see magic as a complex system waiting to be decoded and controlled. Instead of ephemeral spells, they seek to craft durable, useful, marvelous magical items.</p>
             <ul>
               <li>Subclass: Alchemist</li>
@@ -527,6 +537,11 @@
         };
 
         entry.addEventListener("click", toggleEntry);
+        entry.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", (event) => {
+            event.stopPropagation();
+          });
+        });
         entry.addEventListener("keydown", (event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
