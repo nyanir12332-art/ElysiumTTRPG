@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="Images/ElysiumIcon.png">
+    <title>Artificer Infusions - Fable</title>
+    <style>
+      :root {
+        --black: #030704;
+        --green: #39ff88;
+        --green-soft: #94ffc1;
+        --line: rgba(57, 255, 136, 0.28);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scrollbar-width: none;
+      }
+
+      html::-webkit-scrollbar,
+      body::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+
+      .crt-scrollbar {
+        background: #020503;
+        border-left: 1px solid var(--line);
+        bottom: 0;
+        pointer-events: none;
+        position: fixed;
+        right: 0;
+        top: 0;
+        width: 14px;
+        z-index: 20;
+      }
+
+      .crt-scrollbar-button {
+        color: var(--green-soft);
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        height: 16px;
+        left: 0;
+        line-height: 16px;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+      }
+
+      .crt-scrollbar-button.up {
+        top: 0;
+      }
+
+      .crt-scrollbar-button.down {
+        bottom: 0;
+      }
+
+      .crt-scrollbar-thumb {
+        background: #145f35;
+        border-radius: 0;
+        left: 2px;
+        min-height: 42px;
+        position: absolute;
+        right: 2px;
+        top: 0;
+      }
+
+      .crt-scrollbar-thumb.active {
+        background: #1a8f4c;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at center, rgba(26, 143, 76, 0.16), transparent 58%),
+          var(--black);
+        color: var(--green-soft);
+        font-family: "Courier New", monospace;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 10;
+        background:
+          linear-gradient(rgba(57, 255, 136, 0.07) 50%, rgba(0, 0, 0, 0.2) 50%),
+          radial-gradient(circle at center, transparent 42%, rgba(0, 0, 0, 0.42) 100%);
+        background-size: 100% 4px, 100% 100%;
+        mix-blend-mode: screen;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 11;
+        box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.9);
+      }
+
+      .screen {
+        min-height: 100vh;
+        padding: clamp(18px, 4vw, 44px);
+      }
+
+      header {
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 20px;
+        text-shadow: 0 0 10px rgba(57, 255, 136, 0.74);
+      }
+
+      .topbar {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .topbar a {
+        align-items: center;
+        border: 1px solid transparent;
+        color: var(--green-soft);
+        display: inline-flex;
+        min-height: 34px;
+        padding: 8px 10px;
+        text-decoration: none;
+        text-shadow: 0 0 10px rgba(57, 255, 136, 0.58);
+        text-transform: uppercase;
+      }
+
+      .topbar .home-link {
+        border: 1px solid #030704;
+        color: var(--green);
+        font-size: 1.65rem;
+        min-height: 34px;
+        padding: 0 4px 0 0;
+      }
+
+      .topbar a:hover,
+      .topbar a:focus-visible {
+        border-color: var(--line);
+        color: var(--green);
+        outline: none;
+      }
+
+      .topbar .home-link:hover,
+      .topbar .home-link:focus-visible {
+        border-color: transparent;
+      }
+
+      .topbar .active {
+        background: rgba(57, 255, 136, 0.14);
+        border-color: var(--green);
+        color: var(--green);
+        box-shadow: inset 0 0 18px rgba(57, 255, 136, 0.12);
+      }
+
+      main {
+        padding-top: clamp(22px, 5vw, 52px);
+      }
+
+      .prompt {
+        color: var(--green);
+        font-size: clamp(2.1rem, 7vw, 5.6rem);
+        font-weight: 400;
+        line-height: 1.05;
+        margin: 0 0 28px;
+        text-shadow:
+          0 0 8px rgba(57, 255, 136, 0.8),
+          0 0 26px rgba(57, 255, 136, 0.35);
+        text-transform: uppercase;
+      }
+
+      .subclass-content {
+        border-top: 1px solid var(--line);
+        padding-top: 24px;
+      }
+
+      .subclass-content h2 {
+        color: var(--green);
+        font-size: clamp(1.3rem, 3vw, 2rem);
+        font-weight: 400;
+        margin: 28px 0 14px;
+        text-shadow: 0 0 10px rgba(57, 255, 136, 0.62);
+        text-transform: uppercase;
+      }
+
+      .subclass-content p,
+      .subclass-content li {
+        color: var(--green-soft);
+        line-height: 1.65;
+      }
+
+      .subclass-content p {
+        margin: 0 0 16px;
+      }
+
+      .subclass-content ul {
+        margin: 12px 0 20px 24px;
+        padding: 0;
+      }
+
+      .subclass-content li {
+        margin-bottom: 10px;
+      }
+
+      .subclass-content strong,
+      .subclass-content a {
+        color: var(--green);
+        font-weight: 400;
+      }
+
+      .subclass-content a {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .subclass-intro {
+        font-style: italic;
+        font-weight: 700;
+      }
+
+      .infusion-meta {
+        color: var(--green);
+        font-style: italic;
+        font-weight: 700;
+      }
+
+      .table-wrap {
+        border: 1px solid var(--line);
+        box-shadow: inset 0 0 28px rgba(57, 255, 136, 0.08);
+        margin: 16px 0 28px;
+        overflow-x: auto;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      caption,
+      .stat-section {
+        border-bottom: 1px solid var(--line);
+        color: var(--green);
+        font-size: 1.15rem;
+        padding: 12px;
+        text-align: left;
+        text-shadow: 0 0 10px rgba(57, 255, 136, 0.62);
+        text-transform: uppercase;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid var(--line);
+        padding: 12px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--green);
+        font-weight: 400;
+        text-transform: uppercase;
+      }
+
+      td {
+        color: var(--green-soft);
+      }
+
+      tbody tr:hover {
+        background: rgba(57, 255, 136, 0.07);
+      }
+
+      .stat-block {
+        border-left: 0;
+        border-right: 0;
+      }
+
+      .stat-block tbody tr:hover {
+        background: transparent;
+      }
+
+      .stat-block tbody tr:hover > * {
+        background: transparent;
+      }
+
+      .stat-block tbody tr.ability-header:hover > *,
+      .stat-block tbody tr:hover > .stat-section {
+        background: rgba(57, 255, 136, 0.14);
+      }
+
+      .stat-block caption,
+      .stat-block .stat-section,
+      .stat-block .ability-header {
+        background: rgba(57, 255, 136, 0.14);
+        border-left: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+      }
+
+      .stat-block td,
+      .stat-block th {
+        border-left: 0;
+        border-right: 0;
+      }
+
+      .abilities th,
+      .abilities td {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="screen">
+      <header>
+        <nav class="topbar" aria-label="Section navigation">
+          <a class="home-link" href="index.html">Fable</a>
+          <a class="active" href="classes.html">Classes</a>
+          <a href="#">Races</a>
+          <a href="#">Backgrounds</a>
+          <a href="#">Spells</a>
+          <a href="#">Items</a>
+          <a href="#">Feats</a>
+          <a href="#">Systems</a>
+          <a href="#">Lore</a>
+          <a href="#">Records</a>
+        </nav>
+      </header>
+
+      <main>
+        <h1 class="prompt">Artificer Infusions</h1>
+        <section class="subclass-content" aria-label="Artificer infusion rules">
+          <p class="subclass-intro">Artificer infusions are extraordinary processes that rapidly turn a nonmagical object into a magic item. The description of each of the following infusions details the type of object that can receive it, along with whether the resulting magic item requires attunement.</p>
+          <p class="subclass-intro">Some infusions specify a minimum artificer level. You can't learn such an infusion until you are at least that level.</p>
+          <p class="subclass-intro">Unless an infusion's description says otherwise, you can't learn an infusion more than once.</p>
+
+          <h2>Arcane Propulsion Armor</h2>
+          <p class="infusion-meta">Prerequisite: 14th-level artificer<br>Item: A suit of armor (requires attunement)</p>
+          <p>The wearer of this armor gains these benefits:</p>
+          <ul>
+            <li>The wearer's walking speed increases by 5 feet.</li>
+            <li>The armor includes gauntlets, each of which is a magic melee weapon that can be wielded only when the hand is holding nothing. The wearer is proficient with the gauntlets, and each one deals 1d8 force damage on a hit and has the thrown property, with a normal range of 20 feet and a long range of 60 feet. When thrown, the gauntlet detaches and flies at the attack's target, then immediately returns to the wearer and reattaches.</li>
+            <li>The armor can't be removed against the wearer's will.</li>
+            <li>If the wearer is missing any limbs, the armor replaces those limbs - hands, arms, feet, legs, or similar appendages. The replacements function identically to the body parts they replace.</li>
+          </ul>
+
+          <h2>Armor of Magical Strength</h2>
+          <p class="infusion-meta">Item: A suit of armor (requires attunement)</p>
+          <p>This armor has 6 charges. The wearer can expend the armor's charges in the following ways:</p>
+          <ul>
+            <li>When the wearer makes a Strength check or a Strength saving throw, it can expend 1 charge to add a bonus to the roll equal to its Intelligence modifier.</li>
+            <li>If the creature would be knocked prone, it can use its reaction to expend 1 charge to avoid being knocked prone.</li>
+          </ul>
+          <p>The armor regains 1d6 expended charges daily at dawn.</p>
+
+          <h2>Armor of Tools</h2>
+          <p class="infusion-meta">Item: A suit of armor</p>
+          <p>As an action, a creature wearing this infused armor can integrate into it artisan's tools or thieves' tools. The tools remain integrated in the armor for 8 hours or until the wearer removes the tools as an action. The armor can have only one tool integrated at a time. The wearer can add its Intelligence modifier to any ability checks it makes with the integrated tool. The wearer must have a hand free to use the tool.</p>
+
+          <h2>Boots of the Winding Path</h2>
+          <p class="infusion-meta">Prerequisite: 6th-level artificer<br>Item: A pair of boots (requires attunement)</p>
+          <p>While wearing these boots, a creature can teleport up to 15 feet as a bonus action to an unoccupied space the creature can see. The creature must have occupied that space at some point during the current turn.</p>
+
+          <h2>Enhanced Arcane Focus</h2>
+          <p class="infusion-meta">Item: A rod, staff or wand (requires attunement)</p>
+          <p>While holding this item, a creature gains +1 bonus to spell attack rolls. In addition, the creature ignores half cover when making a spell attack.</p>
+          <p>The bonus increases to +2 when you reach 10th level in this class.</p>
+
+          <h2>Enhanced Defense</h2>
+          <p class="infusion-meta">Item: A suit of armor or a shield</p>
+          <p>A creature gains a +1 bonus to Armor Class while wearing (armor) or wielding (shield) the infused item.</p>
+          <p>The bonus increases to +2 when you reach 10th level in this class.</p>
+
+          <h2>Enhanced Weapon</h2>
+          <p class="infusion-meta">Item: A simple or martial weapon</p>
+          <p>This magic weapon grants a +1 bonus to attack and damage rolls made with it.</p>
+          <p>The bonus increases to +2 when you reach 10th level in this class.</p>
+
+          <h2>Helm of Awareness</h2>
+          <p class="infusion-meta">Prerequisite: 10th-level artificer<br>Item: A helmet (requires attunement)</p>
+          <p>While wearing this helmet, a creature has advantage on initiative rolls. In addition, the wearer can't be surprised, provided it isn't incapacitated.</p>
+
+          <h2>Homunculus Servant</h2>
+          <p class="infusion-meta">Item: A gem or crystal worth at least 100 gp</p>
+          <p>You learn intricate methods for magically creating a special homunculus that serves you. The item you infuse serves as the creature's heart, around which the creature's body instantly forms.</p>
+          <p>You determine the homunculus's appearance. Some artificers prefer mechanical-looking birds, whereas some like winged vials or miniature, animate cauldrons.</p>
+          <p>The homunculus is friendly to you and your companions, and it obeys your commands. See this creature's game statistics in the Homunculus Servant stat block, which uses your proficiency bonus (PB) in several places.</p>
+          <p>In combat, the homunculus shares your initiative count, but it takes its turn immediately after yours. It can move and use its reaction on its own, but the only action it takes on its turn is the Dodge action, unless you take a bonus action on your turn to command it to take another action. That action can be one in its stat block or some other action. If you are incapacitated, the homunculus can take any action of its choice, not just Dodge.</p>
+          <p>The homunculus regains 2d6 hit points if the mending spell is cast on it. If you or the homunculus dies, it vanishes, leaving its heart in its space.</p>
+
+          <div class="table-wrap stat-block">
+            <table>
+              <caption>Homunculus Servant</caption>
+              <tbody>
+                <tr><td colspan="6"><em>Tiny construct</em></td></tr>
+                <tr><td colspan="6"><strong>Armor Class:</strong> 13 (natural armor)</td></tr>
+                <tr><td colspan="6"><strong>Hit Points:</strong> 1 + your Intelligence modifier + your artificer level (the homunculus has a number of Hit Dice [d4s] equal to your artificer level)</td></tr>
+                <tr><td colspan="6"><strong>Speed:</strong> 20 ft., fly 30 ft.</td></tr>
+                <tr class="abilities ability-header"><th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th></tr>
+                <tr class="abilities"><td>4 (-3)</td><td>15 (+2)</td><td>12 (+1)</td><td>10 (+0)</td><td>10 (+0)</td><td>7 (-2)</td></tr>
+                <tr><td colspan="6"><strong>Saving Throws:</strong> Dex +2 plus PB</td></tr>
+                <tr><td colspan="6"><strong>Skills:</strong> Perception +0 plus PB x 2, Stealth +2 plus PB</td></tr>
+                <tr><td colspan="6"><strong>Damage Immunities:</strong> poison</td></tr>
+                <tr><td colspan="6"><strong>Condition Immunities:</strong> exhaustion, poisoned</td></tr>
+                <tr><td colspan="6"><strong>Senses:</strong> darkvision 60 ft., passive Perception 10 + (PB x 2)</td></tr>
+                <tr><td colspan="6"><strong>Languages:</strong> understands the languages you speak</td></tr>
+                <tr><td colspan="6"><strong>Challenge:</strong> -</td></tr>
+                <tr><td colspan="6"><strong>Proficiency Bonus (PB):</strong> equals your bonus</td></tr>
+                <tr><td colspan="6"><strong><em>Evasion.</em></strong> If the homunculus is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it fails. It can't use this trait if it's incapacitated.</td></tr>
+                <tr><th colspan="6" class="stat-section">Actions</th></tr>
+                <tr><td colspan="6"><strong><em>Force Strike.</em></strong> <em>Ranged Weapon Attack:</em> your spell attack modifier to hit, range 30 ft., one target you can see. <em>Hit:</em> 1d4 + PB force damage.</td></tr>
+                <tr><th colspan="6" class="stat-section">Reactions</th></tr>
+                <tr><td colspan="6"><strong><em>Channel Magic.</em></strong> The homunculus delivers a spell you cast that has a range of touch. The homunculus must be within 120 feet of you.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>Mind Sharpener</h2>
+          <p class="infusion-meta">Item: A suit of armor or robes</p>
+          <p>The infused item can send a jolt to the wearer to refocus their mind. The item has 4 charges. When the wearer fails a Constitution saving throw to maintain concentration on a spell, the wearer can use its reaction to expend 1 of the item's charges to succeed instead. The item regains 1d4 expended charges daily at dawn.</p>
+
+          <h2>Radiant Weapon</h2>
+          <p class="infusion-meta">Prerequisite: 6th-level artificer<br>Item: A simple or martial weapon (requires attunement)</p>
+          <p>This magic weapon grants a +1 bonus to attack and damage rolls made with it. While holding it, the wielder can take a bonus action to cause it to shed bright light in a 30-foot radius and dim light for an additional 30 feet. The wielder can extinguish the light as a bonus action.</p>
+          <p>The weapon has 4 charges. As a reaction immediately after being hit by an attack, the wielder can expend 1 charge and cause the attacker to be blinded until the end of the attacker's next turn, unless the attacker succeeds on a Constitution saving throw against your spell save DC. The weapon regains 1d4 expended charges daily at dawn.</p>
+
+          <h2>Repeating Shot</h2>
+          <p class="infusion-meta">Item: A simple or martial weapon with the ammunition property (requires attunement)</p>
+          <p>This magic weapon grants a +1 bonus to attack and damage rolls made with it when it's used to make a ranged attack, and it ignores the loading property if it has it.</p>
+          <p>If the weapon lacks ammunition, it produces its own, automatically creating one piece of magic ammunition when the wielder makes a ranged attack with it. The ammunition created by the weapon vanishes the instant after it hits or misses a target.</p>
+
+          <h2>Replicate Magic Item</h2>
+          <p>Using this infusion, you replicate a particular magic item. You can learn this infusion multiple times; each time you do so, choose a magic item that you can make with it, picking from the Replicable Items tables. A table's title tells you the level you must be in the class to choose an item from the table. Alternatively, you can choose the magic item from among the common magic items in the game, not including potions or scrolls.</p>
+          <p>In the tables, an item's entry tells you whether the item requires attunement. See the item's description in the <em>Dungeon Master's Guide</em> for more information about it, including the type of object required for its making.</p>
+          
+          <div class="table-wrap">
+            <table>
+              <caption>Replicable Magic Items (2nd-Level Artificer)</caption>
+              <thead><tr><th>Magic Item</th><th>Attunement</th></tr></thead>
+              <tbody>
+                <tr><td><a href="#">Alchemy Jug</a></td><td>No</td></tr>
+                <tr><td><a href="#">Bag of Holding</a></td><td>No</td></tr>
+                <tr><td><a href="#">Cap of Water Breathing</a></td><td>No</td></tr>
+                <tr><td><a href="#">Goggles of Night</a></td><td>No</td></tr>
+                <tr><td><a href="#">Rope of Climbing</a></td><td>No</td></tr>
+                <tr><td><a href="#">Sending Stones</a></td><td>No</td></tr>
+                <tr><td><a href="#">Wand of Magic Detection</a></td><td>No</td></tr>
+                <tr><td><a href="#">Wand of Secrets</a></td><td>No</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <caption>Replicable Magic Items (6th-Level Artificer)</caption>
+              <thead><tr><th>Magic Item</th><th>Attunement</th></tr></thead>
+              <tbody>
+                <tr><td><a href="#">Boots of Elvenkind</a></td><td>No</td></tr>
+                <tr><td><a href="#">Cloak of Elvenkind</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Cloak of the Manta Ray</a></td><td>No</td></tr>
+                <tr><td><a href="#">Eyes of Charming</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Gloves of Thievery</a></td><td>No</td></tr>
+                <tr><td><a href="#">Lantern of Revealing</a></td><td>No</td></tr>
+                <tr><td><a href="#">Pipes of Haunting</a></td><td>No</td></tr>
+                <tr><td><a href="#">Ring of Water Walking</a></td><td>No</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <caption>Replicable Magic Items (10th-Level Artificer)</caption>
+              <thead><tr><th>Magic Item</th><th>Attunement</th></tr></thead>
+              <tbody>
+                <tr><td><a href="#">Boots of Striding and Springing</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Boots of the Winterlands</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Bracers of Archery</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Brooch of Shielding</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Cloak of Protection</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Eyes of the Eagle</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Gauntlets of Ogre Power</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Gloves of Missile Snaring</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Gloves of Swimming and Climbing</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Hat of Disguise</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Headband of Intellect</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Helm of Telepathy</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Medallion of Thoughts</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Necklace of Adaptation</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Periapt of Wound Closure</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Pipes of the Sewers</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Quiver of Ehlonna</a></td><td>No</td></tr>
+                <tr><td><a href="#">Ring of Jumping</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Ring of Mind Shielding</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Slippers of Spider Climbing</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Ventilating Lungs</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Winged Boots</a></td><td>Yes</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <caption>Replicable Magic Items (14th-Level Artificer)</caption>
+              <thead><tr><th>Magic Item</th><th>Attunement</th></tr></thead>
+              <tbody>
+                <tr><td><a href="#">Amulet of Health</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Arcane Propulsion Arm</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Belt of Hill Giant Strength</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Boots of Levitation</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Boots of Speed</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Bracers of Defense</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Cloak of the Bat</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Dimensional Shackles</a></td><td>No</td></tr>
+                <tr><td><a href="#">Gem of Seeing</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Horn of Blasting</a></td><td>No</td></tr>
+                <tr><td><a href="#">Ring of Free Action</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Ring of Protection</a></td><td>Yes</td></tr>
+                <tr><td><a href="#">Ring of the Ram</a></td><td>Yes</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>Repulsion Shield</h2>
+          <p class="infusion-meta">Prerequisite: 6th-level artificer<br>Item: A shield (requires attunement)</p>
+          <p>A creature gains a +1 bonus to Armor Class while wielding this shield.</p>
+          <p>The shield has 4 charges. While holding it, the wielder can use a reaction immediately after being hit by a melee attack to expend 1 of the shield's charges and push the attacker up to 15 feet away. The shield regains 1d4 expended charges daily at dawn.</p>
+
+          <h2>Resistant Armor</h2>
+          <p class="infusion-meta">Prerequisite: 6th-level artificer<br>Item: A suit of armor (requires attunement)</p>
+          <p>While wearing this armor, a creature has resistance to one of the following damage types, which you choose when you infuse the item: acid, cold, fire, force, lightning, necrotic, poison, psychic, radiant, or thunder.</p>
+
+          <h2>Returning Weapon</h2>
+          <p class="infusion-meta">Item: A simple or martial weapon with the thrown property</p>
+          <p>This magic weapon grants a +1 bonus to attack and damage rolls made with it, and it returns to the wielder's hand immediately after it is used to make a ranged attack.</p>
+
+          <h2>Spell-Refueling Ring</h2>
+          <p class="infusion-meta">Prerequisite: 6th-level artificer<br>Item: A ring (requires attunement)</p>
+          <p>While wearing this ring, the creature can recover one expended spell slot as an action. The recovered slot can be of 3rd level or lower. Once used, the ring can't be used again until the next dawn.</p>
+        </section>
+      </main>
+    </div>
+    <script>
+      (() => {
+        const track = document.createElement("div");
+        const up = document.createElement("div");
+        const thumb = document.createElement("div");
+        const down = document.createElement("div");
+
+        track.className = "crt-scrollbar";
+        up.className = "crt-scrollbar-button up";
+        thumb.className = "crt-scrollbar-thumb";
+        down.className = "crt-scrollbar-button down";
+        up.textContent = "^";
+        down.textContent = "v";
+        track.appendChild(up);
+        track.appendChild(thumb);
+        track.appendChild(down);
+        document.body.appendChild(track);
+
+        const updateScrollbar = () => {
+          const doc = document.documentElement;
+          const maxScroll = doc.scrollHeight - window.innerHeight;
+
+          if (maxScroll <= 0) {
+            track.style.display = "none";
+            return;
+          }
+
+          track.style.display = "block";
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const thumbHeight = Math.max(42, trackHeight * (window.innerHeight / doc.scrollHeight));
+          const thumbTop = buttonSpace + (doc.scrollTop / maxScroll) * (trackHeight - thumbHeight);
+
+          thumb.style.height = `${thumbHeight}px`;
+          thumb.style.transform = `translateY(${thumbTop}px)`;
+        };
+
+        let activeTimer;
+        const markActive = () => {
+          thumb.classList.add("active");
+          clearTimeout(activeTimer);
+          activeTimer = setTimeout(() => thumb.classList.remove("active"), 180);
+        };
+
+        window.addEventListener("scroll", () => {
+          updateScrollbar();
+          markActive();
+        }, { passive: true });
+        window.addEventListener("resize", updateScrollbar);
+        updateScrollbar();
+      })();
+    </script>  </body>
+</html>

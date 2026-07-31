@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="Images/ElysiumIcon.png">
+    <title>Artificer: Artillerist - Fable</title>
+    <style>
+      :root {
+        --black: #030704;
+        --panel: #071108;
+        --green: #39ff88;
+        --green-soft: #94ffc1;
+        --green-dim: #1a8f4c;
+        --line: rgba(57, 255, 136, 0.28);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scrollbar-width: none;
+      }
+
+      html::-webkit-scrollbar,
+      body::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+
+      .crt-scrollbar {
+        background: #020503;
+        border-left: 1px solid var(--line);
+        bottom: 0;
+        pointer-events: none;
+        position: fixed;
+        right: 0;
+        top: 0;
+        width: 14px;
+        z-index: 20;
+      }
+
+      .crt-scrollbar-button {
+        color: var(--green-soft);
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        height: 16px;
+        left: 0;
+        line-height: 16px;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+      }
+
+      .crt-scrollbar-button.up {
+        top: 0;
+      }
+
+      .crt-scrollbar-button.down {
+        bottom: 0;
+      }
+
+      .crt-scrollbar-thumb {
+        background: #145f35;
+        border-radius: 0;
+        left: 2px;
+        min-height: 42px;
+        position: absolute;
+        right: 2px;
+        top: 0;
+      }
+
+      .crt-scrollbar-thumb.active {
+        background: #1a8f4c;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at center, rgba(26, 143, 76, 0.16), transparent 58%),
+          var(--black);
+        color: var(--green-soft);
+        font-family: "Courier New", monospace;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 10;
+        background:
+          linear-gradient(rgba(57, 255, 136, 0.07) 50%, rgba(0, 0, 0, 0.2) 50%),
+          radial-gradient(circle at center, transparent 42%, rgba(0, 0, 0, 0.42) 100%);
+        background-size: 100% 4px, 100% 100%;
+        mix-blend-mode: screen;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 11;
+        box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.9);
+      }
+
+      .screen {
+        min-height: 100vh;
+        padding: clamp(18px, 4vw, 44px);
+      }
+
+      header {
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 20px;
+        text-shadow: 0 0 10px rgba(57, 255, 136, 0.74);
+      }
+
+      .topbar {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .topbar a {
+        align-items: center;
+        border: 1px solid transparent;
+        color: var(--green-soft);
+        display: inline-flex;
+        min-height: 34px;
+        padding: 8px 10px;
+        text-decoration: none;
+        text-shadow: 0 0 10px rgba(57, 255, 136, 0.58);
+        text-transform: uppercase;
+      }
+
+      .topbar .home-link {
+        border: 1px solid #030704;
+        color: var(--green);
+        font-size: 1.65rem;
+        min-height: 34px;
+        padding: 0 4px 0 0;
+      }
+
+      .topbar a:hover,
+      .topbar a:focus-visible {
+        border-color: var(--line);
+        color: var(--green);
+        outline: none;
+      }
+
+      .topbar .home-link:hover,
+      .topbar .home-link:focus-visible {
+        border-color: transparent;
+      }
+
+      .topbar .active {
+        background: rgba(57, 255, 136, 0.14);
+        border-color: var(--green);
+        color: var(--green);
+        box-shadow: inset 0 0 18px rgba(57, 255, 136, 0.12);
+      }
+
+      main {
+        padding-top: clamp(22px, 5vw, 52px);
+      }
+
+      .prompt {
+        color: var(--green);
+        font-size: clamp(2.1rem, 7vw, 5.6rem);
+        font-weight: 400;
+        line-height: 1.05;
+        margin: 0 0 28px;
+        text-shadow:
+          0 0 8px rgba(57, 255, 136, 0.8),
+          0 0 26px rgba(57, 255, 136, 0.35);
+        text-transform: uppercase;
+      }
+
+      .prompt a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .prompt a:hover,
+      .prompt a:focus-visible {
+        text-decoration: underline;
+        text-underline-offset: 8px;
+        outline: none;
+      }
+
+      .subclass-content {
+        border-top: 1px solid var(--line);
+        padding-top: 24px;
+      }
+
+      .subclass-content h2 {
+        color: var(--green);
+        font-size: clamp(1.3rem, 3vw, 2rem);
+        font-weight: 400;
+        margin: 28px 0 14px;
+        text-shadow: 0 0 10px rgba(57, 255, 136, 0.62);
+        text-transform: uppercase;
+      }
+
+      .subclass-content p {
+        color: var(--green-soft);
+        line-height: 1.65;
+        margin: 0 0 16px;
+      }
+
+      .subclass-content ul {
+        margin: 12px 0 0 24px;
+        padding: 0;
+      }
+
+      .subclass-content li {
+        color: var(--green-soft);
+        line-height: 1.65;
+        margin-bottom: 10px;
+      }
+
+      .subclass-content strong {
+        color: var(--green);
+        font-weight: 400;
+      }
+
+      .subclass-intro {
+        font-style: italic;
+        font-weight: 700;
+      }
+
+      .table-wrap {
+        border: 1px solid var(--line);
+        box-shadow: inset 0 0 28px rgba(57, 255, 136, 0.08);
+        margin-top: 16px;
+        overflow-x: auto;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      caption {
+        border-bottom: 1px solid var(--line);
+        color: var(--green);
+        font-size: 1.15rem;
+        padding: 12px;
+        text-align: left;
+        text-shadow: 0 0 10px rgba(57, 255, 136, 0.62);
+        text-transform: uppercase;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid var(--line);
+        padding: 12px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--green);
+        font-weight: 400;
+        text-transform: uppercase;
+      }
+
+      td {
+        color: var(--green-soft);
+      }
+
+      tbody tr:hover {
+        background: rgba(57, 255, 136, 0.07);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="screen">
+      <header>
+        <nav class="topbar" aria-label="Section navigation">
+          <a class="home-link" href="index.html">Fable</a>
+          <a class="active" href="classes.html">Classes</a>
+          <a href="#">Races</a>
+          <a href="#">Backgrounds</a>
+          <a href="#">Spells</a>
+          <a href="#">Items</a>
+          <a href="#">Feats</a>
+          <a href="#">Systems</a>
+          <a href="#">Lore</a>
+          <a href="#">Records</a>
+        </nav>
+      </header>
+
+      <main>
+        <h1 class="prompt"><a href="artificer.html">Artificer</a>: Artillerist</h1>
+        <section class="subclass-content" aria-label="Artillerist subclass features">
+          <p class="subclass-intro">An Artillerist specializes in using magic to hurl energy, projectiles, and explosions on a battlefield. This destructive power is valued by armies in the wars on many different worlds. And when war passes, some members of this specialization seek to build a more peaceful world by using their powers to fight the resurgence of strife. The world-hopping gnome artificer Vi has been especially vocal about making things right: "It's about time we fixed things instead of blowing them all to hell."</p>
+
+          <h2>Tool Proficiency</h2>
+          <p>When you adopt this specialization at 3rd level, you gain proficiency with woodcarver's tools. If you already have this proficiency, you gain proficiency with one other type of artisan's tools of your choice.</p>
+
+          <h2>Artillerist Spells</h2>
+          <p>Starting at 3rd level, you always have certain spells prepared after you reach particular levels in this class, as shown in the Artillerist Spells table. These spells count as artificer spells for you, but they don't count against the number of artificer spells you prepare.</p>
+
+          <div class="table-wrap">
+            <table>
+              <caption>Artillerist Spells</caption>
+              <thead>
+                <tr>
+                  <th>Artificer Level</th>
+                  <th>Artillerist Spells</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>3rd</td><td>Shield, Thunderwave</td></tr>
+                <tr><td>5th</td><td>Scorching Ray, Shatter</td></tr>
+                <tr><td>9th</td><td>Fireball, Wind Wall</td></tr>
+                <tr><td>13th</td><td>Ice Storm, Wall of Fire</td></tr>
+                <tr><td>17th</td><td>Cone of Cold, Wall of Force</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>Eldritch Cannon</h2>
+          <p>Also at 3rd level, you've learned how to create a magical cannon. Using woodcarver's tools or smith's tools, you can take an action to magically create a Small or Tiny eldritch cannon in an unoccupied space on a horizontal surface within 5 feet of you. A Small eldritch cannon occupies its space, and a Tiny one can be held in one hand. Once you create a cannon, you can't do so again until you finish a long rest or until you expend a spell slot to create one. You can have only one cannon at a time and can't create one while your cannon is present.</p>
+          <p>The cannon is a magical object. Regardless of size, the cannon has an AC of 18 and a number of hit points equal to five times your artificer level. It is immune to poison damage and psychic damage. If it is forced to make an ability check or a saving throw, treat all its ability scores as 10 (+0). If the mending spell is cast on it, it regains 2d6 hit points. It disappears if it is reduced to 0 hit points or after 1 hour. You can dismiss it early as an action.</p>
+          <p>When you create the cannon, you determine its appearance and whether it has legs. You also decide which type it is, choosing from the options on the Eldritch Cannons table. On each of your turns, you can take a bonus action to cause the cannon to activate if you are within 60 feet of it. As part of the same bonus action, you can direct the cannon to walk or climb up to 15 feet to an unoccupied space, provided it has legs.</p>
+
+          <div class="table-wrap">
+            <table>
+              <caption>Eldritch Cannon</caption>
+              <thead>
+                <tr>
+                  <th>Cannon</th>
+                  <th>Activation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Flamethrower</td><td>The cannon exhales fire in an adjacent 15-foot cone that you designate. Each creature in that area must make a Dexterity saving throw against your spell save DC, taking 2d8 fire damage on a failed save or half as much damage on a successful one. The fire ignites any flammable objects in the area that aren't being worn or carried.</td></tr>
+                <tr><td>Force Ballista</td><td>Make a ranged spell attack, originating from the cannon, at one creature or object within 120 feet of it. On a hit, the target takes 2d8 force damage, and if the target is a creature, it is pushed up to 5 feet away from the cannon.</td></tr>
+                <tr><td>Protector</td><td>The cannon emits a burst of positive energy that grants itself and each creature of your choice within 10 feet of it a number of temporary hit points equal to 1d8 + your Intelligence modifier (minimum of +1).</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>Arcane Firearm</h2>
+          <p>At 5th level, You know how to turn a wand, staff, or rod into an arcane firearm, a conduit for your destructive spells. When you finish a long rest, you can use woodcarver's tools to carve special sigils into a wand, staff, or rod and thereby turn it into your arcane firearm. The sigils disappear from the object if you later carve them on a different item. The sigils otherwise last indefinitely.</p>
+          <p>You can use your arcane firearm as a spellcasting focus for your artificer spells. When you cast an artificer spell through the firearm, roll a d8, and you gain a bonus to one of the spell's damage rolls equal to the number rolled.</p>
+
+          <h2>Explosive Cannon</h2>
+          <p>Starting at 9th level, every eldritch cannon you create is more destructive:</p>
+          <ul>
+            <li>The cannon's damage rolls all increase by 1d8.</li>
+            <li>As an action, you can command the cannon to detonate if you are within 60 feet of it. Doing so destroys the cannon and forces each creature within 20 feet of it to make a Dexterity saving throw against your spell save DC, taking 3d8 force damage on a failed save or half as much damage on a successful one.</li>
+          </ul>
+
+          <h2>Fortified Position</h2>
+          <p>By 15th level, you're a master at forming well-defended emplacements using Eldritch Cannon:</p>
+          <ul>
+            <li>You and your allies have half cover while within 10 feet of a cannon you create with Eldritch Cannon, as a result of a shimmering field of magical protection that the cannon emits.</li>
+            <li>You can now have two cannons at the same time. You can create two with the same action (but not the same spell slot), and you can activate both of them with the same bonus action. You determine whether the cannons are identical to each other or different. You can't create a third cannon while you have two.</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+    <script>
+      (() => {
+        const track = document.createElement("div");
+        const up = document.createElement("div");
+        const thumb = document.createElement("div");
+        const down = document.createElement("div");
+
+        track.className = "crt-scrollbar";
+        up.className = "crt-scrollbar-button up";
+        thumb.className = "crt-scrollbar-thumb";
+        down.className = "crt-scrollbar-button down";
+        up.textContent = "^";
+        down.textContent = "v";
+        track.appendChild(up);
+        track.appendChild(thumb);
+        track.appendChild(down);
+        document.body.appendChild(track);
+
+        const updateScrollbar = () => {
+          const doc = document.documentElement;
+          const maxScroll = doc.scrollHeight - window.innerHeight;
+
+          if (maxScroll <= 0) {
+            track.style.display = "none";
+            return;
+          }
+
+          track.style.display = "block";
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const thumbHeight = Math.max(42, trackHeight * (window.innerHeight / doc.scrollHeight));
+          const thumbTop = buttonSpace + (doc.scrollTop / maxScroll) * (trackHeight - thumbHeight);
+
+          thumb.style.height = `${thumbHeight}px`;
+          thumb.style.transform = `translateY(${thumbTop}px)`;
+        };
+
+        let activeTimer;
+        const markActive = () => {
+          thumb.classList.add("active");
+          clearTimeout(activeTimer);
+          activeTimer = setTimeout(() => thumb.classList.remove("active"), 180);
+        };
+
+        window.addEventListener("scroll", () => {
+          updateScrollbar();
+          markActive();
+        }, { passive: true });
+        window.addEventListener("resize", updateScrollbar);
+        updateScrollbar();
+      })();
+    </script>  </body>
+</html>
