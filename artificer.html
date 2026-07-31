@@ -183,6 +183,11 @@
         border-bottom-color: var(--green-dim);
       }
 
+      .table-group .blank-group {
+        background: transparent;
+        border-bottom-color: var(--line);
+      }
+
       tbody tr:hover {
         background: rgba(57, 255, 136, 0.07);
       }
@@ -222,7 +227,7 @@
             <caption>The Artificer</caption>
             <thead>
               <tr class="table-group">
-                <th colspan="6">The Artificer</th>
+                <th class="blank-group" colspan="6" aria-hidden="true"></th>
                 <th colspan="5" class="center">Spell Slots per Spell Level</th>
               </tr>
               <tr>
