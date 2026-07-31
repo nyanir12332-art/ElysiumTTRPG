@@ -160,6 +160,10 @@
         text-transform: uppercase;
       }
 
+      caption .slot-label {
+        float: right;
+      }
+
       th,
       td {
         border-bottom: 1px solid var(--line);
@@ -176,16 +180,6 @@
 
       td {
         color: var(--green-soft);
-      }
-
-      .table-group th {
-        background: rgba(57, 255, 136, 0.1);
-        border-bottom-color: var(--green-dim);
-      }
-
-      .table-group .blank-group {
-        background: transparent;
-        border-bottom-color: var(--line);
       }
 
       tbody tr:hover {
@@ -224,12 +218,11 @@
 
         <div class="table-wrap">
           <table>
-            <caption>The Artificer</caption>
+            <caption>
+              <span>The Artificer</span>
+              <span class="slot-label">Spell Slots per Spell Level</span>
+            </caption>
             <thead>
-              <tr class="table-group">
-                <th class="blank-group" colspan="6" aria-hidden="true"></th>
-                <th colspan="5" class="center">Spell Slots per Spell Level</th>
-              </tr>
               <tr>
                 <th>Level</th>
                 <th>Proficiency Bonus</th>
