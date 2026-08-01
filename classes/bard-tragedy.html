@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
+    <link rel="stylesheet" href="../styles/site.css">
+    <link rel="stylesheet" href="../styles/classes.css">
+    <title>Bard: College of Tragedy - Fable</title>
+  </head>
+  <body>
+    <div class="screen">
+      <header>
+        <nav class="topbar" aria-label="Section navigation">
+          <a class="home-link" href="../index.html">Fable</a>
+          <a class="active" href="classes.html">Classes</a>
+          <a href="#">Races</a>
+          <a href="#">Backgrounds</a>
+          <a href="#">Spells</a>
+          <a href="#">Items</a>
+          <a href="#">Feats</a>
+          <a href="#">Systems</a>
+          <a href="#">Lore</a>
+          <a href="#">Records</a>
+        </nav>
+      </header>
+
+      <main>
+        <h1 class="prompt"><a href="bard.html">Bard</a>: College of Tragedy</h1>
+        <section class="subclass-content" aria-label="College of Tragedy subclass features">
+          <p class="subclass-intro">Not all grand stories conclude in triumphant victory. Many tales end with death and despair, and bards of the College of Tragedy know that sorrow and pathos are emotions just as potent as joy and delight. These bards specialize in the power of tragic storytelling, weaving words and spells together to dramatic and devastating effect.</p>
+
+          <h2>Poetry in Misery</h2>
+          <p>When you join the College of Tragedy at 3rd level, you learn to harness the beauty in failure, finding inspiration in even the direst twists of fate. Whenever you or an ally within 30 feet of you rolls a 1 on the d20 for an attack roll, an ability check, or a saving throw, you can use your reaction to soliloquize and regain one expended use of your Bardic Inspiration feature.</p>
+
+          <h2>Sorrowful Fate</h2>
+          <p>Starting at 3rd level, you exploit a foe's peril to instill deep feelings of sorrow and doom. When you or an ally you can see forces a creature to make a saving throw, you can expend one use of your Bardic Inspiration to change the type of saving throw to a Charisma save instead.</p>
+          <p>If the target fails this save, roll a Bardic Inspiration die. The target takes psychic damage equal to the result, and is plagued with regret for 1 minute. If the target is reduced to 0 hit points during this time and can speak, they are magically compelled to utter darkly poetic final words before succumbing to their injuries.</p>
+          <p>Once you use this feature, you can't use it again until you finish a short or long rest.</p>
+
+          <h2>Tale of Hubris</h2>
+          <p>At 6th level, you learn to weave a magical narrative that draws out the fatal arrogance of your foes. When a creature scores a critical hit against you or an ally within 60 feet of you that you can see, you can use your reaction and expend one use of your Bardic Inspiration to target the attacking creature and evoke the story of their downfall. For 1 minute or until the target suffers a critical hit, any weapon attack against the target scores a critical hit on a roll of 18-20.</p>
+          <p>At 14th level, the critical hit range of this feature increases to 17-20.</p>
+
+          <h2>Unstoppable</h2>
+          <p>Also at 6th level, your words can twist the power of fate to create triumph from the promise of future despair. When you make an attack roll or a saving throw, you can gain a +10 bonus to the roll, but the next attack roll or saving throw you make takes a -10 penalty. If not used, this penalty disappears when you finish a short or long rest.</p>
+          <p>You can't use this feature again until you finish a short or long rest, or until you are reduced to 0 hit points.</p>
+
+          <h2>Nimbus of Pathos</h2>
+          <p>Upon reaching 14th level, you can touch a willing creature as an action and empower it with tragic heroism. For 1 minute, the creature is surrounded by mournful music and ghostly singing, granting it the following benefits and drawbacks:</p>
+          <ul>
+            <li>The creature has a +4 bonus to AC.</li>
+            <li>It has advantage on attack rolls and saving throws.</li>
+            <li>When the creature hits a target with a weapon attack or spell attack, that target takes an extra 1d10 radiant damage.</li>
+            <li>Any weapon attack against the creature scores a critical hit on a roll of 18-20.</li>
+          </ul>
+          <p>When this effect ends, the creature immediately drops to 0 hit points and is dying. Once you use this feature, you can't use it again until you finish a long rest.</p>
+        </section>
+      </main>
+    </div>
+    <script>
+      (() => {
+        const track = document.createElement("div");
+        const up = document.createElement("div");
+        const thumb = document.createElement("div");
+        const down = document.createElement("div");
+
+        track.className = "crt-scrollbar";
+        up.className = "crt-scrollbar-button up";
+        thumb.className = "crt-scrollbar-thumb";
+        down.className = "crt-scrollbar-button down";
+        up.textContent = "^";
+        down.textContent = "v";
+        track.appendChild(up);
+        track.appendChild(thumb);
+        track.appendChild(down);
+        document.body.appendChild(track);
+
+        const scrollByAmount = (amount) => {
+          window.scrollBy({ top: amount, behavior: "smooth" });
+        };
+
+        const updateScrollbar = () => {
+          const doc = document.documentElement;
+          const maxScroll = doc.scrollHeight - window.innerHeight;
+
+          if (maxScroll <= 0) {
+            track.style.display = "none";
+            return;
+          }
+
+          track.style.display = "block";
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const thumbHeight = Math.max(42, trackHeight * (window.innerHeight / doc.scrollHeight));
+          const thumbTop = buttonSpace + (doc.scrollTop / maxScroll) * (trackHeight - thumbHeight);
+
+          thumb.style.height = `${thumbHeight}px`;
+          thumb.style.transform = `translateY(${thumbTop}px)`;
+        };
+
+        const scrollToPointer = (event) => {
+          if (event.target === up || event.target === down || event.target === thumb) {
+            return;
+          }
+
+          const rect = track.getBoundingClientRect();
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+          const position = Math.min(Math.max(event.clientY - rect.top - buttonSpace, 0), trackHeight);
+          window.scrollTo({ top: (position / trackHeight) * maxScroll, behavior: "smooth" });
+        };
+
+        const startDrag = (event) => {
+          event.preventDefault();
+          const doc = document.documentElement;
+          const maxScroll = doc.scrollHeight - window.innerHeight;
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const thumbHeight = thumb.offsetHeight;
+          const startY = event.clientY;
+          const startScroll = doc.scrollTop;
+
+          const onMove = (moveEvent) => {
+            const delta = moveEvent.clientY - startY;
+            const scrollDelta = delta * (maxScroll / (trackHeight - thumbHeight));
+            window.scrollTo(0, startScroll + scrollDelta);
+          };
+
+          const onUp = () => {
+            window.removeEventListener("pointermove", onMove);
+            window.removeEventListener("pointerup", onUp);
+          };
+
+          window.addEventListener("pointermove", onMove);
+          window.addEventListener("pointerup", onUp);
+        };
+
+        up.addEventListener("click", () => scrollByAmount(-window.innerHeight * 0.85));
+        down.addEventListener("click", () => scrollByAmount(window.innerHeight * 0.85));
+        track.addEventListener("click", scrollToPointer);
+        thumb.addEventListener("pointerdown", startDrag);
+        window.addEventListener("scroll", updateScrollbar, { passive: true });
+        window.addEventListener("resize", updateScrollbar);
+        updateScrollbar();
+      })();
+    </script>  </body>
+</html>

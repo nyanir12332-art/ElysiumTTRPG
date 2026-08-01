@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
+    <link rel="stylesheet" href="../styles/site.css">
+    <link rel="stylesheet" href="../styles/classes.css">
+    <title>Artificer: Mastermaker - Fable</title>
+  </head>
+  <body>
+    <div class="screen">
+      <header>
+        <nav class="topbar" aria-label="Section navigation">
+          <a class="home-link" href="../index.html">Fable</a>
+          <a class="active" href="classes.html">Classes</a>
+          <a href="#">Races</a>
+          <a href="#">Backgrounds</a>
+          <a href="#">Spells</a>
+          <a href="#">Items</a>
+          <a href="#">Feats</a>
+          <a href="#">Systems</a>
+          <a href="#">Lore</a>
+          <a href="#">Records</a>
+        </nav>
+      </header>
+
+      <main>
+        <h1 class="prompt"><a href="artificer.html">Artificer</a>: Mastermaker</h1>
+        <section class="subclass-content" aria-label="Mastermaker subclass features">
+          <p class="subclass-intro">A Mastermaker specializes in integrating flesh and steel, creating powerful construct limbs and replacing weak organs of flesh with components of metal and stone.</p>
+
+          <h2>Tools of Integration</h2>
+          <p>At 3rd level, you gain proficiency with heavy armor and smith's tools. If you already have this tool proficiency, you gain proficiency with one other type of artisan's tools of your choice.</p>
+
+          <h2>Mastermaker Spells</h2>
+          <p>At 3rd level, you always have certain spells prepared after you reach particular levels in this class, as shown in the Mastermaker Spells table. These spells count as artificer spells for you, but they don't count against the number of artificer spells you prepare.</p>
+
+          <div class="table-wrap">
+            <table>
+              <caption>Mastermaker Spells</caption>
+              <thead>
+                <tr>
+                  <th>Artificer Level</th>
+                  <th>Spells</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>3rd</td><td><a href="#">Absorb Elements</a>, <a href="#">Thunderous Smite</a></td></tr>
+                <tr><td>5th</td><td><a href="#">Enhance Ability</a>, <a href="#">Lesser Restoration</a></td></tr>
+                <tr><td>9th</td><td><a href="#">Blinding Smite</a>, <a href="#">Haste</a></td></tr>
+                <tr><td>13th</td><td><a href="#">Freedom of Movement</a>, <a href="#">Stone Shape</a></td></tr>
+                <tr><td>17th</td><td><a href="#">Banishing Smite</a>, <a href="#">Greater Restoration</a></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>Prosthesis Expertise</h2>
+          <p>At 3rd level, whenever you finish a long rest, you can touch a nonmagical object and imbue it with your power, creating a permanent magical item that replaces a lost limb - a hand, arm, foot, leg, or similar body part. While the prosthetic is attached, it functions identically to the part it replaces. The wearer can detach or reattach it as an action, and it can't be removed against the wearer's will. It detaches if the wearer dies.</p>
+
+          <h2>Battlefist</h2>
+          <p>At 3rd level you replace one of your arms with a battlefist, a magical prosthetic you created. Your battlefist is a simple melee weapon, and you can use it as a spellcasting focus for your artificer spells. While your battlefist is a magical weapon, it can be infused as if it were a nonmagical weapon.</p>
+          <p>When you attack with your battlefist, you can use your Intelligence modifier instead of Strength for the attack roll. If you hit with it, you deal bludgeoning damage equal to 1d10 + your Strength or Intelligence modifier. At 9th level, the damage dealt by your battlefist increases to 2d10 + your Strength or Intelligence modifier.</p>
+          <p>Additionally, you can choose one of the following weapon properties to add to your battlefist: finesse, thrown (range 20/60), or reach. When you finish a long rest, you can replace this property with a different weapon property from the list.</p>
+
+          <h2>Extra Attack</h2>
+          <p>At 5th level, you can attack twice, rather than once, whenever you take the Attack action on your turn.</p>
+
+          <h2>Improved Battlefist</h2>
+          <p>At 9th level, you have modified your battlefist in both mundane and magical ways. It gains the following benefits:</p>
+          <ul>
+            <li>When you infuse your battlefist, you can apply two infusions to it at a time. If both infusions grant bonuses to your attack rolls or armor class, you gain only the greater bonus.</li>
+            <li>Your battlefist is also a shield, increasing your armor class by 2. You can wield it as a weapon even if you are using it as a shield. You can infuse it as if it were both a simple melee weapon and a shield.</li>
+            <li>The maximum number of items you can infuse at once increases by 1, but the extra infusion must be applied to your battlefist.</li>
+          </ul>
+
+          <h2>Construct Apotheosis</h2>
+          <p>At 15th level you have modified your form, becoming nearly impervious to the weaknesses of flesh. You gain the following benefits:</p>
+          <ul>
+            <li>You gain resistance to poison damage and psychic damage, and you are immune to the poisoned condition.</li>
+            <li>If you are affected by a spell or magical effect, you can choose to consider yourself a construct instead of your other creature types.</li>
+            <li>You can cast the <a href="#">Antilife Shell</a> and <a href="#">Investiture of Stone</a> spells without expending a spell slot, without preparing the spell, and without material components, provided you use your battlefist as the spellcasting focus. Once you cast either spell with this feature, you can't cast that spell with it again until you finish a long rest.</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+    <script>
+      (() => {
+        const track = document.createElement("div");
+        const up = document.createElement("div");
+        const thumb = document.createElement("div");
+        const down = document.createElement("div");
+
+        track.className = "crt-scrollbar";
+        up.className = "crt-scrollbar-button up";
+        thumb.className = "crt-scrollbar-thumb";
+        down.className = "crt-scrollbar-button down";
+        up.textContent = "^";
+        down.textContent = "v";
+        track.appendChild(up);
+        track.appendChild(thumb);
+        track.appendChild(down);
+        document.body.appendChild(track);
+
+        const scrollByAmount = (amount) => {
+          window.scrollBy({ top: amount, behavior: "smooth" });
+        };
+
+        const setupTableScrollbars = () => {
+          document.querySelectorAll(".table-wrap").forEach((wrap) => {
+            if (wrap.nextElementSibling?.classList.contains("table-scrollbar")) {
+              return;
+            }
+
+            const bar = document.createElement("div");
+            const left = document.createElement("div");
+            const rail = document.createElement("div");
+            const grip = document.createElement("div");
+            const right = document.createElement("div");
+
+            bar.className = "table-scrollbar";
+            left.className = "table-scrollbar-button";
+            rail.className = "table-scrollbar-track";
+            grip.className = "table-scrollbar-thumb";
+            right.className = "table-scrollbar-button";
+            left.textContent = "<";
+            right.textContent = ">";
+
+            rail.appendChild(grip);
+            bar.appendChild(left);
+            bar.appendChild(rail);
+            bar.appendChild(right);
+            wrap.insertAdjacentElement("afterend", bar);
+
+            const updateTableScrollbar = () => {
+              const maxScroll = wrap.scrollWidth - wrap.clientWidth;
+
+              if (maxScroll <= 0) {
+                bar.hidden = true;
+                return;
+              }
+
+              bar.hidden = false;
+              const railWidth = rail.clientWidth;
+              const gripWidth = Math.max(42, railWidth * (wrap.clientWidth / wrap.scrollWidth));
+              const maxGripLeft = railWidth - gripWidth;
+              const gripLeft = (wrap.scrollLeft / maxScroll) * maxGripLeft;
+
+              grip.style.width = `${gripWidth}px`;
+              grip.style.transform = `translateX(${gripLeft}px)`;
+            };
+
+            const scrollTableBy = (amount) => {
+              wrap.scrollBy({ left: amount, behavior: "smooth" });
+            };
+
+            const scrollTableToPointer = (event) => {
+              if (event.target === grip) {
+                return;
+              }
+
+              const rect = rail.getBoundingClientRect();
+              const maxScroll = wrap.scrollWidth - wrap.clientWidth;
+              const gripWidth = grip.offsetWidth;
+              const maxGripLeft = rail.clientWidth - gripWidth;
+              const position = Math.min(Math.max(event.clientX - rect.left - (gripWidth / 2), 0), maxGripLeft);
+              wrap.scrollTo({ left: (position / maxGripLeft) * maxScroll, behavior: "smooth" });
+            };
+
+            const startTableDrag = (event) => {
+              event.preventDefault();
+              grip.classList.add("dragging");
+              const maxScroll = wrap.scrollWidth - wrap.clientWidth;
+              const maxGripLeft = rail.clientWidth - grip.offsetWidth;
+              const startX = event.clientX;
+              const startScroll = wrap.scrollLeft;
+
+              const onMove = (moveEvent) => {
+                const delta = moveEvent.clientX - startX;
+                const scrollDelta = delta * (maxScroll / maxGripLeft);
+                wrap.scrollLeft = startScroll + scrollDelta;
+              };
+
+              const onUp = () => {
+                grip.classList.remove("dragging");
+                window.removeEventListener("pointermove", onMove);
+                window.removeEventListener("pointerup", onUp);
+              };
+
+              window.addEventListener("pointermove", onMove);
+              window.addEventListener("pointerup", onUp);
+            };
+
+            left.addEventListener("click", () => scrollTableBy(-wrap.clientWidth * 0.85));
+            right.addEventListener("click", () => scrollTableBy(wrap.clientWidth * 0.85));
+            rail.addEventListener("click", scrollTableToPointer);
+            grip.addEventListener("pointerdown", startTableDrag);
+            wrap.addEventListener("scroll", updateTableScrollbar, { passive: true });
+            window.addEventListener("resize", updateTableScrollbar);
+            updateTableScrollbar();
+          });
+        };
+        const updateScrollbar = () => {
+          const doc = document.documentElement;
+          const maxScroll = doc.scrollHeight - window.innerHeight;
+
+          if (maxScroll <= 0) {
+            track.style.display = "none";
+            return;
+          }
+
+          track.style.display = "block";
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const thumbHeight = Math.max(42, trackHeight * (window.innerHeight / doc.scrollHeight));
+          const thumbTop = buttonSpace + (doc.scrollTop / maxScroll) * (trackHeight - thumbHeight);
+
+          thumb.style.height = `${thumbHeight}px`;
+          thumb.style.transform = `translateY(${thumbTop}px)`;
+        };
+
+        const scrollToPointer = (event) => {
+          if (event.target === up || event.target === down || event.target === thumb) {
+            return;
+          }
+
+          const rect = track.getBoundingClientRect();
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+          const position = Math.min(Math.max(event.clientY - rect.top - buttonSpace, 0), trackHeight);
+          window.scrollTo({ top: (position / trackHeight) * maxScroll, behavior: "smooth" });
+        };
+
+        const startDrag = (event) => {
+          event.preventDefault();
+          const doc = document.documentElement;
+          const maxScroll = doc.scrollHeight - window.innerHeight;
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const thumbHeight = thumb.offsetHeight;
+          const startY = event.clientY;
+          const startScroll = doc.scrollTop;
+
+          const onMove = (moveEvent) => {
+            const delta = moveEvent.clientY - startY;
+            const scrollDelta = delta * (maxScroll / (trackHeight - thumbHeight));
+            window.scrollTo(0, startScroll + scrollDelta);
+          };
+
+          const onUp = () => {
+            window.removeEventListener("pointermove", onMove);
+            window.removeEventListener("pointerup", onUp);
+          };
+
+          window.addEventListener("pointermove", onMove);
+          window.addEventListener("pointerup", onUp);
+        };
+
+        up.addEventListener("click", () => scrollByAmount(-window.innerHeight * 0.85));
+        down.addEventListener("click", () => scrollByAmount(window.innerHeight * 0.85));
+        track.addEventListener("click", scrollToPointer);
+        thumb.addEventListener("pointerdown", startDrag);
+        setupTableScrollbars();
+        window.addEventListener("scroll", updateScrollbar, { passive: true });
+        window.addEventListener("resize", updateScrollbar);
+        updateScrollbar();
+      })();
+    </script>  </body>
+</html>

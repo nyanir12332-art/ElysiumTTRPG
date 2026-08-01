@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
+    <link rel="stylesheet" href="../styles/site.css">
+    <link rel="stylesheet" href="../styles/classes.css">
+    <title>Artificer: Forge Adept - Fable</title>
+  </head>
+  <body>
+    <div class="screen">
+      <header>
+        <nav class="topbar" aria-label="Section navigation">
+          <a class="home-link" href="../index.html">Fable</a>
+          <a class="active" href="classes.html">Classes</a>
+          <a href="#">Races</a>
+          <a href="#">Backgrounds</a>
+          <a href="#">Spells</a>
+          <a href="#">Items</a>
+          <a href="#">Feats</a>
+          <a href="#">Systems</a>
+          <a href="#">Lore</a>
+          <a href="#">Records</a>
+        </nav>
+      </header>
+
+      <main>
+        <h1 class="prompt"><a href="artificer.html">Artificer</a>: Forge Adept</h1>
+        <section class="subclass-content" aria-label="Forge Adept subclass features">
+          <p class="subclass-intro">The artificers of The Empire were the finest weaponsmiths in history. As a Forge Adept, you carry on these ancient traditions, creating mystical weapons and armor, strengthening allies on the battlefield, and bringing down enemies with weapons imbued with your own soul energy. If you're from The Empire, you learned these techniques from the masters of your clan. Are you content to follow ancient traditions, or do you want to add your own innovations? If you're not of The Empire, did you learn these techniques from a mentor? Did you steal this knowledge? Or are you replicating these traditions on your own?</p>
+
+          <h2>Tool Proficiency</h2>
+          <p>When you adopt this specialization at 3rd level, you gain proficiency with smith's tools. If you already have this proficiency, you gain proficiency with one other type of artisan's tools of your choice.</p>
+
+          <h2>Forge Adept Spells</h2>
+          <p>Starting at 3rd level, you always have certain spells prepared after you reach particular levels in this class, as shown in the Forge Adept Spells table. These spells count as artificer spells for you, but they don't count against the number of artificer spells you prepare.</p>
+
+          <div class="table-wrap">
+            <table>
+              <caption>Forge Adept Spells</caption>
+              <thead>
+                <tr>
+                  <th>Artificer Level</th>
+                  <th>Forge Adept Spells</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>3rd</td><td>Armor of Agathys, Shield of Faith</td></tr>
+                <tr><td>5th</td><td>Spiritual Weapon, Warding Bond</td></tr>
+                <tr><td>9th</td><td>Beacon of Hope, Remove Curse</td></tr>
+                <tr><td>13th</td><td>Death Ward, Fire Shield</td></tr>
+                <tr><td>17th</td><td>Banishing Smite, Wall of Force</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>Battle Ready</h2>
+          <p>Beginning at 3rd level, you're skilled in fighting side-by-side with your companions on the field of battle. You gain proficiency with martial weapons. Additionally, when you attack with a magic weapon, you can use your Intelligence modifier, instead of Strength or Dexterity, for the attack and damage rolls.</p>
+
+          <h2>Ghall'Shaarat</h2>
+          <p>At 3rd level, you learn to imbue a weapon with a fraction of your spirit. The Empire called this weapon the ghaal'shaarat, Goblin for "mighty blade." Imbuing your ghaal'shaarat works like infusing an item, but does not count toward your maximum number of infused items. When you finish a long rest, you can touch a magic or nonmagical simple or martial melee weapon, which becomes your ghaal'shaarat.</p>
+          <p>Once imbued, your ghaal'shaarat is a magic weapon that grants a +1 bonus to attack and damage rolls, unless the base weapon you imbued already grants a higher bonus. This bonus increases when you reach certain levels in this class, increasing to +2 at 8th level and +3 at 13th level. If the weapon you imbued has the thrown property, it returns to your hand immediately after it is used to make a ranged attack.</p>
+          <p>Your ghaal'shaarat's benefits remain until the weapon is destroyed or until you use this ability to imbue a new item with this power. Other creatures can't benefit from your ghaal'shaarat's powers, and to them, it functions as the unimbued weapon did.</p>
+
+          <h2>Extra Attack</h2>
+          <p>Starting at 5th level, you can attack twice, rather than once, whenever you take the Attack action on your turn.</p>
+
+          <h2>Runes of War</h2>
+          <p>At 9th level, you gain the ability to enhance the weapons of your squad, targeting the damage to the weakness of your enemies. As an action, you can activate an aura that extends from you in a 30-foot radius. The aura moves with you, centered on you, and lasts for 1 minute or until your concentration ends (as if you were casting a spell).</p>
+          <p>When you activate this aura, choose one of the following damage types: acid, cold, fire, lightning, or thunder. Each creature of your choice in the aura deals an extra 1d4 damage of the chosen type when it hits with a weapon attack.</p>
+          <p>You can use this feature a number of times equal to your Intelligence modifier (minimum of once), and you regain all expended uses after a long rest.</p>
+
+          <h2>Perfect Weapon</h2>
+          <p>At 15th level, you learn how to imbue your ghaal'shaarat with additional power, and how to draw on it in time of need. The first time you attack with your ghaal'shaarat on your turn, you can transfer some or all of its bonus to your armor class, instead of using the bonus on any attacks that turn. For every 1 you reduce your attack and damage rolls by, you gain +1 to your AC. As long as you continue holding your ghaal'shaarat, the AC bonus remains in effect until the start of your next turn.</p>
+          <p>Additionally, when you finish a long rest, you can select one of the following benefits. Until you finish your next long rest, you gain the selected benefit whenever you're holding your ghaal'shaarat.</p>
+          <ul>
+            <li>You have resistance to psychic damage, and you can't be charmed or frightened.</li>
+            <li>You use your ghaal'shaarat to channel the elements. When you select this ability, select one of the following damage types: acid, cold, fire, lightning, or thunder. When you hit with your ghaal'shaarat, the target takes an extra 1d6 damage of the chosen type.</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+    <script>
+      (() => {
+        const track = document.createElement("div");
+        const up = document.createElement("div");
+        const thumb = document.createElement("div");
+        const down = document.createElement("div");
+
+        track.className = "crt-scrollbar";
+        up.className = "crt-scrollbar-button up";
+        thumb.className = "crt-scrollbar-thumb";
+        down.className = "crt-scrollbar-button down";
+        up.textContent = "^";
+        down.textContent = "v";
+        track.appendChild(up);
+        track.appendChild(thumb);
+        track.appendChild(down);
+        document.body.appendChild(track);
+
+        const scrollByAmount = (amount) => {
+          window.scrollBy({ top: amount, behavior: "smooth" });
+        };
+
+        const setupTableScrollbars = () => {
+          document.querySelectorAll(".table-wrap").forEach((wrap) => {
+            if (wrap.nextElementSibling?.classList.contains("table-scrollbar")) {
+              return;
+            }
+
+            const bar = document.createElement("div");
+            const left = document.createElement("div");
+            const rail = document.createElement("div");
+            const grip = document.createElement("div");
+            const right = document.createElement("div");
+
+            bar.className = "table-scrollbar";
+            left.className = "table-scrollbar-button";
+            rail.className = "table-scrollbar-track";
+            grip.className = "table-scrollbar-thumb";
+            right.className = "table-scrollbar-button";
+            left.textContent = "<";
+            right.textContent = ">";
+
+            rail.appendChild(grip);
+            bar.appendChild(left);
+            bar.appendChild(rail);
+            bar.appendChild(right);
+            wrap.insertAdjacentElement("afterend", bar);
+
+            const updateTableScrollbar = () => {
+              const maxScroll = wrap.scrollWidth - wrap.clientWidth;
+
+              if (maxScroll <= 0) {
+                bar.hidden = true;
+                return;
+              }
+
+              bar.hidden = false;
+              const railWidth = rail.clientWidth;
+              const gripWidth = Math.max(42, railWidth * (wrap.clientWidth / wrap.scrollWidth));
+              const maxGripLeft = railWidth - gripWidth;
+              const gripLeft = (wrap.scrollLeft / maxScroll) * maxGripLeft;
+
+              grip.style.width = `${gripWidth}px`;
+              grip.style.transform = `translateX(${gripLeft}px)`;
+            };
+
+            const scrollTableBy = (amount) => {
+              wrap.scrollBy({ left: amount, behavior: "smooth" });
+            };
+
+            const scrollTableToPointer = (event) => {
+              if (event.target === grip) {
+                return;
+              }
+
+              const rect = rail.getBoundingClientRect();
+              const maxScroll = wrap.scrollWidth - wrap.clientWidth;
+              const gripWidth = grip.offsetWidth;
+              const maxGripLeft = rail.clientWidth - gripWidth;
+              const position = Math.min(Math.max(event.clientX - rect.left - (gripWidth / 2), 0), maxGripLeft);
+              wrap.scrollTo({ left: (position / maxGripLeft) * maxScroll, behavior: "smooth" });
+            };
+
+            const startTableDrag = (event) => {
+              event.preventDefault();
+              grip.classList.add("dragging");
+              const maxScroll = wrap.scrollWidth - wrap.clientWidth;
+              const maxGripLeft = rail.clientWidth - grip.offsetWidth;
+              const startX = event.clientX;
+              const startScroll = wrap.scrollLeft;
+
+              const onMove = (moveEvent) => {
+                const delta = moveEvent.clientX - startX;
+                const scrollDelta = delta * (maxScroll / maxGripLeft);
+                wrap.scrollLeft = startScroll + scrollDelta;
+              };
+
+              const onUp = () => {
+                grip.classList.remove("dragging");
+                window.removeEventListener("pointermove", onMove);
+                window.removeEventListener("pointerup", onUp);
+              };
+
+              window.addEventListener("pointermove", onMove);
+              window.addEventListener("pointerup", onUp);
+            };
+
+            left.addEventListener("click", () => scrollTableBy(-wrap.clientWidth * 0.85));
+            right.addEventListener("click", () => scrollTableBy(wrap.clientWidth * 0.85));
+            rail.addEventListener("click", scrollTableToPointer);
+            grip.addEventListener("pointerdown", startTableDrag);
+            wrap.addEventListener("scroll", updateTableScrollbar, { passive: true });
+            window.addEventListener("resize", updateTableScrollbar);
+            updateTableScrollbar();
+          });
+        };
+        const updateScrollbar = () => {
+          const doc = document.documentElement;
+          const maxScroll = doc.scrollHeight - window.innerHeight;
+
+          if (maxScroll <= 0) {
+            track.style.display = "none";
+            return;
+          }
+
+          track.style.display = "block";
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const thumbHeight = Math.max(42, trackHeight * (window.innerHeight / doc.scrollHeight));
+          const thumbTop = buttonSpace + (doc.scrollTop / maxScroll) * (trackHeight - thumbHeight);
+
+          thumb.style.height = `${thumbHeight}px`;
+          thumb.style.transform = `translateY(${thumbTop}px)`;
+        };
+
+        const scrollToPointer = (event) => {
+          if (event.target === up || event.target === down || event.target === thumb) {
+            return;
+          }
+
+          const rect = track.getBoundingClientRect();
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+          const position = Math.min(Math.max(event.clientY - rect.top - buttonSpace, 0), trackHeight);
+          window.scrollTo({ top: (position / trackHeight) * maxScroll, behavior: "smooth" });
+        };
+
+        const startDrag = (event) => {
+          event.preventDefault();
+          const doc = document.documentElement;
+          const maxScroll = doc.scrollHeight - window.innerHeight;
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const thumbHeight = thumb.offsetHeight;
+          const startY = event.clientY;
+          const startScroll = doc.scrollTop;
+
+          const onMove = (moveEvent) => {
+            const delta = moveEvent.clientY - startY;
+            const scrollDelta = delta * (maxScroll / (trackHeight - thumbHeight));
+            window.scrollTo(0, startScroll + scrollDelta);
+          };
+
+          const onUp = () => {
+            window.removeEventListener("pointermove", onMove);
+            window.removeEventListener("pointerup", onUp);
+          };
+
+          window.addEventListener("pointermove", onMove);
+          window.addEventListener("pointerup", onUp);
+        };
+
+        up.addEventListener("click", () => scrollByAmount(-window.innerHeight * 0.85));
+        down.addEventListener("click", () => scrollByAmount(window.innerHeight * 0.85));
+        track.addEventListener("click", scrollToPointer);
+        thumb.addEventListener("pointerdown", startDrag);
+        setupTableScrollbars();
+        window.addEventListener("scroll", updateScrollbar, { passive: true });
+        window.addEventListener("resize", updateScrollbar);
+        updateScrollbar();
+      })();
+    </script>  </body>
+</html>
