@@ -30,7 +30,7 @@
         background: #020503;
         border-left: 1px solid var(--line);
         bottom: 0;
-        pointer-events: none;
+        pointer-events: auto;
         position: fixed;
         right: 0;
         top: 0;
@@ -39,6 +39,7 @@
       }
 
       .crt-scrollbar-button {
+        cursor: pointer;
         color: var(--green-soft);
         font-family: Arial, sans-serif;
         font-size: 12px;
@@ -59,6 +60,7 @@
       }
 
       .crt-scrollbar-thumb {
+        cursor: grab;
         background: #145f35;
         border-radius: 0;
         left: 2px;
@@ -66,10 +68,6 @@
         position: absolute;
         right: 2px;
         top: 0;
-      }
-
-      .crt-scrollbar-thumb.active {
-        background: #1a8f4c;
       }
 
       body {
@@ -312,6 +310,10 @@
         track.appendChild(down);
         document.body.appendChild(track);
 
+        const scrollByAmount = (amount) => {
+          window.scrollBy({ top: amount, behavior: "smooth" });
+        };
+
         const updateScrollbar = () => {
           const doc = document.documentElement;
           const maxScroll = doc.scrollHeight - window.innerHeight;
@@ -331,17 +333,49 @@
           thumb.style.transform = `translateY(${thumbTop}px)`;
         };
 
-        let activeTimer;
-        const markActive = () => {
-          thumb.classList.add("active");
-          clearTimeout(activeTimer);
-          activeTimer = setTimeout(() => thumb.classList.remove("active"), 180);
+        const scrollToPointer = (event) => {
+          if (event.target === up || event.target === down || event.target === thumb) {
+            return;
+          }
+
+          const rect = track.getBoundingClientRect();
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+          const position = Math.min(Math.max(event.clientY - rect.top - buttonSpace, 0), trackHeight);
+          window.scrollTo({ top: (position / trackHeight) * maxScroll, behavior: "smooth" });
         };
 
-        window.addEventListener("scroll", () => {
-          updateScrollbar();
-          markActive();
-        }, { passive: true });
+        const startDrag = (event) => {
+          event.preventDefault();
+          const doc = document.documentElement;
+          const maxScroll = doc.scrollHeight - window.innerHeight;
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const thumbHeight = thumb.offsetHeight;
+          const startY = event.clientY;
+          const startScroll = doc.scrollTop;
+
+          const onMove = (moveEvent) => {
+            const delta = moveEvent.clientY - startY;
+            const scrollDelta = delta * (maxScroll / (trackHeight - thumbHeight));
+            window.scrollTo(0, startScroll + scrollDelta);
+          };
+
+          const onUp = () => {
+            window.removeEventListener("pointermove", onMove);
+            window.removeEventListener("pointerup", onUp);
+          };
+
+          window.addEventListener("pointermove", onMove);
+          window.addEventListener("pointerup", onUp);
+        };
+
+        up.addEventListener("click", () => scrollByAmount(-window.innerHeight * 0.85));
+        down.addEventListener("click", () => scrollByAmount(window.innerHeight * 0.85));
+        track.addEventListener("click", scrollToPointer);
+        thumb.addEventListener("pointerdown", startDrag);
+        window.addEventListener("scroll", updateScrollbar, { passive: true });
         window.addEventListener("resize", updateScrollbar);
         updateScrollbar();
       })();

@@ -32,7 +32,7 @@
         background: #020503;
         border-left: 1px solid var(--line);
         bottom: 0;
-        pointer-events: none;
+        pointer-events: auto;
         position: fixed;
         right: 0;
         top: 0;
@@ -41,6 +41,7 @@
       }
 
       .crt-scrollbar-button {
+        cursor: pointer;
         color: var(--green-soft);
         font-family: Arial, sans-serif;
         font-size: 12px;
@@ -61,6 +62,7 @@
       }
 
       .crt-scrollbar-thumb {
+        cursor: grab;
         background: #145f35;
         border-radius: 0;
         left: 2px;
@@ -68,10 +70,6 @@
         position: absolute;
         right: 2px;
         top: 0;
-      }
-
-      .crt-scrollbar-thumb.active {
-        background: #1a8f4c;
       }
 
       body {
@@ -386,7 +384,7 @@
             </ul>
           </li>
           <li class="class-entry">
-            <h3>Cleric</h3>
+            <h3><a class="class-title-link" href="cleric.html">Cleric</a></h3>
             <p class="class-context">Clerics are intermediaries between the mortal world and the distant planes of the gods. As varied as the gods they serve, clerics strive to embody the handiwork of their deities. No ordinary priest, a cleric is imbued with divine magic.</p>
             <ul>
               <li>Subclass: Ambition Domain</li>
@@ -418,7 +416,7 @@
             </ul>
           </li>
           <li class="class-entry">
-            <h3>Druid</h3>
+            <h3><a class="class-title-link" href="druid.html">Druid</a></h3>
             <p class="class-context">Whether calling on the elemental forces of nature or emulating the creatures of the animal world, druids are an embodiment of nature's resilience, cunning, and fury. They claim no mastery over nature, but see themselves as extensions of nature's indomitable will.</p>
             <ul>
               <li>Subclass: Circle of the Blighted</li>
@@ -435,7 +433,7 @@
             </ul>
           </li>
           <li class="class-entry">
-            <h3>Fighter</h3>
+            <h3><a class="class-title-link" href="fighter.html">Fighter</a></h3>
             <p class="class-context">Fighters share an unparalleled mastery with weapons and armor, and a thorough knowledge of the skills of combat. They are well acquainted with death, both meting it out and staring it defiantly in the face.</p>
             <ul>
               <li>Subclass: Arcane Archer</li>
@@ -459,7 +457,7 @@
             </ul>
           </li>
           <li class="class-entry">
-            <h3>Monk</h3>
+            <h3><a class="class-title-link" href="monk.html">Monk</a></h3>
             <p class="class-context">Monks are united in their ability to magically harness the energy that flows in their bodies. Whether channeled as a striking display of combat prowess or a subtler focus of defensive ability and speed, this energy infuses all that a monk does.</p>
             <ul>
               <li>Subclass: Way of the Ascendant Dragon</li>
@@ -480,7 +478,7 @@
             </ul>
           </li>
           <li class="class-entry">
-            <h3>Mystic</h3>
+            <h3><a class="class-title-link" href="mystic.html">Mystic</a></h3>
             <p class="class-context">Mystics shun the world to turn their eyes inward, mastering the full potential of their minds and exploring their psyches before turning to face the world. Mystics are incredibly rare, and most prefer to keep the nature of their abilities secret. Using their inner, psychic strength, they can read minds, fade into invisibility, transform their bodies into living iron, and seize control of the physical world and bend it to their will.</p>
             <ul>
               <li>Subclass: Avatar</li>
@@ -492,7 +490,7 @@
             </ul>
           </li>
           <li class="class-entry">
-            <h3>Paladin</h3>
+            <h3><a class="class-title-link" href="paladin.html">Paladin</a></h3>
             <p class="class-context">Whether sworn before a god's altar and the witness of a priest, in a sacred glade before nature spirits and fey beings, or in a moment of desperation and grief with the dead as the only witness, a paladin's oath is a powerful bond.</p>
             <ul>
               <li>Subclass: Oath of the Ancients</li>
@@ -510,7 +508,7 @@
             </ul>
           </li>
           <li class="class-entry">
-            <h3>Ranger</h3>
+            <h3><a class="class-title-link" href="ranger.html">Ranger</a></h3>
             <p class="class-context">Far from the bustle of cities and towns, past the hedges that shelter the most distant farms from the terrors of the wild, amid the dense-packed trees of trackless forests and across wide and empty plains, rangers keep their unending watch.</p>
             <ul>
               <li>Subclass: Beast Master Conclave</li>
@@ -525,7 +523,7 @@
             </ul>
           </li>
           <li class="class-entry">
-            <h3>Rogue</h3>
+            <h3><a class="class-title-link" href="rogue.html">Rogue</a></h3>
             <p class="class-context">Rogues rely on skill, stealth, and their foes' vulnerabilities to get the upper hand in any situation. They have a knack for finding the solution to just about any problem, demonstrating a resourcefulness and versatility that is the cornerstone of any successful adventuring party.</p>
             <ul>
               <li>Subclass: Arcane Trickster</li>
@@ -541,7 +539,7 @@
             </ul>
           </li>
           <li class="class-entry">
-            <h3>Sorcerer</h3>
+            <h3><a class="class-title-link" href="sorcerer.html">Sorcerer</a></h3>
             <p class="class-context">Sorcerers carry a magical birthright conferred upon them by an exotic bloodline, some otherworldly influence, or exposure to unknown cosmic forces. No one chooses sorcery; the power chooses the sorcerer.</p>
             <ul>
               <li>Subclass: Aberrant Mind</li>
@@ -560,7 +558,7 @@
             </ul>
           </li>
           <li class="class-entry">
-            <h3>Warlock</h3>
+            <h3><a class="class-title-link" href="warlock.html">Warlock</a></h3>
             <p class="class-context">Warlocks are seekers of the knowledge that lies hidden in the fabric of the multiverse. Through pacts made with mysterious beings of supernatural power, warlocks unlock magical effects both subtle and spectacular.</p>
             <ul>
               <li>Subclass: Archfey</li>
@@ -577,7 +575,7 @@
             </ul>
           </li>
           <li class="class-entry">
-            <h3>Wizard</h3>
+            <h3><a class="class-title-link" href="wizard.html">Wizard</a></h3>
             <p class="class-context">Wizards are supreme magic-users, defined and united as a class by the spells they cast. Drawing on the subtle weave of magic that permeates the cosmos, wizards cast spells of explosive fire, arcing lightning, subtle deception, brute-force mind control, and much more.</p>
             <ul>
               <li>Subclass: School of Abjuration</li>
@@ -644,6 +642,10 @@
         track.appendChild(down);
         document.body.appendChild(track);
 
+        const scrollByAmount = (amount) => {
+          window.scrollBy({ top: amount, behavior: "smooth" });
+        };
+
         const updateScrollbar = () => {
           const doc = document.documentElement;
           const maxScroll = doc.scrollHeight - window.innerHeight;
@@ -663,17 +665,49 @@
           thumb.style.transform = `translateY(${thumbTop}px)`;
         };
 
-        let activeTimer;
-        const markActive = () => {
-          thumb.classList.add("active");
-          clearTimeout(activeTimer);
-          activeTimer = setTimeout(() => thumb.classList.remove("active"), 180);
+        const scrollToPointer = (event) => {
+          if (event.target === up || event.target === down || event.target === thumb) {
+            return;
+          }
+
+          const rect = track.getBoundingClientRect();
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+          const position = Math.min(Math.max(event.clientY - rect.top - buttonSpace, 0), trackHeight);
+          window.scrollTo({ top: (position / trackHeight) * maxScroll, behavior: "smooth" });
         };
 
-        window.addEventListener("scroll", () => {
-          updateScrollbar();
-          markActive();
-        }, { passive: true });
+        const startDrag = (event) => {
+          event.preventDefault();
+          const doc = document.documentElement;
+          const maxScroll = doc.scrollHeight - window.innerHeight;
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const thumbHeight = thumb.offsetHeight;
+          const startY = event.clientY;
+          const startScroll = doc.scrollTop;
+
+          const onMove = (moveEvent) => {
+            const delta = moveEvent.clientY - startY;
+            const scrollDelta = delta * (maxScroll / (trackHeight - thumbHeight));
+            window.scrollTo(0, startScroll + scrollDelta);
+          };
+
+          const onUp = () => {
+            window.removeEventListener("pointermove", onMove);
+            window.removeEventListener("pointerup", onUp);
+          };
+
+          window.addEventListener("pointermove", onMove);
+          window.addEventListener("pointerup", onUp);
+        };
+
+        up.addEventListener("click", () => scrollByAmount(-window.innerHeight * 0.85));
+        down.addEventListener("click", () => scrollByAmount(window.innerHeight * 0.85));
+        track.addEventListener("click", scrollToPointer);
+        thumb.addEventListener("pointerdown", startDrag);
+        window.addEventListener("scroll", updateScrollbar, { passive: true });
         window.addEventListener("resize", updateScrollbar);
         updateScrollbar();
       })();

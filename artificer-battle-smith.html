@@ -30,7 +30,7 @@
         background: #020503;
         border-left: 1px solid var(--line);
         bottom: 0;
-        pointer-events: none;
+        pointer-events: auto;
         position: fixed;
         right: 0;
         top: 0;
@@ -39,6 +39,7 @@
       }
 
       .crt-scrollbar-button {
+        cursor: pointer;
         color: var(--green-soft);
         font-family: Arial, sans-serif;
         font-size: 12px;
@@ -59,6 +60,7 @@
       }
 
       .crt-scrollbar-thumb {
+        cursor: grab;
         background: #145f35;
         border-radius: 0;
         left: 2px;
@@ -66,10 +68,6 @@
         position: absolute;
         right: 2px;
         top: 0;
-      }
-
-      .crt-scrollbar-thumb.active {
-        background: #1a8f4c;
       }
 
       body {
@@ -238,6 +236,61 @@
         box-shadow: inset 0 0 28px rgba(57, 255, 136, 0.08);
         margin-top: 16px;
         overflow-x: auto;
+      }
+      .table-wrap {
+        scrollbar-width: none;
+      }
+
+      .table-wrap::-webkit-scrollbar {
+        height: 0;
+        width: 0;
+      }
+
+      .table-scrollbar {
+        align-items: center;
+        background: #020503;
+        border: 1px solid var(--line);
+        border-top: 0;
+        display: flex;
+        height: 14px;
+        margin-top: -1px;
+        user-select: none;
+      }
+
+      .table-scrollbar[hidden] {
+        display: none;
+      }
+
+      .table-scrollbar-button {
+        color: var(--green-soft);
+        cursor: pointer;
+        flex: 0 0 16px;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        line-height: 14px;
+        text-align: center;
+      }
+
+      .table-scrollbar-track {
+        cursor: pointer;
+        flex: 1;
+        height: 100%;
+        position: relative;
+      }
+
+      .table-scrollbar-thumb {
+        background: #145f35;
+        border-radius: 0;
+        bottom: 2px;
+        cursor: grab;
+        left: 0;
+        min-width: 42px;
+        position: absolute;
+        top: 2px;
+      }
+
+      .table-scrollbar-thumb.dragging {
+        cursor: grabbing;
       }
 
       table {
@@ -443,6 +496,104 @@
         track.appendChild(down);
         document.body.appendChild(track);
 
+        const scrollByAmount = (amount) => {
+          window.scrollBy({ top: amount, behavior: "smooth" });
+        };
+
+        const setupTableScrollbars = () => {
+          document.querySelectorAll(".table-wrap").forEach((wrap) => {
+            if (wrap.nextElementSibling?.classList.contains("table-scrollbar")) {
+              return;
+            }
+
+            const bar = document.createElement("div");
+            const left = document.createElement("div");
+            const rail = document.createElement("div");
+            const grip = document.createElement("div");
+            const right = document.createElement("div");
+
+            bar.className = "table-scrollbar";
+            left.className = "table-scrollbar-button";
+            rail.className = "table-scrollbar-track";
+            grip.className = "table-scrollbar-thumb";
+            right.className = "table-scrollbar-button";
+            left.textContent = "<";
+            right.textContent = ">";
+
+            rail.appendChild(grip);
+            bar.appendChild(left);
+            bar.appendChild(rail);
+            bar.appendChild(right);
+            wrap.insertAdjacentElement("afterend", bar);
+
+            const updateTableScrollbar = () => {
+              const maxScroll = wrap.scrollWidth - wrap.clientWidth;
+
+              if (maxScroll <= 0) {
+                bar.hidden = true;
+                return;
+              }
+
+              bar.hidden = false;
+              const railWidth = rail.clientWidth;
+              const gripWidth = Math.max(42, railWidth * (wrap.clientWidth / wrap.scrollWidth));
+              const maxGripLeft = railWidth - gripWidth;
+              const gripLeft = (wrap.scrollLeft / maxScroll) * maxGripLeft;
+
+              grip.style.width = `${gripWidth}px`;
+              grip.style.transform = `translateX(${gripLeft}px)`;
+            };
+
+            const scrollTableBy = (amount) => {
+              wrap.scrollBy({ left: amount, behavior: "smooth" });
+            };
+
+            const scrollTableToPointer = (event) => {
+              if (event.target === grip) {
+                return;
+              }
+
+              const rect = rail.getBoundingClientRect();
+              const maxScroll = wrap.scrollWidth - wrap.clientWidth;
+              const gripWidth = grip.offsetWidth;
+              const maxGripLeft = rail.clientWidth - gripWidth;
+              const position = Math.min(Math.max(event.clientX - rect.left - (gripWidth / 2), 0), maxGripLeft);
+              wrap.scrollTo({ left: (position / maxGripLeft) * maxScroll, behavior: "smooth" });
+            };
+
+            const startTableDrag = (event) => {
+              event.preventDefault();
+              grip.classList.add("dragging");
+              const maxScroll = wrap.scrollWidth - wrap.clientWidth;
+              const maxGripLeft = rail.clientWidth - grip.offsetWidth;
+              const startX = event.clientX;
+              const startScroll = wrap.scrollLeft;
+
+              const onMove = (moveEvent) => {
+                const delta = moveEvent.clientX - startX;
+                const scrollDelta = delta * (maxScroll / maxGripLeft);
+                wrap.scrollLeft = startScroll + scrollDelta;
+              };
+
+              const onUp = () => {
+                grip.classList.remove("dragging");
+                window.removeEventListener("pointermove", onMove);
+                window.removeEventListener("pointerup", onUp);
+              };
+
+              window.addEventListener("pointermove", onMove);
+              window.addEventListener("pointerup", onUp);
+            };
+
+            left.addEventListener("click", () => scrollTableBy(-wrap.clientWidth * 0.85));
+            right.addEventListener("click", () => scrollTableBy(wrap.clientWidth * 0.85));
+            rail.addEventListener("click", scrollTableToPointer);
+            grip.addEventListener("pointerdown", startTableDrag);
+            wrap.addEventListener("scroll", updateTableScrollbar, { passive: true });
+            window.addEventListener("resize", updateTableScrollbar);
+            updateTableScrollbar();
+          });
+        };
         const updateScrollbar = () => {
           const doc = document.documentElement;
           const maxScroll = doc.scrollHeight - window.innerHeight;
@@ -462,17 +613,50 @@
           thumb.style.transform = `translateY(${thumbTop}px)`;
         };
 
-        let activeTimer;
-        const markActive = () => {
-          thumb.classList.add("active");
-          clearTimeout(activeTimer);
-          activeTimer = setTimeout(() => thumb.classList.remove("active"), 180);
+        const scrollToPointer = (event) => {
+          if (event.target === up || event.target === down || event.target === thumb) {
+            return;
+          }
+
+          const rect = track.getBoundingClientRect();
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+          const position = Math.min(Math.max(event.clientY - rect.top - buttonSpace, 0), trackHeight);
+          window.scrollTo({ top: (position / trackHeight) * maxScroll, behavior: "smooth" });
         };
 
-        window.addEventListener("scroll", () => {
-          updateScrollbar();
-          markActive();
-        }, { passive: true });
+        const startDrag = (event) => {
+          event.preventDefault();
+          const doc = document.documentElement;
+          const maxScroll = doc.scrollHeight - window.innerHeight;
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const thumbHeight = thumb.offsetHeight;
+          const startY = event.clientY;
+          const startScroll = doc.scrollTop;
+
+          const onMove = (moveEvent) => {
+            const delta = moveEvent.clientY - startY;
+            const scrollDelta = delta * (maxScroll / (trackHeight - thumbHeight));
+            window.scrollTo(0, startScroll + scrollDelta);
+          };
+
+          const onUp = () => {
+            window.removeEventListener("pointermove", onMove);
+            window.removeEventListener("pointerup", onUp);
+          };
+
+          window.addEventListener("pointermove", onMove);
+          window.addEventListener("pointerup", onUp);
+        };
+
+        up.addEventListener("click", () => scrollByAmount(-window.innerHeight * 0.85));
+        down.addEventListener("click", () => scrollByAmount(window.innerHeight * 0.85));
+        track.addEventListener("click", scrollToPointer);
+        thumb.addEventListener("pointerdown", startDrag);
+        setupTableScrollbars();
+        window.addEventListener("scroll", updateScrollbar, { passive: true });
         window.addEventListener("resize", updateScrollbar);
         updateScrollbar();
       })();

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="Images/ElysiumIcon.png">
-    <title>Artificer: Mastermaker - Fable</title>
+    <title>Fighter - Fable</title>
     <style>
       :root {
         --black: #030704;
@@ -16,14 +16,15 @@
       * {
         box-sizing: border-box;
       }
+
       html {
         scrollbar-width: none;
       }
 
       html::-webkit-scrollbar,
       body::-webkit-scrollbar {
-        width: 0;
         height: 0;
+        width: 0;
       }
 
       .crt-scrollbar {
@@ -82,25 +83,25 @@
       }
 
       body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 10;
         background:
           linear-gradient(rgba(57, 255, 136, 0.07) 50%, rgba(0, 0, 0, 0.2) 50%),
           radial-gradient(circle at center, transparent 42%, rgba(0, 0, 0, 0.42) 100%);
         background-size: 100% 4px, 100% 100%;
+        content: "";
+        inset: 0;
         mix-blend-mode: screen;
+        pointer-events: none;
+        position: fixed;
+        z-index: 10;
       }
 
       body::after {
+        box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.9);
         content: "";
-        position: fixed;
         inset: 0;
         pointer-events: none;
+        position: fixed;
         z-index: 11;
-        box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.9);
       }
 
       .screen {
@@ -134,10 +135,9 @@
       }
 
       .topbar .home-link {
-        border: 1px solid #030704;
+        border-color: #030704;
         color: var(--green);
         font-size: 1.65rem;
-        min-height: 34px;
         padding: 0 4px 0 0;
       }
 
@@ -156,8 +156,8 @@
       .topbar .active {
         background: rgba(57, 255, 136, 0.14);
         border-color: var(--green);
-        color: var(--green);
         box-shadow: inset 0 0 18px rgba(57, 255, 136, 0.12);
+        color: var(--green);
       }
 
       main {
@@ -176,71 +176,27 @@
         text-transform: uppercase;
       }
 
-      .prompt a {
-        color: inherit;
-        text-decoration: none;
-      }
-
-      .prompt a:hover,
-      .prompt a:focus-visible {
-        text-decoration: underline;
-        text-underline-offset: 8px;
-        outline: none;
-      }
-
-      .subclass-content {
+      .class-copy {
         border-top: 1px solid var(--line);
         padding-top: 24px;
       }
 
-      .subclass-content h2 {
-        color: var(--green);
-        font-size: clamp(1.3rem, 3vw, 2rem);
-        font-weight: 400;
-        margin: 28px 0 14px;
-        text-shadow: 0 0 10px rgba(57, 255, 136, 0.62);
-        text-transform: uppercase;
-      }
-
-      .subclass-content p,
-      .subclass-content li {
+      .class-copy p {
         color: var(--green-soft);
-        line-height: 1.65;
-      }
-
-      .subclass-content p {
-        margin: 0 0 16px;
-      }
-
-      .subclass-content ul {
-        margin: 12px 0 0 24px;
-        padding: 0;
-      }
-
-      .subclass-content li {
-        margin-bottom: 10px;
-      }
-
-      .subclass-content strong,
-      .subclass-content a {
-        color: var(--green);
-        font-weight: 400;
-      }
-
-      .subclass-content a {
-        text-decoration: underline;
-        text-underline-offset: 3px;
-      }
-
-      .subclass-intro {
         font-style: italic;
-        font-weight: 700;
+        line-height: 1.65;
+        margin: 0 0 18px;
+      }
+
+      .multiclass-note {
+        text-decoration: underline;
+        text-underline-offset: 4px;
       }
 
       .table-wrap {
         border: 1px solid var(--line);
         box-shadow: inset 0 0 28px rgba(57, 255, 136, 0.08);
-        margin-top: 16px;
+        margin-top: 28px;
         overflow-x: auto;
       }
       .table-wrap {
@@ -301,6 +257,7 @@
 
       table {
         border-collapse: collapse;
+        min-width: 760px;
         width: 100%;
       }
 
@@ -317,7 +274,7 @@
       th,
       td {
         border-bottom: 1px solid var(--line);
-        padding: 12px;
+        padding: 10px 12px;
         text-align: left;
         vertical-align: top;
       }
@@ -334,6 +291,70 @@
 
       tbody tr:hover {
         background: rgba(57, 255, 136, 0.07);
+      }
+
+      .feature-section {
+        border-top: 1px solid var(--line);
+        margin-top: 38px;
+        padding-top: 28px;
+      }
+
+      .feature-section h2,
+      .feature-section h3 {
+        color: var(--green);
+        font-weight: 400;
+        margin: 0 0 16px;
+        text-shadow: 0 0 10px rgba(57, 255, 136, 0.62);
+        text-transform: uppercase;
+      }
+
+      .feature-section h2 {
+        font-size: clamp(1.9rem, 5vw, 3.4rem);
+      }
+
+      .feature-section h3 {
+        font-size: clamp(1.3rem, 3vw, 2rem);
+        margin-top: 24px;
+      }
+
+      .feature-section .minor-heading {
+        color: var(--green);
+        font-size: clamp(1.1rem, 2vw, 1.45rem);
+        margin-top: 18px;
+      }
+
+      .feature-section p,
+      .feature-section li {
+        color: var(--green-soft);
+        line-height: 1.65;
+      }
+
+      .feature-section p {
+        margin: 0 0 8px;
+      }
+
+      .feature-section strong {
+        color: var(--green);
+        font-weight: 400;
+      }
+
+      .feature-section ul {
+        margin: 12px 0 0 24px;
+        padding: 0;
+      }
+
+      .feature-section ul ul {
+        margin-top: 6px;
+      }
+
+      .feature-section a {
+        color: var(--green);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .archetype-list {
+        max-width: 720px;
       }
     </style>
   </head>
@@ -355,61 +376,152 @@
       </header>
 
       <main>
-        <h1 class="prompt"><a href="artificer.html">Artificer</a>: Mastermaker</h1>
-        <section class="subclass-content" aria-label="Mastermaker subclass features">
-          <p class="subclass-intro">A Mastermaker specializes in integrating flesh and steel, creating powerful construct limbs and replacing weak organs of flesh with components of metal and stone.</p>
+        <h1 class="prompt">Fighter</h1>
+        <section class="class-copy" aria-label="Fighter class overview">
+          <p>Fighters share an unparalleled mastery with weapons and armor, and a thorough knowledge of the skills of combat. They are well acquainted with death, both meting it out and staring it defiantly in the face.</p>
+          <p class="multiclass-note">You must have a Dexterity or Strength score of 13 or higher in order to multiclass in or out of this class.</p>
+        </section>
 
-          <h2>Tools of Integration</h2>
-          <p>At 3rd level, you gain proficiency with heavy armor and smith's tools. If you already have this tool proficiency, you gain proficiency with one other type of artisan's tools of your choice.</p>
+        <div class="table-wrap">
+          <table>
+            <caption>The Fighter</caption>
+            <thead>
+              <tr>
+                <th>Level</th>
+                <th>Proficiency Bonus</th>
+                <th>Features</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1st</td><td>+2</td><td>Fighting Style, Second Wind</td></tr>
+              <tr><td>2nd</td><td>+2</td><td>Action Surge (x1)</td></tr>
+              <tr><td>3rd</td><td>+2</td><td>Martial Archetype</td></tr>
+              <tr><td>4th</td><td>+2</td><td>Ability Score Improvement, Martial Versatility</td></tr>
+              <tr><td>5th</td><td>+3</td><td>Extra Attack (x1)</td></tr>
+              <tr><td>6th</td><td>+3</td><td>Ability Score Improvement, Martial Versatility</td></tr>
+              <tr><td>7th</td><td>+3</td><td>Martial Archetype feature</td></tr>
+              <tr><td>8th</td><td>+3</td><td>Ability Score Improvement, Martial Versatility</td></tr>
+              <tr><td>9th</td><td>+4</td><td>Indomitable (x1)</td></tr>
+              <tr><td>10th</td><td>+4</td><td>Martial Archetype feature</td></tr>
+              <tr><td>11th</td><td>+4</td><td>Extra Attack (x2)</td></tr>
+              <tr><td>12th</td><td>+4</td><td>Ability Score Improvement, Martial Versatility</td></tr>
+              <tr><td>13th</td><td>+5</td><td>Indomitable (x2)</td></tr>
+              <tr><td>14th</td><td>+5</td><td>Ability Score Improvement, Martial Versatility</td></tr>
+              <tr><td>15th</td><td>+5</td><td>Martial Archetype feature</td></tr>
+              <tr><td>16th</td><td>+5</td><td>Ability Score Improvement, Martial Versatility</td></tr>
+              <tr><td>17th</td><td>+6</td><td>Action Surge (x2), Indomitable (x3)</td></tr>
+              <tr><td>18th</td><td>+6</td><td>Martial Archetype feature</td></tr>
+              <tr><td>19th</td><td>+6</td><td>Ability Score Improvement, Martial Versatility</td></tr>
+              <tr><td>20th</td><td>+6</td><td>Extra Attack (x3)</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-          <h2>Mastermaker Spells</h2>
-          <p>At 3rd level, you always have certain spells prepared after you reach particular levels in this class, as shown in the Mastermaker Spells table. These spells count as artificer spells for you, but they don't count against the number of artificer spells you prepare.</p>
+        <section class="feature-section" aria-labelledby="class-features">
+          <h2 id="class-features">Class Features</h2>
+          <p>As a fighter, you gain the following class features.</p>
 
-          <div class="table-wrap">
-            <table>
-              <caption>Mastermaker Spells</caption>
-              <thead>
-                <tr>
-                  <th>Artificer Level</th>
-                  <th>Spells</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>3rd</td><td><a href="#">Absorb Elements</a>, <a href="#">Thunderous Smite</a></td></tr>
-                <tr><td>5th</td><td><a href="#">Enhance Ability</a>, <a href="#">Lesser Restoration</a></td></tr>
-                <tr><td>9th</td><td><a href="#">Blinding Smite</a>, <a href="#">Haste</a></td></tr>
-                <tr><td>13th</td><td><a href="#">Freedom of Movement</a>, <a href="#">Stone Shape</a></td></tr>
-                <tr><td>17th</td><td><a href="#">Banishing Smite</a>, <a href="#">Greater Restoration</a></td></tr>
-              </tbody>
-            </table>
-          </div>
+          <h3 class="minor-heading">Hit Points</h3>
+          <p><strong>Hit Dice:</strong> 1d10 per fighter level</p>
+          <p><strong>Hit Points at 1st Level:</strong> 10 + your Constitution modifier</p>
+          <p><strong>Hit Points at Higher Levels:</strong> 1d10 (or 6) + your Constitution modifier per fighter level after 1st</p>
 
-          <h2>Prosthesis Expertise</h2>
-          <p>At 3rd level, whenever you finish a long rest, you can touch a nonmagical object and imbue it with your power, creating a permanent magical item that replaces a lost limb - a hand, arm, foot, leg, or similar body part. While the prosthetic is attached, it functions identically to the part it replaces. The wearer can detach or reattach it as an action, and it can't be removed against the wearer's will. It detaches if the wearer dies.</p>
+          <h3 class="minor-heading">Proficiencies</h3>
+          <p><strong>Armor:</strong> All armor, shields</p>
+          <p><strong>Weapons:</strong> Simple weapons, martial weapons</p>
+          <p><strong>Tools:</strong> None</p>
+          <p><strong>Saving Throws:</strong> Strength, Constitution</p>
+          <p><strong>Skills:</strong> Choose two skills from Acrobatics, Animal Handling, Athletics, History, Insight, Intimidation, Perception, and Survival</p>
 
-          <h2>Battlefist</h2>
-          <p>At 3rd level you replace one of your arms with a battlefist, a magical prosthetic you created. Your battlefist is a simple melee weapon, and you can use it as a spellcasting focus for your artificer spells. While your battlefist is a magical weapon, it can be infused as if it were a nonmagical weapon.</p>
-          <p>When you attack with your battlefist, you can use your Intelligence modifier instead of Strength for the attack roll. If you hit with it, you deal bludgeoning damage equal to 1d10 + your Strength or Intelligence modifier. At 9th level, the damage dealt by your battlefist increases to 2d10 + your Strength or Intelligence modifier.</p>
-          <p>Additionally, you can choose one of the following weapon properties to add to your battlefist: finesse, thrown (range 20/60), or reach. When you finish a long rest, you can replace this property with a different weapon property from the list.</p>
-
-          <h2>Extra Attack</h2>
-          <p>At 5th level, you can attack twice, rather than once, whenever you take the Attack action on your turn.</p>
-
-          <h2>Improved Battlefist</h2>
-          <p>At 9th level, you have modified your battlefist in both mundane and magical ways. It gains the following benefits:</p>
+          <h3 class="minor-heading">Equipment</h3>
+          <p>You start with the following equipment, in addition to the equipment granted by your background:</p>
           <ul>
-            <li>When you infuse your battlefist, you can apply two infusions to it at a time. If both infusions grant bonuses to your attack rolls or armor class, you gain only the greater bonus.</li>
-            <li>Your battlefist is also a shield, increasing your armor class by 2. You can wield it as a weapon even if you are using it as a shield. You can infuse it as if it were both a simple melee weapon and a shield.</li>
-            <li>The maximum number of items you can infuse at once increases by 1, but the extra infusion must be applied to your battlefist.</li>
+            <li>(a) chain mail or (b) leather, longbow, and 20 arrows</li>
+            <li>(a) a martial weapon and a shield or (b) two martial weapons</li>
+            <li>(a) a light crossbow and 20 bolts or (b) two handaxes</li>
+            <li>(a) a dungeoneer's pack or (b) an explorer's pack</li>
           </ul>
 
-          <h2>Construct Apotheosis</h2>
-          <p>At 15th level you have modified your form, becoming nearly impervious to the weaknesses of flesh. You gain the following benefits:</p>
+          <h3>Fighting Style</h3>
+          <p>You adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.</p>
           <ul>
-            <li>You gain resistance to poison damage and psychic damage, and you are immune to the poisoned condition.</li>
-            <li>If you are affected by a spell or magical effect, you can choose to consider yourself a construct instead of your other creature types.</li>
-            <li>You can cast the <a href="#">Antilife Shell</a> and <a href="#">Investiture of Stone</a> spells without expending a spell slot, without preparing the spell, and without material components, provided you use your battlefist as the spellcasting focus. Once you cast either spell with this feature, you can't cast that spell with it again until you finish a long rest.</li>
+            <li><strong>Archery.</strong> You gain a +2 bonus to attack rolls you make with ranged weapons.</li>
+            <li><strong>Blind Fighting.</strong> You have blindsight with a range of 10 feet. Within that range, you can effectively see anything that isn't behind total cover, even if you're blinded or in darkness. Moreover, you can see an invisible creature within that range, unless the creature successfully hides from you.</li>
+            <li><strong>Defense.</strong> While you are wearing armor, you gain a +1 bonus to AC.</li>
+            <li><strong>Dueling.</strong> When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.</li>
+            <li><strong>Great Weapon Fighting.</strong> When you roll a 1 or 2 on a damage die for an attack you make with a melee weapon that you are wielding with two hands, you can reroll the die and must use the new roll, even if the new roll is a 1 or a 2. The weapon must have the two-handed or versatile property for you to gain this benefit.</li>
+            <li><strong>Interception.</strong> When a creature you can see hits a target, other than you, within 5 feet of you with an attack, you can use your reaction to reduce the damage the target takes by 1d10 + your proficiency bonus (to a minimum of 0 damage). You must be wielding a shield or a simple or martial weapon to use this reaction.</li>
+            <li><strong>Protection.</strong> When a creature you can see attacks a target other than you that is within 5 feet of you, you can use your reaction to impose disadvantage on the attack roll. You must be wielding a shield.</li>
+            <li><strong>Superior Technique.</strong> You learn one maneuver of your choice from among those available to the <a href="#">Battle Master</a> archetype. If a maneuver you use requires your target to make a saving throw to resist the maneuver's effects, the saving throw DC equals 8 + your proficiency bonus + your Strength or Dexterity modifier (your choice.)
+              <ul>
+                <li>You gain one superiority die, which is a d6 (this die is added to any superiority dice you have from another source). This die is used to fuel your maneuvers. A superiority die is expended when you use it. You regain your expended superiority dice when you finish a short or long rest.</li>
+              </ul>
+            </li>
+            <li><strong>Thrown Weapon Fighting.</strong> You can draw a weapon that has the thrown property as part of the attack you make with the weapon.
+              <ul>
+                <li>In addition, when you hit with a ranged attack using a thrown weapon, you gain a +2 bonus to the damage roll.</li>
+              </ul>
+            </li>
+            <li><strong>Two-Weapon Fighting.</strong> When you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack.</li>
+            <li><strong>Unarmed Fighting.</strong> Your unarmed strikes can deal bludgeoning damage equal to 1d6 + your Strength modifier on a hit. If you aren't wielding any weapons or a shield when you make the attack roll, the d6 becomes a d8.
+              <ul>
+                <li>At the start of each of your turns, you can deal 1d4 bludgeoning damage to one creature grappled by you.</li>
+              </ul>
+            </li>
+            <li><strong>Close Quarters Shooter.</strong> When making a ranged attack while you are within 5 feet of a hostile creature, you do not have disadvantage on the attack roll. Your ranged attacks ignore half cover and three-quarters cover against targets within 30 feet of you. You have a +1 bonus to attack rolls on ranged attacks.</li>
+            <li><strong>Mariner.</strong> As long as you are not wearing heavy armor or using a shield, you have a swimming speed and a climbing speed equal to your normal speed, and you gain a +1 bonus to armor class.</li>
+            <li><strong>Tunnel Fighter.</strong> As a bonus action, you can enter a defensive stance that lasts until the start of your next turn. While in your defensive stance, you can make opportunity attacks without using your reaction, and you can use your reaction to make a melee attack against a creature that moves more than 5 feet while within your reach.</li>
           </ul>
+
+          <h3>Second Wind</h3>
+          <p>You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level.</p>
+          <p>Once you use this feature, you must finish a short or long rest before you can use it again.</p>
+
+          <h3>Action Surge</h3>
+          <p>Starting at 2nd level, you can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action.</p>
+          <p>Once you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn.</p>
+
+          <h3>Martial Archetype</h3>
+          <p>At 3rd level, you choose an archetype that you strive to emulate in your combat styles and techniques. The archetype you choose grants you features at 3rd level and again at 7th, 10th, 15th, and 18th level.</p>
+
+          <h3 class="minor-heading">Archetype</h3>
+          <ul class="archetype-list">
+            <li>Arcane Archer</li>
+            <li>Banneret</li>
+            <li>Battle Master</li>
+            <li>Brute</li>
+            <li>Cavalier</li>
+            <li>Champion</li>
+            <li>Echo Knight</li>
+            <li>Eldritch Knight</li>
+            <li>Gunslinger</li>
+            <li>Knight</li>
+            <li>Monster Hunter</li>
+            <li>Psi Warrior</li>
+            <li>Renegade</li>
+            <li>Rune Knight</li>
+            <li>Samurai</li>
+            <li>Scout</li>
+            <li>Sharpshooter</li>
+          </ul>
+
+          <h3>Ability Score Improvement</h3>
+          <p>When you reach 4th level, and again at 6th, 8th, 12th, 14th, 16th, and 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.</p>
+
+          <h3>Martial Versatility</h3>
+          <p>Whenever you reach a level in this class that grants the Ability Score Improvement feature, you can do one of the following, as you shift the focus of your martial practice:</p>
+          <ul>
+            <li>Replace a fighting style you know with another fighting style available to fighters.</li>
+            <li>If you know any maneuvers from the <a href="#">Battle Master</a> archetype, you can replace one maneuver you know with a different maneuver.</li>
+          </ul>
+
+          <h3>Extra Attack</h3>
+          <p>Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.</p>
+          <p>The number of attacks increases to three when you reach 11th level in this class and to four when you reach 20th level in this class.</p>
+
+          <h3>Indomitable</h3>
+          <p>Beginning at 9th level, you can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can't use this feature again until you finish a long rest.</p>
+          <p>You can use this feature twice between long rests starting at 13th level and three times between long rests starting at 17th level.</p>
         </section>
       </main>
     </div>
@@ -595,5 +707,6 @@
         window.addEventListener("resize", updateScrollbar);
         updateScrollbar();
       })();
-    </script>  </body>
+    </script>
+  </body>
 </html>
