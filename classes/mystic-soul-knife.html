@@ -7,10 +7,14 @@
     <link rel="stylesheet" href="../styles/site.css">
     <link rel="stylesheet" href="../styles/classes.css">
     <title>Mystic: Soul Knife - Fable</title>
-    <link rel="stylesheet" href="../styles/admin.css">
   </head>
   <body>
     <div class="screen">
+        <div class="page-nav">
+          <div class="page-nav__item page-nav__prev"><a class="page-nav__link" href="mystic-nomad.html"><< Nomad</a></div>
+          <div class="page-nav__item page-nav__next"><a class="page-nav__link" href="mystic-wu-jen.html">Wu Jen >></a></div>
+        </div>
+
       <header>
         <nav class="topbar" aria-label="Section navigation">
           <a class="home-link" href="../index.html">Fable</a>
@@ -29,10 +33,42 @@
       <main>
         <h1 class="prompt"><a href="mystic.html">Mystic</a>: Soul Knife</h1>
         <section class="subclass-content" aria-label="mystic: Soul Knife">
-          <p>Log in as admin, choose Edit Page, and replace this placeholder with the full content for Soul Knife.</p>
+          <p class="subclass-intro">The Order of the Soul Knife sacrifices the breadth of knowledge other mystics gain to focus on a specific psionic technique. These mystics learn to manifest a deadly weapon of pure psychic energy that they can use to cleave through foes. Soul knifes vary widely in their approach to this path. Some follow it out of a desire to achieve martial perfection. Others are ruthless assassins who seek to become the perfect killer.</p>
+
+          <h2>Martial Training</h2>
+          <p>At 1st level, you gain proficiency with medium armor and martial weapons.</p>
+
+          <h2>Soul Knife</h2>
+          <p>Starting at 1st level, you gain the ability to manifest a blade of psychic energy. As a bonus action, you can create scintillating knives of energy that project from both of your fists. You can hold any number of your hands while manifesting these blades. You can dismiss them as a bonus action.</p>
+          <p>For you, a soul knife is a martial melee weapon with the light and finesse properties. It deals 1d8 psychic damage on a hit. As a bonus action, you can prepare to use the blades to parry, gaining a +2 bonus to AC until the start of your next turn or until you are incapacitated.</p>
+
+          <h2>Hone the Blade</h2>
+          <p>Starting at 3rd level, you can spend psi points to augment your soul knife's attack rolls and damage. You gain a bonus to attack and damage rolls with your soul knife depending on the number of psi points spent, as shown on the table below. This bonus lasts for 10 minutes.</p>
+
+          <div class="table-wrap feature-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Psi Points</th>
+                  <th>Attack and Damage Bonus</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>2</td><td>+1</td></tr>
+                <tr><td>5</td><td>+2</td></tr>
+                <tr><td>7</td><td>+4</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>Consummative Knife</h2>
+          <p>Starting at 6th level, whenever you slay an enemy creature with a soul knife attack, you immediately regain 2 psi points.</p>
+
+          <h2>Phantom Knife</h2>
+          <p>Starting at 14th level, you can make an attack that phases through most defenses. As an action, you can make one attack with your soul knife. Treat the target's AC as 10 against this attack, regardless of the target's actual AC.</p>
         </section>
       </main>
     </div>
-    <script src="../scripts/admin.js"></script>
+    <script src="../scripts/table-scrollbars.js"></script>
   </body>
 </html>

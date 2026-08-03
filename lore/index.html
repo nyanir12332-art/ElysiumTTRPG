@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../styles/site.css">
     <link rel="stylesheet" href="../styles/lore.css">
     <title>Lore - Fable</title>
-    <link rel="stylesheet" href="../styles/admin.css">
   </head>
   <body>
     <div class="screen">
@@ -27,9 +26,15 @@
       </header>
 
       <main>
-        <h1 class="prompt">Elysium Timeline</h1>
+        <h1 class="prompt" id="lore-title">Elysium Timeline</h1>
 
-        <section class="timeline" aria-label="Elysium timeline">
+        <nav class="lore-tabs" aria-label="Lore pages">
+          <button class="lore-tab active" type="button" data-lore-target="timeline-panel" data-lore-title="Elysium Timeline" aria-pressed="true">Elysium Timeline</button>
+          <button class="lore-tab" type="button" data-lore-target="city-panel" data-lore-title="The City of Elysium" aria-pressed="false">The City of Elysium</button>
+          <button class="lore-tab" type="button" data-lore-target="factions-panel" data-lore-title="Factions of Elysium" aria-pressed="false">Factions of Elysium</button>
+        </nav>
+
+        <section class="timeline lore-panel active" id="timeline-panel" aria-label="Elysium timeline">
           <details class="timeline-event">
             <summary class="timeline-summary">
               <span class="timeline-node" aria-hidden="true"></span>
@@ -136,8 +141,129 @@
             <p class="timeline-description">The Smoke War was a war between mortals and those that didn't want to be. The war started from a new corporation being a massive energy providor for large sections of the city. The polution of its method to generate energy was fair, but it only grew worse and soon the section that the corporation resided in became inhospitable. The officials of the section, instead of putting backlash on the corporation, began to produce products to help cope with living within the section to profit off of their the common folk's suffering. Everything went well until the pollution got to the point of overflowing onto other sections of the city till breatheable air became a commodity. War broke out and what spilled onto the battlefield weren't humanoids, but humanoids shaped into insectoids as if they were clay put into a mold of insects. These were the products they were being sold by the section to help cope with the smoke, not inhalers or masks, but body part replacements. Despite their grotesque appearance, Elysium recognized these replacements as products of the section and official prosthesis.</p>
           </details>
         </section>
+
+        <section class="lore-panel topic-page" id="city-panel" aria-label="The City of Elysium" hidden>
+          <div class="topic-list">
+            <details class="topic-card">
+              <summary>Districts</summary>
+              <p>The City of Elysium is divided into districts shaped by old ruins, modern industry, protected housing, and the necessities of survival above The Lunar Wastes.</p>
+            </details>
+
+            <details class="topic-card">
+              <summary>The Head</summary>
+              <p>The Head is the city authority that maintains civic order, enforces taboo law, and intervenes when institutions threaten the stability of Elysium.</p>
+            </details>
+
+            <details class="topic-card">
+              <summary>The Taboos</summary>
+              <p>The Taboos are forbidden acts that carry immediate execution, most famously the creation of autonomous non-decomposing mechanical bodies and illegal use of patented magic or technology.</p>
+            </details>
+
+            <details class="topic-card">
+              <summary>The Pantheon</summary>
+              <p>The Pantheon is the compact of greater gods whose followers helped preserve and build Elysium after the world outside became inhospitable.</p>
+            </details>
+
+            <details class="topic-card">
+              <summary>The Lunar Wastes</summary>
+              <p>The Lunar Wastes surround the city as a hostile, eroding remnant of the old realm, making Elysium the last stable bastion for most mortal life.</p>
+            </details>
+
+            <details class="topic-card">
+              <summary>Patents</summary>
+              <p>Patents define ownership over traditions, technology, scripture, magic, and workshop methods. Their abuse and theft helped ignite the Patent War.</p>
+            </details>
+          </div>
+        </section>
+
+        <section class="lore-panel topic-page" id="factions-panel" aria-label="Factions of Elysium" hidden>
+          <div class="faction-groups">
+            <section class="faction-group">
+              <h2>Wings</h2>
+              <details class="topic-card">
+                <summary>The Head</summary>
+                <p>The governing body whose wings carry out the laws of Elysium and answer to the city's highest authority.</p>
+              </details>
+              <h3>Corporations</h3>
+              <details class="topic-card subcategory">
+                <summary>Energy Corporations</summary>
+                <p>Industrial powers that control light, fuel, prosthetics, and the infrastructure that keeps large sections of the city alive.</p>
+              </details>
+              <details class="topic-card subcategory">
+                <summary>Patent Holders</summary>
+                <p>Companies and institutions that own protected techniques, devices, scripture, or magical processes under Elysium law.</p>
+              </details>
+            </section>
+
+            <section class="faction-group">
+              <h2>Associations</h2>
+              <details class="topic-card">
+                <summary>Guild Associations</summary>
+                <p>Loose alliances that organize professionals, contractors, and civic specialists who operate across multiple districts.</p>
+              </details>
+              <h3>Fixer Offices</h3>
+              <details class="topic-card subcategory">
+                <summary>Independent Offices</summary>
+                <p>Small teams that take contracts, settle disputes, recover assets, and handle work too specific or too ugly for larger institutions.</p>
+              </details>
+              <details class="topic-card subcategory">
+                <summary>Registered Fixers</summary>
+                <p>Licensed operators whose work is tolerated because the city needs problems solved faster than official channels can manage.</p>
+              </details>
+            </section>
+
+            <section class="faction-group">
+              <h2>Syndicates</h2>
+              <details class="topic-card">
+                <summary>Major Syndicates</summary>
+                <p>Criminal or semi-legal powers that control black markets, territory, labor routes, and debts beneath the city's official systems.</p>
+              </details>
+              <h3>Subsidiaries</h3>
+              <details class="topic-card subcategory">
+                <summary>Subordinate Crews</summary>
+                <p>Smaller groups that operate under a syndicate's name, often handling enforcement, transport, smuggling, or intimidation.</p>
+              </details>
+            </section>
+
+            <section class="faction-group">
+              <h2>Workshops</h2>
+              <details class="topic-card">
+                <summary>Licensed Workshops</summary>
+                <p>Craft halls and laboratories that create tools, weapons, prosthetics, and magical devices within the city's patent laws.</p>
+              </details>
+              <details class="topic-card">
+                <summary>Backstreet Workshops</summary>
+                <p>Unregistered makers that survive in legal shadows, where useful invention can easily drift into taboo territory.</p>
+              </details>
+            </section>
+          </div>
+        </section>
       </main>
     </div>
+    <script>
+      (() => {
+        const title = document.querySelector("#lore-title");
+        const tabs = document.querySelectorAll(".lore-tab");
+        const panels = document.querySelectorAll(".lore-panel");
+
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            title.textContent = tab.dataset.loreTitle;
+            tabs.forEach((item) => {
+              const isActive = item === tab;
+              item.classList.toggle("active", isActive);
+              item.setAttribute("aria-pressed", String(isActive));
+            });
+            panels.forEach((panel) => {
+              const isActive = panel.id === tab.dataset.loreTarget;
+              panel.classList.toggle("active", isActive);
+              panel.hidden = !isActive;
+            });
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+        });
+      })();
+    </script>
     <script>
       (() => {
         const track = document.createElement("div");
@@ -226,6 +352,5 @@
         updateScrollbar();
       })();
     </script>
-    <script src="../scripts/admin.js"></script>
   </body>
 </html>

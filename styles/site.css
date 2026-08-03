@@ -55,6 +55,7 @@ body::after {
 }
 
 .screen {
+  position: relative;
   margin: 0 auto;
   max-width: 1180px;
   min-height: 100vh;
@@ -62,7 +63,52 @@ body::after {
   text-align: left;
 }
 
+.page-nav {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 100%;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.page-nav__item {
+  position: absolute;
+  top: calc(100% + 12px);
+  pointer-events: auto;
+  z-index: 21;
+}
+
+.page-nav__prev {
+  left: clamp(18px, 4vw, 44px);
+}
+
+.page-nav__next {
+  right: clamp(18px, 4vw, 44px);
+}
+
+.page-nav__link {
+  background: rgba(0, 5, 3, 0.94);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  color: var(--green-soft);
+  display: inline-flex;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 10px 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.page-nav__link:hover,
+.page-nav__link:focus-visible {
+  border-color: var(--green);
+  color: var(--green);
+}
+
 header {
+  position: relative;
   border-bottom: 1px solid var(--line);
   padding-bottom: 20px;
   text-shadow: 0 0 10px rgba(57, 255, 136, 0.74);
