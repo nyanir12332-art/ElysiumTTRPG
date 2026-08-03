@@ -1,0 +1,154 @@
+.admin-auth {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  position: fixed;
+  right: 24px;
+  top: 18px;
+  z-index: 40;
+}
+
+.admin-button,
+.admin-input,
+.admin-panel button,
+.admin-panel input,
+.admin-panel select,
+.admin-panel textarea {
+  background: rgba(3, 7, 4, 0.94);
+  border: 1px solid var(--line);
+  color: var(--green-soft);
+  font: inherit;
+}
+
+.admin-button,
+.admin-panel button {
+  cursor: pointer;
+  min-height: 34px;
+  padding: 7px 10px;
+  text-transform: uppercase;
+}
+
+.admin-button:hover,
+.admin-button:focus-visible,
+.admin-panel button:hover,
+.admin-panel button:focus-visible {
+  border-color: var(--green);
+  color: var(--green);
+  outline: none;
+}
+
+.admin-dialog {
+  background: rgba(3, 7, 4, 0.96);
+  border: 1px solid var(--green);
+  box-shadow: 0 0 28px rgba(57, 255, 136, 0.16);
+  color: var(--green-soft);
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 18px;
+  position: fixed;
+  right: 24px;
+  top: 62px;
+  width: 360px;
+  z-index: 39;
+}
+
+.admin-dialog[hidden],
+.admin-panel[hidden],
+.admin-toolbar[hidden] {
+  display: none;
+}
+
+.admin-dialog h2,
+.admin-panel h2 {
+  color: var(--green);
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.admin-dialog label,
+.admin-panel label {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.admin-input,
+.admin-panel input,
+.admin-panel select,
+.admin-panel textarea {
+  min-height: 34px;
+  padding: 8px;
+  width: 100%;
+}
+
+.admin-panel textarea {
+  min-height: 76px;
+  resize: vertical;
+}
+
+.admin-error {
+  color: #ff8d8d;
+  min-height: 1.4em;
+}
+
+.admin-panel {
+  background: rgba(3, 7, 4, 0.94);
+  border: 1px solid var(--line);
+  margin: 0 0 24px;
+  padding: 16px;
+}
+
+.admin-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.admin-grid .wide {
+  grid-column: 1 / -1;
+}
+
+.admin-toolbar {
+  align-items: center;
+  background: rgba(3, 7, 4, 0.96);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 10px;
+  position: sticky;
+  top: 10px;
+  z-index: 30;
+}
+
+.admin-editing {
+  outline: 1px dashed var(--green);
+  outline-offset: 8px;
+}
+
+.admin-highlight {
+  background: rgba(57, 255, 136, 0.2);
+  color: var(--green);
+  padding: 0 0.18em;
+}
+
+@media (max-width: 720px) {
+  .admin-auth {
+    right: 18px;
+    top: 10px;
+  }
+
+  .admin-dialog {
+    left: 16px;
+    right: 16px;
+    top: 54px;
+    width: auto;
+  }
+
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
