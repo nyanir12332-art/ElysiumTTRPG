@@ -64,18 +64,23 @@ body::after {
 }
 
 .page-nav {
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 100%;
+  /* Fixed to bottom of viewport so class navigation is always accessible */
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: auto;
   pointer-events: none;
-  z-index: 20;
+  z-index: 120;
 }
 
 .page-nav__item {
-  position: absolute;
-  top: calc(100% + 12px);
+  /* Place items at the bottom of the viewport and allow interaction */
+  position: fixed;
+  top: auto;
+  bottom: clamp(18px, 4vw, 44px);
   pointer-events: auto;
-  z-index: 21;
+  z-index: 121;
 }
 
 .page-nav__prev {
