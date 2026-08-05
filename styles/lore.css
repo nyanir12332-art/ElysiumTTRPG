@@ -197,11 +197,32 @@
   box-shadow: none; /* remove shadow */
 }
 
-.image-card img {
+/* Mask-based coloration: show the green color through the non-transparent pixels of the source image */
+.image-mask {
+  width: 100%;
+  /* approximate aspect ratio to reserve space while the mask loads; adjust if you know the exact ratio */
+  padding-top: 62%;
+  background-color: var(--green);
+  -webkit-mask-image: url("../Images/CityofElysium.png");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-image: url("../Images/CityofElysium.png");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
+/* Hide the fallback image visually but keep it available to assistive tech and browsers without mask support */
+.image-fallback {
   display: block;
   width: 100%;
   height: auto;
-  border: none; /* no border around the image */
+  border: none;
+  visibility: hidden;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
 .image-card figcaption {
