@@ -54,6 +54,9 @@ body::after {
   z-index: 11;
 }
 
+/* Import search styles (site-wide) */
+@import url("./search.css");
+
 .screen {
   position: relative;
   margin: 0 auto;
