@@ -1,0 +1,36 @@
+.race-divider {
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 38px;
+  margin: 12px 0 -20px;
+  padding-top: 18px;
+}
+
+.race-list {
+  list-style: disc;
+  margin: 0;
+  padding-left: 1.4em;
+  max-width: 720px;
+}
+
+.race-list li {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0.25em 0;
+}
+
+.race-list a {
+  color: var(--green-soft);
+  display: inline;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.race-list a:hover,
+.race-list a:focus-visible {
+  color: var(--green);
+  text-decoration: underline;
+}
