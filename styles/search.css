@@ -19,7 +19,8 @@
   grid-column: 2;
   grid-row: 1;
   margin: 0;
-  padding: 5px 6px;
+  min-height: 36px;
+  padding: 0 6px;
   position: static;
   width: 100%;
   z-index: 200;
@@ -36,7 +37,7 @@
   font-family: inherit;
   font-size: 0.95rem;
   min-width: 0;
-  padding: 7px 8px;
+  padding: 5px 8px;
   width: min(260px, 25vw);
   outline: none;
 }
@@ -45,8 +46,15 @@
   color: var(--green-dim);
 }
 
+.site-search input[type="search"]::-webkit-search-cancel-button,
+.site-search input[type="search"]::-webkit-search-decoration {
+  appearance: none;
+  display: none;
+}
+
 .site-search input[type="search"]:focus {
-  border-color: var(--line);
+  border-color: transparent;
+  outline: none;
 }
 
 .site-search button {
@@ -63,8 +71,9 @@
 
 .site-search button:hover,
 .site-search button:focus-visible {
-  border-color: var(--line);
+  border-color: transparent;
   color: var(--green);
+  outline: none;
 }
 
 .site-search__results {

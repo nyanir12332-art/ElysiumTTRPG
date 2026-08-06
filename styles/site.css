@@ -1,5 +1,3 @@
-@import url("./search.css");
-
 :root {
   --black: #030704;
   --panel: #071108;
@@ -66,10 +64,30 @@ body::after {
   text-align: left;
 }
 
+.race-list {
+  list-style: disc;
+  margin: 0;
+  padding-left: 1.4em;
+  max-width: 720px;
+}
+
+.race-list li {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0.25em 0;
+}
+
 .class-copy,
 .subclass-content {
   border-top: 1px solid var(--line);
   padding-top: 24px;
+}
+
+.race-divider {
+  border-top: 1px solid var(--line);
+  margin: -1px 0 0;
+  padding-top: 0;
 }
 
 .class-copy p {
@@ -79,59 +97,73 @@ body::after {
   margin: 0 0 18px;
 }
 
+.race-list a {
+  color: var(--green-soft);
+  display: inline;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.race-list a:hover,
+.race-list a:focus-visible {
+  color: var(--green);
+  text-decoration: underline;
+}
 
 .page-nav {
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  margin: 0 0 22px;
-  min-height: 42px;
-  position: relative;
+  /* Fixed to bottom of viewport so class navigation is always accessible */
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: auto;
+  pointer-events: none;
+  z-index: 120;
 }
 
 .page-nav__item {
-  flex: 0 1 auto;
+  /* Place items at the bottom of the viewport and allow interaction */
+  position: fixed;
+  top: auto;
+  bottom: clamp(18px, 4vw, 44px);
+  pointer-events: auto;
+  z-index: 121;
 }
 
 .page-nav__prev {
-  margin-right: auto;
+  left: clamp(18px, 4vw, 44px);
 }
 
 .page-nav__next {
-  margin-left: auto;
+  right: clamp(18px, 4vw, 44px);
 }
 
 .page-nav__link {
-  align-items: center;
-  background: rgba(3, 7, 4, 0.96);
+  background: rgba(0, 5, 3, 0.94);
   border: 1px solid var(--line);
-  box-shadow: 0 0 18px rgba(57, 255, 136, 0.08), inset 0 0 14px rgba(57, 255, 136, 0.06);
+  border-radius: 3px;
   color: var(--green-soft);
   display: inline-flex;
   font-size: 0.9rem;
   font-weight: 600;
-  gap: 8px;
   line-height: 1.4;
-  min-height: 42px;
-  padding: 9px 15px;
+  padding: 10px 14px;
   text-decoration: none;
   text-transform: uppercase;
-  transition: background-color 140ms ease, border-color 140ms ease, box-shadow 140ms ease, color 140ms ease;
   white-space: nowrap;
 }
 
 .page-nav__link:hover,
 .page-nav__link:focus-visible {
-  background: rgba(57, 255, 136, 0.12);
   border-color: var(--green);
-  box-shadow: 0 0 22px rgba(57, 255, 136, 0.16), inset 0 0 16px rgba(57, 255, 136, 0.1);
   color: var(--green);
-  outline: none;
 }
 
-@media (max-width: 1100px) {
-  .page-nav {
-    display: none;
+@media (max-width: 1120px), (max-height: 700px) {
+  .page-nav,
+  .page-nav__item {
+    display: none !important;
   }
 }
 
@@ -154,9 +186,8 @@ header {
   border: 1px solid transparent;
   color: var(--green-soft);
   display: inline-flex;
-  font-size: 1.05rem;
   min-height: 34px;
-  padding: 9px 11px;
+  padding: 8px 10px;
   text-decoration: none;
   text-shadow: 0 0 10px rgba(57, 255, 136, 0.58);
   text-transform: uppercase;
@@ -165,7 +196,7 @@ header {
 .topbar .home-link {
   border: 1px solid #030704;
   color: var(--green);
-  font-size: 1.8rem;
+  font-size: 1.65rem;
   min-height: 34px;
   padding: 0 4px 0 0;
 }

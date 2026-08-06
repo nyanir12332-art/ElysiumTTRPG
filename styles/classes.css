@@ -109,6 +109,19 @@
   text-decoration: underline;
 }
 
+.class-back-link {
+  color: var(--green-dim);
+  margin-right: 0.2em;
+  text-decoration: none;
+  vertical-align: baseline;
+}
+
+.class-back-link:hover,
+.class-back-link:focus-visible {
+  color: var(--green);
+  text-decoration: underline;
+}
+
 .class-copy,
 .subclass-content {
   border-top: 1px solid var(--line);

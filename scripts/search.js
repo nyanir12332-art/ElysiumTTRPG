@@ -7,7 +7,7 @@
     const container = document.createElement('div');
     container.className = 'site-search';
     container.innerHTML = `
-      <input type="search" placeholder="Search site..." aria-label="Search site" />
+      <input type="search" placeholder="Search site..." aria-label="Search site" autocomplete="off" autocorrect="off" spellcheck="false" />
       <button type="button" aria-label="Search">Search</button>
     `;
 
@@ -72,6 +72,7 @@
     });
 
     button.addEventListener('click', () => doSearch(input.value.trim(), resultsEl));
+    input.addEventListener('input', () => hideResults(resultsEl));
     input.addEventListener('keydown', (e) => {
       if(e.key === 'Enter') {
         e.preventDefault();
