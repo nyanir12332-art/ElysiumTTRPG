@@ -60,6 +60,7 @@ body::after {
   max-width: 1180px;
   min-height: 100vh;
   padding: clamp(18px, 4vw, 44px);
+  padding-bottom: clamp(96px, 12vw, 120px);
   text-align: left;
 }
 
@@ -112,7 +113,7 @@ body::after {
   color: var(--green);
 }
 
-@media (max-width: 920px), (max-height: 700px) {
+@media (max-width: 1120px), (max-height: 700px) {
   .page-nav,
   .page-nav__item {
     display: none !important;
