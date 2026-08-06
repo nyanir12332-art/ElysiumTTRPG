@@ -112,6 +112,12 @@ body::after {
   color: var(--green);
 }
 
+@media (max-height: 700px) {
+  .page-nav {
+    display: none;
+  }
+}
+
 header {
   position: relative;
   border-bottom: 1px solid var(--line);
