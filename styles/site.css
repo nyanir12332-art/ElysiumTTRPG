@@ -112,9 +112,10 @@ body::after {
   color: var(--green);
 }
 
-@media (max-width: 780px) {
-  .page-nav {
-    display: none;
+@media (max-width: 920px), (max-height: 700px) {
+  .page-nav,
+  .page-nav__item {
+    display: none !important;
   }
 }
 
