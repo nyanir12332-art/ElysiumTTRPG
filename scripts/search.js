@@ -1,8 +1,8 @@
 (function(){
-  // Create search UI and inject into .topbar
+  // Create one shared search control for every page with a site header.
   function createSearchUI(){
-    const topbar = document.querySelector('.topbar');
-    if(!topbar) return;
+    const mount = document.querySelector('header');
+    if(!mount) return;
 
     const container = document.createElement('div');
     container.className = 'site-search';
@@ -11,7 +11,7 @@
       <button type="button" aria-label="Search">Search</button>
     `;
 
-    topbar.appendChild(container);
+    mount.appendChild(container);
 
     const input = container.querySelector('input[type="search"]');
     const button = container.querySelector('button');
@@ -19,7 +19,57 @@
     const resultsEl = document.createElement('div');
     resultsEl.className = 'site-search__results';
     resultsEl.style.display = 'none';
+    const resultsContent = document.createElement('div');
+    resultsContent.className = 'site-search__results-content';
+    const scrollbar = document.createElement('div');
+    scrollbar.className = 'site-search__scrollbar';
+    scrollbar.innerHTML = '<div class="site-search__scrollbar-button up">^</div><div class="site-search__scrollbar-thumb"></div><div class="site-search__scrollbar-button down">v</div>';
+    resultsEl.append(resultsContent, scrollbar);
     document.body.appendChild(resultsEl);
+
+    const thumb = scrollbar.querySelector('.site-search__scrollbar-thumb');
+    const up = scrollbar.querySelector('.up');
+    const down = scrollbar.querySelector('.down');
+
+    const updateResultsScrollbar = () => {
+      const maxScroll = resultsContent.scrollHeight - resultsContent.clientHeight;
+      if (maxScroll <= 0) {
+        scrollbar.style.display = 'none';
+        return;
+      }
+      scrollbar.style.display = 'block';
+      const trackHeight = scrollbar.clientHeight - 32;
+      const thumbHeight = Math.max(42, trackHeight * (resultsContent.clientHeight / resultsContent.scrollHeight));
+      const maxThumbTop = trackHeight - thumbHeight;
+      thumb.style.height = `${thumbHeight}px`;
+      thumb.style.transform = `translateY(${(resultsContent.scrollTop / maxScroll) * maxThumbTop}px)`;
+    };
+
+    const scrollResultsBy = (amount) => resultsContent.scrollBy({ top: amount, behavior: 'smooth' });
+    up.addEventListener('click', () => scrollResultsBy(-resultsContent.clientHeight * 0.85));
+    down.addEventListener('click', () => scrollResultsBy(resultsContent.clientHeight * 0.85));
+    resultsContent.addEventListener('scroll', updateResultsScrollbar, { passive: true });
+    window.addEventListener('resize', updateResultsScrollbar);
+    thumb.addEventListener('pointerdown', (event) => {
+      event.preventDefault();
+      thumb.classList.add('dragging');
+      const startY = event.clientY;
+      const startScroll = resultsContent.scrollTop;
+      const onMove = (moveEvent) => {
+        const maxScroll = resultsContent.scrollHeight - resultsContent.clientHeight;
+        const trackHeight = scrollbar.clientHeight - 32;
+        const thumbHeight = thumb.offsetHeight;
+        const maxThumbTop = trackHeight - thumbHeight;
+        resultsContent.scrollTop = startScroll + (moveEvent.clientY - startY) * (maxScroll / maxThumbTop);
+      };
+      const onUp = () => {
+        thumb.classList.remove('dragging');
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+      };
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
+    });
 
     button.addEventListener('click', () => doSearch(input.value.trim(), resultsEl));
     input.addEventListener('keydown', (e) => {
@@ -40,44 +90,11 @@
       }
     });
 
-    // Overlap detection with main element: hide if it would overlap
-    function checkOverlap(){
-      try{
-        const main = document.querySelector('main');
-        if(!main) return;
-        const rectSearch = container.getBoundingClientRect();
-        const rectMain = main.getBoundingClientRect();
-        const overlap = !(rectSearch.right < rectMain.left || rectSearch.left > rectMain.right || rectSearch.bottom < rectMain.top || rectSearch.top > rectMain.bottom);
-        if(overlap){
-          container.classList.add('site-search--hidden');
-          resultsEl.style.display = 'none';
-        } else {
-          container.classList.remove('site-search--hidden');
-        }
-      } catch(e){
-        // ignore
-      }
-    }
-
-    window.addEventListener('resize', checkOverlap);
-    window.addEventListener('scroll', checkOverlap, {passive:true});
-    // initial
-    setTimeout(checkOverlap, 120);
-
     // Pre-cache index listing by fetching a prebuilt search-index.json (fast) or fall back to parsing ../index.html
     let indexLinks = null;
     function convertPathToHref(targetPath){
-      // Normalize backslashes to forward slashes
-      const target = targetPath.replace(/\\\\/g,'/').replace(/^\//,'');
-      const cur = (window.location.pathname || '').replace(/\\\\/g,'/');
-      // Determine current directory
-      const curDir = cur.endsWith('/') ? cur : cur.substring(0, cur.lastIndexOf('/')+1);
-      const toSegments = target.split('/').filter(Boolean);
-      const fromSegments = curDir.split('/').filter(Boolean);
-      let i=0; while(i<fromSegments.length && i<toSegments.length && fromSegments[i]===toSegments[i]) i++;
-      const up = fromSegments.length - i;
-      const rel = (up? '../'.repeat(up):'') + toSegments.slice(i).join('/');
-      return rel || './';
+      const target = targetPath.replace(/\\/g, '/').replace(/^\//, '');
+      return new URL(target, document.baseURI).href;
     }
 
     function ensureIndex(){
@@ -119,6 +136,7 @@
       }
       return fetch(href, {cache:'no-store'}).then(r=>r.text()).then(html=>{
         const doc = new DOMParser().parseFromString(html, 'text/html');
+        doc.querySelectorAll('header, .page-nav, .site-search, script, style, nav').forEach((element) => element.remove());
         const text = doc.body ? doc.body.innerText : html;
         pageCache.set(href, text);
         return searchInText(href, q, text);
@@ -171,10 +189,11 @@
     }
 
     function showResults(resultsEl, results, query){
-      resultsEl.innerHTML = '';
+      resultsContent.innerHTML = '';
       if(!results || results.length===0){
-        resultsEl.innerHTML = '<div class="site-search__result">No results</div>';
+        resultsContent.innerHTML = '<div class="site-search__result">No results</div>';
         resultsEl.style.display = 'block';
+        updateResultsScrollbar();
         return;
       }
       results.slice(0,12).forEach(r=>{
@@ -201,9 +220,10 @@
           }
           div.appendChild(sn);
         }
-        resultsEl.appendChild(div);
+        resultsContent.appendChild(div);
       });
       resultsEl.style.display = 'block';
+      updateResultsScrollbar();
     }
 
     function hideResults(resultsEl){

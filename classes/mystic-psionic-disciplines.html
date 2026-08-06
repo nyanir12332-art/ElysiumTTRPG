@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../styles/classes.css">
     <link rel="stylesheet" href="../styles/lore.css">
     <title>Mystic: Psionic Disciplines - Fable</title>
+      <link rel="stylesheet" href="../styles/search.css?v=9">
   </head>
   <body>
     <div class="screen">
@@ -79,23 +80,24 @@
 
           <h2>Combining Psionic Effects</h2>
           <ul>
-            <li>The effects of different psionic disciplines add together while the durations of the disciplines overlap. Likewise, different options from a psionic discipline combine if they are active at the same time. However, a specific option from a psionic discipline doesn't combine with itself if the option is used multiple times. Instead, the most potent effect—usually dependent on how many psi points were used to create the effect—applies while the durations of the effect overlap.</li>
+            <li>The effects of different psionic disciplines add together while the durations of the disciplines overlap. Likewise, different options from a psionic discipline combine if they are active at the same time. However, a specific option from a psionic discipline doesn't combine with itself if the option is used multiple times. Instead, the most potent effect-usually dependent on how many psi points were used to create the effect-applies while the durations of the effect overlap.</li>
             <li>Psionics and spells are separate effects, and therefore their benefits and drawbacks overlap. A psionic effect that reproduces a spell is an exception to this rule.</li>
           </ul>
 
+          <div class="discipline-browser">
           <div class="lore-tabs" role="tablist" aria-label="Mystic disciplines by order">
-            <button class="lore-tab active" type="button" data-target="avatar-panel" aria-selected="true">Avatar</button>
-            <button class="lore-tab" type="button" data-target="awakened-panel" aria-selected="false">Awakened</button>
-            <button class="lore-tab" type="button" data-target="immortal-panel" aria-selected="false">Immortal</button>
-            <button class="lore-tab" type="button" data-target="nomad-panel" aria-selected="false">Nomad</button>
-            <button class="lore-tab" type="button" data-target="wu-jen-panel" aria-selected="false">Wu Jen</button>
+            <button class="lore-tab active" type="button" data-target="avatar-panel" aria-controls="avatar-panel" aria-selected="true">Avatar</button>
+            <button class="lore-tab" type="button" data-target="awakened-panel" aria-controls="awakened-panel" aria-selected="false">Awakened</button>
+            <button class="lore-tab" type="button" data-target="immortal-panel" aria-controls="immortal-panel" aria-selected="false">Immortal</button>
+            <button class="lore-tab" type="button" data-target="nomad-panel" aria-controls="nomad-panel" aria-selected="false">Nomad</button>
+            <button class="lore-tab" type="button" data-target="wu-jen-panel" aria-controls="wu-jen-panel" aria-selected="false">Wu Jen</button>
           </div>
 
           <div class="lore-panel" id="avatar-panel">
             <div class="table-wrap feature-table">
               <table>
                 <thead>
-                  <tr><th>Discipline Name</th></tr>
+                  <tr><th scope="col" data-discipline-heading>Avatar Discipline</th></tr>
                 </thead>
                 <tbody>
                   <tr><td><a href="mystic-avatar-crown-of-despair.html">Crown of Despair</a></td></tr>
@@ -115,7 +117,7 @@
             <div class="table-wrap feature-table">
               <table>
                 <thead>
-                  <tr><th>Discipline Name</th></tr>
+                  <tr><th scope="col" data-discipline-heading>Awakened Discipline</th></tr>
                 </thead>
                 <tbody>
                   <tr><td><a href="mystic-awakened-aura-sight.html">Aura Sight</a></td></tr>
@@ -135,7 +137,7 @@
             <div class="table-wrap feature-table">
               <table>
                 <thead>
-                  <tr><th>Discipline Name</th></tr>
+                  <tr><th scope="col" data-discipline-heading>Immortal Discipline</th></tr>
                 </thead>
                 <tbody>
                   <tr><td><a href="mystic-immortal-adaptive-body.html">Adaptive Body</a></td></tr>
@@ -157,7 +159,7 @@
             <div class="table-wrap feature-table">
               <table>
                 <thead>
-                  <tr><th>Discipline Name</th></tr>
+                  <tr><th scope="col" data-discipline-heading>Nomad Discipline</th></tr>
                 </thead>
                 <tbody>
                   <tr><td><a href="mystic-nomad-nomadic-arrow.html">Nomadic Arrow</a></td></tr>
@@ -174,7 +176,7 @@
             <div class="table-wrap feature-table">
               <table>
                 <thead>
-                  <tr><th>Discipline Name</th></tr>
+                  <tr><th scope="col" data-discipline-heading>Wu Jen Discipline</th></tr>
                 </thead>
                 <tbody>
                   <tr><td><a href="mystic-wu-jen-mastery-of-air.html">Mastery of Air</a></td></tr>
@@ -189,6 +191,7 @@
               </table>
             </div>
           </div>
+          </div>
         </section>
       </main>
     </div>
@@ -197,21 +200,31 @@
       const tabs = document.querySelectorAll('.lore-tab');
       const panels = document.querySelectorAll('.lore-panel');
 
+      const selectDiscipline = (tab) => {
+        const target = tab.dataset.target;
+        const disciplineName = `${tab.textContent.trim()} Discipline`;
+
+        tabs.forEach((button) => {
+          const selected = button === tab;
+          button.classList.toggle('active', selected);
+          button.setAttribute('aria-selected', String(selected));
+        });
+
+        panels.forEach((panel) => {
+          panel.hidden = panel.id !== target;
+          if (!panel.hidden) {
+            panel.querySelector('[data-discipline-heading]').textContent = disciplineName;
+          }
+        });
+      };
+
       tabs.forEach((tab) => {
         tab.addEventListener('click', () => {
-          const target = tab.dataset.target;
-
-          tabs.forEach((button) => {
-            const selected = button === tab;
-            button.classList.toggle('active', selected);
-            button.setAttribute('aria-selected', String(selected));
-          });
-
-          panels.forEach((panel) => {
-            panel.hidden = panel.id !== target;
-          });
+          selectDiscipline(tab);
         });
       });
     </script>
+    <script src="../scripts/search.js?v=5"></script>
+    <script src="../scripts/crt-scrollbar.js?v=1"></script>
   </body>
 </html>

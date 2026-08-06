@@ -122,6 +122,18 @@
   margin: 0 0 18px;
 }
 
+.class-copy a {
+  color: var(--green);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.class-copy a:hover,
+.class-copy a:focus-visible {
+  color: var(--green-soft);
+  outline: none;
+}
+
 .multiclass-note {
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -370,7 +382,8 @@ tbody tr:hover {
 
 .stat-block caption,
 .stat-block .stat-section,
-.stat-block .ability-header {
+.stat-block .ability-header,
+.stat-block thead th {
   background: rgba(57, 255, 136, 0.14);
   border-left: 1px solid var(--line);
   border-right: 1px solid var(--line);

@@ -1,3 +1,5 @@
+@import url("./search.css");
+
 :root {
   --black: #030704;
   --panel: #071108;
@@ -54,9 +56,6 @@ body::after {
   z-index: 11;
 }
 
-/* Import search styles (site-wide) */
-@import url("./search.css");
-
 .screen {
   position: relative;
   margin: 0 auto;
@@ -82,58 +81,57 @@ body::after {
 
 
 .page-nav {
-  /* Fixed to bottom of viewport so class navigation is always accessible */
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: auto;
-  pointer-events: none;
-  z-index: 120;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 22px;
+  min-height: 42px;
+  position: relative;
 }
 
 .page-nav__item {
-  /* Place items at the bottom of the viewport and allow interaction */
-  position: fixed;
-  top: auto;
-  bottom: clamp(18px, 4vw, 44px);
-  pointer-events: auto;
-  z-index: 121;
+  flex: 0 1 auto;
 }
 
 .page-nav__prev {
-  left: clamp(18px, 4vw, 44px);
+  margin-right: auto;
 }
 
 .page-nav__next {
-  right: clamp(18px, 4vw, 44px);
+  margin-left: auto;
 }
 
 .page-nav__link {
-  background: rgba(0, 5, 3, 0.94);
+  align-items: center;
+  background: rgba(3, 7, 4, 0.96);
   border: 1px solid var(--line);
-  border-radius: 3px;
+  box-shadow: 0 0 18px rgba(57, 255, 136, 0.08), inset 0 0 14px rgba(57, 255, 136, 0.06);
   color: var(--green-soft);
   display: inline-flex;
   font-size: 0.9rem;
   font-weight: 600;
+  gap: 8px;
   line-height: 1.4;
-  padding: 10px 14px;
+  min-height: 42px;
+  padding: 9px 15px;
   text-decoration: none;
   text-transform: uppercase;
+  transition: background-color 140ms ease, border-color 140ms ease, box-shadow 140ms ease, color 140ms ease;
   white-space: nowrap;
 }
 
 .page-nav__link:hover,
 .page-nav__link:focus-visible {
+  background: rgba(57, 255, 136, 0.12);
   border-color: var(--green);
+  box-shadow: 0 0 22px rgba(57, 255, 136, 0.16), inset 0 0 16px rgba(57, 255, 136, 0.1);
   color: var(--green);
+  outline: none;
 }
 
-@media (max-width: 1120px), (max-height: 700px) {
-  .page-nav,
-  .page-nav__item {
-    display: none !important;
+@media (max-width: 1100px) {
+  .page-nav {
+    display: none;
   }
 }
 
@@ -156,8 +154,9 @@ header {
   border: 1px solid transparent;
   color: var(--green-soft);
   display: inline-flex;
+  font-size: 1.05rem;
   min-height: 34px;
-  padding: 8px 10px;
+  padding: 9px 11px;
   text-decoration: none;
   text-shadow: 0 0 10px rgba(57, 255, 136, 0.58);
   text-transform: uppercase;
@@ -166,7 +165,7 @@ header {
 .topbar .home-link {
   border: 1px solid #030704;
   color: var(--green);
-  font-size: 1.65rem;
+  font-size: 1.8rem;
   min-height: 34px;
   padding: 0 4px 0 0;
 }

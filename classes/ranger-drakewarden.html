@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../styles/site.css">
     <link rel="stylesheet" href="../styles/classes.css">
     <title>Ranger: Drakewarden - Fable</title>
+      <link rel="stylesheet" href="../styles/search.css?v=9">
   </head>
   <body>
     <div class="screen">
@@ -46,8 +47,8 @@
           </ul>
 
           <h2>Drake Companion</h2>
-          <div class="table-wrap feature-table">
-            <table>
+          <div class="table-wrap stat-block">
+            <table class="stat-block">
               <caption>Drake Companion</caption>
               <thead>
                 <tr><th colspan="6">Small dragon</th></tr>
@@ -56,17 +57,17 @@
                 <tr><td><strong>Armor Class:</strong></td><td colspan="5">14 + PB (natural armor)</td></tr>
                 <tr><td><strong>Hit Points:</strong></td><td colspan="5">5 + five times your ranger level (the drake has a number of hit dice [d10s] equal to your ranger level)</td></tr>
                 <tr><td><strong>Speed:</strong></td><td colspan="5">40 ft.</td></tr>
-                <tr><th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th></tr>
-                <tr><td>16 (+3)</td><td>12 (+1)</td><td>15 (+2)</td><td>8 (−1)</td><td>14 (+2)</td><td>8 (−1)</td></tr>
+                <tr class="abilities ability-header"><th>STR</th><th>DEX</th><th>CON</th><th>INT</th><th>WIS</th><th>CHA</th></tr>
+                <tr class="abilities"><td>16 (+3)</td><td>12 (+1)</td><td>15 (+2)</td><td>8 (-1)</td><td>14 (+2)</td><td>8 (-1)</td></tr>
                 <tr><td colspan="6"><strong>Saving Throws:</strong> Dex +1 plus PB, Wis +2 plus PB</td></tr>
                 <tr><td colspan="6"><strong>Damage Immunities:</strong> determined by the drake's Draconic Essence trait</td></tr>
                 <tr><td colspan="6"><strong>Senses:</strong> darkvision 60 ft., passive Perception 12</td></tr>
                 <tr><td colspan="6"><strong>Languages:</strong> Draconic</td></tr>
                 <tr><td colspan="6"><strong>Challenge:</strong> Proficiency Bonus (PB) equals your bonus</td></tr>
                 <tr><td colspan="6"><strong>Draconic Essence.</strong> When you summon the drake, choose a damage type: acid, cold, fire, lightning, or poison. The chosen type determines the drake's damage immunity and the damage of its Infused Strikes trait.</td></tr>
-                <tr><td colspan="6"><h4>Actions</h4></td></tr>
+                <tr><th colspan="6" class="stat-section">Actions</th></tr>
                 <tr><td colspan="6"><strong>Bite.</strong> Melee Weapon Attack: +3 plus PB to hit, reach 5 ft., one target. <strong>Hit:</strong> 1d6 plus PB piercing damage.</td></tr>
-                <tr><td colspan="6"><h4>Reactions</h4></td></tr>
+                <tr><th colspan="6" class="stat-section">Reactions</th></tr>
                 <tr><td colspan="6"><strong>Infused Strikes.</strong> When another creature within 30 feet of the drake that it can see hits a target with a weapon attack, the drake infuses the strike with its essence, causing the target to take an extra 1d6 damage of the type determined by its Draconic Essence.</td></tr>
               </tbody>
             </table>
@@ -94,5 +95,8 @@
         </section>
       </main>
     </div>
+    <script src="../scripts/table-scrollbars.js"></script>
+    <script src="../scripts/search.js?v=5"></script>
+    <script src="../scripts/crt-scrollbar.js?v=1"></script>
   </body>
 </html>
