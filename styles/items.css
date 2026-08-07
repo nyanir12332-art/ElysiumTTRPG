@@ -70,6 +70,16 @@
   outline: 0;
 }
 
+.item-tab[data-category="ego"],
+.item-tab[data-category="ego"]:hover,
+.item-tab[data-category="ego"]:focus-visible {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--green-soft);
+  cursor: default;
+  outline: 0;
+}
+
 .item-panel {
   align-items: stretch;
   display: flex;

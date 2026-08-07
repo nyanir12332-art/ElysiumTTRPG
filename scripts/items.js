@@ -7,6 +7,15 @@
 
   let activeCategory = tabs.find((tab) => tab.classList.contains('is-active'))?.dataset.category || tabs[0].dataset.category;
 
+  const egoTab = tabs.find((tab) => tab.dataset.category === 'ego');
+  const hideTriggeredEgoTab = () => {
+    if (egoTab && sessionStorage.getItem('elysium-ego-triggered') === 'true') {
+      egoTab.hidden = true;
+      egoTab.setAttribute('aria-hidden', 'true');
+    }
+  };
+  hideTriggeredEgoTab();
+
   const updateOverflowMarkers = () => {
     document.querySelectorAll('.item-card').forEach((item) => {
       const description = item.querySelector('p');
@@ -133,6 +142,7 @@
 
   tabs.forEach((tab) => tab.addEventListener('click', () => {
     if (tab.dataset.category === 'ego') {
+      sessionStorage.setItem('elysium-ego-triggered', 'true');
       triggerEgoGlitch();
       return;
     }
@@ -155,5 +165,6 @@
 
   input.addEventListener('input', filterItems);
   window.addEventListener('resize', updateOverflowMarkers);
+  window.addEventListener('pageshow', hideTriggeredEgoTab);
   updateOverflowMarkers();
 })();
