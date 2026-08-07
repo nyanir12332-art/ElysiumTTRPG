@@ -122,6 +122,11 @@
   text-decoration: underline;
 }
 
+.table-wrap table th.center,
+.table-wrap table td.center {
+  text-align: left;
+}
+
 .class-copy,
 .subclass-content {
   border-top: 1px solid var(--line);

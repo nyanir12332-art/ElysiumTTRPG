@@ -11,6 +11,16 @@
   box-sizing: border-box;
 }
 
+::selection {
+  background: rgba(57, 255, 136, 0.28);
+  color: var(--green);
+}
+
+::-moz-selection {
+  background: rgba(57, 255, 136, 0.28);
+  color: var(--green);
+}
+
 html {
   scrollbar-width: none;
 }

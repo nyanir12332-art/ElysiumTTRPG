@@ -23,7 +23,7 @@
           <a href="#">Spells &amp; Techniques</a>
           <a href="#">Items</a>
           <a href="#">Feats</a>
-          <a href="#">Systems</a>
+          <a href="../systems/spell-points.html">Systems</a>
           <a href="../lore/index.html">Lore</a>
           <a href="#">Records</a>
         </nav>
@@ -37,10 +37,9 @@
         </section>
 
         <div class="table-wrap">
-          <table>
+          <table class="spell-point-table">
             <caption>
               <span>The Cleric</span>
-              <span class="slot-label">Spell Slots per Spell Level</span>
             </caption>
             <thead>
               <tr>
@@ -48,38 +47,30 @@
                 <th>Proficiency Bonus</th>
                 <th>Features</th>
                 <th>Cantrips Known</th>
-                <th class="center">1st</th>
-                <th class="center">2nd</th>
-                <th class="center">3rd</th>
-                <th class="center">4th</th>
-                <th class="center">5th</th>
-                <th class="center">6th</th>
-                <th class="center">7th</th>
-                <th class="center">8th</th>
-                <th class="center">9th</th>
+                <th class="center">Spell Points</th><th class="center">Max Spell Level</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td>1st</td><td>+2</td><td>Spellcasting, Divine Domain</td><td>3</td><td class="center">2</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td></tr>
-              <tr><td>2nd</td><td>+2</td><td>Channel Divinity (x1), Divine Domain feature, Harness Divine Power</td><td>3</td><td class="center">3</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td></tr>
-              <tr><td>3rd</td><td>+2</td><td>-</td><td>3</td><td class="center">4</td><td class="center">2</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td></tr>
-              <tr><td>4th</td><td>+2</td><td>Ability Score Improvement, Cantrip Versatility</td><td>4</td><td class="center">4</td><td class="center">3</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td></tr>
-              <tr><td>5th</td><td>+3</td><td>Destroy Undead (CR 1/2)</td><td>4</td><td class="center">4</td><td class="center">3</td><td class="center">2</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td></tr>
-              <tr><td>6th</td><td>+3</td><td>Channel Divinity (x2), Divine Domain feature</td><td>4</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td></tr>
-              <tr><td>7th</td><td>+3</td><td>-</td><td>4</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">1</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td></tr>
-              <tr><td>8th</td><td>+3</td><td>Ability Score Improvement, Destroy Undead (CR 1), Divine Domain feature, Cantrip Versatility</td><td>4</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">2</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td></tr>
-              <tr><td>9th</td><td>+4</td><td>-</td><td>4</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">1</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td></tr>
-              <tr><td>10th</td><td>+4</td><td>Divine Intervention</td><td>5</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">2</td><td class="center">-</td><td class="center">-</td><td class="center">-</td><td class="center">-</td></tr>
-              <tr><td>11th</td><td>+4</td><td>Destroy Undead (CR 2)</td><td>5</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">2</td><td class="center">1</td><td class="center">-</td><td class="center">-</td><td class="center">-</td></tr>
-              <tr><td>12th</td><td>+4</td><td>Ability Score Improvement, Cantrip Versatility</td><td>5</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">2</td><td class="center">1</td><td class="center">-</td><td class="center">-</td><td class="center">-</td></tr>
-              <tr><td>13th</td><td>+5</td><td>-</td><td>5</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">2</td><td class="center">1</td><td class="center">1</td><td class="center">-</td><td class="center">-</td></tr>
-              <tr><td>14th</td><td>+5</td><td>Destroy Undead (CR 3)</td><td>5</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">2</td><td class="center">1</td><td class="center">1</td><td class="center">-</td><td class="center">-</td></tr>
-              <tr><td>15th</td><td>+5</td><td>-</td><td>5</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">2</td><td class="center">1</td><td class="center">1</td><td class="center">1</td><td class="center">-</td></tr>
-              <tr><td>16th</td><td>+5</td><td>Ability Score Improvement, Cantrip Versatility</td><td>5</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">2</td><td class="center">1</td><td class="center">1</td><td class="center">1</td><td class="center">-</td></tr>
-              <tr><td>17th</td><td>+6</td><td>Destroy Undead (CR 4), Divine Domain feature</td><td>5</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">2</td><td class="center">1</td><td class="center">1</td><td class="center">1</td><td class="center">1</td></tr>
-              <tr><td>18th</td><td>+6</td><td>Channel Divinity (x3)</td><td>5</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">1</td><td class="center">1</td><td class="center">1</td><td class="center">1</td></tr>
-              <tr><td>19th</td><td>+6</td><td>Ability Score Improvement, Cantrip Versatility</td><td>5</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">2</td><td class="center">1</td><td class="center">1</td><td class="center">1</td></tr>
-              <tr><td>20th</td><td>+6</td><td>Divine Intervention improvement</td><td>5</td><td class="center">4</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">3</td><td class="center">2</td><td class="center">2</td><td class="center">1</td><td class="center">1</td></tr>
+              <tr><td>1st</td><td>+2</td><td>Spellcasting, Divine Domain</td><td>3</td><td class="center">4</td><td class="center">1st</td></tr>
+              <tr><td>2nd</td><td>+2</td><td>Channel Divinity (x1), Divine Domain feature, Harness Divine Power</td><td>3</td><td class="center">6</td><td class="center">1st</td></tr>
+              <tr><td>3rd</td><td>+2</td><td>-</td><td>3</td><td class="center">14</td><td class="center">2nd</td></tr>
+              <tr><td>4th</td><td>+2</td><td>Ability Score Improvement, Cantrip Versatility</td><td>4</td><td class="center">17</td><td class="center">2nd</td></tr>
+              <tr><td>5th</td><td>+3</td><td>Destroy Undead (CR 1/2)</td><td>4</td><td class="center">27</td><td class="center">3rd</td></tr>
+              <tr><td>6th</td><td>+3</td><td>Channel Divinity (x2), Divine Domain feature</td><td>4</td><td class="center">32</td><td class="center">3rd</td></tr>
+              <tr><td>7th</td><td>+3</td><td>-</td><td>4</td><td class="center">38</td><td class="center">4th</td></tr>
+              <tr><td>8th</td><td>+3</td><td>Ability Score Improvement, Destroy Undead (CR 1), Divine Domain feature, Cantrip Versatility</td><td>4</td><td class="center">44</td><td class="center">4th</td></tr>
+              <tr><td>9th</td><td>+4</td><td>-</td><td>4</td><td class="center">57</td><td class="center">5th</td></tr>
+              <tr><td>10th</td><td>+4</td><td>Divine Intervention</td><td>5</td><td class="center">64</td><td class="center">5th</td></tr>
+              <tr><td>11th</td><td>+4</td><td>Destroy Undead (CR 2)</td><td>5</td><td class="center">73</td><td class="center">6th</td></tr>
+              <tr><td>12th</td><td>+4</td><td>Ability Score Improvement, Cantrip Versatility</td><td>5</td><td class="center">73</td><td class="center">6th</td></tr>
+              <tr><td>13th</td><td>+5</td><td>-</td><td>5</td><td class="center">83</td><td class="center">7th</td></tr>
+              <tr><td>14th</td><td>+5</td><td>Destroy Undead (CR 3)</td><td>5</td><td class="center">83</td><td class="center">7th</td></tr>
+              <tr><td>15th</td><td>+5</td><td>-</td><td>5</td><td class="center">94</td><td class="center">8th</td></tr>
+              <tr><td>16th</td><td>+5</td><td>Ability Score Improvement, Cantrip Versatility</td><td>5</td><td class="center">94</td><td class="center">8th</td></tr>
+              <tr><td>17th</td><td>+6</td><td>Destroy Undead (CR 4), Divine Domain feature</td><td>5</td><td class="center">107</td><td class="center">9th</td></tr>
+              <tr><td>18th</td><td>+6</td><td>Channel Divinity (x3)</td><td>5</td><td class="center">114</td><td class="center">9th</td></tr>
+              <tr><td>19th</td><td>+6</td><td>Ability Score Improvement, Cantrip Versatility</td><td>5</td><td class="center">123</td><td class="center">9th</td></tr>
+              <tr><td>20th</td><td>+6</td><td>Divine Intervention improvement</td><td>5</td><td class="center">133</td><td class="center">9th</td></tr>
             </tbody>
           </table>
         </div>
@@ -116,10 +107,10 @@
           <h3 class="minor-heading">Cantrips</h3>
           <p>At 1st level, you know three cantrips of your choice from the <a href="#">cleric spell list</a>. You learn additional cleric cantrips of your choice at higher levels, as shown in the Cantrips Known column of the Cleric table.</p>
 
-          <h3 class="minor-heading">Spell Slots</h3>
-          <p>The Cleric table shows how many spell slots you have to cast your cleric spells of 1st level and higher. To cast one of these spells, you must expend a slot of the spell's level or higher. You regain all expended spell slots when you finish a long rest.</p>
-          <p>You prepare the list of cleric spells that are available for you to cast, choosing from the <a href="#">cleric spell list</a>. When you do so, choose a number of cleric spells equal to your Wisdom modifier + your cleric level (minimum of one spell). The spells must be of a level for which you have spell slots.</p>
-          <p>For example, if you are a 3rd-level cleric, you have four 1st-level and two 2nd-level spell slots. With a Wisdom of 16, your list of prepared spells can include six spells of 1st or 2nd level, in any combination. If you prepare the 1st-level spell <a href="#">Cure Wounds</a>, you can cast it using a 1st-level or 2nd-level slot. Casting the spell doesn't remove it from your list of prepared spells.</p>
+          <h3 class="minor-heading">Spell Points</h3>
+          <p>The Cleric table shows how many spell points you have to cast your cleric spells of 1st level and higher. To cast one of these spells, you must expend a slot of the spell's level or higher. You regain all expended spell points when you finish a long rest.</p>
+          <p>You prepare the list of cleric spells that are available for you to cast, choosing from the <a href="#">cleric spell list</a>. When you do so, choose a number of cleric spells equal to your Wisdom modifier + your cleric level (minimum of one spell). The spells must be of a level for which you have spell points.</p>
+          <p>For example, if you are a 3rd-level cleric, you have four 1st-level and two 2nd-level spell points. With a Wisdom of 16, your list of prepared spells can include six spells of 1st or 2nd level, in any combination. If you prepare the 1st-level spell <a href="#">Cure Wounds</a>, you can cast it using a 1st-level or 2nd-level slot. Casting the spell doesn't remove it from your list of prepared spells.</p>
           <p>You can change your list of prepared spells when you finish a long rest. Preparing a new list of cleric spells requires time spent in prayer and meditation: at least 1 minute per spell level for each spell on your list.</p>
 
           <h3 class="minor-heading">Spellcasting Ability</h3>
@@ -180,7 +171,7 @@
           <p>A turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action.</p>
 
           <h3>Harness Divine Power</h3>
-          <p>At 2nd level, you can expend a use of your Channel Divinity to fuel your spells. As a bonus action, you touch your holy symbol, utter a prayer, and regain one expended spell slot, the level of which can be no higher than half your proficiency bonus (rounded up).</p>
+          <p>At 2nd level, you can expend a use of your Channel Divinity to fuel your spells. As a bonus action, you touch your holy symbol, utter a prayer, and regain one expended spell point, the level of which can be no higher than half your proficiency bonus (rounded up).</p>
           <p>The number of times you can use this feature is based on the level you've reached in this class: 2nd level, once; 6th level, twice; and 18th level, thrice. You regain all expended uses when you finish a long rest.</p>
 
           <h3>Ability Score Improvement</h3>
