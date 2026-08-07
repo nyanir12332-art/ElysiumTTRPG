@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
+    <link rel="stylesheet" href="../styles/site.css">
+    <link rel="stylesheet" href="../styles/items.css?v=12">
+    <link rel="stylesheet" href="../styles/search.css?v=13">
+    <title>Items - Fable</title>
+  </head>
+  <body>
+    <div class="screen">
+      <header>
+        <nav class="topbar" aria-label="Section navigation">
+          <a class="home-link" href="../index.html">Fable</a>
+          <a href="../classes/classes.html">Classes</a>
+          <a href="../races/index.html">Races</a>
+          <a href="#">Backgrounds</a>
+          <a href="#">Spells</a>
+          <a class="active" href="index.html" aria-current="page">Items</a>
+          <span class="menu-break" aria-hidden="true"></span><a href="#">Feats</a>
+          <a href="#">Systems</a>
+          <a href="../lore/index.html">Lore</a>
+          <a href="#">Records</a>
+        </nav>
+      </header>
+
+      <main>
+        <h1 class="prompt">Items</h1>
+
+        <section class="item-catalog" aria-label="Item catalog">
+          <label class="item-search" for="item-search-input">
+            <span>Search items</span>
+            <input id="item-search-input" type="search" placeholder="Search items..." autocomplete="off">
+          </label>
+
+          <div class="item-tabs" role="tablist" aria-label="Item categories">
+            <button class="item-tab is-active" id="tab-adventuring-gear" type="button" role="tab" aria-selected="true" aria-controls="panel-adventuring-gear" data-category="adventuring-gear">Adventuring Gear</button>
+            <button class="item-tab" id="tab-armor" type="button" role="tab" aria-selected="false" aria-controls="panel-armor" data-category="armor">Armor</button>
+            <button class="item-tab" id="tab-trinkets" type="button" role="tab" aria-selected="false" aria-controls="panel-trinkets" data-category="trinkets">Trinkets</button>
+            <button class="item-tab" id="tab-weapons" type="button" role="tab" aria-selected="false" aria-controls="panel-weapons" data-category="weapons">Weapons</button>
+            <button class="item-tab" id="tab-firearms" type="button" role="tab" aria-selected="false" aria-controls="panel-firearms" data-category="firearms">Firearms</button>
+            <button class="item-tab" id="tab-explosives" type="button" role="tab" aria-selected="false" aria-controls="panel-explosives" data-category="explosives">Explosives</button>
+            <button class="item-tab" id="tab-relics" type="button" role="tab" aria-selected="false" aria-controls="panel-relics" data-category="relics">Relics</button>
+            <button class="item-tab" id="tab-trade-goods" type="button" role="tab" aria-selected="false" aria-controls="panel-trade-goods" data-category="trade-goods">Trade Goods</button>
+            <button class="item-tab" id="tab-poisons" type="button" role="tab" aria-selected="false" aria-controls="panel-poisons" data-category="poisons">Poisons</button>
+            <button class="item-tab" id="tab-tools" type="button" role="tab" aria-selected="false" aria-controls="panel-tools" data-category="tools">Tools</button>
+            <button class="item-tab" id="tab-ego" type="button" role="tab" aria-selected="false" aria-controls="panel-ego" data-category="ego">E.G.O</button>
+          </div>
+
+          <div class="item-results" id="item-results" aria-live="polite">
+            <section class="item-panel is-active" id="panel-adventuring-gear" role="tabpanel" aria-labelledby="tab-adventuring-gear" data-category="adventuring-gear">
+              <div class="item-column-headings" aria-hidden="true"><span>Name</span><span>Cost</span><span>Weight</span><span>Attributes</span><span>Notes</span><span></span></div>
+              <div class="item-group">
+                <h2 class="item-group-title">Clothes</h2>
+                <article class="item-card"><div class="item-card__heading"><h3>Common Clothes</h3><span>$5</span><span>3 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Costume</h3><span>$50</span><span>4 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Fine Clothes</h3><span>$150</span><span>6 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Robes</h3><span>$10</span><span>4 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Traveler's Clothes</h3><span>$20</span><span>4 lb.</span></div></article>
+              </div>
+              <div class="item-group">
+                <h2 class="item-group-title">Arcane Focus</h2>
+                <article class="item-card"><div class="item-card__heading"><h3>Crystal</h3><span>$100</span><span>1 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Orb</h3><span>$200</span><span>3 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Rod</h3><span>$100</span><span>2 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Staff</h3><span>$50</span><span>4 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Wand</h3><span>$100</span><span>1 lb.</span></div></article>
+              </div>
+              <div class="item-group">
+                <h2 class="item-group-title">Druidic Focus</h2>
+                <article class="item-card"><div class="item-card__heading"><h3>Sprig of Mistletoe</h3><span>$10</span><span>—</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Totem</h3><span>$10</span><span>—</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Wooden Staff</h3><span>$50</span><span>4 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Yew Wand</h3><span>$100</span><span>1 lb.</span></div></article>
+              </div>
+              <div class="item-group">
+                <h2 class="item-group-title">Holy Symbols</h2>
+                <article class="item-card"><div class="item-card__heading"><h3>Amulet</h3><span>$50</span><span>1 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Emblem</h3><span>$50</span><span>—</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Reliquary</h3><span>$50</span><span>2 lb.</span></div></article>
+              </div>
+              <div class="item-group containers-group">
+                <h2 class="item-group-title">Containers</h2>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Backpack</h3><span>$20</span><span>5 lb.</span><span>—</span><span>1 cubic foot/30 pounds of gear</span></div><p>You can also strap items, such as a bedroll or a coil of rope, to the outside of a backpack.</p></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Barrel</h3><span>$20</span><span>70 lb.</span><span>—</span><span>40 gallons liquid, 4 cubic feet solid</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Basket</h3><span>$5</span><span>2 lb.</span><span>—</span><span>2 cubic feet/40 pounds of gear</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Bucket</h3><span>$0.50</span><span>2 lb.</span><span>—</span><span>3 gallons liquid, 1/2 cubic foot solid</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Case, Crossbow Bolt</h3><span>$10</span><span>1 lb.</span><span>—</span><span>20 crossbow bolts</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Case, Map/Scroll</h3><span>$10</span><span>1 lb.</span><span>—</span><span>Ten rolled-up sheets of paper or five rolled-up sheets of parchment</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Chest</h3><span>$50</span><span>25 lb.</span><span>—</span><span>12 cubic feet/300 pounds of gear</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Flask or Tankard</h3><span>$0.20</span><span>1 lb.</span><span>—</span><span>1 pint liquid</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Glass Bottle</h3><span>$20</span><span>2 lb.</span><span>—</span><span>1.5 pints liquid</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Jug or Pitcher</h3><span>$0.20</span><span>4 lb.</span><span>—</span><span>1 gallon liquid</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Pot, Iron</h3><span>$0.20</span><span>10 lb.</span><span>—</span><span>1 gallon liquid</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Pouch</h3><span>$5</span><span>1 lb.</span><span>—</span><span>1/5 cubic foot/6 pounds of gear</span></div><p>A cloth or leather pouch can hold up to 20 sling bullets or 50 blowgun needles, among other things. A compartmentalized pouch for holding spell components is called a component pouch.</p></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Quiver</h3><span>$10</span><span>1 lb.</span><span>—</span><span>20 arrows</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Sack</h3><span>$0.10</span><span>0.5 lb.</span><span>—</span><span>1 cubic foot/30 pounds of gear</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Vial</h3><span>$10</span><span>—</span><span>—</span><span>4 ounces liquid</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Waterskin</h3><span>$2</span><span>5 lb. full</span><span>—</span><span>4 pints liquid</span></div></article>
+              </div>
+              <div class="item-group equipment-pack-group">
+                <h2 class="item-group-title">Equipment Pack</h2>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false">
+                  <div class="item-card__heading"><h3>Burglar's Pack</h3><span>$160</span></div>
+                  <p>Backpack, a bag of 1,000 ball bearings, 10 feet of string, a bell, 5 candles, a crowbar, a hammer, 10 pitons, a hooded lantern, 2 flasks of oil, 5 days rations, a tinderbox and a waterskin. The pack also has 50 feet of hempen rope strapped to the side of it.</p>
+                </article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false">
+                  <div class="item-card__heading"><h3>Diplomat's Pack</h3><span>$390</span></div>
+                  <p>Chest, 2 cases for maps and scrolls, a set of fine clothes, a bottle of ink, an ink pen, a lamp, 2 flasks of oil, 5 sheets of paper, a vial of perfume, sealing wax, and soap.</p>
+                </article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false">
+                  <div class="item-card__heading"><h3>Dungeoneer's Pack</h3><span>$120</span></div>
+                  <p>Backpack, a crowbar, a hammer, 10 pitons, 10 torches, 10 days of rations, and a waterskin. The pack also has 50 feet of hempen rope strapped to the side of it.</p>
+                </article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false">
+                  <div class="item-card__heading"><h3>Entertainer's Pack</h3><span>$400</span></div>
+                  <p>Backpack, a bedroll, 2 costumes, 5 candles, 5 days of rations, a waterskin, and a disguise kit.</p>
+                </article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false">
+                  <div class="item-card__heading"><h3>Explorer's Pack</h3><span>$100</span></div>
+                  <p>Backpack, a bedroll, a mess kit, a tinderbox, 10 torches, 10 days of rations, and a waterskin. The pack also has 50 feet of hempen rope strapped to the side of it.</p>
+                </article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false">
+                  <div class="item-card__heading"><h3>Priest's Pack</h3><span>$190</span></div>
+                  <p>Backpack, a blanket, 10 candles, a tinderbox, an alms box, 2 blocks of incense, a censer, vestments, 2 days of rations, and a waterskin.</p>
+                </article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false">
+                  <div class="item-card__heading"><h3>Scholar's Pack</h3><span>$400</span></div>
+                  <p>Backpack, a book of lore, a bottle of ink, an ink pen, 10 sheets of parchment, a little bag of sand, and a small knife.</p>
+                </article>
+              </div>
+
+              <div class="item-group common-items-group">
+                <h2 class="item-group-title">Common Items</h2>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Abacus</h3><span>$20</span><span>2 lb.</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Bedroll</h3><span>$10</span><span>7 lb.</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Bell</h3><span>$10</span><span>—</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Blanket</h3><span>$5</span><span>3 lb.</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Block and Tackle</h3><span>$10</span><span>5 lb.</span></div><p><em>A set of pulleys with a cable threaded through them and a hook to attach to objects, a block and tackle allows you to hoist up to four times the weight you can normally lift.</em></p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Book</h3><span>$250</span><span>5 lb.</span></div><p><em>A book might contain poetry, historical accounts, information pertaining to a particular field of lore, diagrams and notes on gnomish contraptions, or just about anything else that can be represented using text or pictures. A book of spells is a spellbook.</em></p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Candle</h3><span>$0.10</span><span>—</span></div><p><em>For 1 hour, a candle sheds bright light in a 5-foot radius and dim light for another 5 feet.</em></p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Chain (10 ft)</h3><span>$50</span><span>10 lb.</span></div><p><em>A chain has 10 hit points. It can be burst with a successful DC 20 Strength check.</em></p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Chalk (1 piece)</h3><span>$0.10</span><span>—</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Component Pouch</h3><span>$250</span><span>2 lb.</span></div><p><em>A component pouch is a small, watertight leather belt pouch that has compartments to hold all the material components and other special items you need to cast your spells, except those components that have a specific cost (as indicated in a spell's description).</em></p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Fishing Tackle</h3><span>$10</span><span>4 lb.</span></div><p><em>This kit includes a wooden rod, silken line, corkwood bobbers, steel hooks, lead sinkers, velvet lures, and narrow netting.</em></p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Grappling Hook</h3><span>$20</span><span>4 lb.</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Hammer</h3><span>$10</span><span>3 lb.</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Hourglass</h3><span>$250</span><span>1 lb.</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Ink (1 oz.)</h3><span>$100</span><span>—</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Ink Pen</h3><span>$0.20</span><span>—</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Ladder (10 ft)</h3><span>$1</span><span>25 lb.</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Lock</h3><span>$100</span><span>1 lb.</span></div><p><em>A key is provided with the lock. Without the key, a creature proficient with thieves' tools can pick this lock with a successful DC 15 Dexterity check. Your DM may decide that better locks are available for higher prices.</em></p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Magnifying Glass</h3><span>$1,000</span><span>—</span></div><p><em>This lens allows a closer look at small objects. It is also useful as a substitute or flint and steel when starting fires. Lighting a fire with a magnifying glass requires light as bright as sunlight to focus, tinder to ignite, and about 5 minutes for the fire to ignite. A magnifying glass grants advantage on any ability check made to appraise or inspect an item that is small or highly detailed.</em></p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Manacles</h3><span>$20</span><span>6 lb.</span></div><p><em>These metal restraints can bind a Small or Medium creature. Escaping the manacles requires a successful DC 20 Dexterity check. Breaking them requires a successful DC 20 Strength check. Each set of manacles comes with one key. Without the key, a creature proficient with thieves' tools can pick the manacles' lock with a successful DC 15 Dexterity check. Manacles have 15 hit points.</em></p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Mess Kit</h3><span>$2</span><span>1 lb.</span></div><p><em>This tin box contains a cup and simple cutlery. The box clamps together, and one side can be used as a cooking pan and the other as a plate or shallow bowl.</em></p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Miner's Pick</h3><span>$20</span><span>10 lb.</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Paper (1 sheet)</h3><span>$2</span><span>—</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Parchment (1 sheet)</h3><span>$1</span><span>—</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Perfume (vial)</h3><span>$50</span><span>—</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Piton</h3><span>$0.50</span><span>0.25 lb.</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Pole (10 ft)</h3><span>$0.50</span><span>7 lb.</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Ram, Portable</h3><span>$40</span><span>35 lb.</span></div><p><em>You can use a portable ram to break down doors. When doing so, you gain a +4 bonus on the Strength check. One other character can help you use the ram, giving you advantage on this check.</em></p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Rations (1 day)</h3><span>$5</span><span>2 lb.</span></div><p><em>Rations consist of dry foods suitable for extended travel, including jerky, dried fruit, hardtack, and nuts.</em></p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Rope</h3><span>$10</span><span>10 lb.</span></div><p><em>Rope, whether made of hemp or silk, has 2 hit points and can be burst with a DC 17 Strength check.</em><br>- Hemp (50 ft): $10 · 10 lb.<br>- Silk (50 feet): $100 · 5 lb.</p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Sealing Wax</h3><span>$5</span><span>—</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Shovel</h3><span>$20</span><span>5 lb.</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Signal Whistle</h3><span>$0.50</span><span>—</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Signet Ring</h3><span>$50</span><span>—</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Sledgehammer</h3><span>$20</span><span>10 lb.</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Spellbook</h3><span>$500</span><span>3 lb.</span></div><p><em>Essential for wizards, a spellbook is a leather-bound tome with 100 blank vellum pages suitable for recording spells.</em></p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Spikes, Iron (10)</h3><span>$10</span><span>5 lb.</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Spyglass</h3><span>$10,000</span><span>1 lb.</span></div><p><em>Objects viewed through a spyglass are magnified to twice their size.</em></p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Tent, Two-person</h3><span>$20</span><span>20 lb.</span></div></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Whetstone</h3><span>$0.10</span><span>1 lb.</span></div></article>
+              </div>
+              <div class="item-group usable-items-group">
+                <h2 class="item-group-title">Usable Items</h2>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Ball Bearings (bag of 1,000)</h3><span>$10</span><span>2 lb.</span></div><p>As an action, you can spill these tiny balls from their pouch to cover a level area 10 feet square. A creature moving across the covered area must succeed on a DC 10 Dexterity saving throw or fall prone. A creature moving through the area at half speed doesn't need to make the saving throw.</p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Caltrops (bag of 20)</h3><span>$10</span><span>2 lb.</span></div><p>As an action, you can spread a single bag of caltrops to cover a 5-foot-square area. Any creature that enters the area must succeed on a DC 15 Dexterity saving throw or stop moving and take 1 piercing damage. Until the creature regains at least 1 hit point, its walking speed is reduced by 10 feet. A creature moving through the area at half speed doesn't need to make the saving throw.</p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Climber's Kit</h3><span>$250</span><span>12 lb.</span></div><p>A climber's kit includes special pitons, boot tips, gloves, and a harness. You can use the climber's kit as an action to anchor yourself; when you do, you can't fall more than 25 feet from the point where you anchored yourself, and you can't climb more than 25 feet away from that point without undoing the anchor.</p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Crowbar</h3><span>$20</span><span>5 lb.</span></div><p>Using a crowbar grants advantage to Strength checks where the crowbar's leverage can be applied.</p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Healer's Kit</h3><span>$50</span><span>3 lb.</span></div><p>This kit is a leather pouch containing bandages, salves, and splints. The kit has ten uses. As an action, you can expend one use of the kit to stabilize a creature that has 0 hit points, without needing to make a Wisdom (Medicine) check.</p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Hunting Trap</h3><span>$50</span><span>25 lb.</span></div><p>When you use your action to set it, this trap forms a saw-toothed steel ring that snaps shut when a creature steps on a pressure plate in the center. The trap is affixed by a heavy chain to an immobile object, such as a tree or a spike driven into the ground. A creature that steps on the plate must succeed on a DC 13 Dexterity saving throw or take 1d4 piercing damage and stop moving.</p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Lamp</h3><span>$5</span><span>1 lb.</span></div><p>A lamp casts bright light in a 15-foot radius and dim light for an additional 30 feet. Once lit, it burns for 6 hours on a flask (1 pint) of oil.</p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Lantern - Bullseye</h3><span>$100</span><span>2 lb.</span></div><p>A bullseye lantern casts bright light in a 60-foot cone and dim light for an additional 60 feet. Once lit, it burns for 6 hours on a flask (1 pint) of oil.</p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Lantern - Hooded</h3><span>$50</span><span>2 lb.</span></div><p>A hooded lantern casts bright light in a 30-foot radius and dim light for an additional 30 feet. Once lit, it burns for 6 hours on a flask (1 pint) of oil. As an action, you can lower the hood, reducing the light to dim light in a 5-foot-radius.</p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Oil (flask)</h3><span>$1</span><span>1 lb.</span></div><p>Oil usually comes in a clay flask that holds 1 pint. As an action, you can splash the oil in this flask onto a creature within 5 feet of you or throw it up to 20 feet, shattering it on impact. A hit takes 5 fire damage before the oil dries.</p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Tinderbox</h3><span>$5</span><span>1 lb.</span></div><p>This small container holds flint, fire steel, and tinder, usually dry cloth soaked in light oil, used to kindle a fire. Using it to light a torch—or anything else with abundant, exposed fuel—takes an action. Lighting any other fire takes 1 minute.</p></article>
+                <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Torch</h3><span>$0.10</span><span>1 lb.</span></div><p>A torch burns for 1 hour, providing bright light in a 20-foot radius and dim light for an additional 20 feet. If you make a melee attack with a burning torch and hit, it deals 1 fire damage.</p></article>
+              </div>
+            </section>
+            <section class="item-panel" id="panel-armor" role="tabpanel" aria-labelledby="tab-armor" data-category="armor" hidden><p class="item-empty">No armor has been cataloged yet.</p></section>
+            <section class="item-panel" id="panel-trinkets" role="tabpanel" aria-labelledby="tab-trinkets" data-category="trinkets" hidden><p class="item-empty">No trinkets have been cataloged yet.</p></section>
+            <section class="item-panel" id="panel-weapons" role="tabpanel" aria-labelledby="tab-weapons" data-category="weapons" hidden><p class="item-empty">No weapons have been cataloged yet.</p></section>
+            <section class="item-panel" id="panel-firearms" role="tabpanel" aria-labelledby="tab-firearms" data-category="firearms" hidden><p class="item-empty">No firearms have been cataloged yet.</p></section>
+            <section class="item-panel" id="panel-explosives" role="tabpanel" aria-labelledby="tab-explosives" data-category="explosives" hidden><p class="item-empty">No explosives have been cataloged yet.</p></section>
+            <section class="item-panel" id="panel-relics" role="tabpanel" aria-labelledby="tab-relics" data-category="relics" hidden><p class="item-empty">No relics have been cataloged yet.</p></section>
+            <section class="item-panel" id="panel-trade-goods" role="tabpanel" aria-labelledby="tab-trade-goods" data-category="trade-goods" hidden><p class="item-empty">No trade goods have been cataloged yet.</p></section>
+            <section class="item-panel" id="panel-poisons" role="tabpanel" aria-labelledby="tab-poisons" data-category="poisons" hidden><p class="item-empty">No poisons have been cataloged yet.</p></section>
+            <section class="item-panel" id="panel-tools" role="tabpanel" aria-labelledby="tab-tools" data-category="tools" hidden><p class="item-empty">No tools have been cataloged yet.</p></section>
+            <section class="item-panel" id="panel-ego" role="tabpanel" aria-labelledby="tab-ego" data-category="ego" hidden><p class="item-empty">No E.G.O items have been cataloged yet.</p></section>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="../scripts/search.js?v=7"></script>
+    <script src="../scripts/items.js?v=5"></script>
+    <script src="../scripts/crt-scrollbar.js?v=1"></script>
+  </body>
+</html>

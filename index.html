@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="Images/ElysiumIcon.png">
+    <link rel="stylesheet" href="styles/site.css">
     <link rel="stylesheet" href="styles/search.css?v=13">
     <title>Fable</title>
     <style>
@@ -122,16 +123,15 @@
 
       .brand h1 {
         color: var(--green);
-        font-size: clamp(2rem, 6vw, 4.7rem);
+        font-size: clamp(2.5rem, 6vw, 3.8rem);
         font-weight: 400;
         letter-spacing: 0;
-        line-height: 0.95;
+        line-height: 1;
         margin: 0;
         text-transform: uppercase;
       }
 
       .brand p,
-      nav a,
       .status {
         color: var(--green-soft);
         font-size: 0.95rem;
@@ -151,10 +151,10 @@
 
       .prompt {
         color: var(--green);
-        font-size: clamp(2.1rem, 7vw, 5.6rem);
+        font-size: clamp(1.75rem, 4.8vw, 3.8rem);
         font-weight: 400;
         line-height: 1.05;
-        margin: 0 0 24px;
+        margin: 0 0 28px;
         text-shadow:
           0 0 8px rgba(57, 255, 136, 0.8),
           0 0 26px rgba(57, 255, 136, 0.35);
@@ -174,7 +174,7 @@
         display: grid;
         gap: 18px;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        padding-top: 26px;
+        padding-top: 24px;
       }
 
       .category {
@@ -211,10 +211,19 @@
   <body>
     <div class="screen">
       <header>
-        <div class="brand">
-          <h1>Fable</h1>
-          <p>public city archive</p>
-        </div>
+        <nav class="topbar home-page-nav" aria-label="Site header">
+          <a class="home-link" href="index.html">Fable</a>
+          <a class="active" href="classes/classes.html">Classes</a>
+          <a href="races/index.html">Races</a>
+          <a href="#">Backgrounds</a>
+          <a href="#">Spells</a>
+          <a href="items/index.html">Items</a>
+          <span class="menu-break" aria-hidden="true"></span>
+          <a href="#">Feats</a>
+          <a href="#">Systems</a>
+          <a href="lore/index.html">Lore</a>
+          <a href="#">Records</a>
+        </nav>
       </header>
 
       <main id="home">
@@ -226,10 +235,10 @@
           <a class="category" href="classes/classes.html">CLASSES</a>
           <a class="category" href="races/index.html">RACES</a>
           <a class="category" href="#">BACKGROUNDS</a>
-          <a class="category" href="#">SPELLS &amp; TECHNIQUES</a>
-          <a class="category" href="#">ITEMS</a>
+          <a class="category" href="#">SPELLS</a>
+          <a class="category" href="items/index.html">ITEMS</a>
           <a class="category" href="#">FEATS</a>
-          <a class="category" href="systems/spell-points.html">SYSTEMS</a>
+          <a class="category" href="#">SYSTEMS</a>
           <a class="category" href="lore/index.html">LORE</a>
           <a class="category" href="#">RECORDS</a>
         </section>

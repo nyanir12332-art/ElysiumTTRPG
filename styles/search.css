@@ -5,7 +5,7 @@
 .screen > header {
   display: grid;
   gap: 18px;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 32%);
+  grid-template-columns: minmax(0, 1fr) minmax(200px, 32%);
   position: relative;
 }
 
@@ -185,7 +185,7 @@
 }
 
 header > .site-search {
-  align-self: start;
+  align-self: center;
 }
 
 header > .topbar,
@@ -195,7 +195,7 @@ header > .brand {
   min-width: 0;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 600px) {
   .screen > header {
     grid-template-columns: 1fr;
   }
