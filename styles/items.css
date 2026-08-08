@@ -112,11 +112,19 @@
   align-items: stretch;
   display: flex;
   flex-direction: column;
-  padding-top: 2px;
+  padding-top: 0;
 }
 
 .item-panel[hidden] {
   display: none;
+}
+
+.item-panel > section[hidden] {
+  display: none;
+}
+
+.item-panel > section[hidden] + section > .item-group-title {
+  border-top: 1px solid var(--line);
 }
 
 .item-group {
@@ -170,8 +178,74 @@
   padding-top: 7px;
 }
 
+.item-column-headings--dark,
+.item-column-headings--equipment,
+.apparel-table th {
+  background-color: #000000 !important;
+  color: var(--green);
+}
+
 .item-group:has(.item-column-headings--dark) > .item-group-title {
   background-color: #000000 !important;
+}
+
+.trade-goods-group .item-column-headings--trade-goods,
+.trade-goods-group .item-card {
+  grid-template-columns: minmax(0, 1fr) 90px minmax(0, 2fr);
+}
+
+.trade-goods-group .item-column-headings--trade-goods {
+  background-color: #000000 !important;
+}
+
+.trade-goods-group .item-card__heading > span:nth-of-type(2) {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 18px), transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 18px), transparent 100%);
+}
+
+.poisons-group .item-column-headings--poisons,
+.poisons-group .item-card {
+  grid-template-columns: minmax(240px, 29%) 183px 130px;
+}
+
+.poisons-group .item-column-headings--poisons {
+  background-color: #000000 !important;
+}
+
+.poisons-panel {
+  display: contents;
+}
+
+.tools-panel {
+  display: contents;
+}
+
+.tools-group .item-column-headings--tools,
+.tools-group .item-card {
+  grid-template-columns: minmax(240px, 29%) 90px 90px;
+}
+
+.tools-group .item-column-headings--tools {
+  background-color: #000000 !important;
+}
+
+.tools-subgroup-title {
+  background: #071108;
+  border-bottom: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  color: var(--green);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  padding: 7px 14px;
+  text-transform: uppercase;
 }
 
 .item-column-headings--containers {
@@ -318,6 +392,26 @@
   display: contents;
 }
 
+.weapons-panel {
+  display: contents;
+}
+
+.firearms-panel {
+  display: contents;
+}
+
+.explosives-panel {
+  display: contents;
+}
+
+.relics-panel {
+  display: contents;
+}
+
+.trade-goods-panel {
+  display: contents;
+}
+
 .apparel-section h2 {
   border-left: 1px solid var(--line);
   border-right: 1px solid var(--line);
@@ -349,12 +443,20 @@
 }
 
 .item-group.is-collapsed > :not(.item-group-title),
-.apparel-section.is-collapsed > :not(.item-group-title) {
+.apparel-section.is-collapsed > :not(.item-group-title),
+.weapons-section.is-collapsed > :not(.item-group-title),
+.firearms-section.is-collapsed > :not(.item-group-title),
+.explosives-section.is-collapsed > :not(.item-group-title),
+.relic-browser.is-collapsed > :not(.relic-title) {
   display: none;
 }
 
 .item-group.is-collapsed > .item-group-title::before,
-.apparel-section.is-collapsed > .item-group-title::before {
+.apparel-section.is-collapsed > .item-group-title::before,
+.weapons-section.is-collapsed > .item-group-title::before,
+.firearms-section.is-collapsed > .item-group-title::before,
+.explosives-section.is-collapsed > .item-group-title::before,
+.relic-browser.is-collapsed > .relic-title::before {
   content: "+";
 }
 
@@ -363,6 +465,38 @@
   padding-left: 32px;
   position: relative;
 }
+
+.weapons-section > .item-group-title {
+  background-color: #000000 !important;
+}
+
+.firearms-section > .item-group-title {
+  background-color: #000000 !important;
+}
+
+.explosives-section > .item-group-title {
+  background-color: #000000 !important;
+}
+
+.weapons-table th,
+.weapons-table td {
+  white-space: normal;
+}
+
+.weapons-table th:nth-child(1),
+.weapons-table td:nth-child(1) { width: 24%; }
+
+.weapons-table th:nth-child(2),
+.weapons-table td:nth-child(2) { width: 90px; }
+
+.weapons-table th:nth-child(3),
+.weapons-table td:nth-child(3) { width: 170px; }
+
+.weapons-table th:nth-child(4),
+.weapons-table td:nth-child(4) { width: 90px; }
+
+.weapons-table th:nth-child(5),
+.weapons-table td:nth-child(5) { width: auto; }
 
 .apparel-table {
   border-collapse: collapse;
@@ -462,6 +596,280 @@
 .apparel-table--shields td:nth-child(7) {
   white-space: nowrap;
 }
+
+/* Keep weapon columns grouped together instead of inheriting the wide apparel layout. */
+.apparel-table.weapons-table th:nth-child(1),
+.apparel-table.weapons-table td:nth-child(1) { width: 240px; }
+
+.apparel-table.weapons-table th:nth-child(2),
+.apparel-table.weapons-table td:nth-child(2) { width: 90px; }
+
+.apparel-table.weapons-table th:nth-child(3),
+.apparel-table.weapons-table td:nth-child(3) { width: 170px; }
+
+.apparel-table.weapons-table th:nth-child(4),
+.apparel-table.weapons-table td:nth-child(4) { width: 90px; }
+
+.apparel-table.weapons-table th:nth-child(5),
+.apparel-table.weapons-table td:nth-child(5) { width: auto; }
+
+.apparel-table.weapons-table--ammunition th:nth-child(1),
+.apparel-table.weapons-table--ammunition td:nth-child(1) { width: 58%; }
+
+.apparel-table.weapons-table--ammunition th:nth-child(2),
+.apparel-table.weapons-table--ammunition td:nth-child(2),
+.apparel-table.weapons-table--ammunition th:nth-child(3),
+.apparel-table.weapons-table--ammunition td:nth-child(3) { width: 21%; }
+
+.weapons-section {
+  min-width: 0;
+  width: 100%;
+}
+
+.weapons-section + .weapons-section > .item-group-title {
+  border-top: 0;
+}
+
+.firearms-section {
+  min-width: 0;
+  width: 100%;
+}
+
+.firearms-table th,
+.firearms-table td {
+  white-space: normal;
+}
+
+.apparel-table.firearms-table th:nth-child(1),
+.apparel-table.firearms-table td:nth-child(1) { width: 210px; }
+
+.apparel-table.firearms-table th:nth-child(2),
+.apparel-table.firearms-table td:nth-child(2) { width: 90px; }
+
+.apparel-table.firearms-table th:nth-child(3),
+.apparel-table.firearms-table td:nth-child(3) { width: 130px; }
+
+.apparel-table.firearms-table th:nth-child(4),
+.apparel-table.firearms-table td:nth-child(4) { width: 150px; }
+
+.apparel-table.firearms-table th:nth-child(5),
+.apparel-table.firearms-table td:nth-child(5) { width: 90px; }
+
+.apparel-table.firearms-table th:nth-child(6),
+.apparel-table.firearms-table td:nth-child(6) { width: 100px; }
+
+.apparel-table.firearms-table th:nth-child(7),
+.apparel-table.firearms-table td:nth-child(7) { width: auto; }
+
+.firearms-subtitle {
+  border-top: 0 !important;
+  font-size: 1.1rem !important;
+  padding-bottom: 7px !important;
+  padding-top: 9px !important;
+}
+
+.explosives-section {
+  min-width: 0;
+  width: 100%;
+}
+
+.explosives-section + .explosives-section > .item-group-title {
+  border-top: 0;
+}
+
+.apparel-table.explosives-table th:nth-child(1),
+.apparel-table.explosives-table td:nth-child(1) { width: 220px; }
+
+.apparel-table.explosives-table th:nth-child(2),
+.apparel-table.explosives-table td:nth-child(2) { width: 100px; }
+
+.apparel-table.explosives-table th:nth-child(3),
+.apparel-table.explosives-table td:nth-child(3) { width: 90px; }
+
+.apparel-table.explosives-table th:nth-child(4),
+.apparel-table.explosives-table td:nth-child(4) { width: auto; }
+
+.explosives-table td:nth-child(4) {
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.explosives-table td:nth-child(4) {
+  min-width: 0;
+  padding-right: 54px;
+  position: relative;
+}
+
+.explosive-description {
+  display: block;
+  min-width: 0;
+  max-height: 1.5em;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 72px), transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 72px), transparent 100%);
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.explosive-description--static {
+  max-height: none;
+  overflow: visible;
+  -webkit-mask-image: none;
+  mask-image: none;
+  white-space: normal;
+}
+
+.relic-browser {
+  min-width: 0;
+  width: 100%;
+}
+
+.relic-title {
+  background-color: #000000 !important;
+  border: 1px solid var(--line);
+  color: var(--green);
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin: 0;
+  padding: 8px 10px 8px 32px;
+  position: relative;
+  text-transform: uppercase;
+}
+
+.relic-tabs {
+  align-items: flex-end;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 6px 10px 0;
+}
+
+.relic-table .relic-tab-row th {
+  background: #000000;
+  border-bottom: 0;
+  padding: 0;
+}
+
+.relic-tab {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--green-soft);
+  cursor: pointer;
+  font: inherit;
+  padding: 6px 12px;
+  text-transform: uppercase;
+}
+
+.relic-tab:hover,
+.relic-tab:focus-visible,
+.relic-tab.is-active {
+  background: #000000;
+  border-color: var(--green);
+  color: var(--green);
+  outline: 0;
+}
+
+.relic-table {
+  border-collapse: collapse;
+  color: var(--green-soft);
+  font-family: inherit;
+  font-size: 0.9rem;
+  table-layout: fixed;
+  margin: -1px 0 0;
+  width: 100%;
+}
+
+.relic-table th,
+.relic-table td {
+  border-bottom: 1px solid var(--line);
+  font-weight: 600;
+  padding: 10px 14px;
+  text-align: left;
+}
+
+.relic-table th {
+  background: #000000;
+  color: var(--green);
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  padding-bottom: 7px;
+  padding-top: 7px;
+  text-transform: uppercase;
+}
+
+.relic-table thead tr,
+.relic-table tbody tr {
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+}
+
+.relic-table tbody tr {
+  background: rgba(7, 17, 8, 0.82);
+}
+
+.relic-table tbody tr:hover {
+  background: rgba(57, 255, 136, 0.06);
+}
+
+.relic-table tbody td:first-child {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.relic-table th:nth-child(1),
+.relic-table td:nth-child(1) { width: 34%; }
+
+.relic-table th:nth-child(2),
+.relic-table td:nth-child(2) { width: 150px; }
+
+.relic-table th:nth-child(3),
+.relic-table td:nth-child(3) { width: 130px; }
+
+.explosive-expand {
+  background: transparent;
+  border: 0;
+  color: var(--green);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0;
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.explosives-table tr:has(.explosive-expand) {
+  cursor: pointer;
+}
+
+.explosives-table tr:has(.explosive-expand):focus-visible {
+  outline: 1px solid var(--green);
+  outline-offset: -1px;
+}
+
+.explosives-table tr.is-expanded .explosive-description {
+  max-height: none;
+  overflow: visible;
+  -webkit-mask-image: none;
+  mask-image: none;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.explosives-table tr.is-expanded .explosive-expand {
+  font-size: 0;
+}
+
+.explosives-table tr.is-expanded .explosive-expand::before {
+  content: "-";
+  font-size: 1.7rem;
+}
+
 
 .apparel-table--shields .apparel-subcategory td {
   background: #040906;
@@ -792,7 +1200,31 @@
     grid-template-columns: minmax(0, 1fr) 28px;
   }
 
+  .trade-goods-group .item-card {
+    grid-template-columns: minmax(0, 1fr) 28px;
+  }
+
+  .poisons-group .item-card {
+    grid-template-columns: minmax(0, 1fr) 28px;
+  }
+
+  .tools-group .item-card {
+    grid-template-columns: minmax(0, 1fr) 28px;
+  }
+
   .item-column-headings {
+    display: none;
+  }
+
+  .trade-goods-group .item-column-headings--trade-goods {
+    display: none;
+  }
+
+  .poisons-group .item-column-headings--poisons {
+    display: none;
+  }
+
+  .tools-group .item-column-headings--tools {
     display: none;
   }
 

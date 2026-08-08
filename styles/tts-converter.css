@@ -1,0 +1,343 @@
+.tts-layout {
+  align-items: start;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 28px;
+  grid-template-columns: minmax(280px, 390px) minmax(0, 1fr);
+  padding-top: 24px;
+}
+
+.tts-builder-column {
+  align-content: start;
+  display: grid;
+  gap: 28px;
+}
+
+.tts-editor {
+  background: rgba(7, 17, 8, 0.82);
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.tts-editor__intro {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+}
+
+.tts-editor h2 {
+  color: var(--green);
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.tts-editor p {
+  color: var(--green-soft);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.tts-editor label,
+.tts-editor legend {
+  color: var(--green);
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tts-description-label {
+  position: relative;
+}
+
+.tts-help {
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--green);
+  cursor: help;
+  display: inline-flex;
+  font-family: Georgia, serif;
+  font-size: 0.72rem;
+  font-style: italic;
+  height: 16px;
+  justify-content: center;
+  letter-spacing: 0;
+  margin-left: 6px;
+  position: relative;
+  text-transform: none;
+  vertical-align: 1px;
+  width: 16px;
+}
+
+.tts-help__tooltip {
+  background: rgba(3, 7, 4, 0.98);
+  border: 1px solid var(--green);
+  color: var(--green-soft);
+  display: none;
+  font-family: "Courier New", monospace;
+  font-size: 0.76rem;
+  font-style: normal;
+  font-weight: 400;
+  left: 24px;
+  letter-spacing: 0;
+  line-height: 1.5;
+  padding: 10px 12px;
+  position: absolute;
+  text-align: left;
+  text-transform: none;
+  top: -8px;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.tts-help__tooltip strong {
+  color: var(--green);
+}
+
+.tts-help__tooltip code {
+  color: var(--green);
+}
+
+.tts-help:hover .tts-help__tooltip,
+.tts-help:focus .tts-help__tooltip,
+.tts-help:focus-visible .tts-help__tooltip {
+  display: block;
+}
+
+.tts-editor input,
+.tts-editor select,
+.tts-editor textarea {
+  background: rgba(3, 7, 4, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--green-soft);
+  display: block;
+  font: inherit;
+  margin-top: 6px;
+  padding: 9px 10px;
+  width: 100%;
+}
+
+.tts-editor textarea {
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.tts-editor input:focus,
+.tts-editor select:focus,
+.tts-editor textarea:focus {
+  border-color: var(--green);
+  outline: 0;
+}
+
+.tts-editor fieldset {
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 12px;
+}
+
+.tts-editor fieldset[hidden] {
+  display: none;
+}
+
+.tts-component-options {
+  align-items: center;
+  color: var(--green);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tts-component-options > span {
+  margin-right: 4px;
+}
+
+.tts-component-options label {
+  align-items: center;
+  display: inline-flex;
+  gap: 4px;
+}
+
+.tts-component-options input[type="checkbox"] {
+  appearance: none;
+  background: rgba(3, 7, 4, 0.9);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  display: inline-block;
+  height: 13px;
+  margin: 0;
+  padding: 0;
+  width: 13px;
+}
+
+.tts-component-options input[type="checkbox"]:hover,
+.tts-component-options input[type="checkbox"]:focus-visible {
+  border-color: var(--green);
+  outline: 0;
+}
+
+.tts-component-options input[type="checkbox"]:checked {
+  background: var(--green);
+  box-shadow: inset 0 0 0 3px var(--black);
+}
+
+.tts-actions {
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 14px;
+}
+
+.tts-actions button {
+  background: rgba(57, 255, 136, 0.08);
+  border: 1px solid var(--line);
+  color: var(--green);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  padding: 9px 10px;
+}
+
+.tts-actions button:hover,
+.tts-actions button:focus-visible {
+  background: rgba(57, 255, 136, 0.16);
+  border-color: var(--green);
+  outline: 0;
+}
+
+.tts-actions .tts-actions__secondary {
+  color: var(--green-soft);
+}
+
+.tts-status {
+  color: var(--green-dim) !important;
+  font-size: 0.78rem;
+}
+
+.tts-importer {
+  background: rgba(7, 17, 8, 0.82);
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.tts-importer__search {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.tts-importer__search input {
+  background: rgba(3, 7, 4, 0.9);
+  border: 1px solid var(--line);
+  color: var(--green-soft);
+  font: inherit;
+  min-width: 0;
+  padding: 9px 10px;
+}
+
+.tts-importer__search input:focus {
+  border-color: var(--green);
+  outline: 0;
+}
+
+.tts-importer__search input[type="search"]::-webkit-search-cancel-button,
+.tts-importer__search input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+.tts-importer__search button,
+.tts-importer__result {
+  background: rgba(57, 255, 136, 0.08);
+  border: 1px solid var(--line);
+  color: var(--green);
+  cursor: pointer;
+  font: inherit;
+  padding: 9px 10px;
+}
+
+.tts-importer__search button:hover,
+.tts-importer__search button:focus-visible,
+.tts-importer__result:hover,
+.tts-importer__result:focus-visible {
+  background: rgba(57, 255, 136, 0.16);
+  border-color: var(--green);
+  outline: 0;
+}
+
+.tts-importer__results {
+  display: grid;
+  gap: 6px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.tts-importer__result {
+  text-align: left;
+  width: 100%;
+}
+
+.tts-importer__result small {
+  color: var(--green-dim);
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 3px;
+}
+
+.tts-importer__empty {
+  color: var(--green-dim);
+  margin: 0;
+}
+
+.tts-preview {
+  align-items: start;
+  display: grid;
+  gap: 22px;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.tts-preview__card {
+  color: var(--green-dim);
+  font-size: 0.78rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.tts-preview__card > span {
+  color: var(--green);
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.tts-preview canvas {
+  background: #000;
+  border: 1px solid var(--line);
+  display: block;
+  height: auto;
+  margin: 8px auto 0;
+  max-width: 100%;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .tts-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .tts-preview {
+    grid-template-columns: 1fr;
+  }
+}

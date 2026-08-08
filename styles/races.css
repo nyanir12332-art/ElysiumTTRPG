@@ -68,14 +68,9 @@
 }
 
 .class-copy > ul > li {
-  border-bottom: 1px solid var(--line);
   color: var(--green-soft);
   line-height: 1.65;
-  padding: 11px 0;
-}
-
-.class-copy > ul > li:first-child {
-  border-top: 1px solid var(--line);
+  padding: 4px 0;
 }
 
 .class-copy > ul > li:last-child {

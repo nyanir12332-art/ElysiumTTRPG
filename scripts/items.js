@@ -5,7 +5,11 @@
 
   if (!input || !tabs.length || !panels.length) return;
 
-  let activeCategory = tabs.find((tab) => tab.classList.contains('is-active'))?.dataset.category || tabs[0].dataset.category;
+  const itemTabStorageKey = 'fable.items.activeCategory';
+  const savedCategory = window.localStorage.getItem(itemTabStorageKey);
+  const defaultTab = tabs.find((tab) => tab.classList.contains('is-active')) || tabs[0];
+  const initialTab = tabs.find((tab) => tab.dataset.category === savedCategory) || defaultTab;
+  let activeCategory = initialTab.dataset.category;
 
   const requestedItem = new URLSearchParams(window.location.search).get('item');
 
@@ -28,32 +32,56 @@
 
   const filterItems = () => {
     const query = input.value.trim().toLowerCase();
-    const panel = activeCategory === 'all'
-      ? panels.find((candidate) => candidate.dataset.category === 'adventuring-gear')
-      : panels.find((candidate) => candidate.dataset.category === activeCategory);
-    if (!panel) return;
+    const activePanels = activeCategory === 'all'
+      ? panels.filter((candidate) => candidate.dataset.category !== 'ego')
+      : panels.filter((candidate) => candidate.dataset.category === activeCategory);
+    const panel = activePanels[0];
+    const resultsContainer = document.querySelector('.item-results');
+    if (!panel || !resultsContainer) return;
 
     let visibleItems = 0;
-    panel.querySelectorAll('.item-group').forEach((group) => {
-      let groupVisible = 0;
-      group.querySelectorAll('.item-card').forEach((item) => {
-        const matches = !query || item.textContent.toLowerCase().includes(query);
-        item.hidden = !matches;
-        if (matches) groupVisible += 1;
+    let searchableItems = 0;
+    activePanels.forEach((activePanel) => {
+      activePanel.querySelectorAll('.item-group').forEach((group) => {
+        const cards = [...group.querySelectorAll(':scope > .item-card')];
+        let groupVisible = 0;
+        cards.forEach((item) => {
+          const matches = !query || item.textContent.toLowerCase().includes(query);
+          item.hidden = !matches;
+          if (matches) groupVisible += 1;
+        });
+        group.hidden = Boolean(query && cards.length && !groupVisible);
+        visibleItems += groupVisible;
+        searchableItems += cards.length;
       });
-      group.hidden = Boolean(query && !groupVisible);
-      visibleItems += groupVisible;
+
+      activePanel.querySelectorAll('table tbody tr').forEach((row) => {
+        if (row.classList.contains('apparel-subcategory') || !row.querySelector('td')) return;
+        const matches = !query || row.textContent.toLowerCase().includes(query);
+        const matchesRarity = !row.dataset.rarity || row.dataset.rarity === document.querySelector('.relic-tab.is-active')?.dataset.relicRarity;
+        row.hidden = !matches || !matchesRarity;
+        searchableItems += 1;
+        if (matches && matchesRarity) visibleItems += 1;
+      });
+
+      activePanel.querySelectorAll(':scope > section').forEach((section) => {
+        const rows = [...section.querySelectorAll('table tbody tr')]
+          .filter((row) => !row.classList.contains('apparel-subcategory') && row.querySelector('td'));
+        if (!rows.length) return;
+        section.hidden = Boolean(query && !rows.some((row) => !row.hidden));
+      });
     });
 
-    let noResults = panel.querySelector('.item-no-results');
-    if (query && panel.querySelectorAll('.item-card').length && !visibleItems) {
+    let noResults = resultsContainer.querySelector('.item-no-results');
+    if (query && searchableItems && !visibleItems) {
       if (!noResults) {
         noResults = document.createElement('p');
         noResults.className = 'item-no-results';
-        panel.appendChild(noResults);
+        resultsContainer.appendChild(noResults);
       }
       noResults.textContent = `No items match “${input.value}”.`;
       noResults.hidden = false;
+      noResults.textContent = `No items match "${input.value}".`;
     } else if (noResults) {
       noResults.hidden = true;
     }
@@ -61,6 +89,7 @@
 
   const activateTab = (tab) => {
     activeCategory = tab.dataset.category;
+    window.localStorage.setItem(itemTabStorageKey, activeCategory);
     tabs.forEach((candidate) => {
       const active = candidate === tab;
       candidate.classList.toggle('is-active', active);
@@ -175,6 +204,23 @@
     activateTab(tab);
   }));
 
+  activateTab(initialTab);
+
+  const relicTabs = [...document.querySelectorAll('.relic-tab')];
+  relicTabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      relicTabs.forEach((candidate) => {
+        const active = candidate === tab;
+        candidate.classList.toggle('is-active', active);
+        candidate.setAttribute('aria-selected', String(active));
+      });
+      document.querySelectorAll('.relic-table tbody tr').forEach((row) => {
+        row.hidden = row.dataset.rarity !== tab.dataset.relicRarity;
+      });
+      filterItems();
+    });
+  });
+
   document.querySelectorAll('.item-card').forEach((item) => {
     const toggle = () => {
       const expanded = item.classList.toggle('is-expanded');
@@ -195,7 +241,35 @@
     button.addEventListener('keydown', (event) => event.stopPropagation());
   });
 
-  document.querySelectorAll('.item-group, .apparel-section').forEach((group) => {
+  document.querySelectorAll('.explosive-expand').forEach((button) => {
+    const row = button.closest('tr');
+    const toggleRow = () => {
+      const row = button.closest('tr');
+      const expanded = row.classList.toggle('is-expanded');
+      button.setAttribute('aria-expanded', String(expanded));
+      row.setAttribute('aria-expanded', String(expanded));
+    };
+
+    row.setAttribute('role', 'button');
+    row.setAttribute('tabindex', '0');
+    row.setAttribute('aria-expanded', 'false');
+    row.addEventListener('click', (event) => {
+      if (event.target.closest('button')) return;
+      toggleRow();
+    });
+    row.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleRow();
+      }
+    });
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      toggleRow();
+    });
+  });
+
+  document.querySelectorAll('.item-group, .apparel-section, .weapons-section, .firearms-section, .explosives-section, .relic-browser').forEach((group) => {
     const title = group.querySelector(':scope > .item-group-title');
     if (!title) return;
 
@@ -218,9 +292,35 @@
     });
   });
 
-  input.addEventListener('input', filterItems);
+  const itemSearchButton = document.querySelector('.item-search button');
+  const handleItemSearch = () => {
+    if (input.value.trim() && activeCategory !== 'all') {
+      const allTab = tabs.find((tab) => tab.dataset.category === 'all');
+      if (allTab) {
+        activateTab(allTab);
+        document.querySelector('.item-catalog')?.scrollIntoView({ block: 'start', behavior: 'auto' });
+        return;
+      }
+    }
+    filterItems();
+  };
+
+  input.addEventListener('input', handleItemSearch);
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleItemSearch();
+    }
+  });
+  itemSearchButton?.addEventListener('click', handleItemSearch);
   window.addEventListener('resize', updateOverflowMarkers);
-  if (requestedItem) input.value = requestedItem;
+  if (requestedItem) {
+    input.value = requestedItem;
+    if (activeCategory !== 'all') {
+      const allTab = tabs.find((tab) => tab.dataset.category === 'all');
+      if (allTab) activateTab(allTab);
+    }
+  }
   updateOverflowMarkers();
   filterItems();
 })();

@@ -118,13 +118,18 @@
 
           return fetch(itemPage.href, {cache:'no-store'}).then(r=>r.text()).then(html=>{
             const doc = new DOMParser().parseFromString(html, 'text/html');
-            const itemEntries = Array.from(doc.querySelectorAll('.item-card h3')).map(name => {
-              const itemName = name.textContent.trim();
-              return {
-                title: `Item: ${itemName} - Fable`,
-                href: `${itemPage.href}?item=${encodeURIComponent(itemName)}`
-              };
-            });
+            const itemNames = [
+              ...Array.from(doc.querySelectorAll('.item-card h3')).map(name => name.textContent.trim()),
+              ...Array.from(doc.querySelectorAll('table tbody tr'))
+                .filter(row => !row.classList.contains('apparel-subcategory'))
+                .map(row => row.querySelector('td')?.textContent.trim())
+                .filter(name => name)
+            ];
+            const uniqueItemNames = [...new Map(itemNames.map(itemName => [itemName.toLowerCase(), itemName])).values()];
+            const itemEntries = uniqueItemNames.map(itemName => ({
+              title: `Item: ${itemName} - Fable`,
+              href: `${itemPage.href}?item=${encodeURIComponent(itemName)}`
+            }));
             indexLinks = indexLinks.concat(itemEntries);
             return indexLinks;
           }).catch(()=>indexLinks);

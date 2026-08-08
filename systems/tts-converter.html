@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
+    <link rel="stylesheet" href="../styles/site.css">
+    <link rel="stylesheet" href="../styles/classes.css">
+    <link rel="stylesheet" href="../styles/tts-converter.css?v=8">
+    <link rel="stylesheet" href="../styles/search.css?v=13">
+    <title>TTS Converter - Fable</title>
+  </head>
+  <body>
+    <div class="screen">
+      <header>
+        <nav class="topbar" aria-label="Section navigation">
+          <a class="home-link" href="../index.html">Fable</a>
+          <a href="../classes/classes.html">Classes</a>
+          <a href="../races/index.html">Races</a>
+          <a href="../backgrounds/index.html">Backgrounds</a>
+          <a href="#">Spells</a>
+          <a href="../items/index.html">Items</a>
+          <span class="menu-break" aria-hidden="true"></span><a href="#">Feats</a>
+          <a class="active" href="index.html" aria-current="page">Systems</a>
+          <a href="../lore/index.html">Lore</a>
+          <a href="#">Records</a>
+        </nav>
+      </header>
+
+      <main>
+        <h1 class="prompt"><a class="class-back-link" href="index.html">SYSTEMS</a>: TTS Converter</h1>
+        <section class="tts-layout" aria-label="Tabletop Simulator card converter">
+          <div class="tts-builder-column">
+          <form class="tts-editor" id="tts-editor">
+            <div class="tts-editor__intro">
+              <h2>Card Builder</h2>
+              <p>Build a card to be exported as JPG files usable for Tabletop Simulator.</p>
+            </div>
+
+            <label>Card type
+              <select id="card-type">
+                <option value="feature">Feature</option>
+                <option value="race">Race</option>
+                <option value="class">Class</option>
+                <option value="spell">Spell</option>
+                <option value="technique">Technique</option>
+                <option value="item">Item</option>
+              </select>
+            </label>
+            <label>Title
+              <input id="card-title" type="text" value="Placeholder" maxlength="52">
+            </label>
+            <label>Subtitle / category
+              <input id="card-subtitle" type="text" value="Feature" maxlength="52">
+            </label>
+            <label class="tts-description-label">Description
+              <span class="tts-help" tabindex="0" aria-describedby="rich-formatting-help">i
+                <span class="tts-help__tooltip" id="rich-formatting-help" role="tooltip">
+                  <strong>Rich formatting</strong><br>
+                  <code>&lt;i&gt;text&lt;/i&gt;</code> italic<br>
+                  <code>&lt;b&gt;text&lt;/b&gt;</code> bold<br>
+                  <code>&lt;br&gt;</code> new line<br>
+                  <code>&lt;p&gt;text&lt;/p&gt;</code> paragraph spacing<br>
+                  <code>&lt;h2&gt;text&lt;/h2&gt;</code> subtitle<br>
+                  <code>&lt;ul&gt;&lt;li&gt;text&lt;/li&gt;&lt;/ul&gt;</code> bullet list<br>
+                  <code>&lt;ol&gt;&lt;li&gt;text&lt;/li&gt;&lt;/ol&gt;</code> numbered list
+                </span>
+              </span>
+              <textarea id="card-description" rows="8">Description</textarea>
+            </label>
+            <fieldset id="item-fields" hidden>
+              <legend>Item details</legend>
+              <label>Cost
+                <input id="item-cost" type="text" placeholder="$50">
+              </label>
+              <label>Weight
+                <input id="item-weight" type="text" placeholder="2 lb.">
+              </label>
+              <label>Properties
+                <input id="item-properties" type="text" placeholder="Light, thrown">
+              </label>
+            </fieldset>
+            <fieldset id="spell-fields" hidden>
+              <legend>Spell details</legend>
+              <label>Casting Time
+                <input id="spell-casting-time" type="text" placeholder="1 action">
+              </label>
+              <label>Range
+                <input id="spell-range" type="text" placeholder="30 feet">
+              </label>
+              <label>Duration
+                <input id="spell-duration" type="text" placeholder="1 minute">
+              </label>
+              <div class="tts-component-options" aria-label="Spell components">
+                <span>Components</span>
+                <label title="Verbal component">V <input id="spell-component-v" type="checkbox" aria-label="Verbal component"></label>
+                <label title="Somatic component">S <input id="spell-component-s" type="checkbox" aria-label="Somatic component"></label>
+                <label title="Material component">M <input id="spell-component-m" type="checkbox" aria-label="Material component"></label>
+              </div>
+              <label id="spell-material-field" hidden>Material component
+                <input id="spell-material" type="text" placeholder="a tiny strip of white cloth">
+              </label>
+            </fieldset>
+
+            <div class="tts-actions">
+              <button type="button" id="download-front">Download Front JPG</button>
+              <button type="button" id="download-back">Download Back JPG</button>
+              <button type="button" class="tts-actions__secondary" id="reset-card">Reset</button>
+            </div>
+            <p class="tts-status" id="tts-status" role="status" aria-live="polite">Front and back are exported at exactly 750 × 1050 pixels.</p>
+          </form>
+
+          <section class="tts-editor tts-importer" aria-labelledby="tts-importer-title">
+            <div class="tts-editor__intro">
+              <h2 id="tts-importer-title">Importer</h2>
+              <p>Search the catalog for a class, class feature, race, background, or item and load it into Card Builder.</p>
+            </div>
+            <div class="tts-importer__search">
+              <input id="tts-importer-input" type="search" placeholder="Search classes or features..." aria-label="Search classes or features" autocomplete="off">
+              <button id="tts-importer-button" type="button">Search</button>
+            </div>
+            <div class="tts-importer__results" id="tts-importer-results" aria-live="polite"></div>
+            <p class="tts-status" id="tts-importer-status" role="status" aria-live="polite">Search the site catalog to import an entry.</p>
+          </section>
+          </div>
+
+          <section class="tts-preview" aria-label="Card preview">
+            <div class="tts-preview__card">
+              <span>Front preview</span>
+              <canvas id="card-front" width="750" height="1050"></canvas>
+            </div>
+            <div class="tts-preview__card">
+              <span>Back preview</span>
+              <canvas id="card-back" width="750" height="1050"></canvas>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+    <script src="../scripts/search.js?v=8"></script>
+  <script src="../scripts/tts-converter.js?v=33"></script>
+    <script src="../scripts/tts-importer.js?v=5"></script>
+    <script src="../scripts/crt-scrollbar.js?v=1"></script>
+  </body>
+</html>

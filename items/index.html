@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
     <link rel="stylesheet" href="../styles/site.css">
-    <link rel="stylesheet" href="../styles/items.css?v=39">
+    <link rel="stylesheet" href="../styles/items.css?v=77">
     <link rel="stylesheet" href="../styles/search.css?v=13">
     <title>Items - Fable</title>
   </head>
@@ -16,11 +16,11 @@
           <a class="home-link" href="../index.html">Fable</a>
           <a href="../classes/classes.html">Classes</a>
           <a href="../races/index.html">Races</a>
-          <a href="#">Backgrounds</a>
+          <a href="../backgrounds/index.html">Backgrounds</a>
           <a href="#">Spells</a>
           <a class="active" href="index.html" aria-current="page">Items</a>
           <span class="menu-break" aria-hidden="true"></span><a href="#">Feats</a>
-          <a href="#">Systems</a>
+          <a href="../systems/index.html">Systems</a>
           <a href="../lore/index.html">Lore</a>
           <a href="#">Records</a>
         </nav>
@@ -252,33 +252,363 @@
                   </tbody>
                 </table>
               </section>
-              <section class="apparel-section">
-                <h2 class="item-group-title">Don/Doff Time</h2>
-                <table class="apparel-table apparel-table--don-doff">
-                  <thead><tr><th>Category</th><th>Don</th><th>Doff</th></tr></thead>
+            </section>
+            <section class="item-panel weapons-panel" id="panel-weapons" role="tabpanel" aria-labelledby="tab-weapons" data-category="weapons">
+              <section class="weapons-section">
+                <h2 class="item-group-title">Simple Melee Weapons</h2>
+                <table class="apparel-table weapons-table">
+                  <thead><tr><th>Name</th><th>Cost</th><th>Damage</th><th>Weight</th><th>Properties</th></tr></thead>
                   <tbody>
-                    <tr><td>Light Armor</td><td>1 minute</td><td>1 minute</td></tr>
-                    <tr><td>Medium Armor</td><td>5 minutes</td><td>1 minute</td></tr>
-                    <tr><td>Heavy Armor</td><td>10 minutes</td><td>5 minutes</td></tr>
-                    <tr><td>Shield</td><td>1 action</td><td>1 action</td></tr>
+                    <tr><td>Club</td><td>$1</td><td>1d4 bludgeoning</td><td>2 lb.</td><td>Light</td></tr>
+                    <tr><td>Dagger</td><td>$20</td><td>1d4 piercing</td><td>1 lb.</td><td>Finesse, light, thrown (20/60)</td></tr>
+                    <tr><td>Greatclub</td><td>$2</td><td>1d8 bludgeoning</td><td>10 lb.</td><td>Two-handed</td></tr>
+                    <tr><td>Handaxe</td><td>$50</td><td>1d6 slashing</td><td>2 lb.</td><td>Light, thrown (20/60)</td></tr>
+                    <tr><td>Javelin</td><td>$50</td><td>1d6 piercing</td><td>2 lb.</td><td>Thrown (30/120)</td></tr>
+                    <tr><td>Light hammer</td><td>$20</td><td>1d4 bludgeoning</td><td>2 lb.</td><td>Light, thrown (20/60)</td></tr>
+                    <tr><td>Mace</td><td>$50</td><td>1d6 bludgeoning</td><td>4 lb.</td><td>—</td></tr>
+                    <tr><td>Quarterstaff</td><td>$2</td><td>1d6 bludgeoning</td><td>4 lb.</td><td>Versatile (1d8)</td></tr>
+                    <tr><td>Sickle</td><td>$10</td><td>1d4 slashing</td><td>2 lb.</td><td>Light</td></tr>
+                    <tr><td>Spear</td><td>$10</td><td>1d6 piercing</td><td>3 lb.</td><td>Thrown (20/60), versatile (1d8)</td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <section class="weapons-section">
+                <h2 class="item-group-title">Simple Ranged Weapons</h2>
+                <table class="apparel-table weapons-table">
+                  <thead><tr><th>Name</th><th>Cost</th><th>Damage</th><th>Weight</th><th>Properties</th></tr></thead>
+                  <tbody>
+                    <tr><td>Crossbow, light</td><td>$250</td><td>1d8 piercing</td><td>5 lb.</td><td>Ammunition, range (80/320), loading, two-handed</td></tr>
+                    <tr><td>Dart</td><td>$0.50</td><td>1d4 piercing</td><td>1/4 lb.</td><td>Finesse, thrown (20/60)</td></tr>
+                    <tr><td>Shortbow</td><td>$250</td><td>1d6 piercing</td><td>2 lb.</td><td>Ammunition, range (80/320), two-handed</td></tr>
+                    <tr><td>Sling</td><td>$1</td><td>1d4 bludgeoning</td><td>—</td><td>Ammunition, range (30/120)</td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <section class="weapons-section">
+                <h2 class="item-group-title">Martial Melee Weapons</h2>
+                <table class="apparel-table weapons-table">
+                  <thead><tr><th>Name</th><th>Cost</th><th>Damage</th><th>Weight</th><th>Properties</th></tr></thead>
+                  <tbody>
+                    <tr><td>Battleaxe</td><td>$100</td><td>1d8 slashing</td><td>4 lb.</td><td>Versatile (1d10)</td></tr>
+                    <tr><td>Flail</td><td>$100</td><td>1d8 bludgeoning</td><td>2 lb.</td><td>—</td></tr>
+                    <tr><td>Glaive</td><td>$200</td><td>1d10 slashing</td><td>6 lb.</td><td>Heavy, reach, two-handed</td></tr>
+                    <tr><td>Greataxe</td><td>$300</td><td>1d12 slashing</td><td>7 lb.</td><td>Heavy, two-handed</td></tr>
+                    <tr><td>Greatsword</td><td>$500</td><td>2d6 slashing</td><td>6 lb.</td><td>Heavy, two-handed</td></tr>
+                    <tr><td>Halberd</td><td>$200</td><td>1d10 slashing</td><td>6 lb.</td><td>Heavy, reach, two-handed</td></tr>
+                    <tr><td>Lance</td><td>$100</td><td>1d12 piercing</td><td>6 lb.</td><td>Reach, special</td></tr>
+                    <tr><td>Longsword</td><td>$150</td><td>1d8 slashing</td><td>3 lb.</td><td>Versatile (1d10)</td></tr>
+                    <tr><td>Maul</td><td>$100</td><td>2d6 bludgeoning</td><td>10 lb.</td><td>Heavy, two-handed</td></tr>
+                    <tr><td>Morningstar</td><td>$150</td><td>1d8 piercing</td><td>4 lb.</td><td>—</td></tr>
+                    <tr><td>Pike</td><td>$50</td><td>1d10 piercing</td><td>18 lb.</td><td>Heavy, reach, two-handed</td></tr>
+                    <tr><td>Rapier</td><td>$250</td><td>1d8 piercing</td><td>2 lb.</td><td>Finesse</td></tr>
+                    <tr><td>Scimitar</td><td>$250</td><td>1d6 slashing</td><td>3 lb.</td><td>Finesse, light</td></tr>
+                    <tr><td>Shortsword</td><td>$100</td><td>1d6 piercing</td><td>2 lb.</td><td>Finesse, light</td></tr>
+                    <tr><td>Trident</td><td>$50</td><td>1d6 piercing</td><td>4 lb.</td><td>Thrown (20/60), versatile (1d8)</td></tr>
+                    <tr><td>War pick</td><td>$50</td><td>1d8 piercing</td><td>2 lb.</td><td>—</td></tr>
+                    <tr><td>Warhammer</td><td>$150</td><td>1d8 bludgeoning</td><td>2 lb.</td><td>Versatile (1d10)</td></tr>
+                    <tr><td>Whip</td><td>$20</td><td>1d4 slashing</td><td>3 lb.</td><td>Finesse, reach</td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <section class="weapons-section">
+                <h2 class="item-group-title">Martial Ranged Weapons</h2>
+                <table class="apparel-table weapons-table">
+                  <thead><tr><th>Name</th><th>Cost</th><th>Damage</th><th>Weight</th><th>Properties</th></tr></thead>
+                  <tbody>
+                    <tr><td>Blowgun</td><td>$100</td><td>1 piercing</td><td>1 lb.</td><td>Ammunition, range (25/100), loading</td></tr>
+                    <tr><td>Crossbow, hand</td><td>$750</td><td>1d6 piercing</td><td>3 lb.</td><td>Ammunition, range (30/120), light, loading</td></tr>
+                    <tr><td>Crossbow, heavy</td><td>$500</td><td>1d10 piercing</td><td>18 lb.</td><td>Ammunition, range (100/400), heavy, loading, two-handed</td></tr>
+                    <tr><td>Longbow</td><td>$500</td><td>1d8 piercing</td><td>2 lb.</td><td>Ammunition, range (150/600), heavy, two-handed</td></tr>
+                    <tr><td>Net</td><td>$10</td><td>—</td><td>3 lb.</td><td>Special, thrown (5/15)</td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <section class="weapons-section">
+                <h2 class="item-group-title">Ammunition</h2>
+                <table class="apparel-table weapons-table weapons-table--ammunition">
+                  <thead><tr><th>Ammunition</th><th>Cost</th><th>Weight</th></tr></thead>
+                  <tbody>
+                    <tr><td>Arrows (20)</td><td>$10</td><td>1 lb.</td></tr>
+                    <tr><td>Blowgun needles (50)</td><td>$10</td><td>1 lb.</td></tr>
+                    <tr><td>Crossbow bolts (20)</td><td>$10</td><td>1½ lb.</td></tr>
+                    <tr><td>Sling bullets (20)</td><td>$0.40</td><td>1½ lb.</td></tr>
                   </tbody>
                 </table>
               </section>
             </section>
-            <section class="item-panel" id="panel-weapons" role="tabpanel" aria-labelledby="tab-weapons" data-category="weapons" hidden><p class="item-empty">No weapons have been cataloged yet.</p></section>
-            <section class="item-panel" id="panel-firearms" role="tabpanel" aria-labelledby="tab-firearms" data-category="firearms" hidden><p class="item-empty">No firearms have been cataloged yet.</p></section>
-            <section class="item-panel" id="panel-explosives" role="tabpanel" aria-labelledby="tab-explosives" data-category="explosives" hidden><p class="item-empty">No explosives have been cataloged yet.</p></section>
-            <section class="item-panel" id="panel-relics" role="tabpanel" aria-labelledby="tab-relics" data-category="relics" hidden><p class="item-empty">No relics have been cataloged yet.</p></section>
-            <section class="item-panel" id="panel-trade-goods" role="tabpanel" aria-labelledby="tab-trade-goods" data-category="trade-goods" hidden><p class="item-empty">No trade goods have been cataloged yet.</p></section>
-            <section class="item-panel" id="panel-poisons" role="tabpanel" aria-labelledby="tab-poisons" data-category="poisons" hidden><p class="item-empty">No poisons have been cataloged yet.</p></section>
-            <section class="item-panel" id="panel-tools" role="tabpanel" aria-labelledby="tab-tools" data-category="tools" hidden><p class="item-empty">No tools have been cataloged yet.</p></section>
+            <section class="item-panel firearms-panel" id="panel-firearms" role="tabpanel" aria-labelledby="tab-firearms" data-category="firearms" hidden>
+              <section class="firearms-section">
+                <h2 class="item-group-title">Basic Firearms</h2>
+                <table class="apparel-table firearms-table">
+                  <thead><tr><th>Name</th><th>Cost</th><th>Ammo</th><th>Damage</th><th>Weight</th><th>Range</th><th>Properties</th></tr></thead>
+                  <tbody>
+                    <tr><td>Blunderbuss</td><td>$3,000</td><td>$50 (5)</td><td>2d8 piercing</td><td>10 lb.</td><td>15/60</td><td>Reload 1, misfire 2</td></tr>
+                    <tr><td>Hand Mortar</td><td>$15,000</td><td>$2,500 (1)</td><td>2d8 fire</td><td>10 lb.</td><td>30/60</td><td>Explosive (5 ft.), Reload 1</td></tr>
+                    <tr><td>Musket</td><td>$3,000</td><td>$50 (20)</td><td>1d12 piercing</td><td>10 lb.</td><td>120/480</td><td>Two-handed, reload 1, misfire 2</td></tr>
+                    <tr><td>Palm Pistol</td><td>$500</td><td>$20 (20)</td><td>1d8 piercing</td><td>1 lb.</td><td>40/160</td><td>Light, reload 1, misfire 1</td></tr>
+                    <tr><td>Pepperbox</td><td>$2,500</td><td>$40 (20)</td><td>1d10 piercing</td><td>5 lb.</td><td>80/320</td><td>Reload 6, misfire 2</td></tr>
+                    <tr><td>Wheellock Pistol</td><td>$1,500</td><td>$40 (20)</td><td>1d10 piercing</td><td>3 lb.</td><td>60/240</td><td>Reload 4, misfire 1</td></tr>
+                  </tbody>
+                </table>
+                <h2 class="item-group-title firearms-subtitle">Advanced Firearms</h2>
+                <table class="apparel-table firearms-table firearms-table--advanced">
+                  <thead><tr><th>Name</th><th>Cost</th><th>Ammo</th><th>Damage</th><th>Weight</th><th>Range</th><th>Properties</th></tr></thead>
+                  <tbody>
+                    <tr><td>Assault Rifle</td><td>$16,000</td><td>$900 (30)</td><td>2d8 piercing</td><td>8 lb.</td><td>80/240</td><td>Burst fire, Reload 30, two-handed</td></tr>
+                    <tr><td>Automatic Pistol</td><td>$6,000</td><td>$300 (20)</td><td>2d6 piercing</td><td>3 lb.</td><td>50/150</td><td>Reload 15</td></tr>
+                    <tr><td>Gatling Gun</td><td>$35,000</td><td>$2,250 (100)</td><td>2d8 piercing</td><td>20 lb.</td><td>100/300</td><td>Burst fire, Reload 100, two-handed</td></tr>
+                    <tr><td>Hunting Rifle</td><td>$10,000</td><td>$600 (5)</td><td>2d10 piercing</td><td>8 lb.</td><td>80/240</td><td>Reload 5, two-handed</td></tr>
+                    <tr><td>RPG</td><td>$40,000</td><td>$4,500 (1)</td><td>4d10 fire</td><td>14 lb.</td><td>120/480</td><td>Explosive (15 ft.), Reload 1, two-handed</td></tr>
+                    <tr><td>Revolver</td><td>$7,000</td><td>$225 (6)</td><td>2d8 piercing</td><td>3 lb.</td><td>40/120</td><td>Reload 6</td></tr>
+                    <tr><td>Shotgun</td><td>$9,000</td><td>$300 (2)</td><td>2d8 piercing</td><td>7 lb.</td><td>30/90</td><td>Reload 2, two-handed</td></tr>
+                    <tr><td>SMG</td><td>$14,000</td><td>$1,500 (30)</td><td>2d6 piercing</td><td>4 lb.</td><td>60/180</td><td>Burst fire, Reload 30</td></tr>
+                    <tr><td>Sniper Rifle</td><td>$30,000</td><td>$1,800 (5)</td><td>2d12 piercing</td><td>12 lb.</td><td>150/600</td><td>Reload 5, two-handed</td></tr>
+                  </tbody>
+                </table>
+              </section>
+            </section>
+            <section class="item-panel explosives-panel" id="panel-explosives" role="tabpanel" aria-labelledby="tab-explosives" data-category="explosives" hidden>
+              <section class="explosives-section">
+                <h2 class="item-group-title">Basic Explosives</h2>
+                <table class="apparel-table explosives-table">
+                  <thead><tr><th>Name</th><th>Cost</th><th>Weight</th><th>Description</th></tr></thead>
+                  <tbody>
+                    <tr><td>Bomb</td><td>$1,500</td><td>1 lb.</td><td><span class="explosive-description">As an action, light and throw this bomb at a point up to 60 feet away. Each creature within 5 feet of that point must succeed on a DC 12 Dexterity saving throw or take 3d6 fire damage.</span><button class="explosive-expand" type="button" aria-label="Show bomb description" aria-expanded="false">+</button></td></tr>
+                    <tr><td>Flask of Alchemist's Fire</td><td>$500</td><td>1 lb.</td><td><span class="explosive-description">This sticky, adhesive fluid ignites when exposed to air. As an action, throw this flask up to 20 feet, shattering it on impact. Make a ranged attack against a creature or object, treating the alchemist's fire as an improvised weapon. On a hit, the target takes 1d4 fire damage at the start of each of its turns. A creature can end this damage by using its action to make a DC 10 Dexterity check to extinguish the flames.</span><button class="explosive-expand" type="button" aria-label="Show alchemist's fire description" aria-expanded="false">+</button></td></tr>
+                    <tr><td>Keg of Gunpowder</td><td>$2,500</td><td>20 lb.</td><td><span class="explosive-description">Used to propel bullets from pistols and rifles or form bombs. If ignited in a container, it explodes, dealing 7d6 fire damage to creatures within 10 feet; a successful DC 12 Dexterity saving throw halves the damage. Igniting an ounce causes bright light for 1 round and dim light in a 30-foot radius for an additional 30 feet.</span><button class="explosive-expand" type="button" aria-label="Show gunpowder keg description" aria-expanded="false">+</button></td></tr>
+                    <tr><td>Powder Horn of Gunpowder</td><td>$350</td><td>2 lb.</td><td><span class="explosive-description">Used to propel bullets from pistols and rifles or form bombs. If ignited in a container, it explodes, dealing 3d6 fire damage to creatures within 10 feet; a successful DC 12 Dexterity saving throw halves the damage. Igniting an ounce causes bright light for 1 round and dim light in a 30-foot radius for an additional 30 feet.</span><button class="explosive-expand" type="button" aria-label="Show powder horn description" aria-expanded="false">+</button></td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <section class="explosives-section">
+                <h2 class="item-group-title">Advanced Explosives</h2>
+                <table class="apparel-table explosives-table">
+                  <thead><tr><th>Name</th><th>Cost</th><th>Weight</th><th>Description</th></tr></thead>
+                  <tbody>
+                    <tr><td>Stick of Dynamite</td><td>$6,000</td><td>1 lb.</td><td><span class="explosive-description">As an action, light and throw a stick of dynamite at a point up to 60 feet away. Each creature within 5 feet of that point must make a DC 12 Dexterity saving throw, taking 3d6 bludgeoning damage on a failed save, or half as much on a successful one. Sticks can be bound together; each additional stick increases the damage by 1d6, to a maximum of 10d6, and increases the blast radius by 5 feet, to a maximum of 20 feet. A fuse can delay the explosion for 1 to 6 rounds.</span><button class="explosive-expand" type="button" aria-label="Show dynamite description" aria-expanded="false">+</button></td></tr>
+                    <tr><td>Frag Grenade</td><td>$8,000</td><td>1 lb.</td><td><span class="explosive-description">As an action, throw this grenade at a point up to 60 feet away. Each creature within 20 feet of an exploding fragmentation grenade must make a DC 15 Dexterity saving throw, taking 5d6 piercing damage on a failed save, or half as much on a successful one.</span><button class="explosive-expand" type="button" aria-label="Show fragmentation grenade description" aria-expanded="false">+</button></td></tr>
+                    <tr><td>Smoke Grenade</td><td>$3,000</td><td>2 lb.</td><td><span class="explosive-description">As an action, throw this grenade at a point up to 60 feet away. When it lands, it creates a cloud of smoke that heavily obscures a 20-foot-radius area. A moderate wind disperses the smoke in 4 rounds; a strong wind disperses it in 1 round.</span><button class="explosive-expand" type="button" aria-label="Show smoke grenade description" aria-expanded="false">+</button></td></tr>
+                    <tr><td>Grenade Launcher</td><td>$15,000</td><td>7 lb.</td><td><span class="explosive-description explosive-description--static">A grenade launcher can propel a grenade up to 120 feet away.</span></td></tr>
+                  </tbody>
+                </table>
+              </section>
+            </section>
+            <section class="item-panel relics-panel" id="panel-relics" role="tabpanel" aria-labelledby="tab-relics" data-category="relics" hidden>
+              <section class="relic-browser" aria-label="Relic catalog">
+                <h2 class="item-group-title relic-title">Relic</h2>
+                <table class="relic-table">
+                  <thead>
+                    <tr class="relic-tab-row">
+                      <th colspan="3">
+                        <div class="relic-tabs" role="tablist" aria-label="Relic rarity">
+                          <button class="relic-tab is-active" type="button" role="tab" aria-selected="true" data-relic-rarity="common">Common</button>
+                          <button class="relic-tab" type="button" role="tab" aria-selected="false" data-relic-rarity="uncommon">Uncommon</button>
+                          <button class="relic-tab" type="button" role="tab" aria-selected="false" data-relic-rarity="rare">Rare</button>
+                          <button class="relic-tab" type="button" role="tab" aria-selected="false" data-relic-rarity="very-rare">Very Rare</button>
+                          <button class="relic-tab" type="button" role="tab" aria-selected="false" data-relic-rarity="legendary">Legendary</button>
+                        </div>
+                      </th>
+                    </tr>
+                    <tr><th>Name</th><th>Type</th><th>Attuned</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr data-rarity="common"><td>Armblade</td><td>Weapon</td><td>Attuned</td></tr>
+                    <tr data-rarity="common"><td>Armor of Gleaming</td><td>Armor</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Band of Loyalty</td><td>Ring</td><td>Attuned</td></tr>
+                    <tr data-rarity="common"><td>Bead of Nourishment</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Bead of Refreshment</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Boots of False Tracks</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Bottle of Boundless Coffee</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Breathing Bubble</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Candle of the Deep</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Cast-Off Armor</td><td>Armor</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Charlatan's Die</td><td>Relic</td><td>Attuned</td></tr>
+                    <tr data-rarity="common"><td>Chest of Preserving</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Cleansing Stone</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Cloak of Billowing</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Cloak of Many Fashions</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Clockwork Amulet</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Clothes of Mending</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Coin of Delving</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Cuddly Strixhaven Mascot</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="common"><td>Dark Shard Amulet</td><td>Relic</td><td>Attuned</td></tr>
+                    <tr data-rarity="uncommon"><td>Amulet of the Drunkard</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="uncommon"><td>Arcane Grimoire</td><td>Relic</td><td>Attuned</td></tr>
+                    <tr data-rarity="uncommon"><td>Armor Of Fungal Spores</td><td>Armor</td><td>-</td></tr>
+                    <tr data-rarity="uncommon"><td>Armor Of The Fallen</td><td>Armor</td><td>Attuned</td></tr>
+                    <tr data-rarity="uncommon"><td>Armor Of Weightlessness</td><td>Armor</td><td>Attuned</td></tr>
+                    <tr data-rarity="uncommon"><td>Bag Of Bounty</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="uncommon"><td>Bag of Holding</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="uncommon"><td>Bag of Tricks</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="uncommon"><td>Balance of Harmony</td><td>Relic</td><td>-</td></tr>
+                    <tr data-rarity="uncommon"><td>Balloon Pack</td><td>Relic</td><td>-</td></tr>
+                  </tbody>
+                </table>
+              </section>
+            </section>
+            <section class="item-panel trade-goods-panel" id="panel-trade-goods" role="tabpanel" aria-labelledby="tab-trade-goods" data-category="trade-goods" hidden>
+              <div class="item-group trade-goods-group">
+                <h2 class="item-group-title">Trade Goods</h2>
+                <div class="item-column-headings item-column-headings--dark item-column-headings--trade-goods" aria-hidden="true"><span>Name</span><span>Cost</span><span>Description</span></div>
+                <article class="item-card"><div class="item-card__heading"><h3>Wheat</h3><span>$0.10</span><span>1 lb. of wheat</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Flour or Chicken</h3><span>$0.20</span><span>1 lb. of flour or one chicken</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Salt</h3><span>$0.50</span><span>1 lb. of salt</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Iron or Canvas</h3><span>$1</span><span>1 lb. of iron or 1 sq. yd. of canvas</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Copper or Cotton Cloth</h3><span>$5</span><span>1 lb. of copper or 1 sq. yd. of cotton cloth</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Ginger or Goat</h3><span>$10</span><span>1 lb. of ginger or one goat</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Cinnamon, Pepper, or Sheep</h3><span>$20</span><span>1 lb. of cinnamon or pepper, or one sheep</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Cloves or Pig</h3><span>$30</span><span>1 lb. of cloves or one pig</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Silver or Linen</h3><span>$50</span><span>1 lb. of silver or 1 sq. yd. of linen</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Silk or Cow</h3><span>$100</span><span>1 sq. yd. of silk or one cow</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Saffron or Ox</h3><span>$150</span><span>1 lb. of saffron or one ox</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Gold</h3><span>$500</span><span>1 lb. of gold</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Platinum</h3><span>$5,000</span><span>1 lb. of platinum</span></div></article>
+
+                <article class="item-card"><div class="item-card__heading"><h3>Azurite</h3><span>$100</span><span>Opaque mottled deep blue</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Banded Agate</h3><span>$100</span><span>Translucent striped brown, blue, white, or red</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Blue Quartz</h3><span>$100</span><span>Transparent pale blue</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Eye Agate</h3><span>$100</span><span>Translucent circles of gray, white, brown, blue, or green</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Hematite</h3><span>$100</span><span>Opaque gray-black</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Lapis Lazuli</h3><span>$100</span><span>Opaque light and dark blue with yellow flecks</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Malachite</h3><span>$100</span><span>Opaque striated light and dark green</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Moss Agate</h3><span>$100</span><span>Translucent pink or yellow-white with mossy gray or green markings</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Obsidian</h3><span>$100</span><span>Opaque black</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Rhodochrosite</h3><span>$100</span><span>Opaque light pink</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Tigers Eye</h3><span>$100</span><span>Translucent brown with golden center</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Turquoise</h3><span>$100</span><span>Opaque light blue-green</span></div></article>
+
+                <article class="item-card"><div class="item-card__heading"><h3>Bloodstone</h3><span>$500</span><span>Opaque dark gray with red flakes</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Carnelian</h3><span>$500</span><span>Opaque orange to red-brown</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Chalcedony</h3><span>$500</span><span>Opaque white</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Chrysoprase</h3><span>$500</span><span>Translucent green</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Citrine</h3><span>$500</span><span>Transparent pale yellow-brown</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Jasper</h3><span>$500</span><span>Opaque blue, black, or brown</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Moonstone</h3><span>$500</span><span>Translucent white with pale blue glow</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Onyx</h3><span>$500</span><span>Opaque bands of black and white, or pure black and white</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Quartz</h3><span>$500</span><span>Transparent white, smoky gray, or yellow</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Sardonyx</h3><span>$500</span><span>Opaque bands of red and white</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Star Rose Quartz</h3><span>$500</span><span>Translucent rosy stone with white star-shaped center</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Zircon</h3><span>$500</span><span>Transparent pale blue-green</span></div></article>
+
+                <article class="item-card"><div class="item-card__heading"><h3>Amber</h3><span>$1,000</span><span>Transparent watery gold to rich gold</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Amethyst</h3><span>$1,000</span><span>Transparent deep purple</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Chrysoberyl</h3><span>$1,000</span><span>Transparent yellow-green to pale green</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Coral</h3><span>$1,000</span><span>Opaque crimson</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Garnet</h3><span>$1,000</span><span>Transparent red, brown-green, or violet</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Jade</h3><span>$1,000</span><span>Translucent light green, deep green, or white</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Jet</h3><span>$1,000</span><span>Opaque deep black</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Pearl</h3><span>$1,000</span><span>Opaque lustrous white, yellow, or pink</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Spinel</h3><span>$1,000</span><span>Transparent red, red-brown, or deep green</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Tourmaline</h3><span>$1,000</span><span>Transparent pale green, blue, brown, or red</span></div></article>
+
+                <article class="item-card"><div class="item-card__heading"><h3>Alexandrite</h3><span>$5,000</span><span>Transparent dark green</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Aquamarine</h3><span>$5,000</span><span>Transparent pale blue-green</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Black Pearl</h3><span>$5,000</span><span>Opaque pure black</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Blue Spinel</h3><span>$5,000</span><span>Transparent deep blue</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Peridot</h3><span>$5,000</span><span>Transparent rich olive green</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Topaz</h3><span>$5,000</span><span>Transparent golden yellow</span></div></article>
+
+                <article class="item-card"><div class="item-card__heading"><h3>Black Opal</h3><span>$10,000</span><span>Translucent dark green with black mottling and golden flecks</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Blue Sapphire</h3><span>$10,000</span><span>Transparent blue-white to medium blue</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Emerald</h3><span>$10,000</span><span>Transparent deep bright green</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Fire Opal</h3><span>$10,000</span><span>Translucent fiery red</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Opal</h3><span>$10,000</span><span>Translucent pale blue with green and golden mottling</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Star Ruby</h3><span>$10,000</span><span>Translucent ruby with white star-shaped center</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Star Sapphire</h3><span>$10,000</span><span>Translucent blue sapphire with white star-shaped center</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Yellow Sapphire</h3><span>$10,000</span><span>Transparent fiery yellow or yellow-green</span></div></article>
+
+                <article class="item-card"><div class="item-card__heading"><h3>Black Sapphire</h3><span>$50,000</span><span>Translucent lustrous black with glowing highlights</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Diamond</h3><span>$50,000</span><span>Transparent blue-white, canary, pink, brown, or blue</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Jacinth</h3><span>$50,000</span><span>Transparent fiery orange</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Ruby</h3><span>$50,000</span><span>Transparent clear red to deep crimson</span></div></article>
+              </div>
+            </section>
+            <section class="item-panel poisons-panel" id="panel-poisons" role="tabpanel" aria-labelledby="tab-poisons" data-category="poisons" hidden>
+              <div class="item-group poisons-group">
+                <h2 class="item-group-title">Poisons</h2>
+                <div class="item-column-headings item-column-headings--dark item-column-headings--poisons" aria-hidden="true"><span>Name</span><span>Price per Dose</span><span>Type</span></div>
+                <article class="item-card"><div class="item-card__heading"><h3>Assassin's Blood</h3><span>$1,500</span><span>Ingested</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Burnt Othur Fumes</h3><span>$5,000</span><span>Inhaled</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Carrion Crawler Mucus</h3><span>$2,000</span><span>Contact</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Drow Poison</h3><span>$2,000</span><span>Injury</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Essence of Ether</h3><span>$3,000</span><span>Inhaled</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Malice</h3><span>$2,500</span><span>Inhaled</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Midnight Tears</h3><span>$15,000</span><span>Ingested</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Oil of Taggit</h3><span>$4,000</span><span>Contact</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Pale Tincture</h3><span>$2,500</span><span>Ingested</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Purple Worm Poison</h3><span>$20,000</span><span>Injury</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Serpent Venom</h3><span>$2,000</span><span>Injury</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Torpor</h3><span>$6,000</span><span>Ingested</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Truth Serum</h3><span>$1,500</span><span>Ingested</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Wyvern Poison</h3><span>$12,000</span><span>Injury</span></div></article>
+              </div>
+            </section>
+            <section class="item-panel tools-panel" id="panel-tools" role="tabpanel" aria-labelledby="tab-tools" data-category="tools" hidden>
+              <div class="item-group tools-group">
+                <h2 class="item-group-title">Artisan's Tools</h2>
+                <div class="item-column-headings item-column-headings--dark item-column-headings--tools" aria-hidden="true"><span>Name</span><span>Cost</span><span>Weight</span></div>
+
+                <article class="item-card"><div class="item-card__heading"><h3>Alchemist's Supplies</h3><span>$500</span><span>8 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Brewer's Supplies</h3><span>$200</span><span>9 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Calligrapher's Supplies</h3><span>$100</span><span>5 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Carpenter's Tools</h3><span>$80</span><span>6 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Cartographer's Tools</h3><span>$150</span><span>6 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Cobbler's Tools</h3><span>$50</span><span>5 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Cook's Utensils</h3><span>$10</span><span>8 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Glassblower's Tools</h3><span>$300</span><span>5 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Jeweler's Tools</h3><span>$250</span><span>2 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Leatherworker's Tools</h3><span>$50</span><span>5 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Mason's Tools</h3><span>$100</span><span>8 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Painter's Supplies</h3><span>$100</span><span>5 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Potter's Tools</h3><span>$100</span><span>3 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Smith's Tools</h3><span>$200</span><span>8 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Tinker's Tools</h3><span>$500</span><span>10 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Weaver's Tools</h3><span>$10</span><span>5 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Woodcarver's Tools</h3><span>$10</span><span>5 lb.</span></div></article>
+
+              </div>
+              <div class="item-group tools-group">
+                <h2 class="item-group-title">Gaming Set</h2>
+                <div class="item-column-headings item-column-headings--dark item-column-headings--tools" aria-hidden="true"><span>Name</span><span>Cost</span><span>Weight</span></div>
+                <article class="item-card"><div class="item-card__heading"><h3>Dice Set</h3><span>$1</span><span>-</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Dragonchess Set</h3><span>$10</span><span>1/2 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Playing Card Set</h3><span>$5</span><span>-</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Three-Dragon Ante Set</h3><span>$10</span><span>-</span></div></article>
+
+              </div>
+              <div class="item-group tools-group">
+                <h2 class="item-group-title">Musical Instrument</h2>
+                <div class="item-column-headings item-column-headings--dark item-column-headings--tools" aria-hidden="true"><span>Name</span><span>Cost</span><span>Weight</span></div>
+                <article class="item-card"><div class="item-card__heading"><h3>Bagpipes</h3><span>$300</span><span>6 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Drum</h3><span>$60</span><span>3 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Dulcimer</h3><span>$250</span><span>10 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Flute</h3><span>$20</span><span>1 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Lute</h3><span>$350</span><span>2 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Lyre</h3><span>$300</span><span>2 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Horn</h3><span>$30</span><span>2 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Pan Flute</h3><span>$120</span><span>2 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Shawm</h3><span>$20</span><span>1 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Viol</h3><span>$300</span><span>1 lb.</span></div></article>
+
+              </div>
+              <div class="item-group tools-group">
+                <h2 class="item-group-title">Miscellaneous</h2>
+                <div class="item-column-headings item-column-headings--dark item-column-headings--tools" aria-hidden="true"><span>Name</span><span>Cost</span><span>Weight</span></div>
+                <article class="item-card"><div class="item-card__heading"><h3>Disguise Kit</h3><span>$250</span><span>3 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Forgery Kit</h3><span>$150</span><span>5 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Herbalism Kit</h3><span>$50</span><span>3 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Navigator's Tools</h3><span>$250</span><span>2 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Poisoner's Kit</h3><span>$500</span><span>2 lb.</span></div></article>
+                <article class="item-card"><div class="item-card__heading"><h3>Thieves' Tools</h3><span>$250</span><span>1 lb.</span></div></article>
+              </div>
+            </section>
             <section class="item-panel" id="panel-ego" role="tabpanel" aria-labelledby="tab-ego" data-category="ego" hidden><p class="item-empty">No E.G.O items have been cataloged yet.</p></section>
           </div>
         </section>
       </main>
     </div>
-    <script src="../scripts/search.js?v=7"></script>
-    <script src="../scripts/items.js?v=10"></script>
+    <script src="../scripts/search.js?v=8"></script>
+    <script src="../scripts/items.js?v=22"></script>
     <script src="../scripts/crt-scrollbar.js?v=1"></script>
   </body>
 </html>

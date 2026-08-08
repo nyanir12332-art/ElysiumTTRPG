@@ -16,11 +16,11 @@
           <a class="home-link" href="../index.html">Fable</a>
           <a href="../classes/classes.html">Classes</a>
           <a href="../races/index.html">Races</a>
-          <a href="#">Backgrounds</a>
+          <a href="../backgrounds/index.html">Backgrounds</a>
           <a href="#">Spells</a>
           <a href="../items/index.html">Items</a>
           <span class="menu-break" aria-hidden="true"></span><a href="#">Feats</a>
-          <a href="#">Systems</a>
+          <a href="../systems/index.html">Systems</a>
           <a class="active" href="index.html" aria-current="page">Lore</a>
           <a href="#">Records</a>
         </nav>
@@ -246,23 +246,33 @@
         const title = document.querySelector("#lore-title");
         const tabs = document.querySelectorAll(".lore-tab");
         const panels = document.querySelectorAll(".lore-panel");
+        const loreTabStorageKey = "fable.lore.activePanel";
+
+        const activateLoreTab = (tab, shouldScroll = false) => {
+          title.textContent = tab.dataset.loreTitle;
+          tabs.forEach((item) => {
+            const isActive = item === tab;
+            item.classList.toggle("active", isActive);
+            item.setAttribute("aria-pressed", String(isActive));
+          });
+          panels.forEach((panel) => {
+            const isActive = panel.id === tab.dataset.loreTarget;
+            panel.classList.toggle("active", isActive);
+            panel.hidden = !isActive;
+          });
+          window.localStorage.setItem(loreTabStorageKey, tab.dataset.loreTarget);
+          if (shouldScroll) window.scrollTo({ top: 0, behavior: "smooth" });
+        };
 
         tabs.forEach((tab) => {
           tab.addEventListener("click", () => {
-            title.textContent = tab.dataset.loreTitle;
-            tabs.forEach((item) => {
-              const isActive = item === tab;
-              item.classList.toggle("active", isActive);
-              item.setAttribute("aria-pressed", String(isActive));
-            });
-            panels.forEach((panel) => {
-              const isActive = panel.id === tab.dataset.loreTarget;
-              panel.classList.toggle("active", isActive);
-              panel.hidden = !isActive;
-            });
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            activateLoreTab(tab, true);
           });
         });
+
+        const savedPanel = window.localStorage.getItem(loreTabStorageKey);
+        const initialTab = [...tabs].find((tab) => tab.dataset.loreTarget === savedPanel) || tabs[0];
+        activateLoreTab(initialTab);
       })();
     </script>
     <script>
@@ -353,7 +363,7 @@
         updateScrollbar();
       })();
     </script>
-    <script src="../scripts/search.js?v=7"></script>
+    <script src="../scripts/search.js?v=8"></script>
     <script src="../scripts/crt-scrollbar.js?v=1"></script>
   </body>
 </html>
