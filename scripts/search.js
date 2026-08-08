@@ -11,7 +11,7 @@
       <button type="button" aria-label="Search">Search</button>
     `;
 
-    mount.appendChild(container);
+    document.body.appendChild(container);
 
     const input = container.querySelector('input[type="search"]');
     const button = container.querySelector('button');
@@ -93,9 +93,9 @@
 
     // Pre-cache index listing by fetching a prebuilt search-index.json (fast) or fall back to parsing ../index.html
     let indexLinks = null;
-    function convertPathToHref(targetPath){
+    function convertPathToHref(targetPath, baseHref = document.baseURI){
       const target = targetPath.replace(/\\/g, '/').replace(/^\//, '');
-      return new URL(target, document.baseURI).href;
+      return new URL(target, new URL(baseHref, document.baseURI)).href;
     }
 
     function ensureIndex(){
@@ -103,12 +103,31 @@
       const candidates = ['/search-index.json','../search-index.json','../../search-index.json','./search-index.json','search-index.json'];
       function tryFetch(i){
         if(i>=candidates.length) return fallbackIndex();
-        return fetch(candidates[i], {cache:'no-store'}).then(r=>{
+        const indexUrl = new URL(candidates[i], document.baseURI).href;
+        return fetch(indexUrl, {cache:'no-store'}).then(r=>{
           if(!r.ok) throw new Error('no');
           return r.json();
         }).then(json => {
-          indexLinks = json.map(it=>({title: it.title, href: convertPathToHref(it.path)}));
-          return indexLinks;
+          indexLinks = json.map(it=>({title: it.title, href: convertPathToHref(it.path, indexUrl)}));
+          const itemPage = indexLinks.find(page => /\/items\/index\.html$/i.test(new URL(page.href).pathname)) || {
+            title: 'Items - Fable',
+            href: new URL('items/index.html', indexUrl).href
+          };
+
+          if(!indexLinks.some(page => page.href === itemPage.href)) indexLinks.push(itemPage);
+
+          return fetch(itemPage.href, {cache:'no-store'}).then(r=>r.text()).then(html=>{
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            const itemEntries = Array.from(doc.querySelectorAll('.item-card h3')).map(name => {
+              const itemName = name.textContent.trim();
+              return {
+                title: `Item: ${itemName} - Fable`,
+                href: `${itemPage.href}?item=${encodeURIComponent(itemName)}`
+              };
+            });
+            indexLinks = indexLinks.concat(itemEntries);
+            return indexLinks;
+          }).catch(()=>indexLinks);
         }).catch(()=> tryFetch(i+1));
       }
 
@@ -164,8 +183,21 @@
           hideResults(resultsEl);
           return;
         }
-        // Search titles first
-        const titleMatches = list.filter(p => p.title.toLowerCase().includes(query.toLowerCase()));
+        const titleKey = (title) => title.toLowerCase()
+            .replace(/^item:\s*/, '')
+            .replace(/\s*-\s*fable\s*$/, '')
+            .trim();
+        const rankTitle = (title) => {
+          const normalizedTitle = titleKey(title);
+          const normalizedQuery = query.toLowerCase();
+          if(normalizedTitle === normalizedQuery) return 0;
+          if(normalizedTitle.startsWith(normalizedQuery)) return 1;
+          if(normalizedTitle.includes(normalizedQuery)) return 2;
+          return 3;
+        };
+
+        // Search page and item names first, then search page content.
+        const titleMatches = list.filter(p => titleKey(p.title).includes(query.toLowerCase()));
         const otherPages = list.filter(p => !titleMatches.includes(p));
 
         const promises = [];
@@ -173,17 +205,18 @@
 
         titleMatches.forEach(p=>{
           promises.push(fetchAndSearchPage(p.href, query).then(r=>{
-            if(r) results.push({title: p.title, href: p.href, snippet: r.snippet});
-            else results.push({title: p.title, href: p.href, snippet: ''});
+            if(r) results.push({title: p.title, href: p.href, snippet: r.snippet, score: rankTitle(p.title)});
+            else results.push({title: p.title, href: p.href, snippet: '', score: rankTitle(p.title)});
           }));
         });
 
         // Search other pages' bodies in case title doesn't match
         otherPages.forEach(p=>{
-          promises.push(fetchAndSearchPage(p.href, query).then(r=>{ if(r) results.push({title: p.title, href: p.href, snippet: r.snippet}); }));
+          promises.push(fetchAndSearchPage(p.href, query).then(r=>{ if(r) results.push({title: p.title, href: p.href, snippet: r.snippet, score: 3}); }));
         });
 
         Promise.all(promises).then(()=>{
+          results.sort((a, b) => a.score - b.score || a.title.localeCompare(b.title));
           showResults(resultsEl, results, query);
         });
       });

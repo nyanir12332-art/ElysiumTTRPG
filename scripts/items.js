@@ -7,6 +7,8 @@
 
   let activeCategory = tabs.find((tab) => tab.classList.contains('is-active'))?.dataset.category || tabs[0].dataset.category;
 
+  const requestedItem = new URLSearchParams(window.location.search).get('item');
+
   const updateOverflowMarkers = () => {
     document.querySelectorAll('.item-card').forEach((item) => {
       const description = item.querySelector('p');
@@ -155,5 +157,7 @@
 
   input.addEventListener('input', filterItems);
   window.addEventListener('resize', updateOverflowMarkers);
+  if (requestedItem) input.value = requestedItem;
   updateOverflowMarkers();
+  filterItems();
 })();

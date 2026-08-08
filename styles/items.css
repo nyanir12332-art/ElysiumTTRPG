@@ -1,6 +1,6 @@
 .item-catalog {
   border-top: 1px solid var(--line);
-  max-width: 980px;
+  max-width: none;
   position: relative;
   padding-top: 20px;
 }
@@ -15,9 +15,9 @@
   max-width: none;
   padding: 4px 10px;
   position: absolute;
-  right: 48px;
+  right: 41px;
   top: 64px;
-  width: 36%;
+  width: calc(30% - 7px);
   z-index: 2;
 }
 
@@ -34,6 +34,7 @@
   color: var(--green-soft);
   flex: 1;
   font: inherit;
+  font-size: 0.8rem;
   min-width: 0;
   outline: 0;
   padding: 0;
@@ -41,6 +42,12 @@
 
 .item-search input::placeholder {
   color: var(--green-dim);
+}
+
+@media (max-width: 1400px) {
+  .item-search {
+    display: none !important;
+  }
 }
 
 .item-tabs {
@@ -70,21 +77,28 @@
   outline: 0;
 }
 
+.item-search input[type="search"]::-webkit-search-cancel-button,
+.item-search input[type="search"]::-webkit-search-decoration {
+  appearance: none;
+  display: none;
+}
+
 .item-tab[data-category="ego"],
 .item-tab[data-category="ego"]:hover,
 .item-tab[data-category="ego"]:focus-visible {
   background: transparent;
-  border-color: var(--line);
+  border-color: transparent;
   color: var(--green-soft);
   cursor: default;
   outline: 0;
+  opacity: 0.55;
 }
 
 .item-panel {
   align-items: stretch;
   display: flex;
   flex-direction: column;
-  padding-top: 18px;
+  padding-top: 2px;
 }
 
 .item-panel[hidden] {
@@ -360,12 +374,22 @@
 .ego-tear::after {
   background: repeating-linear-gradient(90deg, rgba(255, 0, 70, 0.35) 0 3px, transparent 3px 17px);
   mix-blend-mode: screen;
-  transform: translateX(9px);
 }
 
 .ego-glitch {
   animation: ego-screen-glitch 1.2s steps(6, end) forwards;
   overflow: hidden;
+}
+
+.ego-glitch .item-tab,
+.ego-glitch .topbar a,
+.ego-glitch .item-search,
+.ego-glitch .item-column-headings,
+.ego-glitch .item-group-title,
+.ego-glitch .item-card,
+.ego-glitch .item-panel {
+  animation: ego-box-corruption 90ms steps(2, end) infinite;
+  transform-origin: center;
 }
 
 .ego-flicker {
@@ -385,24 +409,23 @@
   opacity: 0;
   pointer-events: none;
   position: fixed;
-  transform: scale(1.08) skewX(-5deg);
   width: 100vw;
   z-index: 10001;
 }
 
 @keyframes ego-light-flash {
   0%, 8%, 100% { clip-path: inset(0 100% 0 0); opacity: 0; }
-  10% { clip-path: inset(4% 0 10% 0); opacity: 0.38; transform: translate(-18px, 7px) scale(1.1) skewX(8deg); }
-  17% { clip-path: inset(72% 0 3% 0); opacity: 0.14; transform: translate(24px, -5px) scale(1.04) skewX(-10deg); }
-  25% { clip-path: inset(0 0 0 0); opacity: 0.32; transform: translate(-8px, 3px) scale(1.14) skewX(4deg); }
+  10% { clip-path: inset(4% 0 10% 0); opacity: 0.38; }
+  17% { clip-path: inset(72% 0 3% 0); opacity: 0.14; }
+  25% { clip-path: inset(0 0 0 0); opacity: 0.32; }
   33% { clip-path: inset(22% 0 28% 0); opacity: 0; }
-  39% { clip-path: inset(8% 0 76% 0); opacity: 0.28; transform: translate(31px, -8px) scale(1.18) skewX(-12deg); }
-  46% { clip-path: inset(5% 0 8% 0); opacity: 0.4; transform: translate(12px, 5px) scale(1.08) skewX(-5deg); }
+  39% { clip-path: inset(8% 0 76% 0); opacity: 0.28; }
+  46% { clip-path: inset(5% 0 8% 0); opacity: 0.4; }
   54% { clip-path: inset(52% 0 10% 0); opacity: 0.1; }
-  63% { clip-path: inset(0 0 0 0); opacity: 0.3; transform: translate(-16px, -6px) scale(1.12) skewX(7deg); }
+  63% { clip-path: inset(0 0 0 0); opacity: 0.3; }
   72% { clip-path: inset(66% 0 4% 0); opacity: 0; }
-  78% { clip-path: inset(14% 0 38% 0); opacity: 0.32; transform: translate(20px, 9px) scale(1.05) skewX(-9deg); }
-  84% { clip-path: inset(10% 0 16% 0); opacity: 0.38; transform: translate(16px, -4px) scale(1.06) skewX(-7deg); }
+  78% { clip-path: inset(14% 0 38% 0); opacity: 0.32; }
+  84% { clip-path: inset(10% 0 16% 0); opacity: 0.38; }
   91% { clip-path: inset(0 100% 0 0); opacity: 0; }
 }
 
@@ -413,24 +436,31 @@
   69%, 84% { opacity: 0; }
 }
 
+@keyframes ego-box-corruption {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.025, 0.98); }
+  50% { transform: scale(0.975, 1.02); }
+  75% { transform: scale(1.015, 0.985); }
+}
+
 @keyframes ego-screen-glitch {
-  0%, 100% { filter: none; transform: none; }
-  8% { filter: contrast(3) brightness(2); transform: translateX(-16px) skewX(5deg); }
-  19% { filter: hue-rotate(100deg) saturate(5) contrast(2); transform: translateX(22px) skewX(-7deg); }
-  31% { filter: invert(1) contrast(4); transform: translateX(-28px) scaleY(1.05); }
-  46% { filter: contrast(4) brightness(0.45) hue-rotate(-100deg); transform: translateX(16px) skewX(9deg); }
-  63% { filter: saturate(8) contrast(3); transform: translateX(-20px) scaleX(1.02); }
-  79% { filter: invert(0.7) brightness(1.8); transform: translateX(8px) skewX(-4deg); }
+  0%, 100% { filter: none; }
+  8% { filter: contrast(3) brightness(2); }
+  19% { filter: hue-rotate(100deg) saturate(5) contrast(2); }
+  31% { filter: invert(1) contrast(4); }
+  46% { filter: contrast(4) brightness(0.45) hue-rotate(-100deg); }
+  63% { filter: saturate(8) contrast(3); }
+  79% { filter: invert(0.7) brightness(1.8); }
 }
 
 @keyframes ego-tear {
-  0% { clip-path: inset(0 0 0 0); opacity: 0; transform: translateX(0); }
-  10% { opacity: 1; transform: translateX(-12px) skewX(4deg); }
-  30% { clip-path: inset(18% 0 48% 0); transform: translateX(18px); }
-  48% { clip-path: inset(63% 0 12% 0); transform: translateX(-24px) scaleY(1.4); }
-  67% { clip-path: inset(35% 0 31% 0); transform: translateX(10px); }
-  86% { clip-path: inset(0 0 0 0); opacity: 0.75; transform: translateX(-5px); }
-  100% { opacity: 0; transform: translateX(0); }
+  0% { clip-path: inset(0 0 0 0); opacity: 0; }
+  10% { opacity: 1; }
+  30% { clip-path: inset(18% 0 48% 0); }
+  48% { clip-path: inset(63% 0 12% 0); }
+  67% { clip-path: inset(35% 0 31% 0); }
+  86% { clip-path: inset(0 0 0 0); opacity: 0.75; }
+  100% { opacity: 0; }
 }
 
 @media (max-width: 600px) {
@@ -468,5 +498,20 @@
   .item-card.needs-expansion::after {
     grid-column: 2;
     grid-row: 1 / span 2;
+  }
+
+  .item-card.is-expanded .item-card__heading > span:nth-of-type(n + 3),
+  .item-card:has(span:nth-of-type(4)).is-expanded .item-card__heading > span:nth-of-type(4) {
+    grid-column: 1;
+    grid-row: auto !important;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .item-card.is-expanded p,
+  .item-card:has(span:nth-of-type(4)).is-expanded p {
+    grid-column: 1;
+    grid-row: auto;
   }
 }

@@ -178,23 +178,33 @@ body::after {
 }
 
 header {
-  position: relative;
   border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
   padding-bottom: 20px;
+  position: relative;
   text-shadow: 0 0 10px rgba(57, 255, 136, 0.74);
   z-index: 12;
 }
 
 .topbar {
-  align-content: flex-start;
+  align-content: center;
   align-items: center;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px 10px;
+  flex: 1 1 auto;
   justify-content: flex-start;
   min-height: 68px;
   padding-left: 220px;
   position: relative;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.topbar::-webkit-scrollbar {
+  display: none;
 }
 
 .topbar a {
@@ -203,21 +213,20 @@ header {
   color: var(--green-soft);
   display: inline-flex;
   flex: 0 0 auto;
-  font-size: 1.15rem;
-  min-height: 34px;
-  padding: 8px 6px;
+  font-size: clamp(1.2rem, 2vw, 1.35rem);
+  min-height: 40px;
+  padding: 10px 8px;
   text-decoration: none;
   text-shadow: 0 0 10px rgba(57, 255, 136, 0.58);
   text-transform: uppercase;
 }
 
 .topbar .menu-break {
-  flex-basis: 100%;
-  height: 0;
+  display: none;
 }
 
 .home-page-nav {
-  min-height: 76px;
+  min-height: 68px;
 }
 
 .home-page-nav a:not(.home-link),
@@ -261,17 +270,19 @@ header {
 
 @media (min-width: 601px) and (max-width: 900px) {
   .topbar a {
-    font-size: 1.15rem;
-    padding: 5px 1px;
+    font-size: 1.25rem;
+    padding: 8px 5px;
   }
 }
 
 @media (max-width: 600px) {
   .topbar {
     display: flex;
+    flex-wrap: wrap;
     gap: 4px 8px;
     justify-content: flex-start;
     min-height: 0;
+    overflow-x: visible;
     padding-left: 0;
   }
 
