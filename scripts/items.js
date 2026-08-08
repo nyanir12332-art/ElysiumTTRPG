@@ -87,7 +87,7 @@
       document.addEventListener(eventName, blockInteraction, true);
     });
 
-    const glyphs = '✠✦⚑☠☣☍⚙☒♆⟁⟟⌁⌖✹';
+    const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()[]{}<>?/\\|+=-';
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     const textNodes = [];
     let node;
@@ -116,7 +116,35 @@
       window.setTimeout(flickerText, 40 + Math.random() * 220 + index * 5);
     });
 
+    const egoSymbolFonts = [
+      'Wingdings',
+      'Webdings',
+      'Wingdings 2',
+    ];
+    let fontIndex = 0;
+    const fontTimer = window.setInterval(() => {
+      const font = egoSymbolFonts[fontIndex % egoSymbolFonts.length];
+      document.querySelectorAll('.ego-flicker, input[type="search"], .site-search button').forEach((node) => {
+        node.style.fontFamily = `'${font}'`;
+      });
+      fontIndex += 1;
+    }, 90);
+
     document.body.classList.add('ego-glitch');
+
+    const orderTargets = [
+      document.querySelectorAll('.topbar a'),
+      document.querySelectorAll('.item-tabs .item-tab'),
+    ];
+    let orderOffset = 0;
+    const orderTimer = window.setInterval(() => {
+      orderTargets.forEach((nodes) => {
+        nodes.forEach((node, index) => {
+          node.style.order = String((index + orderOffset) % nodes.length);
+        });
+      });
+      orderOffset += 1;
+    }, 90);
     const tear = document.createElement('div');
     tear.className = 'ego-tear';
     tear.setAttribute('aria-hidden', 'true');
@@ -133,6 +161,8 @@
     document.body.appendChild(lightFlash);
 
     window.setTimeout(() => {
+      window.clearInterval(fontTimer);
+      window.clearInterval(orderTimer);
       window.location.href = '../index.html';
     }, 1200);
   };
@@ -149,6 +179,8 @@
     const toggle = () => {
       const expanded = item.classList.toggle('is-expanded');
       item.setAttribute('aria-expanded', String(expanded));
+      const expandButton = item.querySelector('.item-card__expand');
+      if (expandButton) expandButton.setAttribute('aria-expanded', String(expanded));
     };
     item.addEventListener('click', toggle);
     item.addEventListener('keydown', (event) => {
@@ -157,6 +189,10 @@
         toggle();
       }
     });
+  });
+
+  document.querySelectorAll('.item-card__expand').forEach((button) => {
+    button.addEventListener('keydown', (event) => event.stopPropagation());
   });
 
   document.querySelectorAll('.item-group, .apparel-section').forEach((group) => {
