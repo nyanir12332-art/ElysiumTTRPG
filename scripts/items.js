@@ -28,7 +28,9 @@
 
   const filterItems = () => {
     const query = input.value.trim().toLowerCase();
-    const panel = panels.find((candidate) => candidate.dataset.category === activeCategory);
+    const panel = activeCategory === 'all'
+      ? panels.find((candidate) => candidate.dataset.category === 'adventuring-gear')
+      : panels.find((candidate) => candidate.dataset.category === activeCategory);
     if (!panel) return;
 
     let visibleItems = 0;
@@ -65,7 +67,9 @@
       candidate.setAttribute('aria-selected', String(active));
     });
     panels.forEach((panel) => {
-      const active = panel.dataset.category === activeCategory;
+      const active = activeCategory === 'all'
+        ? panel.dataset.category !== 'ego'
+        : panel.dataset.category === activeCategory;
       panel.hidden = !active;
       panel.classList.toggle('is-active', active);
     });
@@ -151,6 +155,29 @@
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
         toggle();
+      }
+    });
+  });
+
+  document.querySelectorAll('.item-group, .apparel-section').forEach((group) => {
+    const title = group.querySelector(':scope > .item-group-title');
+    if (!title) return;
+
+    title.setAttribute('role', 'button');
+    title.setAttribute('tabindex', '0');
+    title.setAttribute('aria-expanded', 'true');
+    title.addEventListener('mousedown', (event) => event.preventDefault());
+
+    const toggleGroup = () => {
+      const collapsed = group.classList.toggle('is-collapsed');
+      title.setAttribute('aria-expanded', String(!collapsed));
+    };
+
+    title.addEventListener('click', toggleGroup);
+    title.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleGroup();
       }
     });
   });

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
     <link rel="stylesheet" href="../styles/site.css">
-    <link rel="stylesheet" href="../styles/items.css?v=13">
+    <link rel="stylesheet" href="../styles/items.css?v=30">
     <link rel="stylesheet" href="../styles/search.css?v=13">
     <title>Items - Fable</title>
   </head>
@@ -30,15 +30,15 @@
         <h1 class="prompt">Items</h1>
 
         <section class="item-catalog" aria-label="Item catalog">
-          <label class="item-search" for="item-search-input">
-            <span>Search items</span>
+          <div class="item-search">
             <input id="item-search-input" type="search" placeholder="Search items..." autocomplete="off">
-          </label>
+            <button type="button">Search</button>
+          </div>
 
           <div class="item-tabs" role="tablist" aria-label="Item categories">
-            <button class="item-tab is-active" id="tab-adventuring-gear" type="button" role="tab" aria-selected="true" aria-controls="panel-adventuring-gear" data-category="adventuring-gear">Adventuring Gear</button>
+            <button class="item-tab is-active" id="tab-all" type="button" role="tab" aria-selected="true" aria-controls="item-results" data-category="all">All</button>
+            <button class="item-tab" id="tab-adventuring-gear" type="button" role="tab" aria-selected="false" aria-controls="panel-adventuring-gear" data-category="adventuring-gear">Adventuring Gear</button>
             <button class="item-tab" id="tab-apparel" type="button" role="tab" aria-selected="false" aria-controls="panel-apparel" data-category="apparel">Apparel</button>
-            <button class="item-tab" id="tab-trinkets" type="button" role="tab" aria-selected="false" aria-controls="panel-trinkets" data-category="trinkets">Trinkets</button>
             <button class="item-tab" id="tab-weapons" type="button" role="tab" aria-selected="false" aria-controls="panel-weapons" data-category="weapons">Weapons</button>
             <button class="item-tab" id="tab-firearms" type="button" role="tab" aria-selected="false" aria-controls="panel-firearms" data-category="firearms">Firearms</button>
             <button class="item-tab" id="tab-explosives" type="button" role="tab" aria-selected="false" aria-controls="panel-explosives" data-category="explosives">Explosives</button>
@@ -51,9 +51,8 @@
 
           <div class="item-results" id="item-results" aria-live="polite">
             <section class="item-panel is-active" id="panel-adventuring-gear" role="tabpanel" aria-labelledby="tab-adventuring-gear" data-category="adventuring-gear">
-              <div class="item-column-headings" aria-hidden="true"><span>Name</span><span>Cost</span><span>Weight</span><span>Attributes</span><span>Notes</span><span></span></div>
               <div class="item-group">
-                <h2 class="item-group-title">Clothes</h2>
+                <h2 class="item-group-title">Clothes</h2><div class="item-column-headings item-column-headings--dark" aria-hidden="true"><span>Name</span><span>Cost</span><span>Weight</span></div>
                 <article class="item-card"><div class="item-card__heading"><h3>Common Clothes</h3><span>$5</span><span>3 lb.</span></div></article>
                 <article class="item-card"><div class="item-card__heading"><h3>Costume</h3><span>$50</span><span>4 lb.</span></div></article>
                 <article class="item-card"><div class="item-card__heading"><h3>Fine Clothes</h3><span>$150</span><span>6 lb.</span></div></article>
@@ -61,7 +60,7 @@
                 <article class="item-card"><div class="item-card__heading"><h3>Traveler's Clothes</h3><span>$20</span><span>4 lb.</span></div></article>
               </div>
               <div class="item-group">
-                <h2 class="item-group-title">Arcane Focus</h2>
+                <h2 class="item-group-title">Arcane Focus</h2><div class="item-column-headings item-column-headings--dark" aria-hidden="true"><span>Name</span><span>Cost</span><span>Weight</span></div>
                 <article class="item-card"><div class="item-card__heading"><h3>Crystal</h3><span>$100</span><span>1 lb.</span></div></article>
                 <article class="item-card"><div class="item-card__heading"><h3>Orb</h3><span>$200</span><span>3 lb.</span></div></article>
                 <article class="item-card"><div class="item-card__heading"><h3>Rod</h3><span>$100</span><span>2 lb.</span></div></article>
@@ -69,20 +68,20 @@
                 <article class="item-card"><div class="item-card__heading"><h3>Wand</h3><span>$100</span><span>1 lb.</span></div></article>
               </div>
               <div class="item-group">
-                <h2 class="item-group-title">Druidic Focus</h2>
+                <h2 class="item-group-title">Druidic Focus</h2><div class="item-column-headings item-column-headings--dark" aria-hidden="true"><span>Name</span><span>Cost</span><span>Weight</span></div>
                 <article class="item-card"><div class="item-card__heading"><h3>Sprig of Mistletoe</h3><span>$10</span><span>—</span></div></article>
                 <article class="item-card"><div class="item-card__heading"><h3>Totem</h3><span>$10</span><span>—</span></div></article>
                 <article class="item-card"><div class="item-card__heading"><h3>Wooden Staff</h3><span>$50</span><span>4 lb.</span></div></article>
                 <article class="item-card"><div class="item-card__heading"><h3>Yew Wand</h3><span>$100</span><span>1 lb.</span></div></article>
               </div>
               <div class="item-group">
-                <h2 class="item-group-title">Holy Symbols</h2>
+                <h2 class="item-group-title">Holy Symbols</h2><div class="item-column-headings item-column-headings--dark" aria-hidden="true"><span>Name</span><span>Cost</span><span>Weight</span></div>
                 <article class="item-card"><div class="item-card__heading"><h3>Amulet</h3><span>$50</span><span>1 lb.</span></div></article>
                 <article class="item-card"><div class="item-card__heading"><h3>Emblem</h3><span>$50</span><span>—</span></div></article>
                 <article class="item-card"><div class="item-card__heading"><h3>Reliquary</h3><span>$50</span><span>2 lb.</span></div></article>
               </div>
               <div class="item-group containers-group">
-                <h2 class="item-group-title">Containers</h2>
+                <h2 class="item-group-title">Containers</h2><div class="item-column-headings item-column-headings--containers" aria-hidden="true"><span>Name</span><span>Cost</span><span>Weight</span><span>Carrying Capacity</span></div>
                 <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Backpack</h3><span>$20</span><span>5 lb.</span><span>—</span><span>1 cubic foot/30 pounds of gear</span></div><p>You can also strap items, such as a bedroll or a coil of rope, to the outside of a backpack.</p></article>
                 <article class="item-card"><div class="item-card__heading"><h3>Barrel</h3><span>$20</span><span>70 lb.</span><span>—</span><span>40 gallons liquid, 4 cubic feet solid</span></div></article>
                 <article class="item-card"><div class="item-card__heading"><h3>Basket</h3><span>$5</span><span>2 lb.</span><span>—</span><span>2 cubic feet/40 pounds of gear</span></div></article>
@@ -101,7 +100,7 @@
                 <article class="item-card"><div class="item-card__heading"><h3>Waterskin</h3><span>$2</span><span>5 lb. full</span><span>—</span><span>4 pints liquid</span></div></article>
               </div>
               <div class="item-group equipment-pack-group">
-                <h2 class="item-group-title">Equipment Pack</h2>
+                <h2 class="item-group-title">Equipment Pack</h2><div class="item-column-headings item-column-headings--dark" aria-hidden="true"><span>Name</span><span>Cost</span><span>Weight</span></div>
                 <article class="item-card" tabindex="0" role="button" aria-expanded="false">
                   <div class="item-card__heading"><h3>Burglar's Pack</h3><span>$160</span><span>47.5 lb.</span></div>
                   <p>Backpack, a bag of 1,000 ball bearings, 10 feet of string, a bell, 5 candles, a crowbar, a hammer, 10 pitons, a hooded lantern, 2 flasks of oil, 5 days rations, a tinderbox and a waterskin. The pack also has 50 feet of hempen rope strapped to the side of it.</p>
@@ -133,7 +132,7 @@
               </div>
 
               <div class="item-group common-items-group">
-                <h2 class="item-group-title">Common Items</h2>
+                <h2 class="item-group-title">Common Items</h2><div class="item-column-headings item-column-headings--dark" aria-hidden="true"><span>Name</span><span>Cost</span><span>Weight</span></div>
                 <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Abacus</h3><span>$20</span><span>2 lb.</span></div></article>
                 <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Bedroll</h3><span>$10</span><span>7 lb.</span></div></article>
                 <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Bell</h3><span>$10</span><span>—</span></div></article>
@@ -176,7 +175,7 @@
                 <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Whetstone</h3><span>$0.10</span><span>1 lb.</span></div></article>
               </div>
               <div class="item-group usable-items-group">
-                <h2 class="item-group-title">Usable Items</h2>
+                <h2 class="item-group-title">Usable Items</h2><div class="item-column-headings item-column-headings--dark" aria-hidden="true"><span>Name</span><span>Cost</span><span>Weight</span></div>
                 <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Ball Bearings (bag of 1,000)</h3><span>$10</span><span>2 lb.</span></div><p>As an action, you can spill these tiny balls from their pouch to cover a level area 10 feet square. A creature moving across the covered area must succeed on a DC 10 Dexterity saving throw or fall prone. A creature moving through the area at half speed doesn't need to make the saving throw.</p></article>
                 <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Caltrops (bag of 20)</h3><span>$10</span><span>2 lb.</span></div><p>As an action, you can spread a single bag of caltrops to cover a 5-foot-square area. Any creature that enters the area must succeed on a DC 15 Dexterity saving throw or stop moving and take 1 piercing damage. Until the creature regains at least 1 hit point, its walking speed is reduced by 10 feet. A creature moving through the area at half speed doesn't need to make the saving throw.</p></article>
                 <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Climber's Kit</h3><span>$250</span><span>12 lb.</span></div><p>A climber's kit includes special pitons, boot tips, gloves, and a harness. You can use the climber's kit as an action to anchor yourself; when you do, you can't fall more than 25 feet from the point where you anchored yourself, and you can't climb more than 25 feet away from that point without undoing the anchor.</p></article>
@@ -191,8 +190,74 @@
                 <article class="item-card" tabindex="0" role="button" aria-expanded="false"><div class="item-card__heading"><h3>Torch</h3><span>$0.10</span><span>1 lb.</span></div><p>A torch burns for 1 hour, providing bright light in a 20-foot radius and dim light for an additional 20 feet. If you make a melee attack with a burning torch and hit, it deals 1 fire damage.</p></article>
               </div>
             </section>
-            <section class="item-panel" id="panel-apparel" role="tabpanel" aria-labelledby="tab-apparel" data-category="apparel" hidden><p class="item-empty">No apparel has been cataloged yet.</p></section>
-            <section class="item-panel" id="panel-trinkets" role="tabpanel" aria-labelledby="tab-trinkets" data-category="trinkets" hidden><p class="item-empty">No trinkets have been cataloged yet.</p></section>
+            <section class="item-panel apparel-panel" id="panel-apparel" role="tabpanel" aria-labelledby="tab-apparel" data-category="apparel">
+              <section class="apparel-section">
+                <h2 class="item-group-title">Light Armor</h2>
+                <table class="apparel-table">
+                  <thead><tr><th>Name</th><th>Armor Class (AC)</th><th>Strength</th><th>Stealth</th><th>Weight</th><th>Cost</th></tr></thead>
+                  <tbody>
+                    <tr><td>Padded</td><td>11 + Dex modifier</td><td>-</td><td>Disadvantage</td><td>8 lb.</td><td>$50</td></tr>
+                    <tr><td>Leather</td><td>11 + Dex modifier</td><td>-</td><td>-</td><td>10 lb.</td><td>$100</td></tr>
+                    <tr><td>Studded Leather</td><td>12 + Dex modifier</td><td>-</td><td>-</td><td>13 lb.</td><td>$450</td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <section class="apparel-section">
+                <h2 class="item-group-title">Medium Armor</h2>
+                <table class="apparel-table">
+                  <thead><tr><th>Name</th><th>Armor Class (AC)</th><th>Strength</th><th>Stealth</th><th>Weight</th><th>Cost</th></tr></thead>
+                  <tbody>
+                    <tr><td>Hide</td><td>12 + Dex modifier (max 2)</td><td>-</td><td>-</td><td>12 lb.</td><td>$100</td></tr>
+                    <tr><td>Chain Shirt</td><td>13 + Dex modifier (max 2)</td><td>-</td><td>-</td><td>20 lb.</td><td>$500</td></tr>
+                    <tr><td>Scale Mail</td><td>14 + Dex modifier (max 2)</td><td>-</td><td>Disadvantage</td><td>45 lb.</td><td>$500</td></tr>
+                    <tr><td>Spiked Armor</td><td>14 + Dex modifier (max 2)</td><td>-</td><td>Disadvantage</td><td>45 lb.</td><td>$750</td></tr>
+                    <tr><td>Breastplate</td><td>14 + Dex modifier (max 2)</td><td>-</td><td>-</td><td>20 lb.</td><td>$4,000</td></tr>
+                    <tr><td>Halfplate</td><td>15 + Dex modifier (max 2)</td><td>-</td><td>Disadvantage</td><td>40 lb.</td><td>$7,500</td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <section class="apparel-section">
+                <h2 class="item-group-title">Heavy Armor</h2>
+                <table class="apparel-table">
+                  <thead><tr><th>Name</th><th>Armor Class (AC)</th><th>Strength</th><th>Stealth</th><th>Weight</th><th>Cost</th></tr></thead>
+                  <tbody>
+                    <tr><td>Ring Mail</td><td>14</td><td>-</td><td>Disadvantage</td><td>40 lb.</td><td>$300</td></tr>
+                    <tr><td>Chain Mail</td><td>16</td><td>Str 13</td><td>Disadvantage</td><td>55 lb.</td><td>$750</td></tr>
+                    <tr><td>Splint</td><td>17</td><td>Str 15</td><td>Disadvantage</td><td>60 lb.</td><td>$2,000</td></tr>
+                    <tr><td>Plate</td><td>18</td><td>Str 15</td><td>Disadvantage</td><td>65 lb.</td><td>$15,000</td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <section class="apparel-section">
+                <h2 class="item-group-title">Shield</h2>
+                <table class="apparel-table apparel-table--shields">
+                  <thead><tr><th>Shield Type</th><th>Cost</th><th>Armor Class (AC)</th><th>Strength</th><th>Properties</th><th>Weight</th><th>Examples</th></tr></thead>
+                  <tbody>
+                    <tr class="apparel-subcategory"><td colspan="7">Light shields</td></tr>
+                    <tr><td>Light shield</td><td>$50</td><td>+1</td><td>—</td><td>Stable</td><td>3 lb.</td><td>Targe</td></tr>
+                    <tr><td>Buckler</td><td>$100</td><td>+1</td><td>—</td><td>Parrying</td><td>2 lb.</td><td>—</td></tr>
+                    <tr class="apparel-subcategory"><td colspan="7">Medium shields</td></tr>
+                    <tr><td>Infantry shield</td><td>$150</td><td>+2</td><td>11</td><td>Shield wall</td><td>8 lb.</td><td>Germanic round-shield</td></tr>
+                    <tr><td>Cavalry shield</td><td>$200</td><td>+2</td><td>—</td><td>Mounted defense</td><td>6 lb.</td><td>Heater shield</td></tr>
+                    <tr class="apparel-subcategory"><td colspan="7">Heavy shields</td></tr>
+                    <tr><td>Pavise</td><td>$300</td><td>+3</td><td>13</td><td>Bulky, deployable</td><td>15 lb.</td><td>—</td></tr>
+                    <tr><td>Tower shield</td><td>$300</td><td>+3</td><td>15</td><td>Bulky, shield wall</td><td>22 lb.</td><td>Scutum</td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <section class="apparel-section">
+                <h2 class="item-group-title">Don/Doff Time</h2>
+                <table class="apparel-table apparel-table--don-doff">
+                  <thead><tr><th>Category</th><th>Don</th><th>Doff</th></tr></thead>
+                  <tbody>
+                    <tr><td>Light Armor</td><td>1 minute</td><td>1 minute</td></tr>
+                    <tr><td>Medium Armor</td><td>5 minutes</td><td>1 minute</td></tr>
+                    <tr><td>Heavy Armor</td><td>10 minutes</td><td>5 minutes</td></tr>
+                    <tr><td>Shield</td><td>1 action</td><td>1 action</td></tr>
+                  </tbody>
+                </table>
+              </section>
+            </section>
             <section class="item-panel" id="panel-weapons" role="tabpanel" aria-labelledby="tab-weapons" data-category="weapons" hidden><p class="item-empty">No weapons have been cataloged yet.</p></section>
             <section class="item-panel" id="panel-firearms" role="tabpanel" aria-labelledby="tab-firearms" data-category="firearms" hidden><p class="item-empty">No firearms have been cataloged yet.</p></section>
             <section class="item-panel" id="panel-explosives" role="tabpanel" aria-labelledby="tab-explosives" data-category="explosives" hidden><p class="item-empty">No explosives have been cataloged yet.</p></section>
