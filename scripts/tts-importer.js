@@ -157,11 +157,12 @@
     const article = Array.from(document.querySelectorAll('.item-card')).find((item) => normalize(item.querySelector('h3')?.textContent).toLowerCase() === wanted);
     if (article) {
       const values = Array.from(article.querySelectorAll('.item-card__heading > span')).map((span) => cleanField(span.textContent));
+      const details = article.querySelector('.tool-details') || article.querySelector('p');
       return {
         type: 'item',
         title: normalize(article.querySelector('h3')?.textContent) || name,
         subtitle: 'Item',
-        description: article.querySelector('p') ? serializeWithoutControls(article.querySelector('p')) : '',
+        description: details ? serializeWithoutControls(details) : '',
         cost: values[0] || '',
         weight: values[1] || '',
         properties: values[3] || '',
