@@ -124,6 +124,11 @@
     return `${source} Class`;
   };
 
+  const raceSubtitleFromPrompt = (document, fallback) => {
+    const source = titleFromPrompt(document, fallback).split(':')[0].trim();
+    return `${source} Race`;
+  };
+
   const findMatchingHeading = (main, query) => {
     if (!query) return null;
     const headings = Array.from(main.querySelectorAll('h2, h3, h4'));
@@ -219,6 +224,7 @@
   };
 
   const isClassEntry = (entry) => /^classes\//i.test(entry.path) && !/classes\.html$/i.test(entry.path);
+  const isRaceEntry = (entry) => /^races\//i.test(entry.path) && !/races[\\/]index\.html$/i.test(entry.path);
 
   const addChoice = (label, detail, action) => {
     const button = document.createElement('button');
@@ -258,6 +264,84 @@
       });
     });
     status.textContent = 'Choose the class description or a specific feature.';
+  };
+
+  const getRaceCopy = (pageDocument) => pageDocument.querySelector('main .class-copy');
+
+  const getRaceDescription = (entry, pageDocument) => {
+    const copy = getRaceCopy(pageDocument);
+    if (!copy) return '';
+    const pieces = [];
+    Array.from(copy.children).some((child) => {
+      if (child.matches('h2, ul')) return pieces.length > 0;
+      if (child.tagName === 'P') pieces.push(serialize(child));
+      return false;
+    });
+    if (pieces.length) return pieces.join('');
+    const firstParagraph = copy.querySelector('p');
+    return firstParagraph ? serialize(firstParagraph) : '';
+  };
+
+  const getRaceStats = (pageDocument) => {
+    const copy = getRaceCopy(pageDocument);
+    const list = copy?.querySelector(':scope > ul');
+    if (!list) return '';
+    const clone = list.cloneNode(true);
+    Array.from(clone.children).forEach((item) => {
+      const label = normalize(item.querySelector('strong')?.textContent).replace(/\.$/, '').toLowerCase();
+      if (label === 'languages') {
+        let sibling = item.nextElementSibling;
+        while (sibling) {
+          const next = sibling.nextElementSibling;
+          sibling.remove();
+          sibling = next;
+        }
+      }
+    });
+    return serialize(clone);
+  };
+
+  const showRaceChoices = (entry, pageDocument) => {
+    results.innerHTML = '';
+    const raceTitle = titleFromPrompt(pageDocument, entry.title);
+    const raceSubtitle = raceSubtitleFromPrompt(pageDocument, entry.title);
+    const intro = document.createElement('p');
+    intro.className = 'tts-importer__empty';
+    intro.textContent = `Choose what to import from ${raceTitle}:`;
+    results.appendChild(intro);
+
+    addChoice('Race description', 'Overview', () => {
+      fillBuilder({
+        type: 'race',
+        title: raceTitle,
+        subtitle: raceSubtitle,
+        description: getRaceDescription(entry, pageDocument),
+      });
+      status.textContent = `${raceTitle} description loaded into Card Builder.`;
+    });
+
+    addChoice('Race statistics', 'Ability Score through Languages', () => {
+      fillBuilder({
+        type: 'race',
+        title: `${raceTitle} Statistics`,
+        subtitle: raceSubtitle,
+        description: getRaceStats(pageDocument),
+      });
+      status.textContent = `${raceTitle} statistics loaded into Card Builder.`;
+    });
+
+    Array.from(getRaceCopy(pageDocument)?.querySelectorAll(':scope > h2') || []).forEach((heading) => {
+      addChoice(normalize(heading.textContent), 'Subrace', () => {
+        fillBuilder({
+          type: 'race',
+          title: normalize(heading.textContent),
+          subtitle: raceSubtitle,
+          description: sectionAfterHeading(heading),
+        });
+        status.textContent = `${normalize(heading.textContent)} loaded into Card Builder.`;
+      });
+    });
+    status.textContent = 'Choose the race description, statistics, or a subrace.';
   };
 
   const setField = (field, value) => {
@@ -301,6 +385,11 @@
           if (isClassEntry(entry)) {
             const page = await getPage(entry.href);
             showClassChoices(entry, page);
+            return;
+          }
+          if (isRaceEntry(entry)) {
+            const page = await getPage(entry.href);
+            showRaceChoices(entry, page);
             return;
           }
           const imported = await extractEntry(entry, query);
