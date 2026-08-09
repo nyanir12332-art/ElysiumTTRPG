@@ -230,6 +230,77 @@
   grid-template-columns: minmax(240px, 29%) 90px 90px;
 }
 
+.tools-group .tool-card {
+  grid-template-columns: minmax(240px, 29%) 90px 90px minmax(0, 1fr) 30px;
+}
+
+.tools-group .tool-card.needs-expansion::after {
+  grid-column: 5;
+  grid-row: 1;
+}
+
+.tool-details {
+  display: none;
+  font-family: inherit;
+  font-size: 0.88rem;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  line-height: 1.5;
+  margin-top: 10px;
+  min-width: 0;
+  padding-right: 18px;
+}
+
+.tool-card.is-expanded .tool-details {
+  display: block;
+}
+
+.tool-details p {
+  display: block;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0 0 10px;
+  max-height: none;
+  overflow: visible;
+}
+
+.tool-details p:last-of-type {
+  margin-bottom: 12px;
+}
+
+.tool-details strong {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.tool-activity-table {
+  border-collapse: collapse;
+  font-family: inherit;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.tool-activity-table th {
+  background: #000000;
+  color: var(--green);
+  font-weight: 700;
+  padding: 7px 10px;
+  text-align: left;
+}
+
+.tool-activity-table td {
+  border-top: 1px solid var(--line);
+  color: var(--green-soft);
+  padding: 7px 10px;
+  text-align: left;
+}
+
+.tool-activity-table th:last-child,
+.tool-activity-table td:last-child {
+  width: 80px;
+}
+
 .tools-group .item-column-headings--tools {
   background-color: #000000 !important;
 }
@@ -702,9 +773,9 @@
 
 .firearms-subtitle {
   border-top: 0 !important;
-  font-size: 1.1rem !important;
-  padding-bottom: 7px !important;
-  padding-top: 9px !important;
+  font-size: 1.4rem !important;
+  font-weight: 400 !important;
+  padding: 8px 10px 8px 32px !important;
 }
 
 .explosives-section {
@@ -1249,6 +1320,20 @@
 
   .tools-group .item-card {
     grid-template-columns: minmax(0, 1fr) 28px;
+  }
+
+  .tools-group .tool-card {
+    grid-template-columns: minmax(0, 1fr) 28px;
+  }
+
+  .tools-group .tool-card.needs-expansion::after {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .tool-details {
+    grid-column: 1 / -1;
+    grid-row: auto;
   }
 
   .item-column-headings {
