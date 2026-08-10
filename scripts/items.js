@@ -18,7 +18,7 @@
       const description = item.querySelector('p');
       let needsExpansion = false;
 
-      if (description) {
+      if (description && !item.classList.contains('tool-card--static')) {
         needsExpansion = true;
       }
 
@@ -222,6 +222,7 @@
   });
 
   document.querySelectorAll('.item-card').forEach((item) => {
+    if (item.classList.contains('tool-card--static')) return;
     const toggle = () => {
       const expanded = item.classList.toggle('is-expanded');
       item.setAttribute('aria-expanded', String(expanded));

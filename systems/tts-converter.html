@@ -47,6 +47,12 @@
                 <option value="item">Item</option>
               </select>
             </label>
+            <label>Card size
+              <select id="card-size">
+                <option value="portrait">Portrait (750 × 1050)</option>
+                <option value="square">Small square (750 × 750)</option>
+              </select>
+            </label>
             <label>Title
               <input id="card-title" type="text" value="Placeholder" maxlength="52">
             </label>
@@ -75,6 +81,12 @@
               </label>
               <label>Weight
                 <input id="item-weight" type="text" placeholder="2 lb.">
+              </label>
+              <label>Damage
+                <input id="item-damage" type="text" placeholder="1d6 piercing">
+              </label>
+              <label>Carrying Capacity
+                <input id="item-carrying-capacity" type="text" placeholder="1 cubic foot/30 pounds of gear">
               </label>
               <label>Properties
                 <input id="item-properties" type="text" placeholder="Light, thrown">
@@ -138,8 +150,8 @@
       </main>
     </div>
     <script src="../scripts/search.js?v=8"></script>
-  <script src="../scripts/tts-converter.js?v=33"></script>
-    <script src="../scripts/tts-importer.js?v=7"></script>
+  <script src="../scripts/tts-converter.js?v=49"></script>
+    <script src="../scripts/tts-importer.js?v=12"></script>
     <script src="../scripts/crt-scrollbar.js?v=1"></script>
   </body>
 </html>

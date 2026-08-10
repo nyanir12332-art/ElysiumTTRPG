@@ -1,9 +1,9 @@
 (() => {
-  const WIDTH = 750;
-  const HEIGHT = 1050;
+  let WIDTH = 750;
+  let HEIGHT = 1050;
   const CARD_TOP = 25;
-  const CARD_BOTTOM = HEIGHT - 25;
-  const CARD_CENTER_Y = (CARD_TOP + CARD_BOTTOM) / 2;
+  let CARD_BOTTOM = HEIGHT - 25;
+  let CARD_CENTER_Y = (CARD_TOP + CARD_BOTTOM) / 2;
   const COLORS = {
     black: '#030704',
     green: '#39ff88',
@@ -16,12 +16,15 @@
   const front = document.querySelector('#card-front');
   const back = document.querySelector('#card-back');
   const type = document.querySelector('#card-type');
+  const cardSize = document.querySelector('#card-size');
   const title = document.querySelector('#card-title');
   const subtitle = document.querySelector('#card-subtitle');
   const description = document.querySelector('#card-description');
   const itemFields = document.querySelector('#item-fields');
   const itemCost = document.querySelector('#item-cost');
   const itemWeight = document.querySelector('#item-weight');
+  const itemDamage = document.querySelector('#item-damage');
+  const itemCarryingCapacity = document.querySelector('#item-carrying-capacity');
   const itemProperties = document.querySelector('#item-properties');
   const spellFields = document.querySelector('#spell-fields');
   const spellCastingTime = document.querySelector('#spell-casting-time');
@@ -38,6 +41,10 @@
 
   const frontContext = front.getContext('2d');
   const backContext = back.getContext('2d');
+  const CARD_SIZES = {
+    portrait: { width: 750, height: 1050 },
+    square: { width: 750, height: 750 },
+  };
   const iconSources = {
     feature: '../Images/FEAT.png',
     race: '../Images/RACE.png',
@@ -352,17 +359,171 @@
     });
   };
 
-  const drawTintedIcon = (context, image, x, y, size) => {
+  const drawFittedDetailLine = (context, label, value, x, y, width, baseSize) => {
+    let fontSize = baseSize;
+    while (fontSize >= 6) {
+      const gap = fontSize * 0.35;
+      context.font = `700 ${fontSize}px ${CARD_FONT}`;
+      const labelWidth = context.measureText(label).width;
+      context.font = `400 ${fontSize}px ${CARD_FONT}`;
+      const valueWidth = context.measureText(value).width;
+      if (labelWidth + gap + valueWidth <= width) break;
+      fontSize -= 1;
+    }
+    context.font = `700 ${fontSize}px ${CARD_FONT}`;
+    const labelWidth = context.measureText(label).width;
+    const gap = fontSize * 0.35;
+    context.fillText(label, x, y);
+    context.font = `400 ${fontSize}px ${CARD_FONT}`;
+    context.fillText(value, x + labelWidth + gap, y);
+  };
+
+  const drawTintedIcon = (context, image, x, y, size, qualityScale = 1) => {
     if (!image) return;
     const iconCanvas = document.createElement('canvas');
-    iconCanvas.width = size;
-    iconCanvas.height = size;
+    const iconResolution = Math.max(size, Math.round(size * qualityScale));
+    iconCanvas.width = iconResolution;
+    iconCanvas.height = iconResolution;
     const iconContext = iconCanvas.getContext('2d');
-    iconContext.drawImage(image, 0, 0, size, size);
+    iconContext.imageSmoothingEnabled = true;
+    iconContext.drawImage(image, 0, 0, iconResolution, iconResolution);
     iconContext.globalCompositeOperation = 'source-in';
     iconContext.fillStyle = COLORS.green;
-    iconContext.fillRect(0, 0, size, size);
+    iconContext.fillRect(0, 0, iconResolution, iconResolution);
     context.drawImage(iconCanvas, x, y);
+  };
+
+  const drawSquareFront = () => {
+    const context = frontContext;
+    const width = 300;
+    const height = 300;
+    const scale = front.width / width;
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.clearRect(0, 0, front.width, front.height);
+    context.save();
+    context.scale(scale, scale);
+    context.fillStyle = COLORS.black;
+    context.fillRect(0, 0, width, height);
+    context.strokeStyle = COLORS.line;
+    context.lineWidth = 1;
+    context.strokeRect(10, 10, 280, 280);
+    context.strokeRect(11, 11, 39, 20);
+    context.beginPath();
+    context.moveTo(10, 31);
+    context.lineTo(290, 31);
+    context.stroke();
+
+    drawTintedIcon(context, icons[type.value], 22, 13, 16, scale);
+    context.save();
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.fillStyle = COLORS.green;
+    context.font = `700 31px ${CARD_FONT}`;
+    const titleLines = wrapText(context, title.value || 'Untitled', 222 * scale);
+    titleLines.slice(0, 2).forEach((line, index) => context.fillText(line, 58 * scale, (24 + index * 14) * scale));
+    context.restore();
+
+    context.fillStyle = COLORS.soft;
+    context.font = `700 14px ${CARD_FONT}`;
+    const cardSubtitle = subtitle.value.trim().toUpperCase();
+    const subtitleLines = cardSubtitle ? wrapText(context, cardSubtitle, 264).slice(0, 2) : [];
+    subtitleLines.forEach((line, index) => context.fillText(line, 18, 51 + index * 16));
+
+    const itemDamageText = type.value === 'item' ? itemDamage.value.trim() : '';
+    const itemCarryingCapacityText = type.value === 'item' ? itemCarryingCapacity.value.trim() : '';
+    const subtitleBodyStart = subtitleLines.length > 1 ? 87 : subtitleLines.length === 1 ? 69 : 51;
+    const itemDetailLines = [
+      itemDamageText ? ['DAMAGE', itemDamageText] : null,
+      itemCarryingCapacityText ? ['CARRYING CAPACITY', itemCarryingCapacityText] : null,
+    ].filter(Boolean);
+    itemDetailLines.forEach(([label, value], index) => {
+      const lineY = subtitleBodyStart + (index * 15);
+      drawFittedDetailLine(context, label, value, 18, lineY, 264, 11);
+    });
+
+    const meta = type.value === 'item'
+      ? [
+        itemCost.value.trim() ? `<b>COST</b>  ${itemCost.value.trim()}` : '',
+        itemWeight.value.trim() ? `<b>WEIGHT</b>  ${itemWeight.value.trim()}` : '',
+        itemProperties.value.trim() ? `<b>PROPERTIES</b>  ${itemProperties.value.trim()}` : '',
+      ].filter(Boolean).join('    ')
+      : '';
+    const spellComponents = [
+      spellComponentV.checked ? 'V' : '',
+      spellComponentS.checked ? 'S' : '',
+      spellComponentM.checked ? `M${spellMaterial.value.trim() ? ` (${spellMaterial.value.trim()})` : ''}` : '',
+    ].filter(Boolean).join(', ');
+    const spellMeta = type.value === 'spell'
+      ? [
+        spellCastingTime.value.trim() ? `<b>CASTING TIME</b>  ${spellCastingTime.value.trim()}` : '',
+        spellRange.value.trim() ? `<b>RANGE</b>  ${spellRange.value.trim()}` : '',
+        spellComponents ? `<b>COMPONENTS</b>  ${spellComponents}` : '',
+        spellDuration.value.trim() ? `<b>DURATION</b>  ${spellDuration.value.trim()}` : '',
+      ].filter(Boolean).join('\n')
+      : '';
+    const body = [description.value, meta, spellMeta].filter((value) => value && value.trim()).join('\n\n');
+    const bodyStart = subtitleBodyStart + (itemDetailLines.length ? (itemDetailLines.length * 22) : 0);
+    drawFittedTextBlock(context, body, 18, bodyStart, 264, height - bodyStart - 14, 11, COLORS.soft);
+    context.restore();
+  };
+
+  const drawSquareBack = () => {
+    const context = backContext;
+    const width = 300;
+    const height = 300;
+    const scale = back.width / width;
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.clearRect(0, 0, back.width, back.height);
+    context.save();
+    context.scale(scale, scale);
+    context.fillStyle = '#020503';
+    context.fillRect(0, 0, width, height);
+    context.strokeStyle = COLORS.mint;
+    context.lineWidth = 2;
+    roundedRect(context, 8, 8, 284, 284, 18);
+    context.stroke();
+    context.lineWidth = 1;
+    context.strokeStyle = 'rgba(157,228,203,0.78)';
+    roundedRect(context, 18, 18, 264, 264, 12);
+    context.stroke();
+
+    context.save();
+    context.beginPath();
+    roundedRect(context, 18, 18, 264, 264, 12);
+    context.clip();
+    context.strokeStyle = 'rgba(157,228,203,0.7)';
+    context.lineWidth = 1;
+    [42, 70, 98].forEach((y) => {
+      context.beginPath();
+      context.moveTo(18, y);
+      context.quadraticCurveTo(150, y + 42, 282, y);
+      context.stroke();
+    });
+    [258, 230, 202].forEach((y) => {
+      context.beginPath();
+      context.moveTo(18, y);
+      context.quadraticCurveTo(150, y - 42, 282, y);
+      context.stroke();
+    });
+    context.beginPath();
+    context.moveTo(150, 18);
+    context.lineTo(150, 282);
+    context.stroke();
+    context.restore();
+
+    const orb = context.createRadialGradient(130, 137, 12, 154, 160, 74);
+    orb.addColorStop(0, '#d5fff0');
+    orb.addColorStop(0.5, '#86cdb5');
+    orb.addColorStop(1, '#397c69');
+    context.fillStyle = orb;
+    context.beginPath();
+    context.arc(150, 150, 55, 0, Math.PI * 2);
+    context.fill();
+    context.strokeStyle = COLORS.mint;
+    context.lineWidth = 2;
+    context.beginPath();
+    context.arc(150, 150, 62, 0, Math.PI * 2);
+    context.stroke();
+    context.restore();
   };
 
   const drawFront = () => {
@@ -411,6 +572,18 @@
       subtitleLines.slice(0, 2).forEach((line, index) => context.fillText(line, 40, subtitleStart + index * subtitleLineHeight));
     }
 
+    const itemDamageText = cardType === 'item' ? itemDamage.value.trim() : '';
+    const itemCarryingCapacityText = cardType === 'item' ? itemCarryingCapacity.value.trim() : '';
+    const subtitleBodyStart = subtitleLines.length > 1 ? 190 : subtitleLines.length === 1 ? 165 : 115;
+    const itemDetailLines = [
+      itemDamageText ? ['DAMAGE', itemDamageText] : null,
+      itemCarryingCapacityText ? ['CARRYING CAPACITY', itemCarryingCapacityText] : null,
+    ].filter(Boolean);
+    itemDetailLines.forEach(([label, value], index) => {
+      const lineY = subtitleBodyStart + (index * 30);
+      drawFittedDetailLine(context, label, value, 40, lineY, 670, 24);
+    });
+
     const meta = cardType === 'item'
       ? [
         itemCost.value.trim() ? `<b>COST</b>  ${itemCost.value.trim()}` : '',
@@ -434,7 +607,7 @@
     const body = [description.value, meta, spellMeta].filter((value) => value && value.trim()).join('\n\n');
     // Do not reserve the subtitle band when it is empty. Keep a small reading
     // gap below the title divider, then give the description the full height.
-    const bodyStart = subtitleLines.length > 1 ? 190 : subtitleLines.length === 1 ? 165 : 115;
+    const bodyStart = subtitleBodyStart + (itemDetailLines.length ? (itemDetailLines.length * 45) : 0);
     drawFittedTextBlock(context, body, 40, bodyStart, 670, CARD_BOTTOM - bodyStart, 24, COLORS.soft);
   };
 
@@ -458,16 +631,24 @@
     context.clip();
     context.strokeStyle = 'rgba(157,228,203,0.7)';
     context.lineWidth = 2;
-    [70, 130, 190].forEach((y) => {
+    const isSquareCard = cardSize.value === 'square';
+    const topCurveYs = isSquareCard ? [70, 125, 180] : [70, 130, 190];
+    const curveDepth = isSquareCard ? 48 : 100;
+    const curveStart = 48;
+    const curveEnd = 702;
+    topCurveYs.forEach((y) => {
       context.beginPath();
-      context.moveTo(48, y);
-      context.quadraticCurveTo(375, y + 100, 702, y);
+      context.moveTo(curveStart, y);
+      context.quadraticCurveTo(375, y + curveDepth, curveEnd, y);
       context.stroke();
     });
-    [860, 920, 980].forEach((y) => {
+    // Mirror the lower ornament around the orb's center. This preserves the
+    // portrait layout and keeps the square card balanced instead of clipping
+    // the original lower curves below the canvas.
+    topCurveYs.map((y) => (2 * CARD_CENTER_Y) - y).forEach((y) => {
       context.beginPath();
-      context.moveTo(48, y);
-      context.quadraticCurveTo(375, y - 100, 702, y);
+      context.moveTo(curveStart, y);
+      context.quadraticCurveTo(375, y - curveDepth, curveEnd, y);
       context.stroke();
     });
     context.beginPath();
@@ -478,18 +659,26 @@
 
     context.strokeStyle = COLORS.mint;
     context.lineWidth = 2;
-    const orb = context.createRadialGradient(330, CARD_CENTER_Y - 40, 30, 385, CARD_CENTER_Y + 25, 180);
+    const orbRadius = isSquareCard ? 122 : 148;
+    const orb = context.createRadialGradient(
+      330,
+      CARD_CENTER_Y - (isSquareCard ? 28 : 40),
+      isSquareCard ? 22 : 30,
+      385,
+      CARD_CENTER_Y + (isSquareCard ? 18 : 25),
+      orbRadius + 32,
+    );
     orb.addColorStop(0, '#d5fff0');
     orb.addColorStop(0.5, '#86cdb5');
     orb.addColorStop(1, '#397c69');
     context.fillStyle = orb;
     context.beginPath();
-    context.arc(375, CARD_CENTER_Y, 148, 0, Math.PI * 2);
+    context.arc(375, CARD_CENTER_Y, orbRadius, 0, Math.PI * 2);
     context.fill();
     context.strokeStyle = COLORS.mint;
     context.lineWidth = 5;
     context.beginPath();
-    context.arc(375, CARD_CENTER_Y, 164, 0, Math.PI * 2);
+    context.arc(375, CARD_CENTER_Y, orbRadius + (isSquareCard ? 14 : 16), 0, Math.PI * 2);
     context.stroke();
   };
 
@@ -501,11 +690,29 @@
     drawBack();
   };
 
+  const updateCanvasSize = () => {
+    const dimensions = CARD_SIZES[cardSize.value] || CARD_SIZES.portrait;
+    WIDTH = dimensions.width;
+    HEIGHT = dimensions.height;
+    CARD_BOTTOM = HEIGHT - 25;
+    CARD_CENTER_Y = (CARD_TOP + CARD_BOTTOM) / 2;
+    [front, back].forEach((canvas) => {
+      canvas.width = dimensions.width;
+      canvas.height = dimensions.height;
+    });
+    status.textContent = `Front and back are exported at exactly ${dimensions.width} × ${dimensions.height} pixels.`;
+    draw();
+  };
+
   const download = (canvas, filename) => {
     const anchor = document.createElement('a');
     anchor.download = filename;
     anchor.href = canvas.toDataURL('image/jpeg', 0.94);
     anchor.click();
+    window.setTimeout(() => {
+      status.textContent = `${filename} downloaded at ${canvas.width} x ${canvas.height} pixels.`;
+    }, 0);
+    status.textContent = `${filename} downloaded at ${canvas.width} x ${canvas.height} pixels.`;
     status.textContent = `${filename} downloaded at 750 × 1050 pixels.`;
   };
 
@@ -517,7 +724,8 @@
   document.querySelector('#download-back').addEventListener('click', () => download(back, 'elysium-card-back.jpg'));
   document.querySelector('#reset-card').addEventListener('click', () => {
     document.querySelector('#tts-editor').reset();
-    draw();
+    updateCanvasSize();
   });
-  draw();
+  cardSize.addEventListener('change', updateCanvasSize);
+  updateCanvasSize();
 })();

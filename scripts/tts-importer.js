@@ -13,6 +13,8 @@
   const cardDescription = document.querySelector('#card-description');
   const itemCost = document.querySelector('#item-cost');
   const itemWeight = document.querySelector('#item-weight');
+  const itemDamage = document.querySelector('#item-damage');
+  const itemCarryingCapacity = document.querySelector('#item-carrying-capacity');
   const itemProperties = document.querySelector('#item-properties');
   const siteRoot = new URL('../', document.baseURI);
   const indexUrl = new URL('../search-index.json', document.baseURI);
@@ -30,6 +32,14 @@
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
+
+  const itemAliases = new Map([
+    ['ram, portable', 'portable ram'],
+    ['tent, two-person', 'two-person tent'],
+    ['case, crossbow bolt', 'crossbow bolt case'],
+    ['case, map/scroll', 'map/scroll case'],
+    ['pot, iron', 'iron pot'],
+  ]);
 
   const serializeWithoutControls = (node) => {
     const clone = node.cloneNode(true);
@@ -139,11 +149,19 @@
 
   const sectionAfterHeading = (heading) => {
     const level = Number(heading.tagName.substring(1));
+    const headingText = normalize(heading.textContent);
+    const groupedSpellSection = /^(?:preparing and casting spells|spell points)$/i.test(headingText);
+    const sectionEnd = /^(?:spellcasting ability|ritual casting|spellcasting focus|spells known of 1st level and higher)$/i;
     let markup = '';
     let sibling = heading.nextElementSibling;
     while (sibling) {
       const siblingLevel = /^H[1-6]$/.test(sibling.tagName) ? Number(sibling.tagName.substring(1)) : null;
-      if (siblingLevel !== null && siblingLevel <= level) break;
+      if (siblingLevel !== null && siblingLevel <= level) {
+        const keepGroupedMinorHeading = groupedSpellSection
+          && siblingLevel === level
+          && !sectionEnd.test(normalize(sibling.textContent));
+        if (!keepGroupedMinorHeading) break;
+      }
       markup += serialize(sibling);
       sibling = sibling.nextElementSibling;
     }
@@ -153,18 +171,30 @@
   const extractItem = async (entry) => {
     const document = await getPage(entry.href.split('?')[0]);
     const name = entry.itemName || new URL(entry.href).searchParams.get('item') || cleanTitle(entry.title);
-    const wanted = normalize(name).toLowerCase();
+    const normalizedName = normalize(name).toLowerCase();
+    const wanted = itemAliases.get(normalizedName) || normalizedName;
     const article = Array.from(document.querySelectorAll('.item-card')).find((item) => normalize(item.querySelector('h3')?.textContent).toLowerCase() === wanted);
     if (article) {
       const values = Array.from(article.querySelectorAll('.item-card__heading > span')).map((span) => cleanField(span.textContent));
       const details = article.querySelector('.tool-details') || article.querySelector('p');
+      const isContainer = Boolean(article.closest('.containers-group'));
+      const detailText = details ? normalize(details.textContent) : '';
+      const capacitySentence = isContainer
+        ? (detailText.match(/^.*?(?:\.(?=\s+[A-Z]|$)|$)/)?.[0] || '')
+        : '';
+      const containerCapacity = capacitySentence.replace(/\.$/, '').trim();
+      const containerDescription = isContainer && capacitySentence
+        ? escapeText(detailText.slice(capacitySentence.length).trim())
+        : (details ? serializeWithoutControls(details) : '');
       return {
         type: 'item',
         title: normalize(article.querySelector('h3')?.textContent) || name,
         subtitle: 'Item',
-        description: details ? serializeWithoutControls(details) : '',
+        description: containerDescription,
         cost: values[0] || '',
         weight: values[1] || '',
+        damage: '',
+        carryingCapacity: containerCapacity,
         properties: values[3] || '',
       };
     }
@@ -172,15 +202,23 @@
     const row = Array.from(document.querySelectorAll('table tbody tr')).find((item) => normalize(item.querySelector('td')?.textContent).toLowerCase() === wanted);
     if (row) {
       const cells = Array.from(row.querySelectorAll('td'));
+      const table = row.closest('table');
+      const isFirearm = table?.classList.contains('firearms-table');
+      const isWeapon = table?.classList.contains('weapons-table') && !table.classList.contains('weapons-table--ammunition');
+      const damageIndex = isFirearm ? 3 : isWeapon ? 2 : -1;
+      const weightIndex = isFirearm ? 4 : isWeapon ? 3 : 2;
+      const propertiesIndex = isFirearm ? 6 : isWeapon ? 4 : -1;
       cells.slice(3).forEach((cell) => cell.querySelectorAll('button, .item-card__expand, .explosive-expand').forEach((control) => control.remove()));
       return {
         type: 'item',
         title: normalize(cells[0]?.textContent) || name,
-        subtitle: 'Item',
+        subtitle: isFirearm || isWeapon ? 'Weapon' : 'Item',
         description: escapeText(cells.slice(3).map((cell) => normalize(cell.textContent)).filter(Boolean).join(' — ')),
         cost: cleanField(cells[1]?.textContent),
-        weight: cleanField(cells[2]?.textContent),
-        properties: '',
+        weight: cleanField(cells[weightIndex]?.textContent),
+        damage: damageIndex >= 0 ? cleanField(cells[damageIndex]?.textContent) : '',
+        carryingCapacity: '',
+        properties: propertiesIndex >= 0 ? cleanField(cells[propertiesIndex]?.textContent) : '',
       };
     }
     throw new Error('Item not found');
@@ -251,8 +289,8 @@
       status.textContent = `${titleFromPrompt(pageDocument, entry.title)} loaded into Card Builder.`;
     });
 
-    const headings = Array.from(pageDocument.querySelectorAll('main .feature-section h2, main .feature-section h3, main .feature-section h4'))
-      .filter((heading) => !/^(class features|hit points|proficiencies|equipment)$/i.test(normalize(heading.textContent)));
+    const headings = Array.from(pageDocument.querySelectorAll('main .class-copy h2, main .class-copy h3, main .class-copy h4, main .feature-section h2, main .feature-section h3, main .feature-section h4'))
+      .filter((heading) => !/^(class features|hit points|proficiencies|equipment|spell point cost)$/i.test(normalize(heading.textContent)));
     headings.forEach((heading) => {
       addChoice(normalize(heading.textContent), 'Class feature', () => {
         fillBuilder({
@@ -358,6 +396,8 @@
     setField(cardDescription, entry.description);
     setField(itemCost, entry.type === 'item' ? entry.cost : '');
     setField(itemWeight, entry.type === 'item' ? entry.weight : '');
+    setField(itemDamage, entry.type === 'item' ? entry.damage : '');
+    setField(itemCarryingCapacity, entry.type === 'item' ? entry.carryingCapacity : '');
     setField(itemProperties, entry.type === 'item' ? entry.properties : '');
     editor.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
