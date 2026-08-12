@@ -386,11 +386,14 @@
 .district-directory-description {
   background: rgba(1, 6, 3, 0.99);
   border: 1px solid var(--green);
+  border-bottom: 1px solid var(--green);
+  box-sizing: border-box;
   box-shadow: 0 0 24px rgba(57, 255, 136, 0.28), inset 0 0 24px rgba(57, 255, 136, 0.08);
   color: var(--green-soft);
   max-height: calc(100vh - 32px);
   min-height: 250px;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   padding: clamp(14px, 2vw, 24px);
   position: fixed;
   left: 50%;
