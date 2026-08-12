@@ -441,9 +441,14 @@
           Z: `District Z is the lowest layer of The City and is known for dredging and creating incredibly durable metals. It manages dredging and excavation sites, some of which are home to various radioactive monsters. Z Corp. is closely tied with Fixer Associations as they work together to create forces of expeditions into The Ruins to supply The City with a steady flow of relics and singularities. The Backstreets closely border old excavation sites that are known as hellholes, some of District Z's residents end up being trapped within while looking for items left behind to scavenge. It is to note that in the process of excavation, it is not a priority to exterminate monsters, so the left behind hellholes are often teeming with radioactive life.`,
         };
 
+        const capitalizeDistrictTerms = (value) => value.replace(
+          /\b(the\s+)?(corporations?|syndicates?|associations?|districts?|backstreets?|wings?|nests?)\b/gi,
+          (match, article, term) => `${article ? "The " : ""}${term[0].toUpperCase()}${term.slice(1).toLowerCase()}`,
+        );
+
         const setDescriptionContent = (letter) => {
           title.textContent = `District ${letter}`;
-          text.textContent = districtDescriptions[letter] || "No public record is available for this District";
+          text.textContent = capitalizeDistrictTerms(districtDescriptions[letter] || "No public record is available for this District");
         };
 
         const openRestrictedDescription = () => {

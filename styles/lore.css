@@ -400,7 +400,19 @@
   top: 50%;
   transform: translate(-50%, -50%);
   width: min(720px, calc(100vw - 32px));
-  z-index: 2;
+  z-index: 100;
+}
+
+.district-directory-description::before {
+  background: var(--green);
+  bottom: 0;
+  content: "";
+  height: 1px;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  z-index: 3;
 }
 
 .district-directory-description::after {
