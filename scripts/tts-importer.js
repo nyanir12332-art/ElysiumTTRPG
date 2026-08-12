@@ -70,6 +70,12 @@
     return children;
   };
 
+  const serializeRelicTable = (table) => {
+    const clone = table.cloneNode(true);
+    clone.querySelector('caption')?.remove();
+    return serialize(clone).replace(/^<table>\s*/i, '<table>');
+  };
+
   const getPage = (href) => fetch(href, { cache: 'no-store' })
     .then((response) => {
       if (!response.ok) throw new Error('Unable to load page');
@@ -85,12 +91,14 @@
         return response.json();
       })
       .then(async (pages) => {
-        const entries = pages.map((page) => ({
-          title: page.title,
-          text: page.text || '',
-          href: toHref(page.path),
-          path: String(page.path).replace(/\\/g, '/'),
-        }));
+        const entries = pages
+          .filter((page) => !/^classes[\\/]classes\.html$/i.test(String(page.path || '')))
+          .map((page) => ({
+            title: page.title,
+            text: page.text || '',
+            href: toHref(page.path),
+            path: String(page.path).replace(/\\/g, '/'),
+          }));
         const itemPage = new URL('items/index.html', siteRoot);
         try {
           const itemDocument = await getPage(itemPage.href);
@@ -241,7 +249,7 @@
     }
 
     const kind = pageKind(entry);
-    const content = main.querySelector('.class-copy') || main.querySelector('article') || main;
+    const content = main.querySelector('.class-copy') || main.querySelector('.subclass-content') || main.querySelector('article') || main;
     return {
       type: kind === 'race' ? 'race' : kind === 'class' ? 'class' : 'feature',
       title: titleFromPrompt(document, entry.title),
@@ -253,7 +261,7 @@
   const extractOverview = (entry, document) => {
     const main = document.querySelector('main');
     const kind = pageKind(entry);
-    const content = main.querySelector('.class-copy') || main.querySelector('article') || main;
+    const content = main.querySelector('.class-copy') || main.querySelector('.subclass-content') || main.querySelector('article') || main;
     return {
       type: kind === 'race' ? 'race' : kind === 'class' ? 'class' : 'feature',
       title: titleFromPrompt(document, entry.title),
@@ -262,7 +270,20 @@
     };
   };
 
-  const isClassEntry = (entry) => /^classes\//i.test(entry.path) && !/classes\.html$/i.test(entry.path);
+  const isClassEntry = (entry) => /^classes[\\/](?:subclasses[\\/])?[^\\/]+\.html$/i.test(entry.path)
+    && !/classes[\\/]classes\.html$/i.test(entry.path);
+  const classSectionCategory = (entry) => {
+    const path = String(entry.path).replace(/\\/g, '/');
+    if (/(?:^|\/)artificer-infusions\.html$/i.test(path)) return 'Infusion';
+    if (/(?:^|\/)warlock-eldritch-invocations\.html$/i.test(path)) return 'Invocation';
+    if (/(?:^|\/)mystic-psionic-disciplines\.html$/i.test(path)
+      || /(?:^|\/)monk-disciplines\.html$/i.test(path)
+      || /(?:^|\/)mystic-(?:avatar|awakened|immortal|nomad|wu-jen)-[^/]+\.html$/i.test(path)) return 'Discipline';
+    if (/(?:^|\/)blood-hunter-blood-curses\.html$/i.test(path)) return 'Blood Curse';
+    if (/(?:^|\/)blood-hunter-mutagens\.html$/i.test(path)) return 'Mutagen';
+    if (/(?:^|\/)fighter-battle-maneuvers\.html$/i.test(path)) return 'Maneuver';
+    return '';
+  };
   const isRaceEntry = (entry) => /^races\//i.test(entry.path) && !/races[\\/]index\.html$/i.test(entry.path);
 
   const addChoice = (label, detail, action) => {
@@ -279,15 +300,18 @@
 
   const showClassChoices = (entry, pageDocument) => {
     results.innerHTML = '';
+    const sectionCategory = classSectionCategory(entry);
     const intro = document.createElement('p');
     intro.className = 'tts-importer__empty';
     intro.textContent = `Choose what to import from ${titleFromPrompt(pageDocument, entry.title)}:`;
     results.appendChild(intro);
 
-    addChoice('Class description', 'Overview', () => {
-      fillBuilder(extractOverview(entry, pageDocument));
-      status.textContent = `${titleFromPrompt(pageDocument, entry.title)} loaded into Card Builder.`;
-    });
+    if (!sectionCategory) {
+      addChoice('Class description', 'Overview', () => {
+        fillBuilder(extractOverview(entry, pageDocument));
+        status.textContent = `${titleFromPrompt(pageDocument, entry.title)} loaded into Card Builder.`;
+      });
+    }
 
     const headings = Array.from(pageDocument.querySelectorAll('main .class-copy h2, main .class-copy h3, main .class-copy h4, main .feature-section h2, main .feature-section h3, main .feature-section h4'))
       .filter((heading) => !/^(class features|hit points|proficiencies|equipment|spell point cost)$/i.test(normalize(heading.textContent)));
@@ -302,7 +326,109 @@
         status.textContent = `${normalize(heading.textContent)} loaded into Card Builder.`;
       });
     });
-    status.textContent = 'Choose the class description or a specific feature.';
+
+    const isLeafSectionHeading = (heading) => {
+      const level = Number(heading.tagName.substring(1));
+      let sibling = heading.nextElementSibling;
+      while (sibling) {
+        const siblingLevel = /^H[1-6]$/.test(sibling.tagName) ? Number(sibling.tagName.substring(1)) : null;
+        if (siblingLevel !== null) return siblingLevel <= level;
+        sibling = sibling.nextElementSibling;
+      }
+      return true;
+    };
+
+    const sectionHeadings = Array.from(pageDocument.querySelectorAll('main .subclass-content h2, main .subclass-content h3, main .subclass-content h4'))
+      .filter(isLeafSectionHeading);
+    const sectionNodesAfterHeading = (heading) => {
+      const level = Number(heading.tagName.substring(1));
+      const nodes = [];
+      let sibling = heading.nextElementSibling;
+      while (sibling) {
+        const siblingLevel = /^H[1-6]$/.test(sibling.tagName) ? Number(sibling.tagName.substring(1)) : null;
+        if (siblingLevel !== null && siblingLevel <= level) break;
+        nodes.push(sibling);
+        sibling = sibling.nextElementSibling;
+      }
+      return nodes;
+    };
+
+    sectionHeadings.forEach((heading) => {
+      const headingTitle = normalize(heading.textContent);
+      if (sectionCategory === 'Infusion' && headingTitle.toLowerCase() === 'replicate relic') {
+        const sectionNodes = sectionNodesAfterHeading(heading);
+        const descriptionNodes = sectionNodes.filter((node) => !node.matches('.table-wrap'));
+        const tables = sectionNodes.filter((node) => node.matches('.table-wrap'));
+
+        addChoice(headingTitle + ' — Description', 'Infusion description', () => {
+          fillBuilder({
+            type: 'feature',
+            title: headingTitle,
+            subtitle: sectionCategory,
+            description: descriptionNodes.map(serialize).join(''),
+          });
+          status.textContent = headingTitle + ' description loaded into Card Builder.';
+        });
+
+        tables.forEach((table) => {
+          const tableTitle = normalize(table.querySelector('caption')?.textContent || 'Replicable Relics');
+          addChoice(tableTitle, 'Infusion table', () => {
+            fillBuilder({
+              type: 'feature',
+              title: tableTitle,
+              subtitle: sectionCategory,
+              description: serializeRelicTable(table),
+            });
+            status.textContent = tableTitle + ' loaded into Card Builder.';
+          });
+        });
+        return;
+      }
+      addChoice(normalize(heading.textContent), sectionCategory ? `${sectionCategory} section` : 'Single section', () => {
+        fillBuilder({
+          type: 'feature',
+          title: normalize(heading.textContent),
+          subtitle: sectionCategory || 'Feature',
+          description: sectionAfterHeading(heading),
+        });
+        status.textContent = `${normalize(heading.textContent)} loaded into Card Builder.`;
+      });
+    });
+
+    const linkedSections = [...new Map(Array.from(pageDocument.querySelectorAll('main .subclass-content a[href]'))
+      .map((link) => {
+        const href = new URL(link.getAttribute('href'), entry.href).href;
+        return [href, { href, title: normalize(link.textContent) }];
+      })
+      .filter(({ href, title }) => title && /\/classes\/subclasses\/[^/]+\.html$/i.test(new URL(href).pathname))).values()];
+    linkedSections.forEach(({ href, title }) => {
+      addChoice(title, sectionCategory ? `${sectionCategory} section` : 'Linked section', async () => {
+        status.textContent = 'Importing section...';
+        try {
+          const targetDocument = await getPage(href);
+          const targetMain = targetDocument.querySelector('main');
+          const content = targetMain?.querySelector('.subclass-content')
+            || targetMain?.querySelector('.feature-section')
+            || targetMain?.querySelector('.class-copy')
+            || targetMain;
+          if (!content) throw new Error('Linked section has no importable content');
+          fillBuilder({
+            type: 'feature',
+            title,
+            subtitle: sectionCategory || 'Feature',
+            description: serialize(content),
+          });
+          status.textContent = `${title} loaded into Card Builder.`;
+        } catch (error) {
+          status.textContent = 'This section could not be imported.';
+        }
+      });
+    });
+    status.textContent = sectionHeadings.length || linkedSections.length
+      ? sectionCategory
+        ? `Choose a ${sectionCategory.toLowerCase()} to import.`
+        : 'Choose the class description, a class feature, or a single section.'
+      : 'Choose the class description or a specific feature.';
   };
 
   const getRaceCopy = (pageDocument) => pageDocument.querySelector('main .class-copy');

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../../Images/ElysiumIcon.png">
+    <link rel="stylesheet" href="../../styles/site.css">
+    <link rel="stylesheet" href="../../styles/classes.css">
+    <title>Barbarian: Path of the Berserker - Fable</title>
+      <link rel="stylesheet" href="../../styles/search.css?v=13">
+  </head>
+  <body>
+    <div class="screen">
+        <div class="page-nav">
+          <div class="page-nav__item page-nav__prev"><a class="page-nav__link" href="barbarian-beast.html"><< Path of the Beast</a></div>
+          <div class="page-nav__item page-nav__next"><a class="page-nav__link" href="barbarian-depths.html">Path of the Depths >></a></div>
+        </div>
+
+      <header>
+        <nav class="topbar" aria-label="Section navigation">
+          <a class="home-link" href="../../index.html">Fable</a>
+          <a class="active" href="../classes.html">Classes</a>
+          <a href="../../races/index.html">Races</a>
+          <a href="../../backgrounds/index.html">Backgrounds</a>
+          <a href="#">Spells</a>
+          <a href="../../items/index.html">Items</a>
+          <span class="menu-break" aria-hidden="true"></span><a href="#">Feats</a>
+          <a href="../../systems/index.html">Systems</a>
+          <a href="../../lore/index.html">Lore</a>
+          <a href="#">Records</a>
+        </nav>
+      </header>
+
+      <main>
+        <h1 class="prompt"><a class="class-back-link" href="../classes.html">CLASSES</a>: <a href="../barbarian.html">Barbarian</a>: Path of the Berserker</h1>
+        <section class="subclass-content" aria-label="Path of the Berserker subclass features">
+          <p class="subclass-intro">For some barbarians, rage is a means to an end - that end being violence. The Path of the Berserker is a path of untrammeled fury, slick with blood. As you enter the berserker's rage, you thrill in the chaos of battle, heedless of your own health or well-being.</p>
+
+          <h2>Mania</h2>
+          <p>Starting when you choose this path at 3rd level, you can descend into a mania when you rage. If you do so, for the duration of your rage you can make a single melee weapon attack as a bonus action on each of your turns after this one.</p>
+          <p>Once you use this feature, you can't use it again until you finish a short or long rest, unless you expend one additional use of Rage to use it again.</p>
+
+          <h2>Mindless Rage</h2>
+          <p>Beginning at 6th level, you can't be charmed or frightened while raging. If you are charmed or frightened when you enter your rage, the effect is suspended for the duration of the rage.</p>
+
+          <h2>Intimidating Presence</h2>
+          <p>Beginning at 10th level, you can use your action to frighten someone with your menacing presence. When you do so, choose one creature that you can see within 30 feet of you. If the creature can see or hear you, it must succeed on a Wisdom saving throw, with a DC equal to 8 + your proficiency bonus + your Charisma modifier, or be frightened of you until the end of your next turn.</p>
+          <p>On subsequent turns, you can use your action to extend the duration of this effect on the frightened creature until the end of your next turn. This effect ends if the creature ends its turn out of line of sight or more than 60 feet away from you.</p>
+          <p>If the creature succeeds on its saving throw, you can't use this feature on that creature again for 24 hours.</p>
+
+          <h2>Retaliation</h2>
+          <p>Starting at 14th level, when you take damage from a creature that is within 5 feet of you, you can use your reaction to make a melee weapon attack against that creature.</p>
+        </section>
+      </main>
+    </div>
+    <script>
+      (() => {
+        const track = document.createElement("div");
+        const up = document.createElement("div");
+        const thumb = document.createElement("div");
+        const down = document.createElement("div");
+
+        track.className = "crt-scrollbar";
+        up.className = "crt-scrollbar-button up";
+        thumb.className = "crt-scrollbar-thumb";
+        down.className = "crt-scrollbar-button down";
+        up.textContent = "^";
+        down.textContent = "v";
+        track.appendChild(up);
+        track.appendChild(thumb);
+        track.appendChild(down);
+        document.body.appendChild(track);
+
+        const scrollByAmount = (amount) => {
+          window.scrollBy({ top: amount, behavior: "smooth" });
+        };
+
+        const updateScrollbar = () => {
+          const doc = document.documentElement;
+          const maxScroll = doc.scrollHeight - window.innerHeight;
+
+          if (maxScroll <= 0) {
+            track.style.display = "none";
+            return;
+          }
+
+          track.style.display = "block";
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const thumbHeight = Math.max(42, trackHeight * (window.innerHeight / doc.scrollHeight));
+          const thumbTop = buttonSpace + (doc.scrollTop / maxScroll) * (trackHeight - thumbHeight);
+
+          thumb.style.height = `${thumbHeight}px`;
+          thumb.style.transform = `translateY(${thumbTop}px)`;
+        };
+
+        const scrollToPointer = (event) => {
+          if (event.target === up || event.target === down || event.target === thumb) {
+            return;
+          }
+
+          const rect = track.getBoundingClientRect();
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+          const position = Math.min(Math.max(event.clientY - rect.top - buttonSpace, 0), trackHeight);
+          window.scrollTo({ top: (position / trackHeight) * maxScroll, behavior: "smooth" });
+        };
+
+        const startDrag = (event) => {
+          event.preventDefault();
+          const doc = document.documentElement;
+          const maxScroll = doc.scrollHeight - window.innerHeight;
+          const buttonSpace = 16;
+          const trackHeight = window.innerHeight - (buttonSpace * 2);
+          const thumbHeight = thumb.offsetHeight;
+          const startY = event.clientY;
+          const startScroll = doc.scrollTop;
+
+          const onMove = (moveEvent) => {
+            const delta = moveEvent.clientY - startY;
+            const scrollDelta = delta * (maxScroll / (trackHeight - thumbHeight));
+            window.scrollTo(0, startScroll + scrollDelta);
+          };
+
+          const onUp = () => {
+            window.removeEventListener("pointermove", onMove);
+            window.removeEventListener("pointerup", onUp);
+          };
+
+          window.addEventListener("pointermove", onMove);
+          window.addEventListener("pointerup", onUp);
+        };
+
+        up.addEventListener("click", () => scrollByAmount(-window.innerHeight * 0.85));
+        down.addEventListener("click", () => scrollByAmount(window.innerHeight * 0.85));
+        track.addEventListener("click", scrollToPointer);
+        thumb.addEventListener("pointerdown", startDrag);
+        window.addEventListener("scroll", updateScrollbar, { passive: true });
+        window.addEventListener("resize", updateScrollbar);
+        updateScrollbar();
+      })();
+    </script>
+    <script src="../../scripts/search.js?v=8"></script>
+    <script src="../../scripts/crt-scrollbar.js?v=1"></script>
+  </body>
+</html>
