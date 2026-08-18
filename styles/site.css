@@ -11,6 +11,107 @@
   box-sizing: border-box;
 }
 
+.select-menu {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+
+.select-menu__native {
+  clip: rect(0 0 0 0) !important;
+  height: 1px !important;
+  margin: -1px !important;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0 !important;
+  pointer-events: none;
+  position: absolute !important;
+  width: 1px !important;
+}
+
+.select-menu__trigger,
+.select-menu__option {
+  border-radius: 0;
+  font: inherit;
+}
+
+.select-menu__trigger {
+  align-items: center;
+  background: rgba(2, 5, 3, 0.92);
+  border: 1px solid var(--line);
+  color: var(--green-soft);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  min-height: 40px;
+  padding: 7px 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.select-menu__marker {
+  color: var(--green);
+  font-size: 0.8em;
+  margin-left: 14px;
+}
+
+.select-menu.is-open .select-menu__trigger,
+.select-menu__trigger:hover,
+.select-menu__trigger:focus-visible {
+  border-color: var(--green);
+  outline: none;
+}
+
+.select-menu__list {
+  background: #020503;
+  border: 1px solid var(--green-soft);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.52);
+  display: grid;
+  left: 0;
+  margin-top: 3px;
+  max-height: min(320px, 48vh);
+  min-width: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 3px 0;
+  position: fixed;
+  z-index: 150;
+}
+
+.select-menu__list[hidden] {
+  display: none;
+}
+
+.select-menu__option {
+  background: transparent;
+  border: 0;
+  color: var(--green-soft);
+  cursor: pointer;
+  min-height: 31px;
+  padding: 5px 11px;
+  text-align: left;
+  width: 100%;
+}
+
+.select-menu__option:hover,
+.select-menu__option:focus-visible,
+.select-menu__option.is-selected {
+  background: var(--green);
+  color: var(--black);
+  outline: none;
+}
+
+.select-menu__option:disabled {
+  color: var(--green-dim);
+  cursor: not-allowed;
+}
+
+.select-menu__option:disabled:hover,
+.select-menu__option:disabled:focus-visible {
+  background: transparent;
+  color: var(--green-dim);
+}
+
 ::selection {
   background: rgba(57, 255, 136, 0.28);
   color: var(--green);
@@ -19,6 +120,34 @@
 ::-moz-selection {
   background: rgba(57, 255, 136, 0.28);
   color: var(--green);
+}
+
+/* Keep every native overflow control consistent with the CRT page scrollbar. */
+* {
+  scrollbar-color: #145f35 #020503;
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  height: 14px;
+  width: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #020503;
+  border-left: 1px solid var(--line);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #145f35;
+  border: 2px solid #020503;
+  border-radius: 0;
+}
+
+*::-webkit-scrollbar-button {
+  background: #020503;
+  height: 16px;
+  width: 14px;
 }
 
 html {
@@ -196,7 +325,8 @@ header {
   flex: 1 1 auto;
   justify-content: flex-start;
   min-height: 68px;
-  padding-left: 220px;
+  padding-left: 200px;
+  padding-right: 6px;
   position: relative;
   overflow-x: auto;
   scrollbar-width: none;
@@ -367,4 +497,39 @@ main {
   position: absolute;
   right: 2px;
   top: 0;
+}
+
+.crt-scrollbar-host {
+  padding-right: 14px;
+  position: relative;
+  scrollbar-width: none;
+}
+
+.crt-scrollbar-host::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+}
+
+.crt-scrollbar-native-hidden {
+  scrollbar-width: none;
+}
+
+.crt-scrollbar-native-hidden::-webkit-scrollbar {
+  height: 0;
+  width: 0;
+}
+
+.crt-scrollbar--embedded {
+  background: #020503;
+  border-left: 1px solid var(--line);
+  bottom: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 14px;
+  z-index: 2;
+}
+
+.crt-scrollbar--embedded[hidden] {
+  display: none;
 }

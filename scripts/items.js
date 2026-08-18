@@ -7,8 +7,11 @@
 
   const itemTabStorageKey = 'fable.items.activeCategory';
   const savedCategory = window.localStorage.getItem(itemTabStorageKey);
+  const requestedCategory = new URLSearchParams(window.location.search).get('category');
   const defaultTab = tabs.find((tab) => tab.classList.contains('is-active')) || tabs[0];
-  const initialTab = tabs.find((tab) => tab.dataset.category === savedCategory) || defaultTab;
+  const initialTab = tabs.find((tab) => tab.dataset.category === requestedCategory)
+    || tabs.find((tab) => tab.dataset.category === savedCategory)
+    || defaultTab;
   let activeCategory = initialTab.dataset.category;
 
   const requestedItem = new URLSearchParams(window.location.search).get('item');

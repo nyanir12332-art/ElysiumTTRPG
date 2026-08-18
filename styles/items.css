@@ -1,5 +1,8 @@
 .item-catalog {
   border-top: 1px solid var(--line);
+  display: grid;
+  gap: 20px 12px;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 310px);
   max-width: none;
   position: relative;
   padding-top: 20px;
@@ -13,14 +16,22 @@
   display: flex;
   gap: 8px;
   margin: 0;
+  align-self: start;
   min-height: 36px;
   max-width: none;
+  height: auto;
   padding: 0 6px;
-  position: absolute;
-  left: 772px;
-  top: 64px;
-  width: 310px;
+  position: static;
+  grid-column: 2;
+  grid-row: 1;
+  width: auto;
   z-index: 2;
+}
+
+.item-results {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  min-width: 0;
 }
 
 .item-search input {
@@ -29,7 +40,7 @@
   color: var(--green-soft);
   flex: 1;
   font: inherit;
-  font-size: 0.95rem;
+  font-size: 1rem;
   min-width: 0;
   outline: 0;
   padding: 0;
@@ -38,6 +49,7 @@
 .item-search button {
   background: transparent;
   border: 1px solid transparent;
+  border-radius: 0;
   color: var(--green-soft);
   cursor: pointer;
   font: inherit;
@@ -58,28 +70,38 @@
   color: var(--green-dim);
 }
 
-@media (max-width: 1400px) {
-  .item-search {
-    display: none !important;
-  }
-}
-
 .item-tabs {
+  align-items: stretch;
+  align-content: start;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-bottom: 20px;
+  grid-column: 1;
+  grid-row: 1;
+  justify-content: flex-start;
+  margin-bottom: 0;
+  min-width: 0;
+  overflow: visible;
   padding-right: 0;
+  scrollbar-width: none;
+  white-space: normal;
+}
+
+.item-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .item-tab {
   background: transparent;
   border: 1px solid var(--line);
+  border-radius: 0;
   color: var(--green-soft);
   cursor: pointer;
   font: inherit;
+  font-size: 1rem;
+  flex: 0 0 auto;
   padding: 9px 12px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .item-tab:hover,
@@ -106,6 +128,28 @@
   cursor: default;
   outline: 0;
   opacity: 0.55;
+}
+
+@media (max-width: 760px) {
+  .item-catalog {
+    grid-template-columns: 1fr;
+  }
+
+  .item-search {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .item-tabs {
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 10px;
+  }
+
+  .item-results {
+    grid-column: 1;
+    grid-row: 3;
+  }
 }
 
 .item-panel {
@@ -210,14 +254,14 @@
   white-space: nowrap;
 }
 
-.poisons-group .item-column-headings--poisons,
-.poisons-group .item-card {
+.consumables-group .item-column-headings--consumables,
+.consumables-group .item-card {
   grid-template-columns: minmax(240px, 29%) 90px 90px minmax(0, 1fr) 30px;
 }
 
-.poisons-group .item-card .tool-details {
+.consumables-group .item-card .tool-details {
   display: none;
-  grid-column: 1 / -1;
+  grid-column: 1 / -2;
   grid-row: 2;
   line-height: 1.5;
   margin-top: 10px;
@@ -225,20 +269,20 @@
   padding-right: 18px;
 }
 
-.poisons-group .item-card.is-expanded .tool-details {
+.consumables-group .item-card.is-expanded .tool-details {
   display: block;
 }
 
-.poisons-group .item-card.needs-expansion::after {
+.consumables-group .item-card.needs-expansion::after {
   grid-column: 5;
-  grid-row: 1 / span 2;
+  grid-row: 1;
 }
 
-.poisons-group .item-column-headings--poisons {
+.consumables-group .item-column-headings--consumables {
   background-color: #000000 !important;
 }
 
-.poisons-panel {
+.consumables-panel {
   display: contents;
 }
 
@@ -286,7 +330,7 @@
   display: none;
   font-family: inherit;
   font-size: 0.88rem;
-  grid-column: 1 / -1;
+  grid-column: 1 / -2;
   grid-row: 2;
   line-height: 1.5;
   margin-top: 10px;
@@ -488,7 +532,7 @@
 
 .containers-group .item-card.needs-expansion::after {
   grid-column: 5;
-  grid-row: 1 / span 2;
+  grid-row: 1;
 }
 
 .containers-group .item-card p {
@@ -502,7 +546,7 @@
 
 .containers-group .item-card.is-expanded p {
   display: block;
-  grid-column: 1 / -1;
+  grid-column: 1 / -2;
   grid-row: 2;
   max-height: none;
 }
@@ -597,6 +641,14 @@
   background-color: #000000 !important;
 }
 
+.firearms-section > .item-group-title,
+.explosives-section > .item-group-title {
+  box-sizing: border-box;
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
+}
+
 .weapons-table th,
 .weapons-table td {
   white-space: normal;
@@ -616,6 +668,40 @@
 
 .weapons-table th:nth-child(5),
 .weapons-table td:nth-child(5) { width: auto; }
+
+.property-tooltip {
+  cursor: help;
+  position: relative;
+}
+
+.property-tooltip::after {
+  background: #020503;
+  border: 1px solid var(--green);
+  bottom: calc(100% + 8px);
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.55);
+  color: var(--green-soft);
+  content: attr(data-tooltip);
+  display: none;
+  font: 0.78rem/1.45 "Courier New", monospace;
+  left: 0;
+  max-width: min(320px, calc(100vw - 32px));
+  min-width: 220px;
+  overflow-wrap: anywhere;
+  padding: 8px 10px;
+  position: absolute;
+  text-align: left;
+  text-transform: none;
+  width: 280px;
+  white-space: normal;
+  word-break: normal;
+  box-sizing: border-box;
+  z-index: 30;
+}
+
+.property-tooltip:hover::after,
+.property-tooltip:focus-visible::after {
+  display: block;
+}
 
 .apparel-table {
   border-collapse: collapse;
@@ -651,14 +737,14 @@
 .apparel-table thead tr {
   border-left: 1px solid var(--line);
   border-right: 1px solid var(--line);
-  border-top: 1px solid var(--line);
+  border-top: 0;
 }
 
 .apparel-table tbody tr {
   background: rgba(7, 17, 8, 0.82);
   border-left: 1px solid var(--line);
   border-right: 1px solid var(--line);
-  border-top: 1px solid var(--line);
+  border-top: 0;
 }
 
 .apparel-table tbody tr:hover {
@@ -716,6 +802,27 @@
   white-space: nowrap;
 }
 
+.mounts-group .item-column-headings,
+.mounts-group .item-card {
+  grid-template-columns: minmax(240px, 29%) 90px 90px;
+}
+
+.mounts-group--mounts .item-column-headings,
+.mounts-group--mounts .item-card {
+  grid-template-columns: minmax(240px, 29%) 90px 90px minmax(0, 1fr);
+}
+
+.mounts-group--mounts .item-card__heading > span:nth-of-type(3) {
+  align-self: center;
+  color: var(--green-soft);
+  display: block;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  grid-column: 4;
+  white-space: nowrap;
+}
+
 /* Keep weapon columns grouped together instead of inheriting the wide apparel layout. */
 .apparel-table.weapons-table th:nth-child(1),
 .apparel-table.weapons-table td:nth-child(1) { width: 240px; }
@@ -740,6 +847,15 @@
 .apparel-table.weapons-table--ammunition th:nth-child(3),
 .apparel-table.weapons-table--ammunition td:nth-child(3) { width: 90px; }
 
+.apparel-table.weapons-table--ammunition th:nth-child(1),
+.apparel-table.weapons-table--ammunition td:nth-child(1) { width: 42%; }
+
+.apparel-table.weapons-table--ammunition th:nth-child(2),
+.apparel-table.weapons-table--ammunition td:nth-child(2) { width: 25%; }
+
+.apparel-table.weapons-table--ammunition th:nth-child(3),
+.apparel-table.weapons-table--ammunition td:nth-child(3) { width: 33%; }
+
 .weapons-section {
   min-width: 0;
   width: 100%;
@@ -749,8 +865,15 @@
   border-top: 0;
 }
 
-.firearms-section {
+.firearms-section,
+.explosives-section {
+  align-self: stretch;
+  box-sizing: border-box;
+  margin-left: 0;
+  margin-right: 0;
   min-width: 0;
+  padding-left: 0;
+  padding-right: 0;
   width: 100%;
 }
 
@@ -779,18 +902,6 @@
 
 .apparel-table.firearms-table th:nth-child(7),
 .apparel-table.firearms-table td:nth-child(7) { width: auto; }
-
-.firearms-subtitle {
-  border-top: 0 !important;
-  font-size: 1.4rem !important;
-  font-weight: 400 !important;
-  padding: 8px 10px 8px 32px !important;
-}
-
-.explosives-section {
-  min-width: 0;
-  width: 100%;
-}
 
 .explosives-section + .explosives-section > .item-group-title {
   border-top: 0;
@@ -1080,7 +1191,7 @@
   display: block;
   font-size: 0.85rem;
   font-weight: 400;
-  grid-column: 1 / -1;
+  grid-column: 1 / -2;
   margin-top: 6px;
   white-space: normal;
 }
@@ -1145,7 +1256,7 @@
   font-size: 1.7rem;
   font-weight: 700;
   grid-column: 6;
-  grid-row: 1 / -1;
+  grid-row: 1;
   justify-self: end;
 }
 
@@ -1156,7 +1267,7 @@
 .item-card p {
   display: none;
   font-size: 0.85rem;
-  grid-column: 1 / -1;
+  grid-column: 1 / -2;
   grid-row: 2;
   line-height: 1.55;
   margin: 0;
@@ -1239,6 +1350,11 @@
 .ego-glitch {
   animation: ego-screen-glitch 1.2s steps(6, end) forwards;
   overflow: hidden;
+}
+
+/* Adjacent catalog rows share one separator instead of stacking two borders. */
+.item-group > .item-card {
+  border-top: 0;
 }
 
 .ego-flicker {
@@ -1329,13 +1445,13 @@
     grid-template-columns: minmax(0, 1fr) 28px;
   }
 
-  .poisons-group .item-card {
+  .consumables-group .item-card {
     grid-template-columns: minmax(0, 1fr) 28px;
   }
 
-  .poisons-group .item-card.needs-expansion::after {
+  .consumables-group .item-card.needs-expansion::after {
     grid-column: 2;
-    grid-row: 1 / span 2;
+    grid-row: 1;
   }
 
   .containers-group .item-card {
@@ -1344,7 +1460,7 @@
 
   .containers-group .item-card.needs-expansion::after {
     grid-column: 2;
-    grid-row: 1 / span 2;
+    grid-row: 1;
   }
 
   .tools-group .item-card {
@@ -1357,13 +1473,13 @@
 
   .tools-group .tool-card.needs-expansion::after {
     grid-column: 2;
-    grid-row: 1 / span 2;
+    grid-row: 1;
   }
 
   .equipment-pack-group .item-card__expand {
     align-self: center;
     grid-column: 2;
-    grid-row: 1 / span 2;
+    grid-row: 1;
     justify-self: end;
   }
 
@@ -1376,7 +1492,7 @@
   }
 
   .tool-details {
-    grid-column: 1 / -1;
+    grid-column: 1 / -2;
     grid-row: auto;
   }
 
@@ -1388,7 +1504,7 @@
     display: none;
   }
 
-  .poisons-group .item-column-headings--poisons {
+  .consumables-group .item-column-headings--consumables {
     display: none;
   }
 
@@ -1413,7 +1529,7 @@
 
   .item-card.needs-expansion::after {
     grid-column: 2;
-    grid-row: 1 / span 2;
+    grid-row: 1;
   }
 
   .item-card.is-expanded .item-card__heading > span:nth-of-type(n + 3),

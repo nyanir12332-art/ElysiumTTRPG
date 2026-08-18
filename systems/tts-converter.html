@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
-    <link rel="stylesheet" href="../styles/site.css">
+    <link rel="stylesheet" href="../styles/site.css?v=24">
     <link rel="stylesheet" href="../styles/classes.css">
-    <link rel="stylesheet" href="../styles/tts-converter.css?v=8">
+    <link rel="stylesheet" href="../styles/tts-converter.css?v=18">
     <link rel="stylesheet" href="../styles/search.css?v=13">
     <title>TTS Converter - Fable</title>
   </head>
@@ -18,9 +18,8 @@
           <a href="../classes/classes.html">Classes</a>
           <a href="../races/index.html">Races</a>
           <a href="../backgrounds/index.html">Backgrounds</a>
-          <a href="#">Spells</a>
           <a href="../items/index.html">Items</a>
-          <span class="menu-break" aria-hidden="true"></span><a href="#">Feats</a>
+          <span class="menu-break" aria-hidden="true"></span><a href="#">Perks</a>
           <a class="active" href="index.html" aria-current="page">Systems</a>
           <a href="../lore/index.html">Lore</a>
           <a href="#">Records</a>
@@ -72,7 +71,7 @@
                   <code>&lt;ol&gt;&lt;li&gt;text&lt;/li&gt;&lt;/ol&gt;</code> numbered list
                 </span>
               </span>
-              <textarea id="card-description" rows="8">Description</textarea>
+              <span class="crt-scrollbar-textarea-host" data-crt-scrollbar><textarea id="card-description" data-crt-scroll-target rows="8">Description</textarea></span>
             </label>
             <fieldset id="item-fields" hidden>
               <legend>Item details</legend>
@@ -84,6 +83,9 @@
               </label>
               <label>Damage
                 <input id="item-damage" type="text" placeholder="1d6 piercing">
+              </label>
+              <label>Armor Class
+                <input id="item-armor-class" type="text" placeholder="15">
               </label>
               <label>Carrying Capacity
                 <input id="item-carrying-capacity" type="text" placeholder="1 cubic foot/30 pounds of gear">
@@ -112,6 +114,9 @@
               <label id="spell-material-field" hidden>Material component
                 <input id="spell-material" type="text" placeholder="a tiny strip of white cloth">
               </label>
+              <label>Tags
+                <input id="spell-tags" type="text">
+              </label>
             </fieldset>
 
             <div class="tts-actions">
@@ -125,10 +130,10 @@
           <section class="tts-editor tts-importer" aria-labelledby="tts-importer-title">
             <div class="tts-editor__intro">
               <h2 id="tts-importer-title">Importer</h2>
-              <p>Search the catalog for a class, class feature, race, background, or item and load it into Card Builder.</p>
+              <p>Search the catalog for a spell, class, class feature, race, background, or item and load it into Card Builder.</p>
             </div>
             <div class="tts-importer__search">
-              <input id="tts-importer-input" type="search" placeholder="Search classes or features..." aria-label="Search classes or features" autocomplete="off">
+              <input id="tts-importer-input" type="search" aria-label="Search spells, items, systems, or features" autocomplete="off">
               <button id="tts-importer-button" type="button">Search</button>
             </div>
             <div class="tts-importer__results" id="tts-importer-results" aria-live="polite"></div>
@@ -150,8 +155,12 @@
       </main>
     </div>
     <script src="../scripts/search.js?v=8"></script>
-  <script src="../scripts/tts-converter.js?v=49"></script>
-    <script src="../scripts/tts-importer.js?v=13"></script>
-    <script src="../scripts/crt-scrollbar.js?v=1"></script>
+    <script src="../scripts/spells.js?v=2"></script>
+    <script src="../scripts/spell-manifest.js?v=4"></script>
+    <script src="../scripts/spell-links.js?v=8" data-spell-index="spellcasting.html"></script>
+  <script src="../scripts/tts-converter.js?v=56"></script>
+    <script src="../scripts/tts-importer.js?v=21"></script>
+    <script src="../scripts/select-menu.js?v=2"></script>
+    <script src="../scripts/crt-scrollbar.js?v=5"></script>
   </body>
 </html>

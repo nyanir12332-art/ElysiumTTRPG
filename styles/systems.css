@@ -118,6 +118,765 @@ main > h2 + .adventuring-nav {
   padding-top: 0;
 }
 
+.system-copy {
+  border-top: 1px solid var(--line);
+  color: var(--green-soft);
+  margin-top: 30px;
+  padding-top: 24px;
+}
+
+.spell-browser {
+  margin-top: 28px;
+  padding-top: 0;
+}
+
+.spell-browser h2 {
+  color: var(--green);
+  line-height: 1.2;
+  margin: 0 0 18px;
+}
+
+.spell-browser__table-wrap {
+  margin: 0;
+}
+
+.spell-browser__table {
+  border-collapse: collapse;
+  min-width: 980px;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.spell-browser__table th,
+.spell-browser__table td {
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.spell-browser__table th {
+  color: var(--green);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.difficulty-table {
+  border: 1px solid var(--line);
+  border-collapse: collapse;
+  margin: 12px 0 20px;
+  max-width: 100%;
+  width: 360px;
+}
+
+.difficulty-table th,
+.difficulty-table td {
+  border: 1px solid var(--line);
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.spell-browser__table tr[data-spell-row] {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.spell-browser__table tr[data-spell-row]:hover > td {
+  color: var(--green);
+}
+
+.spell-browser__table th:nth-child(1),
+.spell-browser__table td:nth-child(1) { width: 34%; }
+
+.spell-browser__table th:nth-child(2),
+.spell-browser__table td:nth-child(2) { width: 18%; }
+
+.spell-browser__table th:nth-child(3),
+.spell-browser__table td:nth-child(3) { width: 24%; }
+
+.spell-browser__table th:nth-child(4),
+.spell-browser__table td:nth-child(4) { width: 24%; }
+
+.spell-browser__toggle {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: 700;
+  gap: 8px;
+  padding: 0;
+  text-align: left;
+}
+
+.spell-browser__toggle span {
+  color: var(--green);
+  display: inline-block;
+  font-size: 1.12em;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+  width: 0.8em;
+}
+
+.spell-browser__toggle:focus-visible {
+  color: var(--green);
+  outline: none;
+  text-decoration: none;
+}
+
+.spell-browser__detail td {
+  background: rgba(1, 8, 4, 0.88);
+  padding: 0;
+}
+
+.spell-browser__detail-copy {
+  color: var(--green-soft);
+  /* Detail text should use the full table width instead of forming a narrow
+     column inside the expanded row. */
+  max-width: none;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 22px 26px;
+}
+
+.spell-browser__detail-copy dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin: 0 0 18px;
+}
+
+.spell-browser__detail-copy dl div {
+  display: grid;
+  gap: 3px;
+}
+
+.spell-browser__detail-copy dt {
+  color: var(--green-dim);
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.spell-browser__detail-copy dd {
+  margin: 0;
+}
+
+.spell-browser__detail-copy p {
+  line-height: 1.65;
+  margin: 0 0 14px;
+}
+
+.spell-browser__detail-copy p:last-child {
+  margin-bottom: 0;
+}
+
+.spell-browser__detail-copy h3 {
+  color: var(--green);
+  font-size: 1rem;
+  margin: 22px 0 10px;
+}
+
+.spell-browser__detail-copy h3:first-child {
+  margin-top: 0;
+}
+
+.spell-browser__detail-copy ul,
+.spell-browser__detail-copy ol {
+  margin: 0 0 14px;
+  padding-left: 22px;
+}
+
+.spell-browser__detail-copy li + li {
+  margin-top: 7px;
+}
+
+.spell-browser__detail-copy table {
+  border-collapse: collapse;
+  margin: 0 0 18px;
+  max-width: 100%;
+}
+
+.spell-browser__detail-copy th,
+.spell-browser__detail-copy td {
+  border: 1px solid var(--line);
+  padding: 7px 10px;
+  text-align: left;
+}
+
+.spell-browser__detail-copy th {
+  color: var(--green);
+}
+
+.spell-browser__attribution {
+  color: var(--green-dim);
+  font-size: 0.76rem;
+  line-height: 1.55;
+  margin: 14px 0 0;
+}
+
+.spell-rule-reference {
+  color: var(--green);
+  font-style: normal;
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-underline-offset: 0.16em;
+}
+
+.critical-rule-link {
+  color: var(--green);
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-underline-offset: 0.16em;
+}
+
+.attack-outcomes p {
+  margin: 0;
+}
+
+.attack-outcome {
+  margin: 0 !important;
+}
+
+.spell-reference {
+  color: inherit;
+  font-style: normal;
+  text-decoration-color: var(--green);
+  text-decoration-style: solid;
+  text-decoration-line: underline;
+  text-underline-offset: 0.16em;
+}
+
+/* Keep linked spell names consistent even inside sections with their own
+   anchor styling (class features, rules, and tables). */
+a.spell-reference,
+a.spell-reference:visited {
+  color: inherit;
+  font-style: normal;
+  text-decoration-color: var(--green);
+  text-decoration-style: solid;
+  text-decoration-line: underline;
+  text-underline-offset: 0.16em;
+}
+
+a.spell-reference:hover,
+a.spell-reference:focus-visible,
+a.spell-reference:visited:hover {
+  color: var(--green);
+  outline: none;
+  text-decoration-color: var(--green);
+  text-decoration-style: solid;
+}
+
+.spell-reference:hover,
+.spell-reference:focus-visible {
+  color: var(--green);
+  outline: none;
+  text-decoration-style: solid;
+}
+
+.spell-browser__filters {
+  align-items: start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.spell-browser__search {
+  display: grid;
+  gap: 6px;
+  min-width: 210px;
+}
+
+.spell-browser__search-controls {
+  display: grid;
+  flex: 0 0 430px;
+  gap: 12px;
+}
+
+.spell-browser__secondary-filters {
+  align-items: center;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+}
+
+.spell-browser__component-options {
+  align-items: center;
+  color: var(--green);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  gap: 12px;
+  grid-column: 1 / -1;
+}
+
+.spell-browser__component-options label {
+  align-items: center;
+  display: inline-flex;
+  gap: 5px;
+}
+
+.spell-browser__component-options input[type="checkbox"] {
+  appearance: none;
+  background: rgba(3, 7, 4, 0.9);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  height: 17px;
+  margin: 0;
+  padding: 0;
+  width: 17px;
+}
+
+.spell-browser__component-options input[type="checkbox"]:hover,
+.spell-browser__component-options input[type="checkbox"]:focus-visible {
+  border-color: var(--green);
+  outline: 0;
+}
+
+.spell-browser__component-options input[type="checkbox"]:checked {
+  background: var(--green);
+  box-shadow: inset 0 0 0 4px var(--black);
+}
+
+.spell-browser__school-filter .select-menu__value,
+.spell-browser__class-filter .select-menu__value {
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.spell-browser__school-filter .select-menu__trigger,
+.spell-browser__class-filter .select-menu__trigger {
+  font-size: 0.78rem;
+  justify-content: space-between;
+}
+
+.spell-browser__school-filter .select-menu__marker,
+.spell-browser__class-filter .select-menu__marker {
+  flex: 0 0 auto;
+  margin-left: 6px;
+}
+
+.spell-browser__search span {
+  color: var(--green-dim);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.spell-browser__search input,
+.spell-browser__school-filter select,
+.spell-browser__class-filter select {
+  background: rgba(2, 5, 3, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--green-soft);
+  font: inherit;
+  min-height: 38px;
+  padding: 6px 34px 6px 10px;
+}
+
+.spell-browser__search input:focus-visible,
+.spell-browser__school-filter select:focus-visible,
+.spell-browser__class-filter select:focus-visible {
+  border-color: var(--green);
+  outline: none;
+}
+
+.spell-browser__search input::placeholder {
+  color: var(--green-dim);
+  opacity: 1;
+}
+
+.spell-browser__filter-controls {
+  flex: 1 1 auto;
+  margin-top: 19px;
+  min-width: 0;
+}
+
+.spell-browser__level-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: flex-end;
+}
+
+.spell-browser__school-controls {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 12px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.spell-browser__school-tabs {
+  display: flex;
+  flex: 1 1 0;
+  flex-wrap: nowrap;
+  gap: 5px;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.spell-browser__class-filter,
+.spell-browser__school-filter {
+  min-width: 0;
+}
+
+.spell-browser__visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.spell-browser__level-tab,
+.spell-browser__school-tab {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--green-soft);
+  cursor: pointer;
+  font: inherit;
+  min-height: 38px;
+  padding: 6px 10px;
+}
+
+.spell-browser__school-tab {
+  font-size: 0.78rem;
+  min-height: 38px;
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+
+.spell-browser__level-tab:hover,
+.spell-browser__level-tab:focus-visible,
+.spell-browser__level-tab.is-active,
+.spell-browser__school-tab:hover,
+.spell-browser__school-tab:focus-visible,
+.spell-browser__school-tab.is-active {
+  border-color: var(--green);
+  color: var(--green);
+  outline: none;
+}
+
+.spell-browser__empty td {
+  color: var(--green-dim);
+  padding: 24px 12px;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .spell-browser__filters {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .spell-browser__class-filter {
+    min-width: 0;
+  }
+
+  .spell-browser__search-controls {
+    flex-basis: auto;
+  }
+
+  .spell-browser__filter-controls {
+    margin-top: 0;
+  }
+
+  .spell-browser__level-tabs,
+  .spell-browser__school-controls {
+    justify-content: flex-start;
+  }
+
+  .spell-browser__school-tabs {
+    justify-content: flex-start;
+  }
+}
+
+.system-copy h2,
+.system-copy h3 {
+  color: var(--green);
+  line-height: 1.2;
+  margin: 0 0 16px;
+}
+
+.system-copy h3 {
+  margin-top: 32px;
+}
+
+.system-copy p {
+  line-height: 1.65;
+  margin: 0 0 18px;
+}
+
+.system-copy .system-table-wrap {
+  margin: 18px 0 24px;
+}
+
+.system-copy table.advancement-table {
+  min-width: 0;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.spell-browser__search input[type="search"]::-webkit-search-cancel-button,
+.spell-browser__search input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+.system-copy table.advancement-table th,
+.system-copy table.advancement-table td {
+  width: 25%;
+}
+
+.system-copy table.advancement-table th:nth-child(3),
+.system-copy table.advancement-table td:nth-child(3) {
+  border-left: 1px solid var(--line);
+}
+
+.system-copy .food-drink-table-wrap {
+  max-width: none;
+}
+
+.system-copy table.food-drink-table {
+  min-width: 0;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.system-copy table.food-drink-table th,
+.system-copy table.food-drink-table td {
+  width: 50%;
+}
+
+.system-copy .system-footnote {
+  color: var(--green-dim);
+  font-size: 0.9rem;
+}
+
+.system-copy ul {
+  margin: 0 0 18px;
+  padding-left: 1.5em;
+}
+
+.system-copy li {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0.25em 0;
+}
+
+.system-callout {
+  background: rgba(57, 255, 136, 0.08);
+  border-left: 4px solid var(--green);
+  padding: 14px 16px;
+}
+
+.spell-points-calculator {
+  background: linear-gradient(135deg, rgba(7, 17, 8, 0.94), rgba(3, 7, 4, 0.8));
+  border: 1px solid var(--line);
+  margin: 20px 0 30px;
+  max-width: 1080px;
+  padding: 18px;
+}
+
+.spell-points-calculator__row {
+  align-items: end;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(0, 1fr) 174px 92px;
+  padding: 2px 0 16px;
+}
+
+.spell-points-calculator__field {
+  color: var(--green-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.spell-points-calculator__label {
+  color: var(--green-dim);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.spell-points-calculator select,
+.spell-points-calculator input {
+  background: #020503;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--green-soft);
+  font: inherit;
+  height: 40px;
+  min-height: 40px;
+  padding: 7px 10px;
+}
+
+.spell-points-calculator input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.spell-points-calculator input[type="number"]::-webkit-inner-spin-button,
+.spell-points-calculator input[type="number"]::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.spell-points-calculator__level-control {
+  display: flex;
+  gap: 4px;
+  min-width: 0;
+}
+
+.spell-points-calculator__level-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.spell-points-calculator__level-buttons button {
+  flex: 0 0 36px;
+  font-size: 0.9rem;
+  line-height: 1;
+  min-height: 40px;
+  padding: 0;
+}
+
+.spell-points-calculator__level-control input {
+  min-width: 0;
+  width: 100%;
+}
+
+.spell-points-calculator select:focus,
+.spell-points-calculator input:focus,
+.spell-points-calculator button:focus-visible {
+  outline: 1px solid var(--green);
+  outline-offset: 0;
+}
+
+.spell-points-calculator button {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--green);
+  cursor: pointer;
+  font: inherit;
+  min-height: 40px;
+  padding: 7px 12px;
+}
+
+.spell-points-calculator__remove {
+  align-self: end;
+  color: var(--green-dim);
+}
+
+.spell-points-calculator button:hover,
+.spell-points-calculator button:focus-visible {
+  background: rgba(57, 255, 136, 0.12);
+}
+
+.spell-points-calculator button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.spell-points-calculator__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.spell-points-calculator__error {
+  color: #ff9d9d;
+  margin: 14px 0 0;
+}
+
+.spell-points-calculator__result {
+  border-top: 1px solid var(--line);
+  margin-top: 16px;
+  padding-top: 18px;
+}
+
+.spell-points-calculator__metrics {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.spell-points-calculator__metric {
+  background: rgba(2, 5, 3, 0.62);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 82px;
+  padding: 11px 12px;
+}
+
+.spell-points-calculator__metric span,
+.spell-points-calculator__breakdown span {
+  color: var(--green-dim);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.spell-points-calculator__metric strong {
+  color: var(--green);
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.spell-points-calculator__metric small {
+  color: var(--green-soft);
+  font-size: 0.78rem;
+  font-weight: 400;
+  margin-left: 5px;
+}
+
+.system-copy .spell-points-calculator__breakdown {
+  background: rgba(2, 5, 3, 0.62);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--green-dim);
+  margin: 14px 0 0;
+  padding: 10px 12px;
+}
+
+.spell-points-calculator__breakdown span {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.system-copy .spell-points-calculator__result .spell-points-calculator__breakdown:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 620px) {
+  .spell-points-calculator__row {
+    grid-template-columns: minmax(0, 1fr) 160px;
+  }
+
+  .spell-points-calculator__remove {
+    grid-column: 1 / -1;
+  }
+}
+
 @media (max-width: 620px) {
   .adventuring-nav ul {
     grid-template-columns: 1fr;

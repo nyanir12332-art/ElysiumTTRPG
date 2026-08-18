@@ -94,6 +94,14 @@
   text-transform: uppercase;
 }
 
+.class-entry li.subclass-item {
+  white-space: nowrap;
+}
+
+.class-entry li.subclass-item .subclass-name--long {
+  font-size: 0.72em;
+}
+
 .class-entry li::before {
   color: var(--green-dim);
   content: "- ";

@@ -24,6 +24,7 @@
   const itemCost = document.querySelector('#item-cost');
   const itemWeight = document.querySelector('#item-weight');
   const itemDamage = document.querySelector('#item-damage');
+  const itemArmorClass = document.querySelector('#item-armor-class');
   const itemCarryingCapacity = document.querySelector('#item-carrying-capacity');
   const itemProperties = document.querySelector('#item-properties');
   const spellFields = document.querySelector('#spell-fields');
@@ -34,6 +35,7 @@
   const spellComponentS = document.querySelector('#spell-component-s');
   const spellComponentM = document.querySelector('#spell-component-m');
   const spellMaterial = document.querySelector('#spell-material');
+  const spellTags = document.querySelector('#spell-tags');
   const spellMaterialField = document.querySelector('#spell-material-field');
   const status = document.querySelector('#tts-status');
 
@@ -413,7 +415,7 @@
     context.lineTo(290, 31);
     context.stroke();
 
-    drawTintedIcon(context, icons[type.value], 22, 13, 16, scale);
+    drawTintedIcon(context, icons[type.value], 22.5, 13, 16, scale);
     context.save();
     context.setTransform(1, 0, 0, 1, 0, 0);
     context.fillStyle = COLORS.green;
@@ -429,10 +431,12 @@
     subtitleLines.forEach((line, index) => context.fillText(line, 18, 51 + index * 16));
 
     const itemDamageText = type.value === 'item' ? itemDamage.value.trim() : '';
+    const itemArmorClassText = type.value === 'item' ? itemArmorClass.value.trim() : '';
     const itemCarryingCapacityText = type.value === 'item' ? itemCarryingCapacity.value.trim() : '';
     const subtitleBodyStart = subtitleLines.length > 1 ? 87 : subtitleLines.length === 1 ? 69 : 51;
     const itemDetailLines = [
       itemDamageText ? ['DAMAGE', itemDamageText] : null,
+      itemArmorClassText ? ['ARMOR CLASS', itemArmorClassText] : null,
       itemCarryingCapacityText ? ['CARRYING CAPACITY', itemCarryingCapacityText] : null,
     ].filter(Boolean);
     itemDetailLines.forEach(([label, value], index) => {
@@ -442,25 +446,33 @@
 
     const meta = type.value === 'item'
       ? [
-        itemCost.value.trim() ? `<b>COST</b>  ${itemCost.value.trim()}` : '',
-        itemWeight.value.trim() ? `<b>WEIGHT</b>  ${itemWeight.value.trim()}` : '',
+        [
+          itemCost.value.trim() ? `<b>COST</b>  ${itemCost.value.trim()}` : '',
+          itemWeight.value.trim() ? `<b>WEIGHT</b>  ${itemWeight.value.trim()}` : '',
+        ].filter(Boolean).join('    '),
         itemProperties.value.trim() ? `<b>PROPERTIES</b>  ${itemProperties.value.trim()}` : '',
-      ].filter(Boolean).join('    ')
+      ].filter(Boolean).join('\n')
       : '';
     const spellComponents = [
       spellComponentV.checked ? 'V' : '',
       spellComponentS.checked ? 'S' : '',
       spellComponentM.checked ? `M${spellMaterial.value.trim() ? ` (${spellMaterial.value.trim()})` : ''}` : '',
     ].filter(Boolean).join(', ');
+    const spellTiming = [
+      spellCastingTime.value.trim() ? `<b>CASTING TIME</b>  ${spellCastingTime.value.trim()}` : '',
+      spellRange.value.trim() ? `<b>RANGE</b>  ${spellRange.value.trim()}` : '',
+    ].filter(Boolean).join('    ');
     const spellMeta = type.value === 'spell'
       ? [
-        spellCastingTime.value.trim() ? `<b>CASTING TIME</b>  ${spellCastingTime.value.trim()}` : '',
-        spellRange.value.trim() ? `<b>RANGE</b>  ${spellRange.value.trim()}` : '',
+        spellTiming,
         spellComponents ? `<b>COMPONENTS</b>  ${spellComponents}` : '',
         spellDuration.value.trim() ? `<b>DURATION</b>  ${spellDuration.value.trim()}` : '',
       ].filter(Boolean).join('\n')
       : '';
-    const body = [description.value, meta, spellMeta].filter((value) => value && value.trim()).join('\n\n');
+    const spellTagLine = type.value === 'spell' && spellTags.value.trim()
+      ? `<b>TAGS</b>  ${spellTags.value.trim()}`
+      : '';
+    const body = [spellMeta, description.value, spellTagLine, meta].filter((value) => value && value.trim()).join('\n\n');
     const bodyStart = subtitleBodyStart + (itemDetailLines.length ? (itemDetailLines.length * 22) : 0);
     drawFittedTextBlock(context, body, 18, bodyStart, 264, height - bodyStart - 14, 11, COLORS.soft);
     context.restore();
@@ -541,7 +553,7 @@
     context.lineTo(720, 90);
     context.stroke();
 
-    drawTintedIcon(context, icons[cardType], 56, 35, 46);
+    drawTintedIcon(context, icons[cardType], 60, 35, 46);
     context.fillStyle = COLORS.green;
     const cardTitle = title.value || 'Untitled';
     let titleSize = 31;
@@ -573,10 +585,12 @@
     }
 
     const itemDamageText = cardType === 'item' ? itemDamage.value.trim() : '';
+    const itemArmorClassText = cardType === 'item' ? itemArmorClass.value.trim() : '';
     const itemCarryingCapacityText = cardType === 'item' ? itemCarryingCapacity.value.trim() : '';
     const subtitleBodyStart = subtitleLines.length > 1 ? 190 : subtitleLines.length === 1 ? 165 : 115;
     const itemDetailLines = [
       itemDamageText ? ['DAMAGE', itemDamageText] : null,
+      itemArmorClassText ? ['ARMOR CLASS', itemArmorClassText] : null,
       itemCarryingCapacityText ? ['CARRYING CAPACITY', itemCarryingCapacityText] : null,
     ].filter(Boolean);
     itemDetailLines.forEach(([label, value], index) => {
@@ -586,25 +600,33 @@
 
     const meta = cardType === 'item'
       ? [
-        itemCost.value.trim() ? `<b>COST</b>  ${itemCost.value.trim()}` : '',
-        itemWeight.value.trim() ? `<b>WEIGHT</b>  ${itemWeight.value.trim()}` : '',
+        [
+          itemCost.value.trim() ? `<b>COST</b>  ${itemCost.value.trim()}` : '',
+          itemWeight.value.trim() ? `<b>WEIGHT</b>  ${itemWeight.value.trim()}` : '',
+        ].filter(Boolean).join('    '),
         itemProperties.value.trim() ? `<b>PROPERTIES</b>  ${itemProperties.value.trim()}` : '',
-      ].filter(Boolean).join('    ')
+      ].filter(Boolean).join('\n')
       : '';
     const spellComponents = [
       spellComponentV.checked ? 'V' : '',
       spellComponentS.checked ? 'S' : '',
       spellComponentM.checked ? `M${spellMaterial.value.trim() ? ` (${spellMaterial.value.trim()})` : ''}` : '',
     ].filter(Boolean).join(', ');
+    const spellTiming = [
+      spellCastingTime.value.trim() ? `<b>CASTING TIME</b>  ${spellCastingTime.value.trim()}` : '',
+      spellRange.value.trim() ? `<b>RANGE</b>  ${spellRange.value.trim()}` : '',
+    ].filter(Boolean).join('    ');
     const spellMeta = cardType === 'spell'
       ? [
-        spellCastingTime.value.trim() ? `<b>CASTING TIME</b>  ${spellCastingTime.value.trim()}` : '',
-        spellRange.value.trim() ? `<b>RANGE</b>  ${spellRange.value.trim()}` : '',
+        spellTiming,
         spellComponents ? `<b>COMPONENTS</b>  ${spellComponents}` : '',
         spellDuration.value.trim() ? `<b>DURATION</b>  ${spellDuration.value.trim()}` : '',
       ].filter(Boolean).join('\n')
       : '';
-    const body = [description.value, meta, spellMeta].filter((value) => value && value.trim()).join('\n\n');
+    const spellTagLine = cardType === 'spell' && spellTags.value.trim()
+      ? `<b>TAGS</b>  ${spellTags.value.trim()}`
+      : '';
+    const body = [spellMeta, description.value, spellTagLine, meta].filter((value) => value && value.trim()).join('\n\n');
     // Do not reserve the subtitle band when it is empty. Keep a small reading
     // gap below the title divider, then give the description the full height.
     const bodyStart = subtitleBodyStart + (itemDetailLines.length ? (itemDetailLines.length * 45) : 0);

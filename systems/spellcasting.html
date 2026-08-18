@@ -4,22 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
-    <link rel="stylesheet" href="../styles/site.css"><link rel="stylesheet" href="../styles/classes.css"><link rel="stylesheet" href="../styles/systems.css?v=4"><link rel="stylesheet" href="../styles/search.css?v=13">
+    <link rel="stylesheet" href="../styles/site.css?v=24">
+    <link rel="stylesheet" href="../styles/classes.css">
+    <link rel="stylesheet" href="../styles/systems.css?v=27">
+    <link rel="stylesheet" href="../styles/search.css?v=13">
     <title>Spellcasting - Fable</title>
   </head>
   <body>
     <div class="screen">
-      <header><nav class="topbar" aria-label="Section navigation"><a class="home-link" href="../index.html">Fable</a><a href="../classes/classes.html">Classes</a><a href="../races/index.html">Races</a><a href="../backgrounds/index.html">Backgrounds</a><a href="#">Spells</a><a href="../items/index.html">Items</a><span class="menu-break" aria-hidden="true"></span><a href="#">Feats</a><a class="active" href="index.html" aria-current="page">Systems</a><a href="../lore/index.html">Lore</a><a href="#">Records</a></nav></header>
+      <header>
+        <nav class="topbar" aria-label="Section navigation">
+          <a class="home-link" href="../index.html">Fable</a>
+          <a href="../classes/classes.html">Classes</a>
+          <a href="../races/index.html">Races</a>
+          <a href="../backgrounds/index.html">Backgrounds</a>
+          <a href="../items/index.html">Items</a>
+          <span class="menu-break" aria-hidden="true"></span><a href="#">Perks</a>
+          <a class="active" href="index.html" aria-current="page">Systems</a>
+          <a href="../lore/index.html">Lore</a>
+          <a href="#">Records</a>
+        </nav>
+      </header>
       <main>
         <h1 class="prompt"><a class="class-back-link" href="index.html">SYSTEMS</a>: Spellcasting</h1>
-        <h2>General Spellcasting</h2>
-        <nav class="adventuring-nav" aria-label="General spellcasting topics"><ul><li><a href="#casting-a-spell">Casting a Spell</a></li><li><a href="#what-is-a-spell">What is a Spell?</a></li></ul></nav>
-        <h2>Spell Indexes</h2>
-        <nav class="adventuring-nav" aria-label="Spell indexes"><ul><li><a href="#spells-by-level">Spells by Level</a></li><li><a href="#spells-by-name">Spells by Name</a></li><li><a href="#spells-by-school">Spells by School</a></li></ul></nav>
-        <h2>Spell Lists</h2>
-        <nav class="adventuring-nav" aria-label="Spell lists"><ul><li><a href="#bard">Bard</a></li><li><a href="#cleric">Cleric</a></li><li><a href="#druid">Druid</a></li><li><a href="#paladin">Paladin</a></li><li><a href="#ranger">Ranger</a></li><li><a href="#sorcerer">Sorcerer</a></li><li><a href="#warlock">Warlock</a></li><li><a href="#wizard">Wizard</a></li></ul></nav>
+        <nav class="adventuring-nav" aria-label="General spellcasting pages">
+          <ul>
+            <li><a href="spellcasting/casting-a-spell.html">Casting a Spell</a></li>
+            <li><a href="spellcasting/what-is-a-spell.html">What Is a Spell?</a></li>
+          </ul>
+        </nav>
+        <section class="spell-browser" data-spell-browser aria-labelledby="spells-of-elysium">
+          <h2 id="spells-of-elysium">Spells of Elysium</h2>
+          <div class="table-wrap spell-browser__table-wrap">
+            <table class="spell-browser__table">
+              <thead>
+                <tr class="spell-browser__filter-row">
+                  <th colspan="4">
+                    <div class="spell-browser__filters">
+                      <div class="spell-browser__search-controls">
+                        <label class="spell-browser__search">
+                          <span>Search Spells</span>
+                          <input type="search" data-spell-search placeholder="Search all spells" autocomplete="off">
+                        </label>
+                        <div class="spell-browser__secondary-filters">
+                          <label class="spell-browser__school-filter">
+                            <span class="spell-browser__visually-hidden">School of Magic</span>
+                            <select data-spell-school-filter aria-label="Select a school of magic">
+                              <option value="all">All Schools</option>
+                              <option value="Abjuration">Abjuration</option>
+                              <option value="Conjuration">Conjuration</option>
+                              <option value="Divination">Divination</option>
+                              <option value="Enchantment">Enchantment</option>
+                              <option value="Evocation">Evocation</option>
+                              <option value="Illusion">Illusion</option>
+                              <option value="Necromancy">Necromancy</option>
+                              <option value="Transmutation">Transmutation</option>
+                            </select>
+                          </label>
+                          <label class="spell-browser__class-filter">
+                            <span class="spell-browser__visually-hidden">Spell List</span>
+                            <select data-spell-class-filter aria-label="Select a class spell list">
+                              <option value="all">All Spell List</option>
+                              <option value="artificer">Artificer</option>
+                              <option value="bard">Bard</option>
+                              <option value="cleric">Cleric</option>
+                              <option value="druid">Druid</option>
+                              <option value="paladin">Paladin</option>
+                              <option value="ranger">Ranger</option>
+                              <option value="sorcerer">Sorcerer</option>
+                              <option value="warlock">Warlock</option>
+                              <option value="wizard">Wizard</option>
+                            </select>
+                          </label>
+                          <div class="spell-browser__component-options" aria-label="Spell components">
+                            <label title="Verbal component">V <input type="checkbox" data-spell-component="V" aria-label="Verbal component"></label>
+                            <label title="Somatic component">S <input type="checkbox" data-spell-component="S" aria-label="Somatic component"></label>
+                            <label title="Material component">M <input type="checkbox" data-spell-component="M" aria-label="Material component"></label>
+                            <label title="Ritual spell">Ritual <input type="checkbox" data-spell-tag="ritual" aria-label="Ritual spells"></label>
+                            <label title="Concentration spell">Concentration <input type="checkbox" data-spell-tag="concentration" aria-label="Concentration spells"></label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="spell-browser__filter-controls">
+                        <div class="spell-browser__level-tabs" role="tablist" aria-label="Spell level">
+                          <button class="spell-browser__level-tab is-active" type="button" role="tab" aria-selected="true" data-spell-level="0">Cantrips</button>
+                          <button class="spell-browser__level-tab" type="button" role="tab" aria-selected="false" data-spell-level="1">1st</button>
+                          <button class="spell-browser__level-tab" type="button" role="tab" aria-selected="false" data-spell-level="2">2nd</button>
+                          <button class="spell-browser__level-tab" type="button" role="tab" aria-selected="false" data-spell-level="3">3rd</button>
+                          <button class="spell-browser__level-tab" type="button" role="tab" aria-selected="false" data-spell-level="4">4th</button>
+                          <button class="spell-browser__level-tab" type="button" role="tab" aria-selected="false" data-spell-level="5">5th</button>
+                          <button class="spell-browser__level-tab" type="button" role="tab" aria-selected="false" data-spell-level="6">6th</button>
+                          <button class="spell-browser__level-tab" type="button" role="tab" aria-selected="false" data-spell-level="7">7th</button>
+                          <button class="spell-browser__level-tab" type="button" role="tab" aria-selected="false" data-spell-level="8">8th</button>
+                          <button class="spell-browser__level-tab" type="button" role="tab" aria-selected="false" data-spell-level="9">9th</button>
+                        </div>
+                      </div>
+                    </div>
+                  </th>
+                </tr>
+                <tr>
+                  <th>Spell</th>
+                  <th>School</th>
+                  <th>Casting Time</th>
+                  <th>Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="spell-browser__empty" data-spell-empty><td colspan="4">No spells have been entered for this selection.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </main>
     </div>
-    <script src="../scripts/search.js?v=8"></script><script src="../scripts/crt-scrollbar.js?v=1"></script>
+    <script src="../scripts/search.js?v=8"></script>
+    <script src="../scripts/spell-manifest.js?v=4"></script>
+    <script src="../scripts/spell-links.js?v=8" data-spell-index="spellcasting.html"></script>
+    <script src="../scripts/spells.js?v=2"></script>
+    <script src="../scripts/spell-browser.js?v=19"></script>
+    <script src="../scripts/select-menu.js?v=5"></script>
+    <script src="../scripts/crt-scrollbar.js?v=1"></script>
   </body>
 </html>

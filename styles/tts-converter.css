@@ -122,9 +122,23 @@
   width: 100%;
 }
 
+.tts-editor .select-menu {
+  margin-top: 6px;
+}
+
 .tts-editor textarea {
   line-height: 1.45;
   resize: vertical;
+}
+
+.crt-scrollbar-textarea-host {
+  display: block;
+  margin-top: 6px;
+}
+
+.crt-scrollbar-textarea-host > textarea {
+  margin-top: 0;
+  resize: none;
 }
 
 .tts-editor input:focus,
@@ -290,6 +304,14 @@
   gap: 6px;
   max-height: 260px;
   overflow-y: auto;
+}
+
+.tts-importer__results::-webkit-scrollbar {
+  display: none;
+}
+
+.tts-importer__results {
+  scrollbar-width: none;
 }
 
 .tts-importer__result {

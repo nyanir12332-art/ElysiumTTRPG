@@ -1,4 +1,23 @@
 (function(){
+  const scriptUrl = document.currentScript?.src;
+  const loadScript = (url) => new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = url;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.append(script);
+  });
+
+  const installSpellReferences = () => {
+    if (!scriptUrl || document.documentElement.dataset.spellLinksReady) return;
+    const manifestUrl = new URL('spell-manifest.js?v=2', scriptUrl).href;
+    const linksUrl = new URL('spell-links.js?v=7', scriptUrl).href;
+    const loadLinks = () => loadScript(linksUrl).catch(() => {});
+    if (Array.isArray(window.SPELL_MANIFEST)) loadLinks();
+    else loadScript(manifestUrl).then(loadLinks).catch(() => {});
+  };
+
+  installSpellReferences();
   // Create one shared search control for every page with a site header.
   function createSearchUI(){
     const mount = document.querySelector('header');
@@ -98,6 +117,22 @@
       return new URL(target, new URL(baseHref, document.baseURI)).href;
     }
 
+    function topicSlug(value){
+      return String(value || '').toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
+    function addSystemTopicLinks(){
+      const target = topicSlug(decodeURIComponent(window.location.hash.slice(1)));
+      if(!target) return;
+      const heading = Array.from(document.querySelectorAll('main h2, main h3, main h4'))
+        .find((candidate) => topicSlug(candidate.textContent) === target);
+      if(heading) requestAnimationFrame(() => heading.scrollIntoView({block: 'start'}));
+    }
+
+    addSystemTopicLinks();
+
     function ensureIndex(){
       if(indexLinks) return Promise.resolve(indexLinks);
       const candidates = ['/search-index.json','../search-index.json','../../search-index.json','./search-index.json','search-index.json'];
@@ -116,6 +151,24 @@
 
           if(!indexLinks.some(page => page.href === itemPage.href)) indexLinks.push(itemPage);
 
+          const addSystemTopics = () => {
+            const systemPages = indexLinks.filter((page) => /\/systems\/(?:adventuring|character|combat|gamemaster-rules)\//i.test(new URL(page.href).pathname));
+            return Promise.all(systemPages.map((page) => fetch(page.href, {cache:'no-store'}).then(r=>r.text()).then(html=>{
+              const doc = new DOMParser().parseFromString(html, 'text/html');
+              const topics = Array.from(doc.querySelectorAll('main h2, main h3, main h4'))
+                .map((heading) => heading.textContent.trim())
+                .filter(Boolean)
+                .map((topic) => ({
+                  title: `${topic} - ${page.title.replace(/\s*-\s*Fable\s*$/i, '')}`,
+                  href: `${page.href}#${topicSlug(topic)}`
+                }));
+              return topics;
+            }).catch(()=>[]))).then(topicLists => {
+              indexLinks = indexLinks.concat(topicLists.flat());
+              return indexLinks;
+            });
+          };
+
           return fetch(itemPage.href, {cache:'no-store'}).then(r=>r.text()).then(html=>{
             const doc = new DOMParser().parseFromString(html, 'text/html');
             const itemNames = [
@@ -131,8 +184,8 @@
               href: `${itemPage.href}?item=${encodeURIComponent(itemName)}`
             }));
             indexLinks = indexLinks.concat(itemEntries);
-            return indexLinks;
-          }).catch(()=>indexLinks);
+            return addSystemTopics();
+          }).catch(()=>addSystemTopics());
         }).catch(()=> tryFetch(i+1));
       }
 
@@ -155,15 +208,16 @@
     const pageCache = new Map();
 
     function fetchAndSearchPage(href, q){
-      if(pageCache.has(href)){
-        const text = pageCache.get(href);
+      const pageHref = href.split('#')[0];
+      if(pageCache.has(pageHref)){
+        const text = pageCache.get(pageHref);
         return Promise.resolve(searchInText(href, q, text));
       }
-      return fetch(href, {cache:'no-store'}).then(r=>r.text()).then(html=>{
+      return fetch(pageHref, {cache:'no-store'}).then(r=>r.text()).then(html=>{
         const doc = new DOMParser().parseFromString(html, 'text/html');
         doc.querySelectorAll('header, .page-nav, .site-search, script, style, nav').forEach((element) => element.remove());
         const text = doc.body ? doc.body.innerText : html;
-        pageCache.set(href, text);
+        pageCache.set(pageHref, text);
         return searchInText(href, q, text);
       }).catch(()=>null);
     }
