@@ -364,7 +364,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Touch",
     "duration": "Until dispelled",
-    "components": "V, S, M (gold dust worth at least 25 gp, which the spell consumes)",
+    "components": "V, S, M (gold dust worth at least $250, which the spell consumes)",
     "classes": [
       "artificer",
       "wizard"
@@ -385,7 +385,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "60 feet",
     "duration": "1 minute",
-    "components": "V, S, M (a miniature platinum sword with a grip and pommel of copper and zinc, worth 250 gp)",
+    "components": "V, S, M (a miniature platinum sword with a grip and pommel of copper and zinc, worth $2,500)",
     "classes": [
       "bard",
       "wizard"
@@ -428,7 +428,7 @@ window.SPELLS = [
     "castingTime": "1 hour",
     "range": "10 feet",
     "duration": "Special",
-    "components": "V, S, M (for each creature you affect with this spell, you must provide one jacinth worth at least 1,000 gp and one ornately carved bar of silver worth at least 100 gp, all of which the spell consumes)",
+    "components": "V, S, M (for each creature you affect with this spell, you must provide one jacinth worth at least $10,000 and one ornately carved bar of silver worth at least $1,000, all of which the spell consumes)",
     "classes": [
       "cleric",
       "warlock",
@@ -454,7 +454,7 @@ window.SPELLS = [
     "castingTime": "1 minute",
     "range": "Self",
     "duration": "Instantaneous",
-    "components": "V, S, M (specially marked sticks, bones, or similar tokens worth at least 25 gp)",
+    "components": "V, S, M (specially marked sticks, bones, or similar tokens worth at least $250)",
     "classes": [
       "cleric"
     ],
@@ -476,7 +476,7 @@ window.SPELLS = [
     "castingTime": "8 hour",
     "range": "Touch",
     "duration": "Instantaneous",
-    "components": "V, S, M (an agate worth at least 1,000 gp, which the spell consumes)",
+    "components": "V, S, M (an agate worth at least $10,000, which the spell consumes)",
     "classes": [
       "bard",
       "druid"
@@ -926,7 +926,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "150 feet",
     "duration": "Instantaneous",
-    "components": "V, S, M (the powder of a crushed black pearl worth at least 500 gp)",
+    "components": "V, S, M (the powder of a crushed black pearl worth at least $5,000)",
     "classes": [
       "sorcerer",
       "warlock",
@@ -949,7 +949,7 @@ window.SPELLS = [
     "castingTime": "10 minute",
     "range": "1 miles",
     "duration": "10 minute",
-    "components": "V, S, M (a focus worth at least 100 gp, either a jeweled horn for hearing or a glass eye for seeing)",
+    "components": "V, S, M (a focus worth at least $1,000, either a jeweled horn for hearing or a glass eye for seeing)",
     "classes": [
       "bard",
       "cleric",
@@ -973,7 +973,7 @@ window.SPELLS = [
     "castingTime": "1 hour",
     "range": "Touch",
     "duration": "Instantaneous",
-    "components": "V, S, M (a diamond worth at least 1,000 gp and at least 1 cubic inch of flesh of the creature that is to be cloned, which the spell consumes, and a vessel worth at least 2,000 gp that has a sealable lid and is large enough to hold the creature being cloned, such as a huge urn, coffin, mud-filled cyst in the ground, or crystal container filled with salt water)",
+    "components": "V, S, M (a diamond worth at least $10,000 and at least 1 cubic inch of flesh of the creature that is to be cloned, which the spell consumes, and a vessel worth at least $20,000 that has a sealable lid and is large enough to hold the creature being cloned, such as a huge urn, coffin, mud-filled cyst in the ground, or crystal container filled with salt water)",
     "classes": [
       "wizard"
     ],
@@ -1404,7 +1404,7 @@ window.SPELLS = [
     "castingTime": "10 minute",
     "range": "Self",
     "duration": "10 day",
-    "components": "V, S, M (a statuette of yourself carved from ivory and decorated with gems worth at least 1,500 gp)",
+    "components": "V, S, M (a statuette of yourself carved from ivory and decorated with gems worth at least $15,000)",
     "classes": [
       "wizard"
     ],
@@ -1425,7 +1425,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Touch",
     "duration": "Until dispelled",
-    "components": "V, S, M (ruby dust worth 50 gp, which the spell consumes)",
+    "components": "V, S, M (ruby dust worth $500, which the spell consumes)",
     "classes": [
       "artificer",
       "cleric",
@@ -1563,7 +1563,7 @@ window.SPELLS = [
     "castingTime": "1 minute",
     "range": "10 feet",
     "duration": "Instantaneous",
-    "components": "V, S, M (one clay pot filled with grave dirt, one clay pot filled with brackish water, and one 150 gp black onyx stone for each corpse)",
+    "components": "V, S, M (one clay pot filled with grave dirt, one clay pot filled with brackish water, and one $1,500 black onyx stone for each corpse)",
     "classes": [
       "cleric",
       "warlock",
@@ -1872,7 +1872,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Self",
     "duration": "1 minute",
-    "components": "V, S, M (a copper piece)",
+    "components": "V, S, M (a $0.1 coin)",
     "classes": [
       "bard",
       "sorcerer",
@@ -2021,7 +2021,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Self",
     "duration": "Instantaneous",
-    "components": "V, S, M (incense and a sacrificial offering appropriate to your religion, together worth at least 25 gp, which the spell consumes)",
+    "components": "V, S, M (incense and a sacrificial offering appropriate to your religion, together worth at least $250, which the spell consumes)",
     "classes": [
       "druid"
     ],
@@ -2580,7 +2580,7 @@ window.SPELLS = [
     "castingTime": "1 hour",
     "range": "10 feet",
     "duration": "Instantaneous",
-    "components": "V, S, M (10 gp worth of charcoal, incense, and herbs that must be consumed by fire in a brass brazier)",
+    "components": "V, S, M ($100 worth of charcoal, incense, and herbs that must be consumed by fire in a brass brazier)",
     "classes": [
       "wizard"
     ],
@@ -2628,7 +2628,7 @@ window.SPELLS = [
     "castingTime": "1 minute",
     "range": "Self",
     "duration": "1 day",
-    "components": "V, S, M (a set of divinatory tools—such as bones, ivory sticks, cards, teeth, or carved runes—worth 100 gp and an object from the location you wish to find)",
+    "components": "V, S, M (a set of divinatory tools—such as bones, ivory sticks, cards, teeth, or carved runes—worth $1,000 and an object from the location you wish to find)",
     "classes": [
       "bard",
       "cleric",
@@ -2942,7 +2942,7 @@ window.SPELLS = [
     "castingTime": "10 minute",
     "range": "Touch",
     "duration": "1 day",
-    "components": "V, S, M (a sprinkling of holy water, rare incense, and powdered ruby worth at least 1,000 gp)",
+    "components": "V, S, M (a sprinkling of holy water, rare incense, and powdered ruby worth at least $10,000)",
     "classes": [
       "cleric"
     ],
@@ -2964,7 +2964,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "100 feet",
     "duration": "1 hour",
-    "components": "V, S, M (ruby dust worth 1,500 gp)",
+    "components": "V, S, M (ruby dust worth $15,000)",
     "classes": [
       "bard",
       "warlock",
@@ -3083,7 +3083,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "60 feet",
     "duration": "1 minute",
-    "components": "V, S, M (a diamond worth at least 5,000 gp)",
+    "components": "V, S, M (a diamond worth at least $50,000)",
     "classes": [
       "cleric",
       "sorcerer",
@@ -3134,7 +3134,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Touch",
     "duration": "10 day",
-    "components": "V, S, M (a pinch of salt and one copper piece placed on each of the corpse's eyes, which must remain there for the duration)",
+    "components": "V, S, M (a pinch of salt and one $0.1 coin placed on each of the corpse's eyes, which must remain there for the duration)",
     "classes": [
       "cleric",
       "wizard"
@@ -3220,7 +3220,7 @@ window.SPELLS = [
     "castingTime": "1 hour",
     "range": "Touch",
     "duration": "Until dispelled",
-    "components": "V, S, M (incense and powdered diamond worth at least 200 gp, which the spell consumes)",
+    "components": "V, S, M (incense and powdered diamond worth at least $2,000, which the spell consumes)",
     "classes": [
       "artificer",
       "bard",
@@ -3313,7 +3313,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Touch",
     "duration": "Instantaneous",
-    "components": "V, S, M (diamond dust worth at least 100 gp, which the spell consumes)",
+    "components": "V, S, M (diamond dust worth at least $1,000, which the spell consumes)",
     "classes": [
       "artificer",
       "bard",
@@ -3356,7 +3356,7 @@ window.SPELLS = [
     "castingTime": "10 minute",
     "range": "Touch",
     "duration": "24 hour",
-    "components": "V, S, M (burning incense, a small measure of brimstone and oil, a knotted string, a small amount of umber hulk blood, and a small silver rod worth at least 10 gp)",
+    "components": "V, S, M (burning incense, a small measure of brimstone and oil, a knotted string, a small amount of umber hulk blood, and a small silver rod worth at least $100)",
     "classes": [
       "bard",
       "wizard"
@@ -3451,7 +3451,7 @@ window.SPELLS = [
     "castingTime": "24 hour",
     "range": "Touch",
     "duration": "Until dispelled",
-    "components": "V, S, M (herbs, oils, and incense worth at least 1,000 gp, which the spell consumes)",
+    "components": "V, S, M (herbs, oils, and incense worth at least $10,000, which the spell consumes)",
     "classes": [
       "cleric"
     ],
@@ -3636,7 +3636,7 @@ window.SPELLS = [
     "castingTime": "10 minute",
     "range": "30 feet",
     "duration": "Instantaneous",
-    "components": "V, S, M (a gem-encrusted bowl worth at least 1,000 gp, which the spell consumes)",
+    "components": "V, S, M (a gem-encrusted bowl worth at least $10,000, which the spell consumes)",
     "classes": [
       "cleric",
       "druid"
@@ -3750,7 +3750,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Self",
     "duration": "1 minute",
-    "components": "V, S, M (a tiny reliquary worth at least 1,000 gp containing a sacred relic, such as a scrap of cloth from a saint's robe or a piece of parchment from a religious text)",
+    "components": "V, S, M (a tiny reliquary worth at least $10,000 containing a sacred relic, such as a scrap of cloth from a saint's robe or a piece of parchment from a religious text)",
     "classes": [
       "cleric"
     ],
@@ -3837,7 +3837,7 @@ window.SPELLS = [
     "castingTime": "1 minute",
     "range": "Touch",
     "duration": "Instantaneous",
-    "components": "V, S, M (a pearl worth at least 100 gp and an owl feather)",
+    "components": "V, S, M (a pearl worth at least $1,000 and an owl feather)",
     "classes": [
       "artificer",
       "bard",
@@ -3859,7 +3859,7 @@ window.SPELLS = [
     "castingTime": "1 minute",
     "range": "Touch",
     "duration": "10 day",
-    "components": "S, M (a lead-based ink worth at least 10 gp, which the spell consumes)",
+    "components": "S, M (a lead-based ink worth at least $100, which the spell consumes)",
     "classes": [
       "bard",
       "warlock",
@@ -3883,7 +3883,7 @@ window.SPELLS = [
     "castingTime": "1 minute",
     "range": "30 feet",
     "duration": "Until dispelled",
-    "components": "V, S, M (a vellum depiction or a carved statuette in the likeness of the target, and a special component that varies according to the version of the spell you choose, worth at least 500 gp per Hit Die of the target)",
+    "components": "V, S, M (a vellum depiction or a carved statuette in the likeness of the target, and a special component that varies according to the version of the spell you choose, worth at least $5,000 per Hit Die of the target)",
     "classes": [
       "warlock",
       "wizard"
@@ -3984,7 +3984,7 @@ window.SPELLS = [
     "castingTime": "1 minute",
     "range": "Touch",
     "duration": "Until dispelled",
-    "components": "V, S, M (a sapphire worth 1,000 gp)",
+    "components": "V, S, M (a sapphire worth $10,000)",
     "classes": [
       "wizard"
     ],
@@ -4099,7 +4099,7 @@ window.SPELLS = [
     "castingTime": "10 minute",
     "range": "Self",
     "duration": "Instantaneous",
-    "components": "V, S, M (incense worth at least 250 gp, which the spell consumes, and four ivory strips worth at least 50 gp each)",
+    "components": "V, S, M (incense worth at least $2,500, which the spell consumes, and four ivory strips worth at least $500 each)",
     "classes": [
       "bard",
       "cleric",
@@ -4358,7 +4358,7 @@ window.SPELLS = [
     "castingTime": "1 minute",
     "range": "10 feet",
     "duration": "1 hour",
-    "components": "V, S, M (holy water or powdered silver and iron worth at least 100 gp, which the spell consumes)",
+    "components": "V, S, M (holy water or powdered silver and iron worth at least $1,000, which the spell consumes)",
     "classes": [
       "cleric",
       "paladin",
@@ -4385,7 +4385,7 @@ window.SPELLS = [
     "castingTime": "1 minute",
     "range": "Self",
     "duration": "Until dispelled",
-    "components": "V, S, M (a gem, crystal, reliquary, or some other ornamental container worth at least 500 gp)",
+    "components": "V, S, M (a gem, crystal, reliquary, or some other ornamental container worth at least $5,000)",
     "classes": [
       "wizard"
     ],
@@ -4432,7 +4432,7 @@ window.SPELLS = [
     "castingTime": "1 minute",
     "range": "30 feet",
     "duration": "Until dispelled",
-    "components": "V, S, M (a small bit of honeycomb and jade dust worth at least 10 gp, which the spell consumes)",
+    "components": "V, S, M (a small bit of honeycomb and jade dust worth at least $100, which the spell consumes)",
     "classes": [
       "artificer",
       "bard",
@@ -4478,7 +4478,7 @@ window.SPELLS = [
     "castingTime": "1 minute",
     "range": "300 feet",
     "duration": "24 hour",
-    "components": "V, S, M (a miniature portal carved from ivory, a small piece of polished marble, and a tiny silver spoon, each item worth at least 5 gp)",
+    "components": "V, S, M (a miniature portal carved from ivory, a small piece of polished marble, and a tiny silver spoon, each item worth at least $50)",
     "classes": [
       "bard",
       "wizard"
@@ -4939,7 +4939,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Touch",
     "duration": "8 hour",
-    "components": "V, S, M (a pinch of diamond dust worth 25 gp sprinkled over the target, which the spell consumes)",
+    "components": "V, S, M (a pinch of diamond dust worth $250 sprinkled over the target, which the spell consumes)",
     "classes": [
       "bard",
       "ranger",
@@ -5049,7 +5049,7 @@ window.SPELLS = [
       "You beseech an otherworldly entity for aid. The being must be known to you: a god, a primordial, a demon prince, or some other being of cosmic power. That entity sends a celestial, an elemental, or a fiend loyal to it to aid you, making the creature appear in an unoccupied space within range. If you know a specific creature's name, you can speak that name when you cast this spell to request that creature, though you might get a different creature anyway (DM's choice).",
       "When the creature appears, it is under no compulsion to behave in any particular way. You can ask the creature to perform a service in exchange for payment, but it isn't obliged to do so. The requested task could range from simple (fly us across the chasm, or help us fight a battle) to complex (spy on our enemies, or protect us during our foray into the dungeon). You must be able to communicate with the creature to bargain for its services.",
       "Payment can take a variety of forms. A celestial might require a sizable donation of gold or relics to an allied temple, while a fiend might demand a living sacrifice or a gift of treasure. Some creatures might exchange their service for a quest undertaken by you.",
-      "As a rule of thumb, a task that can be measured in minutes requires a payment worth 100 gp per minute. A task measured in hours requires 1,000 gp per hour. And a task measured in days (up to 10 days) requires 10,000 gp per day. The DM can adjust these payments based on the circumstances under which you cast the spell. If the task is aligned with the creature's ethos, the payment might be halved or even waived. Nonhazardous tasks typically require only half the suggested payment, while especially dangerous tasks might require a greater gift. Creatures rarely accept tasks that seem suicidal.",
+      "As a rule of thumb, a task that can be measured in minutes requires a payment worth $1,000 per minute. A task measured in hours requires $10,000 per hour. And a task measured in days (up to 10 days) requires $100,000 per day. The DM can adjust these payments based on the circumstances under which you cast the spell. If the task is aligned with the creature's ethos, the payment might be halved or even waived. Nonhazardous tasks typically require only half the suggested payment, while especially dangerous tasks might require a greater gift. Creatures rarely accept tasks that seem suicidal.",
       "After the creature completes the task, or when the agreed-upon duration of service expires, the creature returns to its home plane after reporting back to you, if appropriate to the task and if possible. If you are unable to agree on a price for the creature's service, the creature immediately returns to its home plane.",
       "A creature enlisted to join your group counts as a member of it, receiving a full share of experience points awarded."
     ],
@@ -5065,7 +5065,7 @@ window.SPELLS = [
     "castingTime": "1 hour",
     "range": "60 feet",
     "duration": "24 hour",
-    "components": "V, S, M (a jewel worth at least 1,000 gp, which the spell consumes)",
+    "components": "V, S, M (a jewel worth at least $10,000, which the spell consumes)",
     "classes": [
       "bard",
       "cleric",
@@ -5090,7 +5090,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Touch",
     "duration": "Instantaneous",
-    "components": "V, S, M (a forked, metal rod worth at least 250 gp, attuned to a particular plane of existence)",
+    "components": "V, S, M (a forked, metal rod worth at least $2,500, attuned to a particular plane of existence)",
     "classes": [
       "cleric",
       "druid",
@@ -5383,7 +5383,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "120 feet",
     "duration": "Until dispelled",
-    "components": "V, S, M (a bit of fleece and jade dust worth at least 25 gp)",
+    "components": "V, S, M (a bit of fleece and jade dust worth at least $250)",
     "classes": [
       "bard",
       "wizard"
@@ -5406,7 +5406,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "500 miles",
     "duration": "1 day",
-    "components": "V, S, M (a small replica of you made from materials worth at least 5 gp)",
+    "components": "V, S, M (a small replica of you made from materials worth at least $50)",
     "classes": [
       "bard",
       "wizard"
@@ -5522,7 +5522,7 @@ window.SPELLS = [
     "castingTime": "1 hour",
     "range": "Touch",
     "duration": "Instantaneous",
-    "components": "V, S, M (a diamond worth at least 500 gp, which the spell consumes)",
+    "components": "V, S, M (a diamond worth at least $5,000, which the spell consumes)",
     "classes": [
       "bard",
       "cleric",
@@ -5611,7 +5611,7 @@ window.SPELLS = [
     "castingTime": "1 hour",
     "range": "Touch",
     "duration": "Instantaneous",
-    "components": "V, S, M (rare oils and unguents worth at least 1,000 gp, which the spell consumes)",
+    "components": "V, S, M (rare oils and unguents worth at least $10,000, which the spell consumes)",
     "classes": [
       "druid"
     ],
@@ -5698,7 +5698,7 @@ window.SPELLS = [
     "castingTime": "1 hour",
     "range": "Touch",
     "duration": "Instantaneous",
-    "components": "V, S, M (a diamond worth at least 1,000 gp, which the spell consumes)",
+    "components": "V, S, M (a diamond worth at least $10,000, which the spell consumes)",
     "classes": [
       "bard",
       "cleric"
@@ -5745,7 +5745,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Touch",
     "duration": "Instantaneous",
-    "components": "V, S, M (diamonds worth 300 gp, which the spell consumes)",
+    "components": "V, S, M (diamonds worth $3,000, which the spell consumes)",
     "classes": [
       "artificer",
       "cleric",
@@ -5853,7 +5853,7 @@ window.SPELLS = [
     "castingTime": "10 minute",
     "range": "Self",
     "duration": "10 minute",
-    "components": "V, S, M (a focus worth at least 1,000 gp, such as a crystal ball, a silver mirror, or a font filled with holy water)",
+    "components": "V, S, M (a focus worth at least $10,000, such as a crystal ball, a silver mirror, or a font filled with holy water)",
     "classes": [
       "bard",
       "cleric",
@@ -5879,7 +5879,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Touch",
     "duration": "Instantaneous",
-    "components": "V, S, M (an exquisite chest, 3 feet by 2 feet by 2 feet, constructed from rare materials worth at least 5,000 gp, and a Tiny replica made from the same materials worth at least 50 gp)",
+    "components": "V, S, M (an exquisite chest, 3 feet by 2 feet by 2 feet, constructed from rare materials worth at least $50,000, and a Tiny replica made from the same materials worth at least $500)",
     "classes": [
       "artificer",
       "wizard"
@@ -5969,7 +5969,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Touch",
     "duration": "Until dispelled",
-    "components": "V, S, M (a powder composed of diamond, emerald, ruby, and sapphire dust worth at least 5,000 gp, which the spell consumes)",
+    "components": "V, S, M (a powder composed of diamond, emerald, ruby, and sapphire dust worth at least $50,000, which the spell consumes)",
     "classes": [
       "wizard"
     ],
@@ -5990,7 +5990,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Self",
     "duration": "1 hour",
-    "components": "V, S, M (a jade circlet worth at least 1,500 gp, which you must place on your head before you cast the spell)",
+    "components": "V, S, M (a jade circlet worth at least $15,000, which you must place on your head before you cast the spell)",
     "classes": [
       "druid",
       "wizard"
@@ -6165,14 +6165,14 @@ window.SPELLS = [
     "castingTime": "12 hour",
     "range": "Touch",
     "duration": "Until dispelled",
-    "components": "V, S, M (snow or ice in quantities sufficient to make a life-size copy of the duplicated creature; some hair, fingernail clippings, or other piece of that creature's body placed inside the snow or ice; and powdered ruby worth 1,500 gp, sprinkled over the duplicate and consumed by the spell)",
+    "components": "V, S, M (snow or ice in quantities sufficient to make a life-size copy of the duplicated creature; some hair, fingernail clippings, or other piece of that creature's body placed inside the snow or ice; and powdered ruby worth $15,000, sprinkled over the duplicate and consumed by the spell)",
     "classes": [
       "wizard"
     ],
     "description": [
       "You shape an illusory duplicate of one beast or humanoid that is within range for the entire casting time of the spell. The duplicate is a creature, partially real and formed from ice or snow, and it can take actions and otherwise be affected as a normal creature. It appears to be the same as the original, but it has half the creature's hit point maximum and is formed without any equipment. Otherwise, the illusion uses all the statistics of the creature it duplicates, except that it is a construct.",
       "The simulacrum is friendly to you and creatures you designate. It obeys your spoken commands, moving and acting in accordance with your wishes and acting on your turn in combat. The simulacrum lacks the ability to learn or become more powerful, so it never increases its level or other abilities, nor can it regain expended spell slots.",
-      "If the simulacrum is damaged, you can repair it in an alchemical laboratory, using rare herbs and minerals worth 100 gp per hit point it regains. The simulacrum lasts until it drops to 0 hit points, at which point it reverts to snow and melts instantly.",
+      "If the simulacrum is damaged, you can repair it in an alchemical laboratory, using rare herbs and minerals worth $1,000 per hit point it regains. The simulacrum lasts until it drops to 0 hit points, at which point it reverts to snow and melts instantly.",
       "If you cast this spell again, any currently active duplicates you created with this spell are instantly destroyed."
     ],
     "higherLevel": [],
@@ -6478,7 +6478,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Touch",
     "duration": "1 hour",
-    "components": "V, S, M (diamond dust worth 100 gp, which the spell consumes)",
+    "components": "V, S, M (diamond dust worth $1,000, which the spell consumes)",
     "classes": [
       "artificer",
       "druid",
@@ -6596,7 +6596,7 @@ window.SPELLS = [
     "castingTime": "1 minute",
     "range": "Touch",
     "duration": "Until dispelled",
-    "components": "V, S, M (mercury, phosphorus, and powdered diamond and opal with a total value of at least 1,000 gp, which the spell consumes)",
+    "components": "V, S, M (mercury, phosphorus, and powdered diamond and opal with a total value of at least $10,000, which the spell consumes)",
     "classes": [
       "bard",
       "cleric",
@@ -6700,7 +6700,7 @@ window.SPELLS = [
     "castingTime": "1 minute",
     "range": "10 feet",
     "duration": "1 round",
-    "components": "V, M (rare chalks and inks infused with precious gems worth 50 gp, which the spell consumes)",
+    "components": "V, M (rare chalks and inks infused with precious gems worth $500, which the spell consumes)",
     "classes": [
       "bard",
       "sorcerer",
@@ -6904,7 +6904,7 @@ window.SPELLS = [
     "castingTime": "1 hour",
     "range": "Touch",
     "duration": "Instantaneous",
-    "components": "V, S, M (a sprinkle of holy water and diamonds worth at least 25,000 gp, which the spell consumes)",
+    "components": "V, S, M (a sprinkle of holy water and diamonds worth at least $250,000, which the spell consumes)",
     "classes": [
       "cleric",
       "druid"
@@ -6926,7 +6926,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Touch",
     "duration": "1 hour",
-    "components": "V, S, M (an ointment for the eyes that costs 25 gp; is made from mushroom powder, saffron, and fat; and is consumed by the spell)",
+    "components": "V, S, M (an ointment for the eyes that costs $250; is made from mushroom powder, saffron, and fat; and is consumed by the spell)",
     "classes": [
       "bard",
       "cleric",
@@ -7154,7 +7154,7 @@ window.SPELLS = [
     "castingTime": "1 action",
     "range": "Touch",
     "duration": "1 hour",
-    "components": "V, S, M (a pair of platinum rings worth at least 50 gp each, which you and the target must wear for the duration)",
+    "components": "V, S, M (a pair of platinum rings worth at least $500 each, which you and the target must wear for the duration)",
     "classes": [
       "cleric"
     ],
@@ -7315,7 +7315,7 @@ window.SPELLS = [
     "description": [
       "Wish is the mightiest spell a mortal creature can cast. By simply speaking aloud, you can alter the very foundations of reality in accord with your desires.",
       "The basic use of this spell is to duplicate any other spell of 8th level or lower. You don't need to meet any requirements in that spell, including costly components. The spell simply takes effect. Alternatively, you can create one of the following effects of your choice:",
-      "• You create one object of up to 25,000 gp in value that isn't a relic. The object can be no more than 300 feet in any dimension, and it appears in an unoccupied space you can see on the ground.\n• You allow up to twenty creatures that you can see to regain all hit points, and you end all effects on them described in the greater restoration spell.\n• You grant up to ten creatures that you can see resistance to a damage type you choose.\n• You grant up to ten creatures you can see immunity to a single spell or other magical effect for 8 hours. For instance, you could make yourself and all your companions immune to a lich's life drain attack.\n• You undo a single recent event by forcing a reroll of any roll made within the last round (including your last turn). Reality reshapes itself to accommodate the new result. For example, a wish spell could undo an opponent's successful save, a foe's critical hit, or a friend's failed save. You can force the reroll to be made with advantage or disadvantage, and you can choose whether to use the reroll or the original roll.",
+      "• You create one object of up to $250,000 in value that isn't a relic. The object can be no more than 300 feet in any dimension, and it appears in an unoccupied space you can see on the ground.\n• You allow up to twenty creatures that you can see to regain all hit points, and you end all effects on them described in the greater restoration spell.\n• You grant up to ten creatures that you can see resistance to a damage type you choose.\n• You grant up to ten creatures you can see immunity to a single spell or other magical effect for 8 hours. For instance, you could make yourself and all your companions immune to a lich's life drain attack.\n• You undo a single recent event by forcing a reroll of any roll made within the last round (including your last turn). Reality reshapes itself to accommodate the new result. For example, a wish spell could undo an opponent's successful save, a foe's critical success, or a friend's failed save. You can force the reroll to be made with advantage or disadvantage, and you can choose whether to use the reroll or the original roll.",
       "You might be able to achieve something beyond the scope of the above examples. State your wish to the DM as precisely as possible. The DM has great latitude in ruling what occurs in such an instance; the greater the wish, the greater the likelihood that something goes wrong. This spell might simply fail, the effect you desire might only be partly achieved, or you might suffer some unforeseen consequence as a result of how you worded the wish. For example, wishing that a villain were dead might propel you forward in time to a period when that villain is no longer alive, effectively removing you from the game. Similarly, wishing for a legendary relic or artifact might instantly transport you to the presence of the item's current owner.",
       "The stress of casting this spell to produce any effect other than duplicating another spell weakens you. After enduring that stress, each time you cast a spell until you finish a long rest, you take 1d10 necrotic damage per level of that spell. This damage can't be reduced or prevented in any way. In addition, your Strength drops to 3, if it isn't 3 or lower already, for 2d4 days. For each of those days that you spend resting and doing nothing more than light activity, your remaining recovery time decreases by 2 days. Finally, there is a 33 chance that you are unable to cast wish ever again if you suffer this stress."
     ],
@@ -7418,7 +7418,7 @@ window.SPELLS = [
     "school": "Evocation",
     "castingTime": "1 action",
     "range": "5 feet",
-    "components": "S, M (a melee weapon worth at least 1 sp)",
+    "components": "S, M (a melee weapon worth at least $1)",
     "classes": [
       "artificer",
       "sorcerer",
@@ -7726,7 +7726,7 @@ window.SPELLS = [
     "school": "Evocation",
     "castingTime": "1 action",
     "range": "5 feet",
-    "components": "S, M (a melee weapon worth at least 1 sp)",
+    "components": "S, M (a melee weapon worth at least $1)",
     "classes": [
       "artificer",
       "sorcerer",

@@ -60,6 +60,10 @@
 
       activePanel.querySelectorAll('table tbody tr').forEach((row) => {
         if (row.classList.contains('apparel-subcategory') || !row.querySelector('td')) return;
+        if (row.closest('.tool-activity-table')) {
+          row.hidden = false;
+          return;
+        }
         const matches = !query || row.textContent.toLowerCase().includes(query);
         const matchesRarity = !row.dataset.rarity || row.dataset.rarity === document.querySelector('.relic-tab.is-active')?.dataset.relicRarity;
         row.hidden = !matches || !matchesRarity;
