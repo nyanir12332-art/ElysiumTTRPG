@@ -462,7 +462,7 @@ window.PERKS = [
   {
     "id": "healer-initiate",
     "name": "Healer Initiate",
-    "description": "When you use a trauma kit to stabilize a dying creature, that creature also regains hit points equal to your Wisdom modifier.",
+    "description": "You gain proficiency with trauma kits. When you use a trauma kit to stabilize a dying creature, that creature also regains hit points equal to your Wisdom modifier.",
     "requirements": ""
   },
   {
