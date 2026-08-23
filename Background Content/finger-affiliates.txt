@@ -1,0 +1,93 @@
+THUMB AFFILIATE
+
+You work under the Thumb's protection or provide services to one of its Famiglie. You have learned that the Thumb values rank, formal courtesy, and obedience above personal comfort. You are useful, but you are not yet a Soldato and cannot give orders to Thumb members.
+
+Skill Proficiencies: Intimidation, Persuasion
+Tool Proficiencies: One gaming set or one tool set appropriate to your work
+Languages: One language of your choice
+Equipment: A set of formal black, red, and gold clothing; a badge or token identifying your Famiglia; a notebook listing the titles and forms of address used by local factions; a cellphone; and a wallet containing $120
+
+FEATURE: HIERARCHICAL COURTESY
+
+You can identify the practical signs of rank used by the Thumb and by most City organizations. When you need to contact a Thumb-affiliated Famiglia, you can usually locate a minor intermediary, request a private meeting, or obtain a modest safe place to wait, provided you have not violated the Thumb's rules. The intermediary will not risk their life, reveal confidential information, or provide expensive equipment for you. You also know enough etiquette to avoid accidental insults when dealing with a faction that cares about rank.
+
+ADVANCEMENT: SOLDATO
+
+You can become a Soldato when a Famiglia accepts you, you complete a period of service chosen by the GM, and you swear obedience to the Thumb's hierarchy. A new Soldato begins at one of the four Soldato sub-ranks—Primo, Secondo, Terzo, or Quarto—chosen by the recognizing superior. Advancement beyond Soldato requires the character to follow the Thumb's orders and earn promotion; this background does not bypass the Capo, Consigliere, Sottocapo, or Capo dei Capi.
+
+
+INDEX AFFILIATE
+
+You carry messages, locate people, or perform small tasks for the Index without having received a Prescript ordering you to join. You have seen enough of the Index to understand that a Prescript is not a normal request, and that neither outsiders nor members are permitted to treat one casually.
+
+Skill Proficiencies: Insight, Investigation
+Tool Proficiencies: Calligrapher's supplies or one set of tools used in your work
+Languages: One language of your choice
+Equipment: A black formal outfit; a notebook and pencils; a sealed envelope bearing an Index mark; a cellphone; and a wallet containing $100
+
+FEATURE: PRESCRIPT RELAY
+
+You know how to deliver a message to an Index intermediary without claiming to interpret a Prescript yourself. Once during a long rest, when you are in a settlement with an Index presence, you can deliver a short written request for mundane information, a meeting, or a safe route. The response is never guaranteed and may arrive as an indirect instruction. The Index does not provide combat assistance, valuable property, or an explanation of where its commands originate through this feature.
+
+ADVANCEMENT: PROSELYTE
+
+You can become a Proselyte when you receive and willingly follow a Prescript that directs you to enter the Index, then complete the Index's initiation under a Proxy or Messenger. The Prescript is created by the GM and should create a meaningful obligation without removing the player's control of the character. A Proselyte learns by shadowing a Proxy in a familia of roughly five or six people and may later be promoted to Proxy or Messenger. This background never creates a Prescript or grants a promotion automatically.
+
+
+MIDDLE AFFILIATE
+
+You are protected by a Middle Sibling, work for a Middle-associated family, or have earned the Finger's tolerance by helping one of its members. You are not a Sibling and do not possess the protection granted to someone whose name is recorded in the Middle's Book of Vengeance.
+
+Skill Proficiencies: Athletics, Intimidation
+Tool Proficiencies: One gaming set or one tool set appropriate to your work
+Languages: One language of your choice
+Equipment: A durable jacket in bright or light colors; a personal notebook used to record favors and grudges; a chain or other keepsake symbolizing solidarity; a cellphone; and a wallet containing $100
+
+FEATURE: SIBLING'S INTRODUCTION
+
+When you are in Backstreets controlled or influenced by the Middle, you can ask a known Sibling or affiliate to introduce you to another member, locate ordinary shelter, or arrange a conversation about a local dispute. The request is conditional: the Sibling expects respect, honesty, and repayment of favors. This feature cannot erase a Vengeance, alter the Book of Vengeance, or protect you from punishment if you personally commit a serious sin against the Middle.
+
+ADVANCEMENT: LITTLE SIBLING
+
+You can become a Little Sibling when the Middle accepts you as family and records your obligation in its system of vengeance. The character must demonstrate loyalty to a Sibling or complete a task approved by a Big Sibling or higher. Membership is for life in the Middle's eyes; leaving after joining makes the character a target of former Siblings. Promotion to Young Sibling, Big Sibling, and Great Sibling remains subject to the Middle's recognition and the accomplishments described in its hierarchy.
+
+
+RING AFFILIATE
+
+You supply materials, display work, run errands for a gallery, or create art that the Ring considers worth evaluating. You are associated with the Ring but are not a Student, Docent, or Maestro. The Ring's protection is conditional on your continued usefulness and on the judgments of the artists above you.
+
+Skill Proficiencies: Deception, Performance
+Tool Proficiencies: Painter's supplies or one other artisan's tool
+Languages: One language of your choice
+Equipment: An artist's tool set and materials; a set of clean white clothing; a sketchbook; a cellphone; and a wallet containing $120
+
+FEATURE: GALLERY ACCESS
+
+You can find a Ring-affiliated gallery or an ordinary artist who knows one. You can submit a harmless piece for evaluation, learn who is currently accepting commissions, and request a place to work for a short time. Gallery staff may offer food, shelter, or a small payment when your work is useful, but they can also reject it or impose a deadline. This feature does not let you enter a Main Studio, attend a VIP auction, or bypass a Docent or Maestro.
+
+ADVANCEMENT: STUDENT
+
+You can become a Student when a School of the Ring accepts your work and assigns you regular assignments. A Student must submit work for evaluation and may be judged by Docents or Maestros. Promotion to Docent and then Maestro requires recognition by the Ring and the accomplishments described in its hierarchy; completing an assignment alone does not guarantee promotion. The Ring's art, pigments, and other unusual techniques are not automatically magical, and this background grants no Relic.
+
+
+PINKY AFFILIATE
+
+You are a courier, informant, cover identity, or useful outsider whose work has benefited a hidden Pinky member. You do not know the identities of most Pinky affiliates, and they may not know yours. You have contacts, but you do not have a seat, a title, or a star-forged blade.
+
+Skill Proficiencies: Deception, Stealth
+Tool Proficiencies: Disguise kit or one tool set appropriate to your cover identity
+Languages: One language of your choice
+Equipment: A disguise kit; clothing suitable for two different social roles; a notebook containing deliberately incomplete contact information; a cellphone; and a wallet containing $150
+
+FEATURE: UNMARKED CONTACT
+
+You can leave a message for a Pinky contact through a prearranged dead drop, coded advertisement, or ordinary social encounter. If the contact chooses to respond, they can provide a rumor, a discreet introduction, or a temporary cover identity. They do not reveal the Pinky's internal structure, expose another member, provide a star-forged blade, or intervene in a dangerous conflict merely because you ask. Your contact may also give you a task before offering help.
+
+ADVANCEMENT: STAR-BEARER
+
+The Pinky's hierarchy is tied to seats, personal titles, and ownership of a star-forged Relic blade. You can become a true member only when a Pinky authority recognizes you, you accept a seat and title, and you lawfully come into possession of the corresponding star-forged blade. A character cannot claim a seat simply by finding or stealing a blade, and this background never supplies one. Once accepted, the character is expected to appoint one blade as their own and follow the obligations of that seat. The GM determines the seat, title, and duties offered by the Pinky.
+
+
+USING THESE BACKGROUNDS
+
+An affiliate may have contacts among a Finger without being trusted with its secrets. The GM should make the relationship useful but conditional: favors create obligations, protection has limits, and advancement changes the character's responsibilities. A character can work for more than one faction, but the Five Fingers may treat divided loyalties as a serious problem. None of these backgrounds replaces a character's class, perk, language, crafting ability, or access to magic, Relics, or firearms.

@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
-    <link rel="stylesheet" href="../styles/site.css?v=24">
+    <link rel="stylesheet" href="../styles/site.css?v=26">
     <link rel="stylesheet" href="../styles/classes.css">
     <link rel="stylesheet" href="../styles/tts-converter.css?v=18">
     <link rel="stylesheet" href="../styles/search.css?v=13">
@@ -19,7 +19,7 @@
           <a href="../races/index.html">Races</a>
           <a href="../backgrounds/index.html">Backgrounds</a>
           <a href="../items/index.html">Items</a>
-          <span class="menu-break" aria-hidden="true"></span><a href="#">Perks</a>
+          <span class="menu-break" aria-hidden="true"></span><a href="../perks/index.html">Perks</a>
           <a class="active" href="index.html" aria-current="page">Systems</a>
           <a href="../lore/index.html">Lore</a>
           <a href="#">Records</a>
@@ -44,6 +44,7 @@
                 <option value="spell">Spell</option>
                 <option value="technique">Technique</option>
                 <option value="item">Item</option>
+                <option value="perk">Perk</option>
               </select>
             </label>
             <label>Card size
@@ -118,6 +119,15 @@
                 <input id="spell-tags" type="text">
               </label>
             </fieldset>
+            <fieldset id="perk-fields" hidden>
+              <legend>Perk details</legend>
+              <label>Requirements
+                <input id="perk-requirement" type="text" placeholder="Fey Affiliate">
+              </label>
+              <label>Required By
+                <input id="perk-required-by" type="text" placeholder="Fey Related">
+              </label>
+            </fieldset>
 
             <div class="tts-actions">
               <button type="button" id="download-front">Download Front JPG</button>
@@ -130,10 +140,10 @@
           <section class="tts-editor tts-importer" aria-labelledby="tts-importer-title">
             <div class="tts-editor__intro">
               <h2 id="tts-importer-title">Importer</h2>
-              <p>Search the catalog for a spell, class, class feature, race, background, or item and load it into Card Builder.</p>
+              <p>Search the catalog for a spell, perk, class, class feature, race, background, or item and load it into Card Builder.</p>
             </div>
             <div class="tts-importer__search">
-              <input id="tts-importer-input" type="search" aria-label="Search spells, items, systems, or features" autocomplete="off">
+              <input id="tts-importer-input" type="search" aria-label="Search spells, backgrounds, perks, items, systems, or features" autocomplete="off">
               <button id="tts-importer-button" type="button">Search</button>
             </div>
             <div class="tts-importer__results" id="tts-importer-results" aria-live="polite"></div>
@@ -155,11 +165,12 @@
       </main>
     </div>
     <script src="../scripts/search.js?v=8"></script>
-    <script src="../scripts/spells.js?v=2"></script>
+    <script src="../scripts/spells.js?v=5"></script>
+    <script src="../scripts/perks.js?v=6"></script>
     <script src="../scripts/spell-manifest.js?v=4"></script>
-    <script src="../scripts/spell-links.js?v=8" data-spell-index="spellcasting.html"></script>
-  <script src="../scripts/tts-converter.js?v=56"></script>
-    <script src="../scripts/tts-importer.js?v=21"></script>
+    <script src="../scripts/spell-links.js?v=9" data-spell-index="spellcasting.html"></script>
+  <script src="../scripts/tts-converter.js?v=61"></script>
+    <script src="../scripts/tts-importer.js?v=27"></script>
     <script src="../scripts/select-menu.js?v=2"></script>
     <script src="../scripts/crt-scrollbar.js?v=5"></script>
   </body>

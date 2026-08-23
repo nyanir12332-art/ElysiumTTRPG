@@ -1,0 +1,289 @@
+.perk-browser {
+  margin-top: 28px;
+}
+
+main > .prompt + #perks-introduction {
+  margin-top: 8px;
+}
+
+#perks-introduction h2,
+.perk-browser h2 {
+  color: var(--green);
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0 0 18px;
+  text-shadow: 0 0 10px rgba(57, 255, 136, 0.62);
+  text-transform: uppercase;
+}
+
+.perk-browser__table-wrap {
+  margin: 0;
+  overflow-x: auto;
+}
+
+.perk-browser__table {
+  border-collapse: collapse;
+  min-width: 720px;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.perk-browser__perk-column {
+  width: 35%;
+}
+
+.perk-browser__requirements-column {
+  width: 65%;
+}
+
+.perk-browser__table th,
+.perk-browser__table td {
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.perk-browser__table th {
+  color: var(--green);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.perk-browser__table tr[data-perk-row] > td:first-child {
+  white-space: nowrap;
+}
+
+.perk-browser__filters {
+  align-items: end;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.perk-browser__search {
+  display: grid;
+  flex: 1 1 auto;
+  gap: 6px;
+  min-width: 210px;
+}
+
+.perk-browser__search span {
+  color: var(--green-dim);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.perk-browser__search input {
+  background: rgba(2, 5, 3, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--green-soft);
+  font: inherit;
+  min-height: 38px;
+  padding: 6px 34px 6px 10px;
+  width: 100%;
+}
+
+.perk-browser__search input:focus-visible {
+  border-color: var(--green);
+  outline: none;
+}
+
+.perk-browser__search input::placeholder {
+  color: var(--green-dim);
+  opacity: 1;
+}
+
+.perk-browser__search input[type="search"]::-webkit-search-cancel-button,
+.perk-browser__search input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+.perk-browser__requirements-heading {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.perk-browser__requirements-filter {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  margin-left: 10px;
+}
+
+.perk-browser__requirements-filter input {
+  appearance: none;
+  background: rgba(3, 7, 4, 0.9);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  width: 16px;
+}
+
+.perk-browser__requirements-filter input:hover,
+.perk-browser__requirements-filter input:focus-visible {
+  border-color: var(--green);
+  outline: 0;
+}
+
+.perk-browser__requirements-filter input:checked {
+  background: var(--green);
+  box-shadow: inset 0 0 0 4px var(--black);
+}
+
+.perk-browser__visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.perk-browser__table tr[data-perk-row] {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.perk-browser__table tr[data-perk-row]:hover > td {
+  color: var(--green);
+}
+
+.perk-browser__toggle {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: 700;
+  gap: 8px;
+  padding: 0;
+  text-align: left;
+}
+
+.perk-browser__toggle span {
+  color: var(--green);
+  display: inline-block;
+  font-size: 1.12em;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+  width: 0.8em;
+}
+
+.perk-browser__toggle:focus-visible {
+  color: var(--green);
+  outline: none;
+  text-decoration: none;
+}
+
+.perk-browser__detail td {
+  background: rgba(1, 8, 4, 0.88);
+  padding: 0;
+}
+
+.perk-browser__detail-copy {
+  color: var(--green-soft);
+  line-height: 1.65;
+  padding: 22px 26px;
+  width: 100%;
+}
+
+.perk-browser__detail-copy p {
+  margin: 0 0 14px;
+}
+
+.perk-browser__detail-copy p:last-child {
+  margin-bottom: 0;
+}
+
+.perk-browser__stat-block {
+  border-top: 1px solid var(--line);
+  margin: 18px 0 4px;
+  max-width: 780px;
+  min-width: 0;
+  width: 100%;
+}
+
+.perk-browser__stat-block caption {
+  border-top: 1px solid var(--line);
+  text-transform: none;
+}
+
+.perk-browser__stat-block th,
+.perk-browser__stat-block td {
+  padding: 7px 10px;
+}
+
+.perk-browser__stat-block th[scope="row"] {
+  text-transform: none;
+  white-space: nowrap;
+  width: 185px;
+}
+
+.perk-browser__stat-block .ability-header th,
+.perk-browser__stat-block tbody > tr:nth-child(5) th {
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
+.perk-browser__stat-block .ability-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+.perk-browser__stat-block .ability-grid > span {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.perk-browser__reference {
+  color: var(--green-soft);
+  text-decoration: underline;
+  text-decoration-color: var(--green);
+  text-decoration-style: solid;
+  text-underline-offset: 0.16em;
+}
+
+.perk-browser__reference:hover,
+.perk-browser__reference:focus-visible {
+  color: var(--green);
+  outline: none;
+}
+
+.perk-browser__related {
+  color: inherit;
+  font-size: inherit;
+}
+
+.perk-browser__related strong {
+  color: inherit;
+}
+
+.perk-browser__empty td {
+  color: var(--green-dim);
+  padding: 24px 12px;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .perk-browser__filters {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+}

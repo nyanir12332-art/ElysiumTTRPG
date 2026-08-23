@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="Images/ElysiumIcon.png">
-    <link rel="stylesheet" href="styles/site.css">
+    <link rel="stylesheet" href="styles/site.css?v=26">
     <link rel="stylesheet" href="styles/search.css?v=13">
     <title>Fable</title>
     <style>
@@ -233,6 +233,167 @@
         visibility: visible;
       }
 
+      .message-trigger {
+        align-items: center;
+        background: radial-gradient(circle at 50% 42%, rgba(57, 255, 136, 0.24), rgba(7, 17, 8, 0.96) 65%);
+        border: 1px solid var(--green);
+        box-shadow: inset 0 0 20px rgba(57, 255, 136, 0.14), 0 0 14px rgba(57, 255, 136, 0.48);
+        color: var(--green);
+        cursor: pointer;
+        display: flex;
+        font-family: inherit;
+        font-size: 2rem;
+        font-weight: 700;
+        height: 62px;
+        justify-content: center;
+        left: 20px;
+        line-height: 1;
+        padding: 0;
+        position: fixed;
+        text-shadow: 0 0 8px rgba(57, 255, 136, 0.7);
+        top: 20px;
+        width: 62px;
+        z-index: 30;
+        animation: message-beacon 1.8s ease-in-out infinite;
+      }
+
+      .message-trigger::after {
+        align-items: center;
+        background: var(--green);
+        border: 1px solid #d8ffe7;
+        color: var(--black);
+        content: "1";
+        display: flex;
+        font-family: Arial, sans-serif;
+        font-size: 0.7rem;
+        font-weight: 700;
+        height: 18px;
+        justify-content: center;
+        position: absolute;
+        right: -7px;
+        top: -7px;
+        width: 18px;
+      }
+
+      .message-trigger:hover,
+      .message-trigger:focus-visible {
+        background: rgba(57, 255, 136, 0.14);
+        border-color: var(--green);
+        color: var(--green);
+        outline: none;
+        animation-play-state: paused;
+      }
+
+      .message-overlay {
+        align-items: center;
+        background: radial-gradient(circle at 50% 42%, rgba(17, 74, 39, 0.28), rgba(1, 4, 2, 0.93) 68%);
+        display: flex;
+        inset: 0;
+        justify-content: center;
+        padding: 28px;
+        position: fixed;
+        z-index: 40;
+        animation: message-overlay-in 180ms ease-out both;
+      }
+
+      .message-overlay[hidden] { display: none; }
+
+      .message-letter {
+        background:
+          linear-gradient(rgba(57, 255, 136, 0.035) 50%, rgba(0, 0, 0, 0.08) 50%),
+          radial-gradient(circle at 50% 0, rgba(57, 255, 136, 0.13), transparent 48%),
+          #081109;
+        background-size: 100% 4px, 100% 100%, 100% 100%;
+        border: 1px solid var(--green);
+        box-shadow: inset 0 0 46px rgba(57, 255, 136, 0.12), 0 0 44px rgba(57, 255, 136, 0.27);
+        color: var(--green-soft);
+        line-height: 1.65;
+        max-height: min(86vh, 820px);
+        max-width: 850px;
+        overflow-y: auto;
+        padding: 36px clamp(24px, 6vw, 64px) 48px;
+        position: relative;
+        scrollbar-width: none;
+        width: 100%;
+        animation: letter-unfold 460ms cubic-bezier(0.16, 0.84, 0.26, 1) both;
+      }
+
+      .message-letter::-webkit-scrollbar { display: none; }
+
+      .message-letter__classification {
+        color: var(--green-dim);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        margin: 0 0 10px !important;
+        text-transform: uppercase;
+      }
+
+      .message-letter h2 {
+        border-bottom: 1px solid var(--line);
+        color: var(--green);
+        font-size: clamp(1.2rem, 3vw, 1.6rem);
+        letter-spacing: 0.04em;
+        margin: 0 0 20px;
+        padding: 0 42px 14px 0;
+        text-shadow: 0 0 10px rgba(57, 255, 136, 0.48);
+        text-transform: uppercase;
+      }
+
+      .message-letter p { margin: 0 0 18px; }
+
+      .message-letter p strong {
+        color: var(--green);
+        display: inline-block;
+        letter-spacing: 0.05em;
+        padding: 6px 10px;
+        border: 1px dashed var(--line);
+      }
+
+
+      .message-close {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--green-soft);
+        cursor: pointer;
+        font: inherit;
+        line-height: 1;
+        padding: 7px 10px;
+        position: absolute;
+        right: 14px;
+        top: 14px;
+      }
+
+      .message-close:hover,
+      .message-close:focus-visible { border-color: var(--green); color: var(--green); outline: none; }
+
+      @keyframes message-beacon {
+        0%, 100% { box-shadow: inset 0 0 20px rgba(57, 255, 136, 0.14), 0 0 12px rgba(57, 255, 136, 0.42); transform: scale(1); }
+        50% { box-shadow: inset 0 0 28px rgba(57, 255, 136, 0.28), 0 0 28px rgba(57, 255, 136, 0.8); transform: scale(1.06); }
+      }
+
+      @keyframes message-overlay-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      @keyframes letter-unfold {
+        from { opacity: 0; transform: perspective(1200px) translateY(30px) scale(0.94) rotateX(-6deg); }
+        to { opacity: 1; transform: perspective(1200px) translateY(0) scale(1) rotateX(0); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .message-trigger,
+        .message-overlay,
+        .message-letter { animation: none; }
+      }
+
+      @media (max-width: 600px) {
+        .message-trigger { height: 52px; left: 10px; top: 10px; width: 52px; }
+        .message-overlay { padding: 12px; }
+        .message-letter { padding: 54px 22px 30px; }
+      }
+
       @media (max-width: 760px) {
         .categories {
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -251,6 +412,20 @@
     </style>
   </head>
   <body>
+    <button class="message-trigger" id="message-trigger" type="button" aria-label="Open letter from Ozwald" aria-controls="ozwald-letter" aria-expanded="false">✉</button>
+    <div class="message-overlay" id="ozwald-letter" role="dialog" aria-modal="true" aria-labelledby="ozwald-letter-title" hidden>
+      <article class="message-letter">
+        <button class="message-close" id="message-close" type="button" aria-label="Close letter">×</button>
+        <p class="message-letter__classification">Private correspondence // priority delivery</p>
+        <h2 id="ozwald-letter-title">A Letter from Ozwald</h2>
+        <p><strong>Sender: Ozwald</strong></p>
+        <p>May you receive this in your time of need.</p>
+        <p>The City you live in has made time and life two of its many currencies. Everyday life is a struggle, even for the common person. Corporations will find a way to monetize some aspect of mortal life through magic and law-defying Singularities. Officials and The Head have no interest in helping the needy; they even call this City some sort of cultivation, a garden of their suffering. What lies outside the layers, down in The Ruins, is nothing short of hell itself. Even if you are able to fight your way through the hordes of monstrosities, nothing awaits you beyond The City. There is no Eden, promised land, or heaven. There are only The Wastes, which even the gods turned their backs on.</p>
+        <p>In this kind of life, people have forsaken their dreams to live today and, in doing so, have no future to look forward to. I am not looking for people who wish for a better future for the City, for their family, or for someone else. What I seek are people who will not—who will never, not even for a moment—compromise or give up their dream. The White Nights and Dark Days have given people the ability to dream even in this place, but there are very few of you.</p>
+        <p>If you have not given up on your dream, allow me to extend a helping hand. Within this letter are a first-class WARP train ticket and a temporary District D Nest ID. These will grant you safe passage to District D's Nest. When you are there, meet me at what they call the Gates of Horn and Ivory. It is a hotel where I have already made reservations for you.</p>
+        <p>Of course, you are free to sell the contents of this letter, but I assure you that you will never be this close to finding a thread of hope for the future you wish to witness.</p>
+      </article>
+    </div>
     <div class="screen">
       <header>
         <nav class="topbar home-page-nav" aria-label="Site header">
@@ -260,7 +435,7 @@
           <a href="backgrounds/index.html">Backgrounds</a>
           <a href="items/index.html">Items</a>
           <span class="menu-break" aria-hidden="true"></span>
-          <a href="#">Perks</a>
+          <a href="perks/index.html">Perks</a>
           <a href="systems/index.html">Systems</a>
           <a href="lore/index.html">Lore</a>
           <a href="records/index.html">Records</a>
@@ -277,7 +452,7 @@
           <a class="category" href="races/index.html"><span class="category-index">02</span><span class="category-title">Races</span></a>
           <a class="category" href="backgrounds/index.html"><span class="category-index">03</span><span class="category-title">Backgrounds</span></a>
           <a class="category" href="items/index.html"><span class="category-index">04</span><span class="category-title">Items</span></a>
-          <a class="category" href="#"><span class="category-index">05</span><span class="category-title">Perks</span></a>
+          <a class="category" href="perks/index.html"><span class="category-index">05</span><span class="category-title">Perks</span></a>
           <a class="category" href="systems/index.html"><span class="category-index">06</span><span class="category-title">Systems</span></a>
           <a class="category" href="lore/index.html"><span class="category-index">07</span><span class="category-title">Lore</span></a>
               <a class="category" href="records/index.html"><span class="category-index">08</span><span class="category-title">Records</span></a>
@@ -287,7 +462,29 @@
     </div>
     <script src="scripts/search.js?v=8"></script>
     <script src="scripts/spell-manifest.js?v=1"></script>
-    <script src="scripts/spell-links.js?v=8" data-spell-index="systems/spellcasting.html"></script>
+    <script src="scripts/spell-links.js?v=9" data-spell-index="systems/spellcasting.html"></script>
+    <script>
+      (() => {
+        const trigger = document.querySelector("#message-trigger");
+        const overlay = document.querySelector("#ozwald-letter");
+        const close = document.querySelector("#message-close");
+        if (!trigger || !overlay || !close) return;
+        const setOpen = (open) => {
+          overlay.hidden = !open;
+          trigger.setAttribute("aria-expanded", String(open));
+          if (open) close.focus();
+          else trigger.focus();
+        };
+        trigger.addEventListener("click", () => setOpen(true));
+        close.addEventListener("click", () => setOpen(false));
+        overlay.addEventListener("click", (event) => {
+          if (event.target === overlay) setOpen(false);
+        });
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && !overlay.hidden) setOpen(false);
+        });
+      })();
+    </script>
     <script>
       (() => {
         const track = document.createElement("div");

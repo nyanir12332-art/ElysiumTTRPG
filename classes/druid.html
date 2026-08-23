@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
-    <link rel="stylesheet" href="../styles/site.css">
+    <link rel="stylesheet" href="../styles/site.css?v=26">
     <link rel="stylesheet" href="../styles/classes.css">
     <title>Druid - Fable</title>
       <link rel="stylesheet" href="../styles/search.css?v=13">
@@ -21,7 +21,7 @@
           <a href="../races/index.html">Races</a>
           <a href="../backgrounds/index.html">Backgrounds</a>
           <a href="../items/index.html">Items</a>
-          <span class="menu-break" aria-hidden="true"></span><a href="#">Perks</a>
+          <span class="menu-break" aria-hidden="true"></span><a href="../perks/index.html">Perks</a>
           <a href="../systems/index.html">Systems</a>
           <a href="../lore/index.html">Lore</a>
           <a href="#">Records</a>
@@ -144,9 +144,9 @@
           <h3 class="minor-heading">Spellcasting Focus</h3>
           <p>You can use a druidic focus as a spellcasting focus for your druid spells.</p>
 
-          <h3>Wild Shape</h3>
+          <h3 id="wild-shape">Wild Shape</h3>
           <p>Starting at 2nd level, you can use your action to magically assume the shape of a beast that you have seen before. You can use this feature twice. You regain expended uses when you finish a short or long rest.</p>
-          <p>Your druid level determines the beasts you can transform into, as shown in the Beast Shapes table. At 2nd level, for example, you can transform into any beast that has a challenge rating of 1/4 or lower that doesn't have a flying or swimming speed.</p>
+          <p>Your druid level determines the beasts you can transform into, as shown in the Beast Shapes table. At 2nd level, for example, you can transform into any beast that has a challenge rating of 0.25 or lower that doesn't have a flying or swimming speed.</p>
 
           <div class="table-wrap feature-table">
             <table>
@@ -160,8 +160,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr><td>2nd</td><td>1/4</td><td>No flying or swimming speed</td><td>Wolf</td></tr>
-                <tr><td>4th</td><td>1/2</td><td>No flying speed</td><td>Crocodile</td></tr>
+              <tr><td>2nd</td><td>0.25</td><td>No flying or swimming speed</td><td>Wolf</td></tr>
+              <tr><td>4th</td><td>0.5</td><td>No flying speed</td><td>Crocodile</td></tr>
                 <tr><td>8th</td><td>1</td><td>-</td><td>Giant eagle</td></tr>
               </tbody>
             </table>
@@ -220,7 +220,7 @@
         <script src="../scripts/table-scrollbars.js"></script>
     <script src="../scripts/search.js?v=8"></script>
     <script src="../scripts/spell-manifest.js?v=1"></script>
-    <script src="../scripts/spell-links.js?v=8" data-spell-index="../systems/spellcasting.html"></script>
+    <script src="../scripts/spell-links.js?v=9" data-spell-index="../systems/spellcasting.html"></script>
     <script src="../scripts/crt-scrollbar.js?v=1"></script>
   </body>
 </html>

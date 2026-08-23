@@ -58,7 +58,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "arcane-hand",
-    "name": "Hand"
+    "name": "Arcane Hand"
   },
   {
     "id": "arcane-lock",
@@ -66,11 +66,11 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "arcane-sword",
-    "name": "Sword"
+    "name": "Arcane Sword"
   },
   {
     "id": "arcanists-magic-aura",
-    "name": "Magic Aura"
+    "name": "Mystic Aura"
   },
   {
     "id": "astral-projection",
@@ -106,7 +106,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "black-tentacles",
-    "name": "Black Tentacles"
+    "name": "Grasping Tentacles"
   },
   {
     "id": "blade-barrier",
@@ -207,30 +207,6 @@ window.SPELL_MANIFEST = [
   {
     "id": "confusion",
     "name": "Confusion"
-  },
-  {
-    "id": "conjure-animals",
-    "name": "Conjure Animals"
-  },
-  {
-    "id": "conjure-celestial",
-    "name": "Conjure Celestial"
-  },
-  {
-    "id": "conjure-elemental",
-    "name": "Conjure Elemental"
-  },
-  {
-    "id": "conjure-fey",
-    "name": "Conjure Fey"
-  },
-  {
-    "id": "conjure-minor-elementals",
-    "name": "Conjure Minor Elementals"
-  },
-  {
-    "id": "conjure-woodland-beings",
-    "name": "Conjure Woodland Beings"
   },
   {
     "id": "contact-other-plane",
@@ -422,7 +398,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "faithful-hound",
-    "name": "Faithful Hound"
+    "name": "Watchful Hound"
   },
   {
     "id": "false-life",
@@ -494,7 +470,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "floating-disk",
-    "name": "Floating Disk"
+    "name": "Arcane Disk"
   },
   {
     "id": "fly",
@@ -522,7 +498,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "freezing-sphere",
-    "name": "Freezing Sphere"
+    "name": "Frozen Sphere"
   },
   {
     "id": "gaseous-form",
@@ -555,10 +531,6 @@ window.SPELL_MANIFEST = [
   {
     "id": "glyph-of-warding",
     "name": "Glyph of Warding"
-  },
-  {
-    "id": "goodberry",
-    "name": "Goodberry"
   },
   {
     "id": "grease",
@@ -634,7 +606,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "hideous-laughter",
-    "name": "Hideous Laughter"
+    "name": "Uncontrollable Laughter"
   },
   {
     "id": "hold-monster",
@@ -686,7 +658,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "instant-summons",
-    "name": "Instant Summons"
+    "name": "Arcane Summons"
   },
   {
     "id": "invisibility",
@@ -694,7 +666,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "irresistible-dance",
-    "name": "Irresistible Dance"
+    "name": "Compelling Dance"
   },
   {
     "id": "jump",
@@ -770,7 +742,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "magnificent-mansion",
-    "name": "Magnificent Mansion"
+    "name": "Grand Mansion"
   },
   {
     "id": "major-image",
@@ -918,7 +890,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "private-sanctum",
-    "name": "Private Sanctum"
+    "name": "Warded Sanctum"
   },
   {
     "id": "produce-flame",
@@ -974,7 +946,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "resilient-sphere",
-    "name": "Resilient Sphere"
+    "name": "Protective Sphere"
   },
   {
     "id": "resistance",
@@ -1014,7 +986,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "secret-chest",
-    "name": "Secret Chest"
+    "name": "Hidden Chest"
   },
   {
     "id": "see-invisibility",
@@ -1150,7 +1122,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "telepathic-bond",
-    "name": "Telepathic Bond"
+    "name": "Psychic Bond"
   },
   {
     "id": "teleport",
@@ -1174,7 +1146,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "tiny-hut",
-    "name": "Tiny Hut"
+    "name": "Sheltering Hut"
   },
   {
     "id": "tongues",
@@ -1347,5 +1319,165 @@ window.SPELL_MANIFEST = [
   {
     "id": "control-flames",
     "name": "Control Flames"
-  }
+  },
+  {"id":"absorb-elements","name":"Absorb Elements"},
+  {"id":"armor-of-agathys","name":"Armor of Agathys"},
+  {"id":"arms-of-hadar","name":"Arms of Hadar"},
+  {"id":"beast-bond","name":"Beast Bond"},
+  {"id":"catapult","name":"Catapult"},
+  {"id":"cause-fear","name":"Cause Fear"},
+  {"id":"ceremony","name":"Ceremony"},
+  {"id":"chaos-bolt","name":"Chaos Bolt"},
+  {"id":"chromatic-orb","name":"Chromatic Orb"},
+  {"id":"compelled-duel","name":"Compelled Duel"},
+  {"id":"dissonant-whispers","name":"Dissonant Whispers"},
+  {"id":"distort-value","name":"Distort Value"},
+  {"id":"earth-tremor","name":"Earth Tremor"},
+  {"id":"ensnaring-strike","name":"Ensnaring Strike"},
+  {"id":"frost-fingers","name":"Frost Fingers"},
+  {"id":"hail-of-thorns","name":"Hail of Thorns"},
+  {"id":"hex","name":"Hex"},
+  {"id":"ice-knife","name":"Ice Knife"},
+  {"id":"puppet","name":"Puppet"},
+  {"id":"caustic-brew","name":"Caustic Brew"},
+  {"id":"thunderous-smite","name":"Thunderous Smite"},
+  {"id":"witch-bolt","name":"Witch Bolt"},
+  {"id":"wrathful-smite","name":"Wrathful Smite"},
+  {"id":"flame-scorcher","name":"Flame Scorcher"},
+  {"id":"beast-sense","name":"Beast Sense"},
+  {"id":"borrowed-knowledge","name":"Borrowed Knowledge"},
+  {"id":"cloud-of-daggers","name":"Cloud of Daggers"},
+  {"id":"cordon-of-arrows","name":"Cordon of Arrows"},
+  {"id":"crown-of-madness","name":"Crown of Madness"},
+  {"id":"dust-devil","name":"Dust Devil"},
+  {"id":"dragons-breath","name":"Dragon's Breath"},
+  {"id":"earthbind","name":"Earthbind"},
+  {"id":"flock-of-familiars","name":"Flock of Familiars"},
+  {"id":"gift-of-gab","name":"Gift of Gab"},
+  {"id":"healing-spirit","name":"Healing Spirit"},
+  {"id":"kinetic-jaunt","name":"Kinetic Jaunt"},
+  {"id":"earthen-grasp","name":"Earthen Grasp"},
+  {"id":"mind-spike","name":"Mind Spike"},
+  {"id":"fey-mischief","name":"Fey Mischief"},
+  {"id":"phantasmal-force","name":"Phantasmal Force"},
+  {"id":"pyrotechnics","name":"Pyrotechnics"},
+  {"id":"binding-ice","name":"Binding Ice"},
+  {"id":"shadow-blade","name":"Shadow Blade"},
+  {"id":"snowball-swarm","name":"Snowball Swarm"},
+  {"id":"spray-of-cards","name":"Spray of Cards"},
+  {"id":"summon-beast","name":"Summon Beast"},
+  {"id":"psychic-whip","name":"Psychic Whip"},
+  {"id":"vortex-warp","name":"Vortex Warp"},
+  {"id":"warding-wind","name":"Warding Wind"},
+  {"id":"wither-and-bloom","name":"Wither and Bloom"},
+  {"id":"crusaders-mantle","name":"Crusader's Mantle"},
+  {"id":"elemental-weapon","name":"Elemental Weapon"},
+  {"id":"enemies-abound","name":"Enemies Abound"},
+  {"id":"erupting-earth","name":"Erupting Earth"},
+  {"id":"fast-friends","name":"Fast Friends"},
+  {"id":"feign-death","name":"Feign Death"},
+  {"id":"flame-arrows","name":"Flame Arrows"},
+  {"id":"flame-stride","name":"Flame Stride"},
+  {"id":"fortified-tower","name":"Fortified Tower"},
+  {"id":"hunger-of-hadar","name":"Hunger of Hadar"},
+  {"id":"incite-greed","name":"Incite Greed"},
+  {"id":"intellect-fortress","name":"Intellect Fortress"},
+  {"id":"life-transference","name":"Life Transference"},
+  {"id":"lightning-arrow","name":"Lightning Arrow"},
+  {"id":"orbiting-meteors","name":"Orbiting Meteors"},
+  {"id":"motivational-speech","name":"Motivational Speech"},
+  {"id":"spirit-shroud","name":"Spirit Shroud"},
+  {"id":"summon-lesser-demons","name":"Summon Lesser Demons"},
+  {"id":"summon-fey","name":"Summon Fey"},
+  {"id":"summon-shadowspawn","name":"Summon Shadowspawn"},
+  {"id":"summon-undead","name":"Summon Undead"},
+  {"id":"thunder-step","name":"Thunder Step"},
+  {"id":"summon-warrior-spirit","name":"Summon Warrior Spirit"},
+  {"id":"tidal-wave","name":"Tidal Wave"},
+  {"id":"tiny-servant","name":"Tiny Servant"},
+  {"id":"wall-of-sand","name":"Wall of Sand"},
+  {"id":"wall-of-water","name":"Wall of Water"},
+  {"id":"aura-of-vitality","name":"Aura of Vitality"},
+  {"id":"blinding-smite","name":"Blinding Smite"},
+  {"id":"catnap","name":"Catnap"},
+  {"id":"conjure-barrage","name":"Conjure Barrage"},
+  {"id":"swift-courier","name":"Swift Courier"},
+  {"id":"grasping-vine","name":"Grasping Vine"},
+  {"id":"guardian-of-nature","name":"Guardian of Nature"},
+  {"id":"psychic-lance","name":"Psychic Lance"},
+  {"id":"shadow-of-moil","name":"Shadow of Moil"},
+  {"id":"sickening-radiance","name":"Sickening Radiance"},
+  {"id":"summon-construct","name":"Summon Construct"},
+  {"id":"summon-elemental","name":"Summon Elemental"},
+  {"id":"summon-greater-demon","name":"Summon Greater Demon"},
+  {"id":"staggering-smite","name":"Staggering Smite"},
+  {"id":"storm-sphere","name":"Storm Sphere"},
+  {"id":"summon-aberration","name":"Summon Aberration"},
+  {"id":"vitriolic-sphere","name":"Vitriolic Sphere"},
+  {"id":"watery-sphere","name":"Watery Sphere"},
+  {"id":"charm-monster","name":"Charm Monster"},
+  {"id":"elemental-bane","name":"Elemental Bane"},
+  {"id":"find-greater-steed","name":"Find Greater Steed"},
+  {"id":"aura-of-life","name":"Aura of Life"},
+  {"id":"aura-of-purity","name":"Aura of Purity"},
+  {"id":"banishing-smite","name":"Banishing Smite"},
+  {"id":"circle-of-power","name":"Circle of Power"},
+  {"id":"conjure-volley","name":"Conjure Volley"},
+  {"id":"control-winds","name":"Control Winds"},
+  {"id":"danse-macabre","name":"Danse Macabre"},
+  {"id":"dawn","name":"Dawn"},
+  {"id":"destructive-wave","name":"Destructive Wave"},
+  {"id":"enervation","name":"Enervation"},
+  {"id":"far-step","name":"Far Step"},
+  {"id":"holy-weapon","name":"Holy Weapon"},
+  {"id":"immolation","name":"Immolation"},
+  {"id":"infernal-calling","name":"Infernal Calling"},
+  {"id":"maelstrom","name":"Maelstrom"},
+  {"id":"negative-energy-flood","name":"Negative Energy Flood"},
+  {"id":"skill-empowerment","name":"Skill Empowerment"},
+  {"id":"steel-wind-strike","name":"Steel Wind Strike"},
+  {"id":"summon-celestial","name":"Summon Celestial"},
+  {"id":"summon-draconic-spirit","name":"Summon Draconic Spirit"},
+  {"id":"synaptic-static","name":"Synaptic Static"},
+  {"id":"swift-quiver","name":"Swift Quiver"},
+  {"id":"transmute-rock","name":"Transmute Rock"},
+  {"id":"wall-of-light","name":"Wall of Light"},
+  {"id":"wrath-of-nature","name":"Wrath of Nature"},
+  {"id":"arcane-gate","name":"Arcane Gate"},
+  {"id":"bones-of-the-earth","name":"Bones of the Earth"},
+  {"id":"create-homunculus","name":"Create Homunculus"},
+  {"id":"druid-grove","name":"Druid Grove"},
+  {"id":"platinum-shield","name":"Platinum Shield"},
+  {"id":"investiture-of-flame","name":"Investiture of Flame"},
+  {"id":"investiture-of-ice","name":"Investiture of Ice"},
+  {"id":"investiture-of-stone","name":"Investiture of Stone"},
+  {"id":"investiture-of-wind","name":"Investiture of Wind"},
+  {"id":"mental-prison","name":"Mental Prison"},
+  {"id":"primordial-ward","name":"Primordial Ward"},
+  {"id":"scatter","name":"Scatter"},
+  {"id":"soul-cage","name":"Soul Cage"},
+  {"id":"summon-fiend","name":"Summon Fiend"},
+  {"id":"otherworldly-guise","name":"Otherworldly Guise"},
+  {"id":"martial-transformation","name":"Martial Transformation"},
+  {"id":"create-magen","name":"Create Magen"},
+  {"id":"crown-of-stars","name":"Crown of Stars"},
+  {"id":"draconic-transformation","name":"Draconic Transformation"},
+  {"id":"dream-of-the-blue-veil","name":"Dream of the Blue Veil"},
+  {"id":"power-word-pain","name":"Power Word: Pain"},
+  {"id":"temple-of-the-gods","name":"Temple of the Gods"},
+  {"id":"whirlwind","name":"Whirlwind"},
+  {"id":"horrid-wilting","name":"Horrid Wilting"},
+  {"id":"dark-star","name":"Dark Star"},
+  {"id":"illusory-dragon","name":"Illusory Dragon"},
+  {"id":"maddening-darkness","name":"Maddening Darkness"},
+  {"id":"mighty-fortress","name":"Mighty Fortress"},
+  {"id":"reality-break","name":"Reality Break"},
+  {"id":"telepathy","name":"Telepathy"},
+  {"id":"tsunami","name":"Tsunami"},
+  {"id":"blade-of-disaster","name":"Blade of Disaster"},
+  {"id":"invulnerability","name":"Invulnerability"},
+  {"id":"mass-polymorph","name":"Mass Polymorph"},
+  {"id":"power-word-heal","name":"Power Word: Heal"},
+  {"id":"psychic-scream","name":"Psychic Scream"},
+  {"id":"ravenous-void","name":"Ravenous Void"}
 ];

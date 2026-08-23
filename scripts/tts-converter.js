@@ -37,6 +37,9 @@
   const spellMaterial = document.querySelector('#spell-material');
   const spellTags = document.querySelector('#spell-tags');
   const spellMaterialField = document.querySelector('#spell-material-field');
+  const perkFields = document.querySelector('#perk-fields');
+  const perkRequirement = document.querySelector('#perk-requirement');
+  const perkRequiredBy = document.querySelector('#perk-required-by');
   const status = document.querySelector('#tts-status');
 
   if (!front || !back) return;
@@ -54,6 +57,7 @@
     spell: '../Images/SPELL.png',
     technique: '../Images/TECHNIQUE.png',
     item: '../Images/ITEM.png',
+    perk: '../Images/PERK.png?v=2',
   };
   const icons = {};
 
@@ -156,7 +160,9 @@
 
       if (tag === 'p' || tag === 'div') {
         startBlock();
-        Array.from(node.childNodes).forEach((child) => walk(child, style, list));
+        Array.from(node.childNodes)
+          .filter((child) => child.nodeType !== Node.TEXT_NODE || /\S/.test(child.nodeValue || ''))
+          .forEach((child) => walk(child, style, list));
         flushLine(0.55);
         return;
       }
@@ -187,7 +193,9 @@
         currentIndent = 34;
         const marker = list && list.type === 'ol' ? `${list.index}. ` : '• ';
         appendRun(marker, style);
-        Array.from(node.childNodes).forEach((child) => walk(child, style, list));
+        Array.from(node.childNodes)
+          .filter((child) => child.nodeType !== Node.TEXT_NODE || /\S/.test(child.nodeValue || ''))
+          .forEach((child) => walk(child, style, list));
         flushLine();
         return;
       }
@@ -444,13 +452,19 @@
       drawFittedDetailLine(context, label, value, 18, lineY, 264, 11);
     });
 
-    const meta = type.value === 'item'
+    const itemMeta = type.value === 'item'
       ? [
         [
           itemCost.value.trim() ? `<b>COST</b>  ${itemCost.value.trim()}` : '',
           itemWeight.value.trim() ? `<b>WEIGHT</b>  ${itemWeight.value.trim()}` : '',
         ].filter(Boolean).join('    '),
         itemProperties.value.trim() ? `<b>PROPERTIES</b>  ${itemProperties.value.trim()}` : '',
+      ].filter(Boolean).join('\n')
+      : '';
+    const perkMeta = type.value === 'perk'
+      ? [
+        perkRequirement.value.trim() ? `<b>REQUIREMENTS</b>  ${perkRequirement.value.trim()}` : '',
+        perkRequiredBy.value.trim() ? `<b>REQUIRED BY</b>  ${perkRequiredBy.value.trim()}` : '',
       ].filter(Boolean).join('\n')
       : '';
     const spellComponents = [
@@ -472,7 +486,7 @@
     const spellTagLine = type.value === 'spell' && spellTags.value.trim()
       ? `<b>TAGS</b>  ${spellTags.value.trim()}`
       : '';
-    const body = [spellMeta, description.value, spellTagLine, meta].filter((value) => value && value.trim()).join('\n\n');
+    const body = [spellMeta, description.value, spellTagLine, itemMeta, perkMeta].filter((value) => value && value.trim()).join('\n\n');
     const bodyStart = subtitleBodyStart + (itemDetailLines.length ? (itemDetailLines.length * 22) : 0);
     drawFittedTextBlock(context, body, 18, bodyStart, 264, height - bodyStart - 14, 11, COLORS.soft);
     context.restore();
@@ -598,13 +612,19 @@
       drawFittedDetailLine(context, label, value, 40, lineY, 670, 24);
     });
 
-    const meta = cardType === 'item'
+    const itemMeta = cardType === 'item'
       ? [
         [
           itemCost.value.trim() ? `<b>COST</b>  ${itemCost.value.trim()}` : '',
           itemWeight.value.trim() ? `<b>WEIGHT</b>  ${itemWeight.value.trim()}` : '',
         ].filter(Boolean).join('    '),
         itemProperties.value.trim() ? `<b>PROPERTIES</b>  ${itemProperties.value.trim()}` : '',
+      ].filter(Boolean).join('\n')
+      : '';
+    const perkMeta = cardType === 'perk'
+      ? [
+        perkRequirement.value.trim() ? `<b>REQUIREMENTS</b>  ${perkRequirement.value.trim()}` : '',
+        perkRequiredBy.value.trim() ? `<b>REQUIRED BY</b>  ${perkRequiredBy.value.trim()}` : '',
       ].filter(Boolean).join('\n')
       : '';
     const spellComponents = [
@@ -626,7 +646,7 @@
     const spellTagLine = cardType === 'spell' && spellTags.value.trim()
       ? `<b>TAGS</b>  ${spellTags.value.trim()}`
       : '';
-    const body = [spellMeta, description.value, spellTagLine, meta].filter((value) => value && value.trim()).join('\n\n');
+    const body = [spellMeta, description.value, spellTagLine, itemMeta, perkMeta].filter((value) => value && value.trim()).join('\n\n');
     // Do not reserve the subtitle band when it is empty. Keep a small reading
     // gap below the title divider, then give the description the full height.
     const bodyStart = subtitleBodyStart + (itemDetailLines.length ? (itemDetailLines.length * 45) : 0);
@@ -707,6 +727,7 @@
   const draw = () => {
     itemFields.hidden = type.value !== 'item';
     spellFields.hidden = type.value !== 'spell';
+    perkFields.hidden = type.value !== 'perk';
     spellMaterialField.hidden = type.value !== 'spell' || !spellComponentM.checked;
     drawFront();
     drawBack();

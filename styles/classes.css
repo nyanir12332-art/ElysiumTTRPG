@@ -1,6 +1,6 @@
 .class-list {
   align-items: start;
-  border-top: 1px solid var(--line);
+  border-top: 0;
   display: grid;
   gap: 18px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -394,6 +394,11 @@ tbody tr:hover {
 .stat-block {
   border-left: 0;
   border-right: 0;
+}
+
+/* Keep the statblock table's top edge explicit across every page. */
+table.stat-block {
+  border-top: 1px solid var(--line);
 }
 
 .stat-block tbody tr:hover,

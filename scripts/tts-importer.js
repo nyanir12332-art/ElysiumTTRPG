@@ -31,6 +31,8 @@
   const spellComponentM = document.querySelector('#spell-component-m');
   const spellMaterial = document.querySelector('#spell-material');
   const spellTags = document.querySelector('#spell-tags');
+  const perkRequirement = document.querySelector('#perk-requirement');
+  const perkRequiredBy = document.querySelector('#perk-required-by');
   const siteRoot = new URL('../', document.baseURI);
   const indexUrl = new URL('../search-index.json', document.baseURI);
   let indexPromise;
@@ -71,6 +73,25 @@
       });
     return `<table>${rows.join('')}</table>`;
   };
+  const structuredTable = (table) => {
+    if (!table || !Array.isArray(table.headers) || !Array.isArray(table.rows)) return '';
+    const title = table.title ? `<h2>${formatSpellInline(table.title)}</h2>` : '';
+    const header = `<tr>${table.headers.map((cell) => `<th>${formatSpellInline(cell)}</th>`).join('')}</tr>`;
+    const rows = table.rows.map((row) => `<tr>${row.map((cell) => `<td>${formatSpellInline(cell)}</td>`).join('')}</tr>`).join('');
+    return `${title}<table>${header}${rows}</table>`;
+  };
+  const structuredStatblock = (block) => {
+    if (!block || !block.name) return '';
+    const details = Array.isArray(block.details) ? block.details : [];
+    const traits = Array.isArray(block.traits) ? block.traits : [];
+    const actions = Array.isArray(block.actions) ? block.actions : [];
+    const rows = details.map(({ label, value }) => `<tr><td><b>${formatSpellInline(label)}</b></td><td>${formatSpellInline(value)}</td></tr>`).join('');
+    const traitMarkup = traits.map(({ name, text }) => `<p><b><i>${formatSpellInline(name)}</i></b> ${formatSpellInline(text)}</p>`).join('');
+    const actionMarkup = actions.length
+      ? `<h3>Actions</h3>${actions.map(({ name, text }) => `<p><b><i>${formatSpellInline(name)}</i></b> ${formatSpellInline(text)}</p>`).join('')}`
+      : '';
+    return `<div class="spell-statblock"><h2>${formatSpellInline(block.name)}</h2>${block.subtitle ? `<p><i>${formatSpellInline(block.subtitle)}</i></p>` : ''}<table class="spell-statblock__table">${rows}</table>${traitMarkup}${actionMarkup}</div>`;
+  };
   const formatSpellDescription = (spell) => {
     const descriptionBlocks = spell.description || [];
     const blocks = [...descriptionBlocks, ...(spell.higherLevel || []).filter(Boolean)];
@@ -94,6 +115,8 @@
       const higherLevel = index >= descriptionBlocks.length;
       markup.push(`<p>${higherLevel ? '<b>At Higher Levels.</b> ' : ''}${formatSpellInline(block)}</p>`);
     }
+    markup.push(...(spell.tables || []).map(structuredTable));
+    markup.push(...(spell.statblocks || []).map(structuredStatblock));
     return markup.join('');
   };
   const extractSpellMaterial = (components) => {
@@ -123,6 +146,57 @@
     path: 'systems/spellcasting.html',
     spell,
   }));
+  const backgroundEntries = async () => {
+    const backgroundIndex = new URL('backgrounds/index.html', siteRoot);
+    const pageDocument = await getPage(backgroundIndex.href);
+    return Array.from(pageDocument.querySelectorAll('.background-list a[href]'))
+      .map((link) => {
+        const title = normalize(link.textContent);
+        const href = new URL(link.getAttribute('href'), backgroundIndex.href).href;
+        const fileName = new URL(href).pathname.split('/').pop();
+        return {
+          title: `Background: ${title} - Fable`,
+          text: title,
+          href,
+          path: `backgrounds/${fileName}`,
+        };
+      })
+      .filter((entry) => entry.path !== 'backgrounds/index.html');
+  };
+  const uniqueEntries = (entries) => [...new Map(entries.map((entry) => [
+    `${String(entry.path || '').toLowerCase()}|${String(entry.title || '').toLowerCase()}`,
+    entry,
+  ])).values()];
+  const perkEntries = () => {
+    const perks = Array.isArray(window.PERKS) ? window.PERKS : [];
+    const requiredBy = new Map(perks.map((perk) => [perk.id, []]));
+    perks.forEach((perk) => {
+      const requirements = String(perk.requirements || '')
+        .split(/[,/]/)
+        .map((requirement) => requirement.replace(/^\s*\d+\s+/, '').replace(/\s+(?:perks|feats)\s*$/i, '').trim().toLowerCase());
+      perks.forEach((candidate) => {
+        if (candidate.id !== perk.id && requirements.includes(candidate.name.toLowerCase())) requiredBy.get(candidate.id).push(perk.name);
+      });
+    });
+    return perks.map((perk) => ({
+      title: `Perk: ${perk.name} - Fable`,
+      text: [perk.name, perk.description, perk.requirements, ...(requiredBy.get(perk.id) || [])].filter(Boolean).join(' '),
+      path: 'perks/index.html',
+      perk: {
+        ...perk,
+        requiredBy: (requiredBy.get(perk.id) || []).join(', '),
+      },
+    }));
+  };
+
+  const extractPerk = (perk) => ({
+    type: 'perk',
+    title: perk.name,
+    subtitle: 'Perk',
+    description: escapeText(perk.description),
+    requirement: perk.requirements || '',
+    requiredBy: perk.requiredBy || '',
+  });
 
   const itemAliases = new Map([
     ['ram, portable', 'portable ram'],
@@ -238,16 +312,28 @@
         } catch (error) {
           // The rest of the catalog remains usable if the item catalog cannot load.
         }
-        entries.push(...spellEntries());
-        return entries;
+        try {
+          entries.push(...await backgroundEntries());
+        } catch (error) {
+          // Background imports remain optional when the background catalog cannot load.
+        }
+        entries.push(...spellEntries(), ...perkEntries());
+        return uniqueEntries(entries);
       })
-      // Spell imports stay available even if the optional site search index cannot load.
-      .catch(() => spellEntries());
+      // Spell and perk imports stay available even if the optional site search index cannot load.
+      .catch(async () => {
+        try {
+          return uniqueEntries([...await backgroundEntries(), ...spellEntries(), ...perkEntries()]);
+        } catch (error) {
+          return uniqueEntries([...spellEntries(), ...perkEntries()]);
+        }
+      });
     return indexPromise;
   };
 
   const pageKind = (entry) => {
     if (entry.spell) return 'spell';
+    if (entry.perk) return 'perk';
     if (/^races\//i.test(entry.path)) return 'race';
     if (/^backgrounds\//i.test(entry.path)) return 'background';
     if (/^items\//i.test(entry.path)) return 'item';
@@ -369,6 +455,7 @@
 
   const extractEntry = async (entry, query) => {
     if (entry.spell) return extractSpell(entry.spell);
+    if (entry.perk) return extractPerk(entry.perk);
     if (pageKind(entry) === 'item') return extractItem(entry);
     const document = await getPage(entry.href);
     const main = document.querySelector('main');
@@ -634,6 +721,95 @@
     status.textContent = 'Choose the race description, statistics, or a subrace.';
   };
 
+  const contentBeforeHeading = (container, headingText) => {
+    const target = String(headingText).toLowerCase();
+    const children = Array.from(container.children);
+    const stopIndex = children.findIndex((child) => normalize(child.textContent).toLowerCase() === target);
+    return children
+      .slice(0, stopIndex < 0 ? children.length : stopIndex)
+      .map(serialize)
+      .join('');
+  };
+
+  const contentUntilNextOption = (heading, optionHeadings) => {
+    const markup = [];
+    let sibling = heading.nextElementSibling;
+    while (sibling) {
+      if (optionHeadings.includes(sibling)) break;
+      markup.push(serialize(sibling));
+      sibling = sibling.nextElementSibling;
+    }
+    return markup.join('');
+  };
+
+  const showBackgroundChoices = (entry, pageDocument) => {
+    const copy = pageDocument.querySelector('main .class-copy');
+    const backgroundTitle = titleFromPrompt(pageDocument, entry.title);
+    if (!copy) return false;
+
+    const splitBackgrounds = new Map([
+      ['nest dweller', ['Nest Access', 'District of Origin Options']],
+      ['backstreets rat', ['Rat Network', 'District of Origin Options']],
+      ['associate fixer', ['Association Sponsorship', 'Association Options']],
+    ]);
+    const split = splitBackgrounds.get(backgroundTitle.toLowerCase());
+    if (split) {
+      clearResults();
+      const [coreHeading, optionsHeading] = split;
+      const options = Array.from(copy.querySelectorAll(':scope > h2'))
+        .find((heading) => normalize(heading.textContent).toLowerCase() === optionsHeading.toLowerCase());
+      addChoice(backgroundTitle, `Background through ${coreHeading}`, () => {
+        fillBuilder({
+          type: 'feature',
+          title: backgroundTitle,
+          subtitle: 'Background',
+          description: contentBeforeHeading(copy, optionsHeading),
+        });
+        status.textContent = `${backgroundTitle} loaded into Card Builder.`;
+      });
+      if (options) {
+        const allHeadings = Array.from(copy.querySelectorAll(':scope > h3'));
+        const optionHeadings = backgroundTitle.toLowerCase() === 'associate fixer'
+          ? allHeadings.filter((heading, index) => index % 2 === 0)
+          : allHeadings;
+        optionHeadings.forEach((option) => {
+          const optionTitle = normalize(option.textContent);
+          addChoice(optionTitle, `${backgroundTitle} option`, () => {
+            fillBuilder({
+              type: 'feature',
+              title: optionTitle,
+              subtitle: `${backgroundTitle} Background`,
+              description: contentUntilNextOption(option, optionHeadings),
+            });
+            status.textContent = `${optionTitle} loaded into Card Builder.`;
+          });
+        });
+      }
+      status.textContent = `Choose the ${backgroundTitle} background or one of its options.`;
+      return true;
+    }
+
+    if (backgroundTitle.toLowerCase() === 'finger affiliate') {
+      clearResults();
+      const optionHeadings = Array.from(copy.querySelectorAll(':scope > .finger-option'));
+      optionHeadings.forEach((option) => {
+        const optionTitle = normalize(option.textContent);
+        addChoice(optionTitle, 'Finger Affiliate option', () => {
+          fillBuilder({
+            type: 'feature',
+            title: optionTitle,
+            subtitle: 'Finger Affiliate Background',
+            description: contentUntilNextOption(option, optionHeadings),
+          });
+          status.textContent = `${optionTitle} loaded into Card Builder.`;
+        });
+      });
+      status.textContent = 'Choose a Finger Affiliate option to import.';
+      return true;
+    }
+    return false;
+  };
+
   const setField = (field, value) => {
     if (!field) return;
     field.value = value || '';
@@ -657,6 +833,8 @@
     setField(itemArmorClass, entry.type === 'item' ? entry.armorClass : '');
     setField(itemCarryingCapacity, entry.type === 'item' ? entry.carryingCapacity : '');
     setField(itemProperties, entry.type === 'item' ? entry.properties : '');
+    setField(perkRequirement, entry.type === 'perk' ? entry.requirement : '');
+    setField(perkRequiredBy, entry.type === 'perk' ? entry.requiredBy : '');
     setField(spellCastingTime, entry.type === 'spell' ? entry.castingTime : '');
     setField(spellRange, entry.type === 'spell' ? entry.range : '');
     setField(spellDuration, entry.type === 'spell' ? entry.duration : '');
@@ -698,6 +876,10 @@
             const page = await getPage(entry.href);
             showRaceChoices(entry, page);
             return;
+          }
+          if (pageKind(entry) === 'background') {
+            const page = await getPage(entry.href);
+            if (showBackgroundChoices(entry, page)) return;
           }
           const imported = await extractEntry(entry, query);
           fillBuilder(imported);

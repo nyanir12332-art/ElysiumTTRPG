@@ -10,9 +10,10 @@
   const displayNames = new Map(manifest.map((spell) => [spell.name.toLowerCase(), spell.name]));
 
   const escapePattern = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  // Include both multi-word and one-word titles. This makes ordinary prose
+  // Auto-link only multi-word titles to avoid turning ordinary prose into spell links.
   // references (for example, “fireball” or “shield”) link as well.
   const candidates = [...nameToId.keys()]
+    .filter((name) => name.includes(' '))
     .sort((left, right) => right.length - left.length);
   const titlePattern = new RegExp(`\\b(${candidates.map(escapePattern).join('|')})\\b`, 'gi');
   const classNames = ['artificer', 'bard', 'cleric', 'druid', 'paladin', 'ranger', 'sorcerer', 'warlock', 'wizard'];
@@ -29,18 +30,6 @@
     link.href = `${indexPath}?search=${encodeURIComponent(displayNames.get(lookup) || matched)}`;
     link.textContent = displayNames.get(lookup) || matched;
     return link;
-  };
-
-  const shouldLinkMatch = (text, matched, offset) => {
-    const lookup = matched.toLowerCase();
-    if (lookup.includes(' ')) return true;
-    const before = text.slice(Math.max(0, offset - 48), offset);
-    const after = text.slice(offset + matched.length, Math.min(text.length, offset + matched.length + 48));
-    // One-word titles overlap heavily with ordinary rules vocabulary. Require
-    // an explicit spell reference or a casting/preparation verb nearby.
-    return new RegExp(`(?:\\b(?:cast|casts|casting|prepare|prepared|learn|known|choose|select|use|using)\\s+(?:the\\s+)?|\\b(?:the\\s+)?(?:spell|cantrip)\\s+(?:named\\s+)?$)`, 'i').test(before)
-      || /^\\s+(?:spell|cantrip)\\b/i.test(after)
-      || /^\\s+(?:spell|cantrip)\\s+(?:of|from)\\b/i.test(after);
   };
 
   const makeClassListLink = (matched, className) => {
@@ -80,11 +69,6 @@
     const fragment = document.createDocumentFragment();
     let cursor = 0;
     text.replace(titlePattern, (matched, _capture, offset) => {
-      if (!shouldLinkMatch(text, matched, offset)) {
-        fragment.append(document.createTextNode(text.slice(cursor, offset + matched.length)));
-        cursor = offset + matched.length;
-        return matched;
-      }
       fragment.append(document.createTextNode(text.slice(cursor, offset)), makeLink(matched));
       cursor = offset + matched.length;
       return matched;
@@ -104,6 +88,10 @@
   };
 
   document.querySelectorAll('a').forEach((link) => {
+    // School links use school names as their labels, and a school can share
+    // a name with a spell (for example, Divination). Keep their destination
+    // intact instead of treating them as spell-name links.
+    if (link.dataset.spellSchoolReference) return;
     const text = link.textContent.trim();
     const match = text.match(new RegExp(`^(${classNames.join('|')})\\s+spell list$`, 'i'));
     if (match) {

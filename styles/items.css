@@ -179,7 +179,6 @@
 
 .item-group.equipment-pack-group { order: 1; }
 .item-group.common-items-group { order: 2; }
-.item-group.usable-items-group { order: 3; }
 
 .item-column-headings {
   color: var(--green);
@@ -491,33 +490,6 @@
 .equipment-pack-group .item-card.is-expanded .item-card__expand::before {
   content: "-";
   font-size: 1.7rem;
-}
-
-.usable-items-group .item-card {
-  grid-template-columns: minmax(240px, 29%) 90px 90px minmax(0, 1fr) 30px;
-}
-
-.usable-items-group .item-card p {
-  display: none;
-}
-
-.usable-items-group .item-card.has-overflow p {
-  -webkit-mask-image: none;
-  mask-image: none;
-}
-
-.usable-items-group .item-card.needs-expansion::after {
-  display: block;
-  grid-column: 5;
-  grid-row: 1;
-}
-
-.usable-items-group .item-card.is-expanded p {
-  display: block;
-}
-
-.usable-items-group .item-card.is-expanded p::after {
-  display: none;
 }
 
 .containers-group .item-group-title,
@@ -838,23 +810,6 @@
 
 .apparel-table.weapons-table th:nth-child(5),
 .apparel-table.weapons-table td:nth-child(5) { width: auto; }
-
-.apparel-table.weapons-table--ammunition th:nth-child(1),
-.apparel-table.weapons-table--ammunition td:nth-child(1) { width: 240px; }
-
-.apparel-table.weapons-table--ammunition th:nth-child(2),
-.apparel-table.weapons-table--ammunition td:nth-child(2),
-.apparel-table.weapons-table--ammunition th:nth-child(3),
-.apparel-table.weapons-table--ammunition td:nth-child(3) { width: 90px; }
-
-.apparel-table.weapons-table--ammunition th:nth-child(1),
-.apparel-table.weapons-table--ammunition td:nth-child(1) { width: 42%; }
-
-.apparel-table.weapons-table--ammunition th:nth-child(2),
-.apparel-table.weapons-table--ammunition td:nth-child(2) { width: 25%; }
-
-.apparel-table.weapons-table--ammunition th:nth-child(3),
-.apparel-table.weapons-table--ammunition td:nth-child(3) { width: 33%; }
 
 .weapons-section {
   min-width: 0;
@@ -1312,6 +1267,10 @@
 
 .item-card.is-expanded p::after {
   display: none;
+}
+
+.item-card.needs-expansion[aria-expanded="true"]::after {
+  content: "-";
 }
 
 .item-no-results {

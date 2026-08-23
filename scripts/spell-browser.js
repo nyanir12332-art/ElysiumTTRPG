@@ -118,6 +118,25 @@
     return markup.join('');
   };
 
+  const renderTable = (table, linkBasicSave = false) => {
+    if (!table || !Array.isArray(table.headers) || !Array.isArray(table.rows)) return '';
+    const title = table.title ? `<h3>${renderInline(table.title, linkBasicSave)}</h3>` : '';
+    const header = `<thead><tr>${table.headers.map((cell) => `<th>${renderInline(cell, linkBasicSave)}</th>`).join('')}</tr></thead>`;
+    const body = `<tbody>${table.rows.map((row) => `<tr>${row.map((cell) => `<td>${renderInline(cell, linkBasicSave)}</td>`).join('')}</tr>`).join('')}</tbody>`;
+    return `${title}<table>${header}${body}</table>`;
+  };
+
+  const renderStatblock = (block, linkBasicSave = false) => {
+    if (!block || !block.name) return '';
+    const details = Array.isArray(block.details) ? block.details : [];
+    const traits = Array.isArray(block.traits) ? block.traits : [];
+    const actions = Array.isArray(block.actions) ? block.actions : [];
+    const detailRows = details.map(({ label, value }) => `<tr><td><strong>${renderInline(label, linkBasicSave)}</strong></td><td>${renderInline(value, linkBasicSave)}</td></tr>`).join('');
+    const traitRows = traits.map(({ name, text }) => `<tr><td colspan="2"><strong><em>${renderInline(name, linkBasicSave)}</em></strong> ${renderInline(text, linkBasicSave)}</td></tr>`).join('');
+    const actionRows = actions.map(({ name, text }) => `<tr><td colspan="2"><strong><em>${renderInline(name, linkBasicSave)}</em></strong> ${renderInline(text, linkBasicSave)}</td></tr>`).join('');
+    return `<section class="spell-statblock"><h3>${renderInline(block.name, linkBasicSave)}</h3>${block.subtitle ? `<p><em>${renderInline(block.subtitle, linkBasicSave)}</em></p>` : ''}<table><tbody>${detailRows}${traitRows}${actions.length ? `<tr><th colspan="2">Actions</th></tr>${actionRows}` : ''}</tbody></table></section>`;
+  };
+
   const ordinal = (value) => ({
     0: 'Cantrip', 1: '1st', 2: '2nd', 3: '3rd', 4: '4th', 5: '5th',
     6: '6th', 7: '7th', 8: '8th', 9: '9th'
@@ -175,6 +194,8 @@
     const higherLevel = higherLevelText
       ? `<p><strong>At Higher Levels.</strong> ${renderInline(higherLevelText, linkBasicSave)}</p>`
       : '';
+    const tables = (spell.tables || []).map((table) => renderTable(table, linkBasicSave)).join('');
+    const statblocks = (spell.statblocks || []).map((block) => renderStatblock(block, linkBasicSave)).join('');
     return `<tr class="spell-browser__detail" data-spell-detail="${escapeHtml(spell.id)}" hidden>
       <td colspan="4">
         <div class="spell-browser__detail-copy">
@@ -184,7 +205,7 @@
             <div><dt>Components</dt><dd>${escapeHtml(spell.components)}</dd></div>
             <div><dt>Range</dt><dd>${escapeHtml(spell.range)}</dd></div>
           </dl>
-          ${paragraphs}${higherLevel}${traits.length ? `<dl class="spell-browser__tags"><div><dt>Tags</dt><dd>${escapeHtml(traits.join(', '))}</dd></div></dl>` : ''}
+          ${paragraphs}${tables}${statblocks}${higherLevel}${traits.length ? `<dl class="spell-browser__tags"><div><dt>Tags</dt><dd>${escapeHtml(traits.join(', '))}</dd></div></dl>` : ''}
         </div>
       </td>
     </tr>`;
@@ -263,6 +284,7 @@
   const linkedSearch = spellParameters.get('search');
   const linkedClass = spellParameters.get('class');
   const linkedSpell = spellParameters.get('spell');
+  const linkedSchool = spellParameters.get('school');
   if (linkedSearch) {
     searchInput.value = linkedSearch;
     renderRows();
@@ -271,5 +293,8 @@
     renderRows();
   } else if (linkedSpell) {
     openSpell(linkedSpell, true);
+  } else if (linkedSchool && [...schoolFilter.options].some((option) => option.value === linkedSchool)) {
+    setActiveSchool(linkedSchool);
+    renderRows();
   }
 })();

@@ -1,10 +1,10 @@
 .lore-tabs {
-  border-top: 1px solid var(--line);
+  border-top: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   min-height: 38px;
-  margin: 12px 0 42px;
+  margin: 12px 0 0;
   padding-top: 18px;
 }
 
@@ -29,14 +29,21 @@
 }
 
 .lore-tab {
+  align-items: center;
+  appearance: none;
   background: rgba(7, 17, 8, 0.82);
   border: 1px solid var(--line);
+  box-sizing: border-box;
   color: var(--green-soft);
   cursor: pointer;
+  display: inline-flex;
   font: inherit;
+  justify-content: center;
+  line-height: 1.2;
   min-height: 38px;
   padding: 8px 12px;
   text-shadow: 0 0 10px rgba(57, 255, 136, 0.5);
+  text-decoration: none;
   text-transform: uppercase;
 }
 
@@ -59,6 +66,302 @@
 
 .lore-panel[hidden] {
   display: none;
+}
+
+.class-copy.lore-panel {
+  border-top: 0;
+}
+
+#lore-panel p {
+  font-style: normal;
+}
+
+#lore-panel {
+  padding-top: 26px;
+}
+
+#general-panel {
+  padding-top: 0;
+}
+
+#lore-panel .lore-overview {
+  font-size: 1.45rem;
+}
+
+.lore-directory {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 0 32px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.lore-directory__entry {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--green-soft);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 600;
+  min-height: 48px;
+  padding: 10px 8px 10px 28px;
+  position: relative;
+  text-align: left;
+}
+
+.lore-directory__entry::before {
+  color: var(--green-dim);
+  content: ">";
+  left: 8px;
+  position: absolute;
+}
+
+.lore-directory__entry:hover,
+.lore-directory__entry:focus-visible,
+.lore-directory__entry.active {
+  border-bottom-color: var(--green);
+  color: var(--green);
+  outline: none;
+  text-decoration: underline;
+}
+
+/* General lore uses full-page destinations, so present its directory as deliberate buttons rather than bare links. */
+.general-directory {
+  align-items: center;
+  border-top: 0;
+  column-gap: 18px;
+  display: grid;
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  row-gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+}
+
+.general-directory li {
+  align-items: center;
+  background: rgba(7, 17, 8, 0.72);
+  border: 1px solid var(--line);
+  display: flex;
+  min-height: 54px;
+  padding: 0;
+  position: relative;
+  transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease, color 120ms ease;
+}
+
+.general-directory li::before {
+  color: var(--green-dim);
+  content: ">";
+  font-weight: 700;
+  left: 13px;
+  line-height: 1.5;
+  pointer-events: none;
+  position: absolute;
+}
+
+.general-directory a {
+  align-items: center;
+  color: var(--green-soft);
+  display: flex;
+  flex: 1 1 auto;
+  font-size: 1.05rem;
+  font-weight: 600;
+  min-height: 52px;
+  padding: 12px 14px 12px 34px;
+  text-decoration: none;
+}
+
+.general-directory li:hover,
+.general-directory li:focus-within {
+  background: rgba(57, 255, 136, 0.1);
+  border-color: var(--green);
+  box-shadow: inset 0 0 18px rgba(57, 255, 136, 0.12), 0 0 8px rgba(57, 255, 136, 0.12);
+}
+
+.general-directory a:hover,
+.general-directory a:focus-visible {
+  color: var(--green);
+  outline: none;
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .general-directory {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .general-directory {
+    grid-template-columns: 1fr;
+  }
+}
+
+.general-content {
+  margin-top: 0;
+}
+
+#general-page {
+  padding-top: 26px;
+}
+
+#general-panel .general-directory {
+  margin-top: 26px;
+}
+
+#general-panel .general-content,
+#general-page .general-content {
+  margin-top: 12px;
+}
+
+#general-page .general-content {
+  margin-top: 0;
+}
+
+.syndicate-directories {
+  margin: 18px 0 24px;
+}
+
+.syndicate-directory-section {
+  border-top: 1px solid var(--line);
+  margin-top: 28px;
+  padding-top: 18px;
+}
+
+.syndicate-directory-section:first-child {
+  margin-top: 0;
+}
+
+.syndicate-directory-section h3 {
+  margin-top: 0;
+}
+
+.general-entry[hidden] {
+  display: none;
+}
+
+.general-entry {
+  margin: 0 0 28px;
+}
+
+.general-entry h2 {
+  color: var(--green);
+  font-family: inherit;
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 28px 0 14px;
+}
+
+.general-entry h3 {
+  color: var(--green);
+  font-family: inherit;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 24px 0 10px;
+}
+
+.general-entry h4 {
+  color: var(--green-soft);
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 18px 0 8px;
+}
+
+.general-entry p {
+  font-style: normal;
+  margin: 0 0 14px;
+}
+
+.general-entry .lore-list {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+}
+
+.general-entry .lore-list li {
+  margin: 0 0 8px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.general-entry .lore-list li::before {
+  color: var(--green-dim);
+  content: "-";
+  left: 0;
+  position: absolute;
+}
+
+.general-magic-note {
+  border-left: 2px solid var(--green-dim);
+  color: var(--green-soft);
+  padding-left: 14px;
+}
+
+.general-table-wrap {
+  overflow-x: auto;
+  margin: 12px 0 24px;
+}
+
+.general-table {
+  border-collapse: collapse;
+  min-width: 680px;
+  width: 100%;
+}
+
+.general-table th,
+.general-table td {
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.general-table th:first-child {
+  width: 25%;
+}
+
+.general-table thead th {
+  color: var(--green);
+  text-transform: uppercase;
+}
+
+.general-table a {
+  color: var(--green-soft);
+  text-decoration: none;
+}
+
+.general-table a:hover,
+.general-table a:focus-visible {
+  color: var(--green);
+  outline: none;
+  text-decoration: underline;
+}
+
+.lore-entry {
+  margin: 0 0 28px;
+}
+
+.lore-entry h2 {
+  color: var(--green);
+  font-family: inherit;
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0 0 12px;
+}
+
+.lore-entry h3 {
+  color: var(--green);
+  font-family: inherit;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 .timeline {
@@ -555,6 +858,10 @@
 }
 
 @media (max-width: 720px) {
+  .lore-directory {
+    grid-template-columns: 1fr;
+  }
+
   .lore-tabs {
     display: grid;
     grid-template-columns: 1fr;

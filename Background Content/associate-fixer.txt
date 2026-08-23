@@ -1,0 +1,141 @@
+ASSOCIATE FIXER BACKGROUNDS
+===========================
+
+These are draft backgrounds for characters affiliated with a Fixer Association. They are not published to the website.
+
+ASSOCIATE FIXER AFFILIATE
+-------------------------
+You work under the sponsorship of one of the twelve Fixer Associations. You have not necessarily earned a permanent rank, a regular salary, or the right to accept every Association contract, but you have proven useful enough that an Association is willing to put its name behind you.
+
+Choose one Association below. You gain the listed proficiencies, equipment, and Association feature. The feature represents an affiliation, not automatic membership. To become an Associate Fixer, you still need a Fixer license, the Association's approval, and a place in an Associate Office or branch. The DM decides when a character has earned that opportunity through play.
+
+Every Associate Fixer background also gives you:
+Equipment: An identity badge holder, a notebook, common or professional clothing, a City Card, and $100.
+Feature: ASSOCIATION SPONSORSHIP. You can request ordinary administrative guidance, identify the Association desk responsible for a common contract, and seek an introduction to an affiliated Office in a District where your Association operates. The Association can refuse a request that is unsafe, politically inconvenient, or outside your status.
+
+
+HANA ASSOCIATION — THE REGISTRY
+-------------------------------
+The Hana Association coordinates the Fixer system, issues licenses, grades Offices and hazards, and keeps the records that make the City's contract economy function.
+
+Skill Proficiencies: Investigation and Persuasion
+Tool Proficiencies: Calligrapher's supplies and one of your choice
+Additional Equipment: A seal stamp, ink pen, and a bundle of blank forms
+Feature: LICENSED PROCEDURE. You know how an ordinary request is registered, graded, assigned, and reported. You can tell when a document is missing a normal authorization, though you cannot forge a valid Hana license. With Hana sponsorship, you can sit for the examinations required to become an Associate Fixer.
+
+
+ZWEI ASSOCIATION — PROTECTION
+-----------------------------
+The Zwei Association specializes in protection, rescue, supervision, and the defense of clients who cannot safely defend themselves.
+
+Skill Proficiencies: Athletics and Insight
+Tool Proficiencies: Shields and one of your choice of vehicles or artisan's tools
+Additional Equipment: A light shield, signal whistle, and a trauma kit
+Feature: PROTECTIVE DETAIL. You can organize an ordinary escort, identify the safest visible route through a familiar area, and recognize common signs that a client is being watched. A Zwei branch can recommend you for field training and a formal Associate Fixer placement.
+
+
+TRES ASSOCIATION — WORKSHOP OVERSIGHT
+-------------------------------------
+The Tres Association handles Workshop regulation, equipment review, weapon taxation, and applications concerning gear that requires the Head's approval.
+
+Skill Proficiencies: Investigation and Sleight of Hand
+Tool Proficiencies: Smith's tools and one other artisan's tool
+Additional Equipment: A whetstone, magnifying glass, calipers, and work gloves
+Feature: WORKSHOP INSPECTION. You can identify ordinary Workshop marks, notice common manufacturing defects, and tell when equipment has not passed routine inspection. Tres sponsorship can place you with an Associate Office that tests or maintains Fixer equipment.
+
+
+SHI ASSOCIATION — QUIET WORK
+----------------------------
+The Shi Association specializes in covert assassination, impartial contracts, and strict confidentiality.
+
+Skill Proficiencies: Stealth and Insight
+Tool Proficiencies: Thieves' tools and one of your choice
+Additional Equipment: A pocket camera, plain formal clothing, a notebook, and a signal whistle
+Feature: DISCREET BRIEFING. You know how to pass an ordinary message without attracting attention and how to arrange a quiet meeting in a familiar District. Shi sponsorship can lead to licensing, but the Association expects absolute discretion before it grants deeper trust.
+
+
+CINQ ASSOCIATION — CONTRACTED DUELS
+-----------------------------------
+The Cinq Association manages contracted duels governed by formal rules, declarations, etiquette, and agreed limits.
+
+Skill Proficiencies: Acrobatics and Persuasion
+Tool Proficiencies: One musical instrument and calligrapher's supplies
+Additional Equipment: A signet ring, fine clothing, a signal whistle, and a written copy of duel etiquette
+Feature: DUELING ETIQUETTE. You can recognize an ordinary Cinq challenge, identify the parties to a declared duel, and explain the basic terms to a bystander. Cinq sponsorship can put you forward for a licensed duelist's training and an Associate Fixer post.
+
+
+LIU ASSOCIATION — COMBINED FORCE
+--------------------------------
+The Liu Association trains spirited teams that cooperate against multiple opponents, using formation, momentum, and flame-wreathed equipment.
+
+Skill Proficiencies: Athletics and Intimidation
+Tool Proficiencies: Cook's utensils and one artisan's tool
+Additional Equipment: A sledgehammer, rations, a signal flare, and work clothes
+Feature: SHARED MOMENTUM. You know how to coordinate an ordinary push, retreat, or rescue through noise and smoke. A Liu branch can invite you to team drills and recommend you for Associate Fixer licensing.
+
+
+SEVEN ASSOCIATION — INVESTIGATION
+----------------------------------
+The Seven Association gathers intelligence, investigates cases, concludes reports, and maintains knowledge that other people would prefer to keep hidden.
+
+Skill Proficiencies: Investigation and Perception
+Tool Proficiencies: Calligrapher's supplies and one of your choice
+Additional Equipment: A magnifying glass, notebook, cellphone, ink pen, and a pocket camera
+Feature: CASEWORK NETWORK. You know how to file a basic report, preserve an ordinary clue, and locate a public record in a District you know. Seven sponsorship can lead to a licensed investigative Office and Associate Fixer status.
+
+
+EIGHT ASSOCIATION — CREATURE RESEARCH
+--------------------------------------
+The Eight Association studies creatures of the City and assigns hunts and bounties, separating unusual citizens from hazards that must be contained.
+
+Skill Proficiencies: Animal Handling and Nature
+Tool Proficiencies: Herbalism kit and one of your choice
+Additional Equipment: A filter mask, field notebook, field glasses, rations, and sample containers
+Feature: FIELD SURVEY. You can identify common tracks, feeding signs, nesting behavior, and ordinary environmental warnings from creatures you have studied. Eight sponsorship can place you on a supervised hunt before you become an Associate Fixer.
+
+
+DEVYAT ASSOCIATION — DELIVERY
+--------------------------------
+The Devyat Association moves packages and messages across the City, treating deadlines and the safe handling of a delivery as matters of professional honor.
+
+Skill Proficiencies: Survival and Perception
+Tool Proficiencies: Vehicles and one of your choice
+Additional Equipment: A backpack, cellphone, district transit pass, signal whistle, and a sealed courier pouch
+Feature: DEADLINE DISCIPLINE. You can estimate travel time across routes you know, protect a package from ordinary inspection, and identify a legitimate Devyat handoff. A Devyat sponsor can recommend you for courier licensing and an Associate Fixer route.
+
+
+DIECI ASSOCIATION — STUDY
+--------------------------
+The Dieci Association turns study and retained knowledge into practical strength. Its members maintain intense routines of reading, review, and disciplined application.
+
+Skill Proficiencies: History and Investigation
+Tool Proficiencies: Calligrapher's supplies and one of your choice
+Additional Equipment: A spellbook or study book, notebook, ink pen, and a quiet set of common clothes
+Feature: STUDIED RECALL. You can reconstruct ordinary information from notes, recognize the structure of a formal lesson, and find a suitable place for concentrated study in a familiar District. Dieci sponsorship can lead to a licensed Associate Fixer position and, eventually, the Fist or Key hierarchy.
+
+
+ÖUFI ASSOCIATION — CONTRACT ENFORCEMENT
+---------------------------------------
+The Öufi Association enforces contracts and legal obligations, using investigation, negotiation, and violence when a party refuses to honor its terms.
+
+Skill Proficiencies: Insight and Intimidation
+Tool Proficiencies: Calligrapher's supplies and one of your choice
+Additional Equipment: A signet ring, sealing wax, formal clothing, and a contract folio
+Feature: CONTRACTUAL AUTHORITY. You can recognize ordinary contract language, identify a clear breach, and direct a complainant to the proper legal channel. Öufi sponsorship can lead to a Fixer license and a place in an enforcement Office, but it does not make your personal agreements magically binding.
+
+
+DODEKA ASSOCIATION — FAITH AND ARCHIVES
+---------------------------------------
+The Dodeka Association operates branches as churches, preserves old scriptures, and maintains records concerning the gods and the City's earlier ages.
+
+Skill Proficiencies: History and Religion
+Tool Proficiencies: Calligrapher's supplies and one of your choice
+Additional Equipment: A holy symbol, a book, ink pen, common clothing, and a packet of archival paper
+Feature: TEMPLE ARCHIVE. You know how to care for ordinary devotional records and can request access to a Dodeka temple's public materials. Dodeka sponsorship can place you with an Associate Office or a branch that accepts new Fixers.
+
+
+ASSOCIATE FIXER ADVANCEMENT
+---------------------------
+An Associate Fixer is not simply someone who likes an Association. The character must obtain or already possess a Fixer license, demonstrate the skills expected by the chosen Association, and receive a sponsor's recommendation. The Association may place the character in an Associate Office, assign them to a branch, or require a probationary contract first.
+
+Advancement should be handled as a story opportunity rather than an automatic level reward. A character who repeatedly completes Association contracts, respects its rules, and survives its expectations may be offered a formal position. A character who breaks a contract, violates a City-wide Taboo, or endangers the Association's reputation can lose sponsorship without losing the background's memories and proficiencies.

@@ -1,0 +1,200 @@
+VETERAN
+-------
+You survived a war, corporate purge, Syndicate campaign, hazardous expedition, or another period of sustained violence. You know how quickly a confident plan becomes a casualty report, and you carry habits that keep you alive when everyone else panics.
+
+Skill Proficiencies: Athletics and Intimidation
+Tool Proficiencies: One vehicle or artisan's tool, and one gaming set
+Equipment: A service token or old unit patch, a whetstone, common clothes, a notebook of names, a City Card, and $200
+
+FEATURE: HARDENED SURVIVOR
+You can identify ordinary signs of an ambush, a recently abandoned position, and a group moving with military discipline. In a settlement where your service is known, you can usually find a veteran willing to exchange practical advice, a meal, or a safe place to sleep. This does not guarantee protection, employment, or loyalty.
+
+
+NEW FIXER
+---------
+You have only recently entered the Fixer profession. You may have completed an Association examination, worked under an Office, or taken your first contract in the Backstreets, but your reputation has not yet outgrown your mistakes.
+
+Skill Proficiencies: Choose two from Acrobatics, Athletics, Investigation, Perception, Persuasion, Stealth, and Survival
+Tool Proficiencies: Thieves' tools or one artisan's tool, plus one vehicle or gaming set
+Equipment: A backpack, cellphone, identity badge holder, notebook, one tool you are proficient with, common clothes, and $150
+
+FEATURE: OPEN CONTRACTS
+You know how to locate public requests, read an ordinary contract, and identify the nearest Fixer Office or Association desk in a District you know. You can take legal beginner work through an Office or Association, though the work may be dangerous and the pay is not guaranteed. This feature does not grant a Fixer license; obtaining one still follows the City's licensing rules.
+
+
+RUIN DELVER
+-----------
+You have entered The Ruins in search of relics, old-world records, durable metals, or a route to something the City has forgotten. You learned to treat every door, corpse, machine, and patch of dust as a possible warning.
+
+Skill Proficiencies: Investigation and Survival
+Tool Proficiencies: Cartographer's tools and one vehicle or artisan's tool
+Equipment: A climber's kit, rechargeable flashlight, 2 power cells, filter mask, 2 air filter cartridges, notebook, 5 days of rations, waterskin, and $100
+
+FEATURE: DELVER'S ROUTE
+You can recognize common Ruin markers, abandoned expedition signs, and the difference between ordinary decay and a likely Warp hazard. When planning an expedition, you can usually find a delver, scavenger, or records clerk who knows one recent rumor about the route. The information is incomplete and may be wrong; it never removes the need for an actual expedition.
+
+
+NEST DWELLER
+------------
+You grew up in a Nest and were shaped by its Wing's rules, services, surveillance, and expectations. Choose the District where you began. Your chosen option gives a local contact, habit, or cultural detail; it does not grant citizenship, a visa, or immunity from the Wing's laws.
+
+Skill Proficiencies: Insight and Persuasion
+Tool Proficiencies: Choose one tool associated with your District
+Equipment: Fine or professional clothing, a cellphone, a City Card, identity documents, and $300
+
+FEATURE: NEST ACCESS
+You know how to navigate ordinary Nest services, checkpoints, work schedules, and public etiquette in your home District. In that District, you can usually find a former neighbor, coworker, or service contact who can provide a small favor or point you toward the proper office. They will not knowingly risk their Nest status for you.
+
+DISTRICT OF ORIGIN OPTIONS
+
+D DISTRICT — DREAM CIRCUITS
+You grew up around D Corp.'s dream services, hotels, and recreational districts. You know how to spot a staged dream experience and have contacts among attendants, technicians, and people who sell private fantasies.
+
+E DISTRICT — CLEAN RECORDS
+You were raised among E Corp.'s audit towers and record-adjustment services. You understand how people hide failures behind paperwork and can recognize when a public record has been deliberately altered.
+
+F DISTRICT — GLASS DOME
+You grew up beneath F Corp.'s elevated glass dome, around puzzle-solving fairy tools and bridge settlements. You know how to maintain fragile equipment and navigate layered platforms, ladders, and suspended walkways.
+
+G DISTRICT — GRAVITY WORKS
+You are from G Corp.'s floating Nest, where gravity technology shapes transport, buildings, and work. You understand lift regulations, aerial routes, and the warning signs of a failing gravitic system.
+
+H DISTRICT — BOLUS CLINICS
+You grew up around H Corp.'s bioengineering clinics and constantly rearranged housing. You can identify common medical marketing, recognize a basic bolus treatment, and know where displaced residents look for shelter after a restructuring.
+
+I DISTRICT — THE STREETS OF MUSIC
+You came from I District, where the memory of the Pianist and the first Distortion still shapes daily life. You know local performance spaces, memorial customs, and which streets residents avoid after dark.
+
+J DISTRICT — LOCKED DEALS
+You grew up in J Corp.'s gambling Nest, where contracts and locks protect both money and freedom. You can recognize ordinary gambling-house etiquette and identify when a deal contains an obvious conceptual or physical restriction.
+
+K DISTRICT — REGENERATION WARDS
+You were raised around K Corp.'s ampule clinics and productive farms. You know basic wound triage, the difference between a legitimate clinic and a dangerous imitator, and how to find a medical queue that is not completely compromised.
+
+L DISTRICT — THE FALLEN WING
+You grew up in the unprotected remains of old L Corp.'s District. You know how residents survive without a stable Wing, where the Middle and the Index exert pressure, and which abandoned facilities are most likely to attract scavengers.
+
+M DISTRICT — MOONLIGHT WARDS
+You came from M Corp.'s medical and psychological-care district. You know the language of mental-health treatment, the risks of counterfeit Moonlight Stones, and how to find a quiet room when a person is overwhelmed.
+
+N DISTRICT — PURCHASED EXPERIENCES
+You were raised among N Corp.'s white buildings, schools, and manufactured experiences. You can recognize common experience packages, understand the etiquette of N Corp. classrooms, and tell when someone is performing a borrowed identity.
+
+O DISTRICT — PERFECT CONTAINMENT
+You grew up in O Corp.'s windowless containment architecture. You are comfortable checking doors, seals, and environmental controls, and you know how quickly a comfortable room can become a carefully designed trap.
+
+P DISTRICT — RESILIENT SHELLS
+You lived in P Corp.'s durable buildings, where the outside can bend while the inside remains safe. You know structural inspection habits and can find residents who understand the local bloodfiend threat and the Wing's failing protection.
+
+Q DISTRICT — HIDDEN GLYPHS
+You were raised in the secretive district of Q Corp., where glyphs and talismans are treated as guarded tools. You can identify common protective markings and know when outsiders are being kept away from a district facility for more than ordinary privacy.
+
+R DISTRICT — MILITARY HATCHERIES
+You grew up around R Corp.'s factories, hatcheries, and training grounds. You understand basic squad signals, recognize the signs of haste- or strength-focused augmentation, and know how to stay out of a live training lane.
+
+S DISTRICT — FEUDAL FIELDS
+You came from S Corp.'s agricultural territory, where old-world customs and feudal authority shape daily life. You know local titles, harvest obligations, and which officials can be approached without turning a request into a political insult.
+
+T DISTRICT — TIME ACCOUNTS
+You were raised in T Corp.'s sepia-lit district, where time and color are measured resources. You understand ordinary time-credit etiquette, can estimate a delay by local standards, and know which services refuse visitors who cannot pay in time.
+
+U DISTRICT — THE GREAT LAKE
+You grew up around U Corp.'s portships and the divided Great Lake. You know basic vessel procedures, lake-weather warnings, and the difference between a tourist route and a passage likely to draw a Whale or worse.
+
+V DISTRICT — THE DATA LANDFILL
+You were raised among V Corp.'s broadcasts, networks, and electronic waste. You can identify common obsolete hardware, know where scavengers trade parts, and understand why a device that looks dead may still be watched.
+
+W DISTRICT — WARP TRANSIT
+You grew up around W Corp.'s WARP trains and the strict habits of rapid transit. You know platform procedures, transit checkpoints, and the signs that a route has been closed because of Warp contamination or corporate secrecy.
+
+X DISTRICT — THE WATCHED DISTRICT
+You came from B Corp.'s directly managed District X, where residents assume they are always being observed. You know how people behave under surveillance, how to keep an ordinary conversation private, and when a quiet street is quiet for a reason.
+
+Y DISTRICT — COLD WARP WASTE
+You were raised in Y District among snow, garbage, and Warp-contaminated waste. You know how to layer clothing and filters, which shelters remain heated, and how to recognize a contaminated pile before it starts moving.
+
+Z DISTRICT — EXCAVATION LINES
+You grew up around Z Corp.'s dredging sites and Ruin excavations. You can identify common excavation equipment, recognize a hellhole boundary, and know which work crews leave behind useful warnings instead of simply abandoning a site.
+
+
+BACKSTREETS RAT
+---------------
+You grew up without a Nest, a stable Office, or reliable protection. Rats survive through speed, small favors, scavenging, and knowing when to disappear. Choose the District where you began. Your choice gives you a local survival specialty; it does not make you a member of a Syndicate.
+
+Skill Proficiencies: Stealth and Survival
+Tool Proficiencies: Thieves' tools and one of your choice of miscellaneous kit, gaming set, or artisan's tool
+Equipment: A battered backpack, common clothes, a lighter, notebook, waterskin, a City Card with no balance, and $75
+
+FEATURE: RAT NETWORK
+You know the safest ordinary alleys, cheap food sources, and places where people trade small favors in your home District. You can usually find a Rat, street vendor, or low-level Syndicate contact who can provide a rumor or temporary hiding place. They will not fight for you, and calling on the same contact repeatedly may attract attention.
+
+DISTRICT OF ORIGIN OPTIONS
+
+D DISTRICT — DREAM-SIDE SCAVENGER
+You survived by guiding tourists around dream-service buildings and collecting discarded comfort items. You know which attendants ignore trespassers and which entertainment doors lead somewhere dangerous.
+
+E DISTRICT — ERASED NAME
+You learned to live under records that were incomplete, altered, or deliberately inconvenient. You know how to avoid routine searches and where discarded identity documents are likely to turn up.
+
+F DISTRICT — BRIDGE CRAWLER
+You scavenged the elevated walkways beneath F Corp.'s dome. You can judge a weak platform, move across narrow bridges quickly, and find shelter among maintenance crews.
+
+G DISTRICT — UNDER-ISLAND RUNNER
+You lived beneath G Corp.'s floating structures, carrying messages and salvage between hanging settlements. You know how to secure loose gear and recognize dangerous changes in local gravity.
+
+H DISTRICT — RESTRUCTURED
+You survived repeated housing changes in H District, learning to move before a room or neighborhood was reassigned. You know how to pack quickly, find temporary shelter, and spot a recently shifted boundary.
+
+I DISTRICT — MUSIC-STREET RAT
+You grew up in the streets scarred by the Pianist's destruction. You know which abandoned venues are safe during the day, which sounds signal danger, and how to disappear into a crowd of performers.
+
+J DISTRICT — CASINO RUNNER
+You carried messages, debts, or marked cards around J Corp.'s gambling houses. You know how to look poor without looking helpless and how to recognize when a game is being watched by more than the house.
+
+K DISTRICT — CLINIC SCRAPPER
+You survived by recovering discarded medical supplies and directing injured people toward clinics. You can recognize expired or counterfeit treatment and know which alley doors connect to emergency queues.
+
+L DISTRICT — FALLEN-NEST RAT
+You grew up in the ruins of old L Corp.'s influence, where several Syndicates compete for control. You know how to avoid recruitment sweeps and which signs indicate that a street has changed hands.
+
+M DISTRICT — WARD SLEEPER
+You lived near M Corp.'s wards, sleeping in maintenance spaces and waiting rooms. You know where exhausted patients leave food, which guards accept conversation, and when someone needs quiet more than advice.
+
+N DISTRICT — EXPERIENCE RUNNER
+You carried packages and messages through N Corp.'s experience venues. You know how to tell a genuine resident from a paying visitor and how to avoid being pulled into someone else's purchased fantasy.
+
+O DISTRICT — CONTAINER RAT
+You survived among O Corp.'s containment structures and service corridors. You know how to test a door without opening it and which ventilation hums mean that the room beyond is not meant for people.
+
+P DISTRICT — SHELL-SHELTERED
+You found refuge in the durable spaces of P District, hiding behind structures that could withstand punishment. You know which buildings are sound, which residents have spare rooms, and where bloodfiends are most likely to enter.
+
+Q DISTRICT — TALISMAN THIEF
+You survived by trading scraps near Q Corp.'s guarded glyph workshops. You can recognize a harmless seal from a warning mark and know which outsiders are watched as soon as they cross a district boundary.
+
+R DISTRICT — HATCHERY RUNNER
+You carried food, parts, or messages around R Corp.'s military facilities. You know basic drill commands, how to stay clear of training exercises, and which discarded equipment is safe to handle.
+
+S DISTRICT — FIELD RAT
+You survived around S Corp.'s farms and aristocratic estates. You know harvest paths, servant entrances, and how to speak carefully around officials who treat poverty as a personal insult.
+
+T DISTRICT — TIME-DEBTOR
+You lived by trading labor for time in T Corp.'s district. You know which clocks are trustworthy, how to negotiate a short delay, and where people go when their time account is nearly empty.
+
+U DISTRICT — PORTSHIP STOWAWAY
+You grew up moving between U Corp.'s portships, hiding from crews and avoiding the Great Lake. You know cargo routes, storm shelters, and which vessels are likely to leave without asking questions.
+
+V DISTRICT — LANDFILL SCAVENGER
+You survived by salvaging dead electronics and parts from V Corp.'s Backstreets. You can tell useful scrap from a trapped device and know which scavenger crews will trade fairly for a working component.
+
+W DISTRICT — PLATFORM RAT
+You lived around W Corp.'s transit infrastructure, slipping through service passages and abandoned platforms. You know how to read ordinary transit warnings and recognize when Warp exposure has made a route unsafe.
+
+X DISTRICT — CAMERA-DODGER
+You learned to survive in the watched streets of X District. You know where cameras overlap, how residents react to unusual behavior, and how to appear like someone who belongs in a crowd.
+
+Y DISTRICT — WARP-SNOW RAT
+You survived the cold waste of Y District, scavenging under snow and contaminated refuse. You know how to preserve warmth, identify dangerous Warp residue, and find shelters that have not yet been buried.
+
+Z DISTRICT — HELLHOLE SCAVENGER
+You grew up around Z Corp.'s excavation sites, taking discarded tools and supplies from the edge of hellholes. You know when a tunnel is settling, where crews leave emergency caches, and when a monster has begun following your trail.
