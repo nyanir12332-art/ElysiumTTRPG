@@ -155,6 +155,18 @@ main > h2 + .adventuring-nav {
   padding-top: 24px;
 }
 
+.system-copy a {
+  color: var(--green);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.system-copy a:hover,
+.system-copy a:focus-visible {
+  color: var(--green-soft);
+  outline: none;
+}
+
 /* A page title already supplies the divider; begin its system content at the same
    spacing as class and race pages instead of adding a second stacked gap. */
 main > .prompt + .system-copy {
