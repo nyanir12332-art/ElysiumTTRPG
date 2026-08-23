@@ -525,14 +525,24 @@
   const showClassChoices = (entry, pageDocument) => {
     clearResults();
     const sectionCategory = classSectionCategory(entry);
+    const isSubclass = /^classes[\\/][^\\/]+[\\/][^\\/]+\.html$/i.test(entry.path);
     const intro = document.createElement('p');
     intro.className = 'tts-importer__empty';
     intro.textContent = `Choose what to import from ${titleFromPrompt(pageDocument, entry.title)}:`;
     results.appendChild(intro);
 
     if (!sectionCategory) {
-      addChoice('Class description', 'Overview', () => {
-        fillBuilder(extractOverview(entry, pageDocument));
+      addChoice(isSubclass ? 'Subclass description' : 'Class description', 'Overview', () => {
+        const subclassIntro = pageDocument.querySelector('main .subclass-content > .subclass-intro')
+          || pageDocument.querySelector('main .subclass-content > p');
+        fillBuilder(isSubclass
+          ? {
+            type: 'feature',
+            title: titleFromPrompt(pageDocument, entry.title),
+            subtitle: 'Subclass',
+            description: subclassIntro ? serialize(subclassIntro) : '',
+          }
+          : extractOverview(entry, pageDocument));
         status.textContent = `${titleFromPrompt(pageDocument, entry.title)} loaded into Card Builder.`;
       });
     }
@@ -627,24 +637,13 @@
       .filter(({ href, title }) => title && /\/classes\/[^/]+\/[^/]+\.html$/i.test(new URL(href).pathname))).values()];
     linkedSections.forEach(({ href, title }) => {
       addChoice(title, sectionCategory ? `${sectionCategory} section` : 'Linked section', async () => {
-        status.textContent = 'Importing section...';
+        status.textContent = 'Loading section choices...';
         try {
           const targetDocument = await getPage(href);
-          const targetMain = targetDocument.querySelector('main');
-          const content = targetMain?.querySelector('.subclass-content')
-            || targetMain?.querySelector('.feature-section')
-            || targetMain?.querySelector('.class-copy')
-            || targetMain;
-          if (!content) throw new Error('Linked section has no importable content');
-          fillBuilder({
-            type: 'feature',
-            title,
-            subtitle: sectionCategory || 'Feature',
-            description: serialize(content),
-          });
-          status.textContent = `${title} loaded into Card Builder.`;
+          const targetPath = new URL(href).pathname.replace(/^\/+/, '');
+          showClassChoices({ ...entry, href, path: targetPath, title }, targetDocument);
         } catch (error) {
-          status.textContent = 'This section could not be imported.';
+          status.textContent = 'This section could not be loaded.';
         }
       });
     });

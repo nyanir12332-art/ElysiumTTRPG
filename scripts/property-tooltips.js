@@ -2,6 +2,7 @@
   const explanations = {
     ammunition: 'You can use a weapon with ammunition to make a ranged attack only if you have ammunition to fire. Each attack expends one piece. Drawing ammunition is part of the attack and requires a free hand for a one-handed weapon. After battle, you can recover half the expended ammunition by searching for a minute. Using it for a melee attack treats it as an improvised weapon.',
     finesse: 'When attacking with a finesse weapon, choose Strength or Dexterity for both attack and damage rolls; use the same modifier for both.',
+    glove: 'A glove weapon is worn on your hand or forearm and cannot be disarmed or thrown. You can hold objects, wield weapons, and cast spells with that hand, but may attack with the glove only when the hand is unoccupied. Its attacks are unarmed strikes, and you are proficient with them only if you are proficient with the glove weapon.',
     heavy: "Small creatures have disadvantage on attack rolls with heavy weapons because their size and bulk make them too large to use effectively.",
     light: 'A light weapon is small and easy to handle, making it ideal for fighting with two weapons.',
     loading: 'Because of the time required to load this weapon, you can fire only one piece of ammunition when using an action, bonus action, or reaction to fire it, regardless of the number of attacks you can normally make.',
