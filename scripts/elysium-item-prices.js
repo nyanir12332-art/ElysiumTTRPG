@@ -43,6 +43,8 @@
       ["Ruin Delver's Pack", "$680", "35 lb.", "Backpack, City Card, climber's kit, rechargeable flashlight, 2 power cells, filter mask, 2 air filter cartridges, 5 days of rations, waterskin, and hammer."],
     ],
   };
+  window.ELYSIUM_ITEM_CATALOG = { prices, additions };
+
   document.querySelectorAll(".item-group").forEach((group) => {
     const title = group.querySelector(":scope > .item-group-title")?.textContent.trim();
     const groupPrices = prices[title];

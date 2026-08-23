@@ -205,6 +205,14 @@
     ['case, map/scroll', 'map/scroll case'],
     ['pot, iron', 'iron pot'],
   ]);
+  const catalogItems = () => Object.entries(window.ELYSIUM_ITEM_CATALOG?.additions || {})
+    .flatMap(([category, items]) => items.map(([name, cost, weight, description]) => ({
+      category,
+      name: normalize(name),
+      cost: cleanField(cost),
+      weight: cleanField(weight),
+      description,
+    })));
   const specialWeaponDescriptions = {
     lance: "You have disadvantage when you use a lance to attack a target within 5 feet of you. A lance requires two hands to wield when you aren't mounted.",
     net: 'A Large or smaller creature hit by a net is restrained until freed. A net has no effect on formless creatures or creatures that are Huge or larger. A creature can use its action to make a DC 10 Strength check to free itself or another creature within its reach. Dealing 5 slashing damage to the net (AC 10) also frees the creature without harming it, destroying the net. When you attack with a net, you can make only one attack regardless of how many attacks you can normally make.',
@@ -294,7 +302,7 @@
         const itemPage = new URL('items/index.html', siteRoot);
         try {
           const itemDocument = await getPage(itemPage.href);
-          const itemNames = [
+        const itemNames = [
             ...Array.from(itemDocument.querySelectorAll('.item-card h3')).map((heading) => heading.textContent),
             ...Array.from(itemDocument.querySelectorAll('table tbody tr'))
               .filter((row) => !row.classList.contains('apparel-subcategory'))
@@ -302,14 +310,21 @@
               .filter(Boolean),
           ];
           const uniqueNames = [...new Map(itemNames.map((name) => [normalize(name).toLowerCase(), normalize(name)])).values()];
-          uniqueNames.forEach((name) => entries.push({
+        uniqueNames.forEach((name) => entries.push({
             title: `Item: ${name} - Fable`,
             text: name,
             href: `${itemPage.href}?item=${encodeURIComponent(name)}`,
             path: 'items/index.html',
-            itemName: name,
-          }));
-        } catch (error) {
+          itemName: name,
+        }));
+        catalogItems().forEach((item) => entries.push({
+          title: `Item: ${item.name} - Fable`,
+          text: `${item.name} ${item.description}`,
+          href: `${itemPage.href}?item=${encodeURIComponent(item.name)}`,
+          path: 'items/index.html',
+          itemName: item.name,
+        }));
+      } catch (error) {
           // The rest of the catalog remains usable if the item catalog cannot load.
         }
         try {
@@ -395,6 +410,8 @@
     if (article) {
       const values = Array.from(article.querySelectorAll('.item-card__heading > span')).map((span) => cleanField(span.textContent));
       const details = article.querySelector('.tool-details') || article.querySelector('p');
+      const category = normalize(article.closest('.item-group')?.querySelector(':scope > .item-group-title')?.textContent);
+      const listedCost = window.ELYSIUM_ITEM_CATALOG?.prices?.[category]?.[normalize(article.querySelector('h3')?.textContent)] || values[0] || '';
       const isContainer = Boolean(article.closest('.containers-group'));
       const isMount = Boolean(article.closest('.mounts-group--mounts'));
       const detailText = details ? normalize(details.textContent) : '';
@@ -410,11 +427,31 @@
         title: normalize(article.querySelector('h3')?.textContent) || name,
         subtitle: 'Item',
         description: containerDescription,
-        cost: values[0] || '',
+        cost: listedCost,
         weight: isMount ? '' : values[1] || '',
         damage: '',
         carryingCapacity: isMount ? values[2] || '' : containerCapacity,
         properties: values[3] || '',
+      };
+    }
+
+    const catalogItem = catalogItems().find((item) => normalize(item.name).toLowerCase() === wanted);
+    if (catalogItem) {
+      const capacitySentence = catalogItem.category === 'Containers'
+        ? (catalogItem.description.match(/^.*?(?:\.(?=\s+[A-Z]|$)|$)/)?.[0] || '')
+        : '';
+      return {
+        type: 'item',
+        title: catalogItem.name,
+        subtitle: catalogItem.category === 'Equipment Pack' ? 'Equipment Pack' : 'Item',
+        description: escapeText(catalogItem.category === 'Containers' && capacitySentence
+          ? catalogItem.description.slice(capacitySentence.length).trim()
+          : catalogItem.description),
+        cost: catalogItem.cost,
+        weight: catalogItem.weight,
+        carryingCapacity: capacitySentence.replace(/\.$/, '').trim(),
+        damage: '',
+        properties: '',
       };
     }
 
