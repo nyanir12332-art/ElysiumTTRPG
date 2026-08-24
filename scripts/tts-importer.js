@@ -31,6 +31,9 @@
   const spellComponentM = document.querySelector('#spell-component-m');
   const spellMaterial = document.querySelector('#spell-material');
   const spellTags = document.querySelector('#spell-tags');
+  const disciplinePsiCost = document.querySelector('#discipline-psi-cost');
+  const disciplineDuration = document.querySelector('#discipline-duration');
+  const disciplineTags = document.querySelector('#discipline-tags');
   const perkRequirement = document.querySelector('#perk-requirement');
   const perkRequiredBy = document.querySelector('#perk-required-by');
   const siteRoot = new URL('../', document.baseURI);
@@ -146,6 +149,41 @@
     path: 'systems/spellcasting.html',
     spell,
   }));
+  const disciplineMetadata = (title) => {
+    const rawTitle = String(title || '').trim();
+    if (rawTitle === 'Bestial Transformation.') {
+      return { name: 'Bestial Transformation', psiCost: 'Varies', duration: '1 hour', tags: '' };
+    }
+    const match = rawTitle.match(/^(.*?)\s*\(([^)]+)\)\.?$/);
+    if (!match) return { name: rawTitle.replace(/\.$/, ''), psiCost: '', duration: '', tags: '' };
+    const parts = match[2].split(';').map((part) => part.trim()).filter(Boolean);
+    const psiCost = parts.shift() || '';
+    const concentrationIndex = parts.findIndex((part) => /^conc\.?$/i.test(part));
+    const concentration = concentrationIndex !== -1;
+    if (concentration) parts.splice(concentrationIndex, 1);
+    const duration = parts.join('; ')
+      .replace(/\b1 min\./i, '1 minute')
+      .replace(/\b(\d+) min\./i, '$1 minutes')
+      .replace(/\b1 hr\./i, '1 hour')
+      .replace(/\b(\d+) hr\./i, '$1 hours');
+    return { name: match[1].trim(), psiCost, duration, tags: concentration ? 'Concentration' : '' };
+  };
+  const disciplineEntries = () => (window.PSIONIC_DISCIPLINES || []).flatMap((discipline) => [
+    {
+      title: `Discipline: ${discipline.title} - Fable`,
+      text: [discipline.title, discipline.group, discipline.introduction, ...(discipline.abilities || []).flatMap((ability) => [ability.title, ability.content])]
+        .filter(Boolean)
+        .join(' '),
+      path: 'classes/mystic/mystic-psionic-disciplines.html',
+      discipline,
+    },
+    ...(discipline.abilities || []).map((ability) => ({
+      title: `Discipline Ability: ${disciplineMetadata(ability.title).name} - ${discipline.title} - Fable`,
+      text: [discipline.title, discipline.group, ability.title, ability.content].filter(Boolean).join(' '),
+      path: 'classes/mystic/mystic-psionic-disciplines.html',
+      disciplineAbility: { discipline, ability },
+    })),
+  ]);
   const backgroundEntries = async () => {
     const backgroundIndex = new URL('backgrounds/index.html', siteRoot);
     const pageDocument = await getPage(backgroundIndex.href);
@@ -278,7 +316,7 @@
             href: toHref(page.path),
             path: String(page.path).replace(/\\/g, '/'),
           }));
-        const systemPages = entries.filter((entry) => /^systems\/(?:adventuring|character|combat|gamemaster-rules)\//i.test(entry.path));
+        const systemPages = entries.filter((entry) => /^systems\/(?!index\.html$|tts-converter\.html$).+\.html$/i.test(entry.path));
         const systemTopics = await Promise.all(systemPages.map(async (entry) => {
           try {
             const pageDocument = await getPage(entry.href);
@@ -332,15 +370,15 @@
         } catch (error) {
           // Background imports remain optional when the background catalog cannot load.
         }
-        entries.push(...spellEntries(), ...perkEntries());
+        entries.push(...spellEntries(), ...perkEntries(), ...disciplineEntries());
         return uniqueEntries(entries);
       })
       // Spell and perk imports stay available even if the optional site search index cannot load.
       .catch(async () => {
         try {
-          return uniqueEntries([...await backgroundEntries(), ...spellEntries(), ...perkEntries()]);
+          return uniqueEntries([...await backgroundEntries(), ...spellEntries(), ...perkEntries(), ...disciplineEntries()]);
         } catch (error) {
-          return uniqueEntries([...spellEntries(), ...perkEntries()]);
+          return uniqueEntries([...spellEntries(), ...perkEntries(), ...disciplineEntries()]);
         }
       });
     return indexPromise;
@@ -348,6 +386,7 @@
 
   const pageKind = (entry) => {
     if (entry.spell) return 'spell';
+    if (entry.discipline || entry.disciplineAbility) return 'discipline';
     if (entry.perk) return 'perk';
     if (/^races\//i.test(entry.path)) return 'race';
     if (/^backgrounds\//i.test(entry.path)) return 'background';
@@ -846,6 +885,50 @@
     return false;
   };
 
+  const disciplineCard = (discipline) => ({
+    type: 'discipline',
+    title: discipline.title,
+    subtitle: `${discipline.group} Discipline`,
+    description: discipline.introduction,
+    psiCost: '',
+    duration: '',
+    tags: '',
+  });
+
+  const disciplineAbilityCard = (discipline, ability) => {
+    const metadata = disciplineMetadata(ability.title);
+    return {
+      type: 'discipline',
+      title: metadata.name,
+      subtitle: `${discipline.group} Discipline — ${discipline.title}`,
+      description: ability.content,
+      psiCost: metadata.psiCost,
+      duration: metadata.duration,
+      tags: metadata.tags,
+    };
+  };
+
+  const showDisciplineChoices = (discipline) => {
+    clearResults();
+    const intro = document.createElement('p');
+    intro.className = 'tts-importer__empty';
+    intro.textContent = `Choose what to import from ${discipline.title}:`;
+    results.appendChild(intro);
+
+    addChoice('Discipline description', 'Description and Psychic Focus', () => {
+      fillBuilder(disciplineCard(discipline));
+      status.textContent = `${discipline.title} description loaded into Card Builder.`;
+    });
+    (discipline.abilities || []).forEach((ability) => {
+      const metadata = disciplineMetadata(ability.title);
+      addChoice(metadata.name, 'Discipline Ability', () => {
+        fillBuilder(disciplineAbilityCard(discipline, ability));
+        status.textContent = `${metadata.name} loaded into Card Builder.`;
+      });
+    });
+    status.textContent = `Choose the ${discipline.title} description or an ability.`;
+  };
+
   const setField = (field, value) => {
     if (!field) return;
     field.value = value || '';
@@ -879,6 +962,9 @@
     setChecked(spellComponentM, entry.type === 'spell' && entry.componentM);
     setField(spellMaterial, entry.type === 'spell' ? entry.material : '');
     setField(spellTags, entry.type === 'spell' ? entry.tags : '');
+    setField(disciplinePsiCost, entry.type === 'discipline' ? entry.psiCost : '');
+    setField(disciplineDuration, entry.type === 'discipline' ? entry.duration : '');
+    setField(disciplineTags, entry.type === 'discipline' ? entry.tags : '');
     editor.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
@@ -903,6 +989,15 @@
       button.addEventListener('click', async () => {
         status.textContent = 'Importing entry...';
         try {
+          if (entry.disciplineAbility) {
+            fillBuilder(disciplineAbilityCard(entry.disciplineAbility.discipline, entry.disciplineAbility.ability));
+            status.textContent = `${disciplineMetadata(entry.disciplineAbility.ability.title).name} loaded into Card Builder.`;
+            return;
+          }
+          if (entry.discipline) {
+            showDisciplineChoices(entry.discipline);
+            return;
+          }
           if (isClassEntry(entry)) {
             const page = await getPage(entry.href);
             showClassChoices(entry, page);

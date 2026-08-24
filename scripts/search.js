@@ -143,7 +143,11 @@
           if(!r.ok) throw new Error('no');
           return r.json();
         }).then(json => {
-          indexLinks = json.map(it=>({title: it.title, href: convertPathToHref(it.path, indexUrl)}));
+          indexLinks = json.map(it=>({
+            title: it.title,
+            href: convertPathToHref(it.path, indexUrl),
+            text: it.text || ''
+          }));
           const itemPage = indexLinks.find(page => /\/items\/index\.html$/i.test(new URL(page.href).pathname)) || {
             title: 'Items - Fable',
             href: new URL('items/index.html', indexUrl).href
@@ -152,7 +156,7 @@
           if(!indexLinks.some(page => page.href === itemPage.href)) indexLinks.push(itemPage);
 
           const addSystemTopics = () => {
-            const systemPages = indexLinks.filter((page) => /\/systems\/(?:adventuring|character|combat|gamemaster-rules)\//i.test(new URL(page.href).pathname));
+            const systemPages = indexLinks.filter((page) => /\/systems\/(?!index\.html$|tts-converter\.html$).+\.html$/i.test(new URL(page.href).pathname));
             return Promise.all(systemPages.map((page) => fetch(page.href, {cache:'no-store'}).then(r=>r.text()).then(html=>{
               const doc = new DOMParser().parseFromString(html, 'text/html');
               const topics = Array.from(doc.querySelectorAll('main h2, main h3, main h4'))
@@ -263,15 +267,26 @@
         const results = [];
 
         titleMatches.forEach(p=>{
-          promises.push(fetchAndSearchPage(p.href, query).then(r=>{
-            if(r) results.push({title: p.title, href: p.href, snippet: r.snippet, score: rankTitle(p.title)});
-            else results.push({title: p.title, href: p.href, snippet: '', score: rankTitle(p.title)});
-          }));
+          const indexed = p.text ? searchInText(p.href, query, p.text) : null;
+          if(indexed) {
+            results.push({title: p.title, href: p.href, snippet: indexed.snippet, score: rankTitle(p.title)});
+          } else if(p.text) {
+            results.push({title: p.title, href: p.href, snippet: '', score: rankTitle(p.title)});
+          } else {
+            promises.push(fetchAndSearchPage(p.href, query).then(r=>{
+              results.push({title: p.title, href: p.href, snippet: r ? r.snippet : '', score: rankTitle(p.title)});
+            }));
+          }
         });
 
         // Search other pages' bodies in case title doesn't match
         otherPages.forEach(p=>{
-          promises.push(fetchAndSearchPage(p.href, query).then(r=>{ if(r) results.push({title: p.title, href: p.href, snippet: r.snippet, score: 3}); }));
+          if(p.text) {
+            const indexed = searchInText(p.href, query, p.text);
+            if(indexed) results.push({title: p.title, href: p.href, snippet: indexed.snippet, score: 3});
+          } else {
+            promises.push(fetchAndSearchPage(p.href, query).then(r=>{ if(r) results.push({title: p.title, href: p.href, snippet: r.snippet, score: 3}); }));
+          }
         });
 
         Promise.all(promises).then(()=>{

@@ -37,6 +37,10 @@
   const spellMaterial = document.querySelector('#spell-material');
   const spellTags = document.querySelector('#spell-tags');
   const spellMaterialField = document.querySelector('#spell-material-field');
+  const disciplineFields = document.querySelector('#discipline-fields');
+  const disciplinePsiCost = document.querySelector('#discipline-psi-cost');
+  const disciplineDuration = document.querySelector('#discipline-duration');
+  const disciplineTags = document.querySelector('#discipline-tags');
   const perkFields = document.querySelector('#perk-fields');
   const perkRequirement = document.querySelector('#perk-requirement');
   const perkRequiredBy = document.querySelector('#perk-required-by');
@@ -55,6 +59,7 @@
     race: '../Images/RACE.png',
     class: '../Images/CLASS.png',
     spell: '../Images/SPELL.png',
+    discipline: '../Images/SPELL.png',
     technique: '../Images/TECHNIQUE.png',
     item: '../Images/ITEM.png',
     perk: '../Images/PERK.png?v=2',
@@ -486,7 +491,16 @@
     const spellTagLine = type.value === 'spell' && spellTags.value.trim()
       ? `<b>TAGS</b>  ${spellTags.value.trim()}`
       : '';
-    const body = [spellMeta, description.value, spellTagLine, itemMeta, perkMeta].filter((value) => value && value.trim()).join('\n\n');
+    const disciplineMeta = type.value === 'discipline'
+      ? [
+        disciplinePsiCost.value.trim() ? `<b>PSI POINT COST</b>  ${disciplinePsiCost.value.trim()}` : '',
+        disciplineDuration.value.trim() ? `<b>DURATION</b>  ${disciplineDuration.value.trim()}` : '',
+      ].filter(Boolean).join('\n')
+      : '';
+    const disciplineTagLine = type.value === 'discipline' && disciplineTags.value.trim()
+      ? `<b>TAGS</b>  ${disciplineTags.value.trim()}`
+      : '';
+    const body = [spellMeta, disciplineMeta, description.value, spellTagLine, disciplineTagLine, itemMeta, perkMeta].filter((value) => value && value.trim()).join('\n\n');
     const bodyStart = subtitleBodyStart + (itemDetailLines.length ? (itemDetailLines.length * 22) : 0);
     drawFittedTextBlock(context, body, 18, bodyStart, 264, height - bodyStart - 14, 11, COLORS.soft);
     context.restore();
@@ -646,7 +660,16 @@
     const spellTagLine = cardType === 'spell' && spellTags.value.trim()
       ? `<b>TAGS</b>  ${spellTags.value.trim()}`
       : '';
-    const body = [spellMeta, description.value, spellTagLine, itemMeta, perkMeta].filter((value) => value && value.trim()).join('\n\n');
+    const disciplineMeta = cardType === 'discipline'
+      ? [
+        disciplinePsiCost.value.trim() ? `<b>PSI POINT COST</b>  ${disciplinePsiCost.value.trim()}` : '',
+        disciplineDuration.value.trim() ? `<b>DURATION</b>  ${disciplineDuration.value.trim()}` : '',
+      ].filter(Boolean).join('\n')
+      : '';
+    const disciplineTagLine = cardType === 'discipline' && disciplineTags.value.trim()
+      ? `<b>TAGS</b>  ${disciplineTags.value.trim()}`
+      : '';
+    const body = [spellMeta, disciplineMeta, description.value, spellTagLine, disciplineTagLine, itemMeta, perkMeta].filter((value) => value && value.trim()).join('\n\n');
     // Do not reserve the subtitle band when it is empty. Keep a small reading
     // gap below the title divider, then give the description the full height.
     const bodyStart = subtitleBodyStart + (itemDetailLines.length ? (itemDetailLines.length * 45) : 0);
@@ -727,6 +750,7 @@
   const draw = () => {
     itemFields.hidden = type.value !== 'item';
     spellFields.hidden = type.value !== 'spell';
+    disciplineFields.hidden = type.value !== 'discipline';
     perkFields.hidden = type.value !== 'perk';
     spellMaterialField.hidden = type.value !== 'spell' || !spellComponentM.checked;
     drawFront();

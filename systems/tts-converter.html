@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -42,6 +42,7 @@
                 <option value="race">Race</option>
                 <option value="class">Class</option>
                 <option value="spell">Spell</option>
+                <option value="discipline">Discipline Ability</option>
                 <option value="technique">Technique</option>
                 <option value="item">Item</option>
                 <option value="perk">Perk</option>
@@ -119,6 +120,18 @@
                 <input id="spell-tags" type="text">
               </label>
             </fieldset>
+            <fieldset id="discipline-fields" hidden>
+              <legend>Discipline ability details</legend>
+              <label>Psi Point Cost
+                <input id="discipline-psi-cost" type="text" placeholder="3 psi">
+              </label>
+              <label>Duration
+                <input id="discipline-duration" type="text" placeholder="1 minute">
+              </label>
+              <label>Tags
+                <input id="discipline-tags" type="text" placeholder="Concentration">
+              </label>
+            </fieldset>
             <fieldset id="perk-fields" hidden>
               <legend>Perk details</legend>
               <label>Requirements
@@ -140,10 +153,10 @@
           <section class="tts-editor tts-importer" aria-labelledby="tts-importer-title">
             <div class="tts-editor__intro">
               <h2 id="tts-importer-title">Importer</h2>
-              <p>Search the catalog for a spell, perk, class, class feature, race, background, or item and load it into Card Builder.</p>
+              <p>Search the catalog for a spell, discipline, perk, class, class feature, race, background, or item and load it into Card Builder.</p>
             </div>
             <div class="tts-importer__search">
-              <input id="tts-importer-input" type="search" aria-label="Search spells, backgrounds, perks, items, systems, or features" autocomplete="off">
+              <input id="tts-importer-input" type="search" aria-label="Search spells, disciplines, backgrounds, perks, items, systems, or features" autocomplete="off">
               <button id="tts-importer-button" type="button">Search</button>
             </div>
             <div class="tts-importer__results" id="tts-importer-results" aria-live="polite"></div>
@@ -164,14 +177,15 @@
         </section>
       </main>
     </div>
-    <script src="../scripts/search.js?v=8"></script>
+    <script src="../scripts/search.js?v=9"></script>
     <script src="../scripts/spells.js?v=5"></script>
     <script src="../scripts/perks.js?v=6"></script>
     <script src="../scripts/spell-manifest.js?v=4"></script>
     <script src="../scripts/spell-links.js?v=9" data-spell-index="spellcasting.html"></script>
-  <script src="../scripts/tts-converter.js?v=61"></script>
+  <script src="../scripts/tts-converter.js?v=62"></script>
     <script src="../scripts/elysium-item-prices.js?v=20"></script>
-    <script src="../scripts/tts-importer.js?v=30"></script>
+    <script src="../scripts/psionic-disciplines-data.js?v=1"></script>
+    <script src="../scripts/tts-importer.js?v=35"></script>
     <script src="../scripts/select-menu.js?v=2"></script>
     <script src="../scripts/crt-scrollbar.js?v=5"></script>
   </body>

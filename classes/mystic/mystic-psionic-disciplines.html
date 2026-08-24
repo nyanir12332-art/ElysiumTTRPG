@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -6,16 +6,15 @@
     <link rel="icon" type="image/png" href="../../Images/ElysiumIcon.png">
     <link rel="stylesheet" href="../../styles/site.css?v=26">
     <link rel="stylesheet" href="../../styles/classes.css">
-    <link rel="stylesheet" href="../../styles/lore.css">
+    <link rel="stylesheet" href="../../styles/lore.css?v=3">
+    <link rel="stylesheet" href="../../styles/search.css?v=13">
     <title>Mystic: Psionic Disciplines - Fable</title>
-      <link rel="stylesheet" href="../../styles/search.css?v=13">
   </head>
   <body>
     <div class="screen">
       <div class="page-nav">
-      <div class="page-nav__item page-nav__prev"><a class="page-nav__link" href="mystic-wu-jen.html"><< Wu Jen</a></div>
+        <div class="page-nav__item page-nav__prev"><a class="page-nav__link" href="mystic-wu-jen.html">&lt;&lt; Wu Jen</a></div>
       </div>
-
       <header>
         <nav class="topbar" aria-label="Section navigation">
           <a class="home-link" href="../../index.html">Fable</a>
@@ -32,7 +31,7 @@
 
       <main>
         <h1 class="prompt"><a class="class-back-link" href="../classes.html">CLASSES</a>: <a href="../mystic.html">Mystic</a>: Psionic Disciplines</h1>
-        <section class="subclass-content" aria-label="mystic: Psionic Disciplines">
+        <section class="subclass-content" aria-label="Mystic psionic disciplines">
           <p class="subclass-intro">Psionic disciplines are the heart of a mystic's craft. They are the mental exercises and psionic formulae used to forge will into tangible, magical effects.</p>
 
           <h2>Using a Discipline</h2>
@@ -42,9 +41,7 @@
           </ul>
 
           <h2>Psychic Focus</h2>
-          <ul>
-            <li>The Psychic Focus section of a discipline describes the benefit you gain when you choose that discipline for your psychic focus.</li>
-          </ul>
+          <ul><li>The Psychic Focus section of a discipline describes the benefit you gain when you choose that discipline for your psychic focus.</li></ul>
 
           <h2>Effect Options and Psi Points</h2>
           <ul>
@@ -54,9 +51,7 @@
           </ul>
 
           <h2>Components</h2>
-          <ul>
-            <li>Disciplines don't require the components that many spells require. Using a discipline requires no spoken words, gestures, or materials. The power of psionics comes from the mind.</li>
-          </ul>
+          <ul><li>Disciplines don't require the components that many spells require. Using a discipline requires no spoken words, gestures, or materials. The power of psionics comes from the mind.</li></ul>
 
           <h2>Duration</h2>
           <ul>
@@ -67,9 +62,7 @@
           </ul>
 
           <h2>Targets and Areas of Effect</h2>
-          <ul>
-            <li>Psionic disciplines use the same rules as spells for determining targets and areas of effect, as presented in chapter 10, "Spellcasting," of the Player's Handbook.</li>
-          </ul>
+          <ul><li>Psionic disciplines use the same rules as spells for determining targets and areas of effect, as presented in chapter 10, "Spellcasting," of the Player's Handbook.</li></ul>
 
           <h2>Saving Throws and Attack Rolls</h2>
           <ul>
@@ -83,147 +76,24 @@
             <li>Psionics and spells are separate effects, and therefore their benefits and drawbacks overlap. A psionic effect that reproduces a spell is an exception to this rule.</li>
           </ul>
 
-          <div class="discipline-browser">
-          <div class="lore-tabs" role="tablist" aria-label="Mystic disciplines by order">
-            <button class="lore-tab active" type="button" data-target="avatar-panel" aria-controls="avatar-panel" aria-selected="true">Avatar</button>
-            <button class="lore-tab" type="button" data-target="awakened-panel" aria-controls="awakened-panel" aria-selected="false">Awakened</button>
-            <button class="lore-tab" type="button" data-target="immortal-panel" aria-controls="immortal-panel" aria-selected="false">Immortal</button>
-            <button class="lore-tab" type="button" data-target="nomad-panel" aria-controls="nomad-panel" aria-selected="false">Nomad</button>
-            <button class="lore-tab" type="button" data-target="wu-jen-panel" aria-controls="wu-jen-panel" aria-selected="false">Wu Jen</button>
-          </div>
-
-          <div class="lore-panel" id="avatar-panel">
-            <div class="table-wrap feature-table">
-              <table>
-                <thead>
-                  <tr><th scope="col" data-discipline-heading>Avatar Discipline</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td><a href="mystic-avatar-crown-of-despair.html">Crown of Despair</a></td></tr>
-                  <tr><td><a href="mystic-avatar-crown-of-disgust.html">Crown of Disgust</a></td></tr>
-                  <tr><td><a href="mystic-avatar-crown-of-rage.html">Crown of Rage</a></td></tr>
-                  <tr><td><a href="mystic-avatar-mantle-of-command.html">Mantle of Command</a></td></tr>
-                  <tr><td><a href="mystic-avatar-mantle-of-courage.html">Mantle of Courage</a></td></tr>
-                  <tr><td><a href="mystic-avatar-mantle-of-fear.html">Mantle of Fear</a></td></tr>
-                  <tr><td><a href="mystic-avatar-mantle-of-fury.html">Mantle of Fury</a></td></tr>
-                  <tr><td><a href="mystic-avatar-mantle-of-joy.html">Mantle of Joy</a></td></tr>
-                </tbody>
+          <section class="discipline-browser" data-discipline-browser aria-label="Psionic discipline catalog">
+            <div class="lore-tabs" data-discipline-orders role="tablist" aria-label="Mystic orders"></div>
+            <div class="discipline-browser__discipline-tabs" data-discipline-tabs aria-label="Disciplines"></div>
+            <div class="discipline-browser__introduction" data-discipline-introduction></div>
+            <div class="table-wrap feature-table discipline-browser__table-wrap">
+              <table class="discipline-browser__table">
+                <thead><tr><th>Ability</th><th>Psi Point Cost</th><th>Duration</th></tr></thead>
+                <tbody data-discipline-catalog></tbody>
               </table>
             </div>
-          </div>
-
-          <div class="lore-panel" id="awakened-panel" hidden>
-            <div class="table-wrap feature-table">
-              <table>
-                <thead>
-                  <tr><th scope="col" data-discipline-heading>Awakened Discipline</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td><a href="mystic-awakened-aura-sight.html">Aura Sight</a></td></tr>
-                  <tr><td><a href="mystic-awakened-intellect-fortress.html">Intellect Fortress</a></td></tr>
-                  <tr><td><a href="mystic-awakened-mantle-of-awe.html">Mantle of Awe</a></td></tr>
-                  <tr><td><a href="mystic-awakened-recognition.html">Recognition</a></td></tr>
-                  <tr><td><a href="mystic-awakened-psychic-assault.html">Psychic Assault</a></td></tr>
-                  <tr><td><a href="mystic-awakened-psychic-disruption.html">Psychic Disruption</a></td></tr>
-                  <tr><td><a href="mystic-awakened-psychic-inquisition.html">Psychic Inquisition</a></td></tr>
-                  <tr><td><a href="mystic-awakened-telepathic-contact.html">Telepathic Contact</a></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="lore-panel" id="immortal-panel" hidden>
-            <div class="table-wrap feature-table">
-              <table>
-                <thead>
-                  <tr><th scope="col" data-discipline-heading>Immortal Discipline</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td><a href="mystic-immortal-adaptive-body.html">Adaptive Body</a></td></tr>
-                  <tr><td><a href="mystic-immortal-bestial-form.html">Bestial Form</a></td></tr>
-                  <tr><td><a href="mystic-immortal-brute-force.html">Brute Force</a></td></tr>
-                  <tr><td><a href="mystic-immortal-celerity.html">Celerity</a></td></tr>
-                  <tr><td><a href="mystic-immortal-corrosive-metabolism.html">Corrosive Metabolism</a></td></tr>
-                  <tr><td><a href="mystic-immortal-diminution.html">Diminution</a></td></tr>
-                  <tr><td><a href="mystic-immortal-giant-growth.html">Giant Growth</a></td></tr>
-                  <tr><td><a href="mystic-immortal-iron-durability.html">Iron Durability</a></td></tr>
-                  <tr><td><a href="mystic-immortal-psionic-restoration.html">Psionic Restoration</a></td></tr>
-                  <tr><td><a href="mystic-immortal-psionic-weapon.html">Psionic Weapon</a></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="lore-panel" id="nomad-panel" hidden>
-            <div class="table-wrap feature-table">
-              <table>
-                <thead>
-                  <tr><th scope="col" data-discipline-heading>Nomad Discipline</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td><a href="mystic-nomad-nomadic-arrow.html">Nomadic Arrow</a></td></tr>
-                  <tr><td><a href="mystic-nomad-nomadic-chameleon.html">Nomadic Chameleon</a></td></tr>
-                  <tr><td><a href="mystic-nomad-nomadic-mind.html">Nomadic Mind</a></td></tr>
-                  <tr><td><a href="mystic-nomad-nomadic-step.html">Nomadic Step</a></td></tr>
-                  <tr><td><a href="mystic-nomad-third-eye.html">Third Eye</a></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="lore-panel" id="wu-jen-panel" hidden>
-            <div class="table-wrap feature-table">
-              <table>
-                <thead>
-                  <tr><th scope="col" data-discipline-heading>Wu Jen Discipline</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td><a href="mystic-wu-jen-mastery-of-air.html">Mastery of Air</a></td></tr>
-                  <tr><td><a href="mystic-wu-jen-mastery-of-fire.html">Mastery of Fire</a></td></tr>
-                  <tr><td><a href="mystic-wu-jen-mastery-of-force.html">Mastery of Force</a></td></tr>
-                  <tr><td><a href="mystic-wu-jen-mastery-of-ice.html">Mastery of Ice</a></td></tr>
-                  <tr><td><a href="mystic-wu-jen-mastery-of-light-and-darkness.html">Mastery of Light and Darkness</a></td></tr>
-                  <tr><td><a href="mystic-wu-jen-mastery-of-water.html">Mastery of Water</a></td></tr>
-                  <tr><td><a href="mystic-wu-jen-mastery-of-weather.html">Mastery of Weather</a></td></tr>
-                  <tr><td><a href="mystic-wu-jen-mastery-of-wood-and-earth.html">Mastery of Wood and Earth</a></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          </div>
+          </section>
         </section>
       </main>
     </div>
     <script src="../../scripts/table-scrollbars.js"></script>
-    <script>
-      const tabs = document.querySelectorAll('.lore-tab');
-      const panels = document.querySelectorAll('.lore-panel');
-
-      const selectDiscipline = (tab) => {
-        const target = tab.dataset.target;
-        const disciplineName = `${tab.textContent.trim()} Discipline`;
-
-        tabs.forEach((button) => {
-          const selected = button === tab;
-          button.classList.toggle('active', selected);
-          button.setAttribute('aria-selected', String(selected));
-        });
-
-        panels.forEach((panel) => {
-          panel.hidden = panel.id !== target;
-          if (!panel.hidden) {
-            panel.querySelector('[data-discipline-heading]').textContent = disciplineName;
-          }
-        });
-      };
-
-      tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-          selectDiscipline(tab);
-        });
-      });
-    </script>
-    <script src="../../scripts/search.js?v=8"></script>
+    <script src="../../scripts/psionic-disciplines-data.js?v=1"></script>
+    <script src="../../scripts/discipline-browser.js?v=7"></script>
+    <script src="../../scripts/search.js?v=9"></script>
     <script src="../../scripts/spell-manifest.js?v=1"></script>
     <script src="../../scripts/spell-links.js?v=9" data-spell-index="../../systems/spellcasting.html"></script>
     <script src="../../scripts/crt-scrollbar.js?v=1"></script>
