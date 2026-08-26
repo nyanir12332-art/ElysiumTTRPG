@@ -675,6 +675,26 @@
   display: block;
 }
 
+.vehicle-fuel-tooltip {
+  color: inherit;
+  display: inline-block;
+  font-size: 0.65em;
+  margin-left: 0;
+  vertical-align: super;
+}
+
+.mounts-group--vehicles .item-card,
+.mounts-group--waterborne .item-card {
+  overflow: visible;
+}
+
+.mounts-group--vehicles .item-card:has(.vehicle-fuel-tooltip:hover),
+.mounts-group--vehicles .item-card:has(.vehicle-fuel-tooltip:focus-visible),
+.mounts-group--waterborne .item-card:has(.vehicle-fuel-tooltip:hover),
+.mounts-group--waterborne .item-card:has(.vehicle-fuel-tooltip:focus-visible) {
+  z-index: 40;
+}
+
 .apparel-table {
   border-collapse: collapse;
   color: var(--green-soft);
@@ -785,6 +805,22 @@
 }
 
 .mounts-group--mounts .item-card__heading > span:nth-of-type(3) {
+  align-self: center;
+  color: var(--green-soft);
+  display: block;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  grid-column: 4;
+  white-space: nowrap;
+}
+
+.mounts-group--vehicles .item-column-headings,
+.mounts-group--vehicles .item-card {
+  grid-template-columns: minmax(240px, 29%) 90px 90px minmax(0, 1fr);
+}
+
+.mounts-group--vehicles .item-card__heading > span:nth-of-type(3) {
   align-self: center;
   color: var(--green-soft);
   display: block;
@@ -1202,6 +1238,26 @@
   word-break: break-word;
   text-overflow: clip;
   white-space: normal;
+}
+
+/* Vehicles use fixed table columns; they never expose expandable item attributes. */
+.mounts-group--vehicles .item-card .item-card__heading > span:nth-of-type(3),
+.mounts-group--waterborne .item-card .item-card__heading > span:nth-of-type(3) {
+  align-self: center;
+  color: var(--green-soft);
+  display: block;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  grid-column: 4;
+  grid-row: 1;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.mounts-group--vehicles .item-card .item-card__heading > span:nth-of-type(3)::before,
+.mounts-group--waterborne .item-card .item-card__heading > span:nth-of-type(3)::before {
+  content: none;
 }
 
 .item-card.needs-expansion::after {

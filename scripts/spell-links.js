@@ -10,12 +10,12 @@
   const displayNames = new Map(manifest.map((spell) => [spell.name.toLowerCase(), spell.name]));
 
   const escapePattern = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  // Auto-link only multi-word titles to avoid turning ordinary prose into spell links.
+  // Auto-link only title-cased, multi-word spell names inside identified spell tables.
   // references (for example, “fireball” or “shield”) link as well.
   const candidates = [...nameToId.keys()]
     .filter((name) => name.includes(' '))
     .sort((left, right) => right.length - left.length);
-  const titlePattern = new RegExp(`\\b(${candidates.map(escapePattern).join('|')})\\b`, 'gi');
+  const titlePattern = new RegExp(`\\b(${candidates.map(escapePattern).join('|')})\\b`, 'g');
   const classNames = ['artificer', 'bard', 'cleric', 'druid', 'paladin', 'ranger', 'sorcerer', 'warlock', 'wizard'];
   const classListPattern = new RegExp(`\\b(${classNames.join('|')})\\s+spell list\\b`, 'gi');
   const protectedTags = new Set(['A', 'BUTTON', 'CODE', 'SCRIPT', 'STYLE', 'TEXTAREA', 'OPTION']);
@@ -27,7 +27,7 @@
     const link = document.createElement('a');
     link.className = 'spell-reference';
     link.dataset.spellReference = id;
-    link.href = `${indexPath}?search=${encodeURIComponent(displayNames.get(lookup) || matched)}`;
+    link.href = `${indexPath}?spell=${encodeURIComponent(id)}`;
     link.textContent = displayNames.get(lookup) || matched;
     return link;
   };
@@ -82,12 +82,33 @@
     const nodes = [];
     while (walker.nextNode()) {
       const parent = walker.currentNode.parentElement;
-      if (parent && !protectedTags.has(parent.tagName) && !parent.closest('a, button, code, pre')) nodes.push(walker.currentNode);
+      // Headings are labels, not prose. A spell name in a heading (for
+      // example, "Mage Hand Legerdemain") must never become a spell link.
+      if (parent && !protectedTags.has(parent.tagName) && !parent.closest('a, button, code, pre, h1, h2, h3, h4, h5, h6')) {
+        nodes.push(walker.currentNode);
+      }
     }
     return nodes;
   };
 
+  const isSpellTableText = (node) => {
+    const table = node.parentElement?.closest('table');
+    if (!table) return false;
+
+    const section = table.closest('section, article, main');
+    const context = `${table.querySelector('thead')?.textContent || ''} ${section?.querySelector('h1, h2, h3')?.textContent || ''}`;
+    return /\bspell(?:s|casting)?\b/i.test(context);
+  };
+
   document.querySelectorAll('a').forEach((link) => {
+    // Do not retain or create spell links in headings. This also cleans up
+    // markup written before the heading safeguard existed.
+    if (link.closest('h1, h2, h3, h4, h5, h6')) {
+      if (link.classList.contains('spell-reference') || link.dataset.spellReference) {
+        link.replaceWith(document.createTextNode(link.textContent));
+      }
+      return;
+    }
     // School links use school names as their labels, and a school can share
     // a name with a spell (for example, Divination). Keep their destination
     // intact instead of treating them as spell-name links.
@@ -102,12 +123,16 @@
     }
     const spellName = displayNames.get(text.toLowerCase());
     if (!spellName) return;
+    const href = link.getAttribute('href') || '';
+    if (!link.classList.contains('spell-reference')
+      && !link.dataset.spellReference
+      && !/spellcasting\.html/i.test(href)) return;
     link.classList.add('spell-reference');
     link.dataset.spellReference = nameToId.get(text.toLowerCase());
     link.textContent = spellName;
-    link.href = `${indexPath}?search=${encodeURIComponent(spellName)}`;
+    link.href = `${indexPath}?spell=${encodeURIComponent(nameToId.get(text.toLowerCase()))}`;
   });
 
   collectEligibleTextNodes().forEach(replaceClassListText);
-  collectEligibleTextNodes().forEach(replaceText);
+  collectEligibleTextNodes().filter(isSpellTableText).forEach(replaceText);
 })();

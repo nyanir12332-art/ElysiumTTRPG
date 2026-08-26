@@ -795,4 +795,66 @@
   });
   cardSize.addEventListener('change', updateCanvasSize);
   updateCanvasSize();
+
+  // Shared renderer for the batch importer. It deliberately uses the same
+  // canvas and drawing code as the manual card builder, so both exports stay
+  // visually identical.
+  const batchFields = {
+    type, cardSize, title, subtitle, description,
+    itemCost, itemWeight, itemDamage, itemArmorClass, itemCarryingCapacity, itemProperties,
+    spellCastingTime, spellRange, spellDuration, spellComponentV, spellComponentS, spellComponentM,
+    spellMaterial, spellTags, disciplinePsiCost, disciplineDuration, disciplineTags, perkRequirement, perkRequiredBy,
+  };
+  const snapshot = () => Object.fromEntries(Object.entries(batchFields).map(([name, field]) => [name, field.type === 'checkbox' ? field.checked : field.value]));
+  const restore = (values) => Object.entries(batchFields).forEach(([name, field]) => {
+    const value = values[name];
+    if (field.type === 'checkbox') field.checked = Boolean(value);
+    else field.value = value || '';
+  });
+  const applyCard = (card, size) => {
+    type.value = card.type || 'feature';
+    cardSize.value = size;
+    title.value = card.title || 'Untitled';
+    subtitle.value = card.subtitle || 'Feature';
+    description.value = card.description || '';
+    itemCost.value = card.cost || '';
+    itemWeight.value = card.weight || '';
+    itemDamage.value = card.damage || '';
+    itemArmorClass.value = card.armorClass || '';
+    itemCarryingCapacity.value = card.carryingCapacity || '';
+    itemProperties.value = card.properties || '';
+    spellCastingTime.value = card.castingTime || '';
+    spellRange.value = card.range || '';
+    spellDuration.value = card.duration || '';
+    spellComponentV.checked = Boolean(card.componentV);
+    spellComponentS.checked = Boolean(card.componentS);
+    spellComponentM.checked = Boolean(card.componentM);
+    spellMaterial.value = card.material || '';
+    spellTags.value = card.tags || '';
+    disciplinePsiCost.value = card.psiCost || '';
+    disciplineDuration.value = card.duration || '';
+    disciplineTags.value = card.tags || '';
+    perkRequirement.value = card.requirement || '';
+    perkRequiredBy.value = card.requiredBy || '';
+    updateCanvasSize();
+  };
+  window.TTSCardRenderer = {
+    async jpeg(card, size) {
+      const previous = snapshot();
+      applyCard(card, size);
+      const blob = await new Promise((resolve) => front.toBlob(resolve, 'image/jpeg', 0.94));
+      restore(previous);
+      updateCanvasSize();
+      return blob;
+    },
+    async backJpeg(size) {
+      const previous = snapshot();
+      cardSize.value = size;
+      updateCanvasSize();
+      const blob = await new Promise((resolve) => back.toBlob(resolve, 'image/jpeg', 0.94));
+      restore(previous);
+      updateCanvasSize();
+      return blob;
+    },
+  };
 })();

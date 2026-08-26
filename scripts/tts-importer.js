@@ -143,6 +143,12 @@
       tags: [spell.ritual ? 'Ritual' : '', spell.concentration ? 'Concentration' : ''].filter(Boolean).join(', '),
     };
   };
+  window.TTSSpellCatalog = {
+    get(id) {
+      const spell = (window.SPELLS || []).find((entry) => entry.id === id);
+      return spell ? extractSpell(spell) : null;
+    },
+  };
   const spellEntries = () => (window.SPELLS || []).map((spell) => ({
     title: `Spell: ${spell.name} - Fable`,
     text: [spell.name, spell.school, ...(spell.classes || []), ...(spell.description || []), ...(spell.higherLevel || [])].filter(Boolean).join(' '),
@@ -283,12 +289,6 @@
     if (tag === 'th') return `<th>${children}</th>`;
     if (tag === 'td') return `<td>${children}</td>`;
     return children;
-  };
-
-  const serializeRelicTable = (table) => {
-    const clone = table.cloneNode(true);
-    clone.querySelector('caption')?.remove();
-    return serialize(clone).replace(/^<table>\s*/i, '<table>');
   };
 
   const getPage = (href) => fetch(href, { cache: 'no-store' })
@@ -445,14 +445,24 @@
     const name = entry.itemName || new URL(entry.href).searchParams.get('item') || cleanTitle(entry.title);
     const normalizedName = normalize(name).toLowerCase();
     const wanted = itemAliases.get(normalizedName) || normalizedName;
-    const article = Array.from(document.querySelectorAll('.item-card')).find((item) => normalize(item.querySelector('h3')?.textContent).toLowerCase() === wanted);
+    const itemName = (heading) => {
+      const copy = heading?.cloneNode(true);
+      copy?.querySelectorAll('.vehicle-fuel-tooltip').forEach((marker) => marker.remove());
+      return normalize(copy?.textContent);
+    };
+    const article = Array.from(document.querySelectorAll('.item-card')).find((item) => itemName(item.querySelector('h3')).toLowerCase() === wanted);
     if (article) {
       const values = Array.from(article.querySelectorAll('.item-card__heading > span')).map((span) => cleanField(span.textContent));
       const details = article.querySelector('.tool-details') || article.querySelector('p');
       const category = normalize(article.closest('.item-group')?.querySelector(':scope > .item-group-title')?.textContent);
-      const listedCost = window.ELYSIUM_ITEM_CATALOG?.prices?.[category]?.[normalize(article.querySelector('h3')?.textContent)] || values[0] || '';
+      const articleName = itemName(article.querySelector('h3'));
+      const listedCost = window.ELYSIUM_ITEM_CATALOG?.prices?.[category]?.[articleName] || values[0] || '';
       const isContainer = Boolean(article.closest('.containers-group'));
       const isMount = Boolean(article.closest('.mounts-group--mounts'));
+      const isLandVehicle = Boolean(article.closest('.mounts-group--vehicles'));
+      const isWaterborneVehicle = Boolean(article.closest('.mounts-group--waterborne'));
+      const isVehicle = isLandVehicle || isWaterborneVehicle;
+      const fuelPerHour = article.querySelector('.vehicle-fuel-tooltip')?.dataset.fuelPerHour || '';
       const detailText = details ? normalize(details.textContent) : '';
       const capacitySentence = isContainer
         ? (detailText.match(/^.*?(?:\.(?=\s+[A-Z]|$)|$)/)?.[0] || '')
@@ -463,14 +473,14 @@
         : (details ? serializeWithoutControls(details) : '');
       return {
         type: 'item',
-        title: normalize(article.querySelector('h3')?.textContent) || name,
-        subtitle: 'Item',
+        title: articleName || name,
+        subtitle: isVehicle ? 'Vehicle' : 'Item',
         description: containerDescription,
         cost: listedCost,
-        weight: isMount ? '' : values[1] || '',
+        weight: isMount || isVehicle ? '' : values[1] || '',
         damage: '',
-        carryingCapacity: isMount ? values[2] || '' : containerCapacity,
-        properties: values[3] || '',
+        carryingCapacity: isMount || isLandVehicle ? values[2] || '' : containerCapacity,
+        properties: isVehicle ? `Speed: ${values[1] || '-'}${fuelPerHour ? `; Fuel: ${fuelPerHour} per hour` : ''}` : values[3] || '',
       };
     }
 
@@ -527,6 +537,15 @@
       };
     }
     throw new Error('Item not found');
+  };
+
+  // Used by the batch importer so starting equipment uses the exact same
+  // catalog cards as a manual item import.
+  window.TTSItemCatalog = {
+    resolve(name) {
+      const itemPage = new URL('items/index.html', siteRoot).href;
+      return extractItem({ href: `${itemPage}?item=${encodeURIComponent(name)}`, itemName: name });
+    },
   };
 
   const extractEntry = async (entry, query) => {
@@ -650,50 +669,7 @@
 
     const sectionHeadings = Array.from(pageDocument.querySelectorAll('main .subclass-content h2, main .subclass-content h3, main .subclass-content h4'))
       .filter(isLeafSectionHeading);
-    const sectionNodesAfterHeading = (heading) => {
-      const level = Number(heading.tagName.substring(1));
-      const nodes = [];
-      let sibling = heading.nextElementSibling;
-      while (sibling) {
-        const siblingLevel = /^H[1-6]$/.test(sibling.tagName) ? Number(sibling.tagName.substring(1)) : null;
-        if (siblingLevel !== null && siblingLevel <= level) break;
-        nodes.push(sibling);
-        sibling = sibling.nextElementSibling;
-      }
-      return nodes;
-    };
-
     sectionHeadings.forEach((heading) => {
-      const headingTitle = normalize(heading.textContent);
-      if (sectionCategory === 'Infusion' && headingTitle.toLowerCase() === 'replicate relic') {
-        const sectionNodes = sectionNodesAfterHeading(heading);
-        const descriptionNodes = sectionNodes.filter((node) => !node.matches('.table-wrap'));
-        const tables = sectionNodes.filter((node) => node.matches('.table-wrap'));
-
-        addChoice(headingTitle + ' — Description', 'Infusion description', () => {
-          fillBuilder({
-            type: 'feature',
-            title: headingTitle,
-            subtitle: sectionCategory,
-            description: descriptionNodes.map(serialize).join(''),
-          });
-          status.textContent = headingTitle + ' description loaded into Card Builder.';
-        });
-
-        tables.forEach((table) => {
-          const tableTitle = normalize(table.querySelector('caption')?.textContent || 'Replicable Relics');
-          addChoice(tableTitle, 'Infusion table', () => {
-            fillBuilder({
-              type: 'feature',
-              title: tableTitle,
-              subtitle: sectionCategory,
-              description: serializeRelicTable(table),
-            });
-            status.textContent = tableTitle + ' loaded into Card Builder.';
-          });
-        });
-        return;
-      }
       addChoice(normalize(heading.textContent), sectionCategory ? `${sectionCategory} section` : 'Single section', () => {
         fillBuilder({
           type: 'feature',

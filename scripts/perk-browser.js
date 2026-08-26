@@ -126,7 +126,7 @@
     ? new RegExp(`\\b(${referenceCandidates.map(escapeRegExp).join('|')})\\b`, 'gi')
     : null;
 
-  const spellHref = (spell) => `../systems/spellcasting.html?search=${encodeURIComponent(spell.name)}`;
+  const spellHref = (spell) => `../systems/spellcasting.html?spell=${encodeURIComponent(spell.id)}`;
   const schoolHref = (school) => `../systems/spellcasting.html?school=${encodeURIComponent(school)}`;
 
   // One-word spell names frequently overlap with ordinary prose. Match the

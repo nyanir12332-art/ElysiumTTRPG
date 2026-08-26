@@ -11,7 +11,7 @@
   const installSpellReferences = () => {
     if (!scriptUrl || document.documentElement.dataset.spellLinksReady) return;
     const manifestUrl = new URL('spell-manifest.js?v=2', scriptUrl).href;
-    const linksUrl = new URL('spell-links.js?v=7', scriptUrl).href;
+    const linksUrl = new URL('spell-links.js?v=13', scriptUrl).href;
     const loadLinks = () => loadScript(linksUrl).catch(() => {});
     if (Array.isArray(window.SPELL_MANIFEST)) loadLinks();
     else loadScript(manifestUrl).then(loadLinks).catch(() => {});

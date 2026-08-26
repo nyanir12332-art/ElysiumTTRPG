@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
     <link rel="stylesheet" href="../styles/site.css?v=26">
     <link rel="stylesheet" href="../styles/classes.css">
-    <link rel="stylesheet" href="../styles/tts-converter.css?v=18">
+    <link rel="stylesheet" href="../styles/tts-converter.css?v=19">
     <link rel="stylesheet" href="../styles/search.css?v=13">
     <title>TTS Converter - Fable</title>
   </head>
@@ -162,6 +162,57 @@
             <div class="tts-importer__results" id="tts-importer-results" aria-live="polite"></div>
             <p class="tts-status" id="tts-importer-status" role="status" aria-live="polite">Search the site catalog to import an entry.</p>
           </section>
+          <section class="tts-editor tts-batch-importer" aria-labelledby="tts-batch-title">
+            <div class="tts-editor__intro">
+              <h2 id="tts-batch-title">Batch Importer</h2>
+              <p>Choose any combination of class, background, and race. Exported cards are placed in separate folders with portrait and square JPG versions.</p>
+            </div>
+            <fieldset>
+              <legend>1. Class</legend>
+              <label>Class
+                <select id="batch-class"><option value="">Do not include a class</option></select>
+              </label>
+              <label>Level
+                <select id="batch-class-level" disabled><option value="">Choose a class first</option></select>
+              </label>
+              <label id="batch-subclass-label" hidden>Subclass
+                <select id="batch-subclass"><option value="">Do not include a subclass</option></select>
+              </label>
+              <div class="tts-batch-options" id="batch-equipment-options" hidden></div>
+            </fieldset>
+            <fieldset>
+              <legend>2. Background</legend>
+              <label>Background
+                <select id="batch-background"><option value="">Do not include a background</option></select>
+              </label>
+              <div class="tts-batch-options" id="batch-background-options" hidden></div>
+            </fieldset>
+            <fieldset>
+              <legend>3. Race</legend>
+              <label>Race
+                <select id="batch-race"><option value="">Do not include a race</option></select>
+              </label>
+              <div class="tts-batch-options" id="batch-race-options" hidden></div>
+            </fieldset>
+            <div class="tts-actions">
+              <button type="button" id="batch-download" disabled>Download Batch ZIP</button>
+            </div>
+            <p class="tts-status" id="batch-status" role="status" aria-live="polite">Choose at least one class, background, or race to enable the export.</p>
+          </section>
+          <section class="tts-editor tts-batch-importer" aria-labelledby="tts-spell-batch-title">
+            <div class="tts-editor__intro">
+              <h2 id="tts-spell-batch-title">Spell Batch Importer</h2>
+              <p>Select any number of spells to export as card JPGs in one ZIP file.</p>
+            </div>
+            <label>Find spells
+              <input id="spell-batch-search" type="search" placeholder="Search by spell name, school, or class" autocomplete="off">
+            </label>
+            <div class="tts-batch-options tts-spell-batch__results" id="spell-batch-results" aria-live="polite"></div>
+            <div class="tts-actions">
+              <button type="button" id="spell-batch-download" disabled>Download Spell ZIP</button>
+            </div>
+            <p class="tts-status" id="spell-batch-status" role="status" aria-live="polite">Select one or more spells to enable the export.</p>
+          </section>
           </div>
 
           <section class="tts-preview" aria-label="Card preview">
@@ -177,15 +228,16 @@
         </section>
       </main>
     </div>
-    <script src="../scripts/search.js?v=9"></script>
-    <script src="../scripts/spells.js?v=5"></script>
-    <script src="../scripts/perks.js?v=6"></script>
+    <script src="../scripts/search.js?v=12"></script>
+    <script src="../scripts/spells.js?v=9"></script>
+    <script src="../scripts/perks.js?v=7"></script>
     <script src="../scripts/spell-manifest.js?v=4"></script>
-    <script src="../scripts/spell-links.js?v=9" data-spell-index="spellcasting.html"></script>
-  <script src="../scripts/tts-converter.js?v=62"></script>
+    <script src="../scripts/spell-links.js?v=13" data-spell-index="spellcasting.html"></script>
+  <script src="../scripts/tts-converter.js?v=64"></script>
     <script src="../scripts/elysium-item-prices.js?v=20"></script>
     <script src="../scripts/psionic-disciplines-data.js?v=1"></script>
-    <script src="../scripts/tts-importer.js?v=35"></script>
+    <script src="../scripts/tts-importer.js?v=44"></script>
+    <script src="../scripts/tts-batch-importer.js?v=13"></script>
     <script src="../scripts/select-menu.js?v=2"></script>
     <script src="../scripts/crt-scrollbar.js?v=5"></script>
   </body>

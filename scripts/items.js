@@ -18,6 +18,12 @@
 
   const updateOverflowMarkers = () => {
     document.querySelectorAll('.item-card').forEach((item) => {
+      if (item.closest('.mounts-group--vehicles, .mounts-group--waterborne')) {
+        item.classList.remove('needs-expansion', 'has-overflow', 'is-expanded');
+        item.setAttribute('aria-expanded', 'false');
+        return;
+      }
+
       const description = item.querySelector('p');
       let needsExpansion = false;
 
@@ -53,7 +59,7 @@
           item.hidden = !matches;
           if (matches) groupVisible += 1;
         });
-        group.hidden = Boolean(query && cards.length && !groupVisible);
+        group.hidden = Boolean(query && !groupVisible);
         visibleItems += groupVisible;
         searchableItems += cards.length;
       });
@@ -229,7 +235,8 @@
   });
 
   document.querySelectorAll('.item-card').forEach((item) => {
-    if (item.classList.contains('tool-card--static')) return;
+    if (item.classList.contains('tool-card--static')
+      || item.closest('.mounts-group--vehicles, .mounts-group--waterborne')) return;
     const toggle = () => {
       const expanded = item.classList.toggle('is-expanded');
       item.setAttribute('aria-expanded', String(expanded));
@@ -247,6 +254,11 @@
 
   document.querySelectorAll('.item-card__expand').forEach((button) => {
     button.addEventListener('keydown', (event) => event.stopPropagation());
+  });
+
+  document.querySelectorAll('.vehicle-fuel-tooltip').forEach((marker) => {
+    marker.addEventListener('click', (event) => event.stopPropagation());
+    marker.addEventListener('keydown', (event) => event.stopPropagation());
   });
 
   document.querySelectorAll('.explosive-expand').forEach((button) => {

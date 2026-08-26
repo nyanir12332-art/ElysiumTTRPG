@@ -430,7 +430,7 @@ main > .prompt + .system-copy > h3:first-child {
    anchor styling (class features, rules, and tables). */
 a.spell-reference,
 a.spell-reference:visited {
-  color: inherit;
+  color: var(--green);
   font-style: normal;
   text-decoration-color: var(--green);
   text-decoration-style: solid;

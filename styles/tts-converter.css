@@ -331,6 +331,53 @@
   margin: 0;
 }
 
+.tts-batch-importer fieldset {
+  min-width: 0;
+}
+
+.tts-batch-options {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+.tts-batch-options > p {
+  color: var(--green-dim);
+  font-size: 0.8rem;
+}
+
+.tts-batch-options label {
+  align-items: start;
+  display: flex;
+  font-size: 0.8rem;
+  gap: 8px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.tts-batch-options input {
+  appearance: none;
+  background: rgba(3, 7, 4, 0.9);
+  border: 1px solid var(--line);
+  flex: 0 0 auto;
+  height: 14px;
+  margin: 2px 0 0;
+  padding: 0;
+  width: 14px;
+}
+
+.tts-batch-options input:checked {
+  background: var(--green);
+  box-shadow: inset 0 0 0 3px var(--black);
+}
+
+.tts-spell-batch__results {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
 .tts-preview {
   align-items: start;
   display: grid;

@@ -329,6 +329,10 @@ window.SPELL_MANIFEST = [
     "name": "Divine Favor"
   },
   {
+    "id": "divine-smite",
+    "name": "Divine Smite"
+  },
+  {
     "id": "divine-word",
     "name": "Divine Word"
   },
