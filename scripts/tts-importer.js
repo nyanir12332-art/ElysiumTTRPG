@@ -184,7 +184,7 @@
       discipline,
     },
     ...(discipline.abilities || []).map((ability) => ({
-      title: `Discipline Ability: ${disciplineMetadata(ability.title).name} - ${discipline.title} - Fable`,
+      title: `Psionic Discipline: ${disciplineMetadata(ability.title).name} - ${discipline.title} - Fable`,
       text: [discipline.title, discipline.group, ability.title, ability.content].filter(Boolean).join(' '),
       path: 'classes/mystic/mystic-psionic-disciplines.html',
       disciplineAbility: { discipline, ability },
@@ -462,6 +462,7 @@
       const isLandVehicle = Boolean(article.closest('.mounts-group--vehicles'));
       const isWaterborneVehicle = Boolean(article.closest('.mounts-group--waterborne'));
       const isVehicle = isLandVehicle || isWaterborneVehicle;
+      const isAttachment = Boolean(article.closest('.attachments-section'));
       const fuelPerHour = article.querySelector('.vehicle-fuel-tooltip')?.dataset.fuelPerHour || '';
       const detailText = details ? normalize(details.textContent) : '';
       const capacitySentence = isContainer
@@ -471,16 +472,19 @@
       const containerDescription = isContainer && capacitySentence
         ? escapeText(detailText.slice(capacitySentence.length).trim())
         : (details ? serializeWithoutControls(details) : '');
+      const attachmentDescription = isAttachment
+        ? `${containerDescription}<p><strong>Attachable To.</strong> ${escapeText(values[2] || '-')}</p>`
+        : containerDescription;
       return {
         type: 'item',
         title: articleName || name,
-        subtitle: isVehicle ? 'Vehicle' : 'Item',
-        description: containerDescription,
+        subtitle: isAttachment ? 'Attachment' : isVehicle ? 'Vehicle' : 'Item',
+        description: attachmentDescription,
         cost: listedCost,
         weight: isMount || isVehicle ? '' : values[1] || '',
         damage: '',
         carryingCapacity: isMount || isLandVehicle ? values[2] || '' : containerCapacity,
-        properties: isVehicle ? `Speed: ${values[1] || '-'}${fuelPerHour ? `; Fuel: ${fuelPerHour} per hour` : ''}` : values[3] || '',
+        properties: isAttachment ? `Attachable To: ${values[2] || '-'}` : isVehicle ? `Speed: ${values[1] || '-'}${fuelPerHour ? `; Fuel: ${fuelPerHour} per hour` : ''}` : values[3] || '',
       };
     }
 
@@ -517,15 +521,16 @@
       const isFirearm = table?.classList.contains('firearms-table');
       const isWeapon = table?.classList.contains('weapons-table') && !table.classList.contains('weapons-table--ammunition');
       const isArmor = table?.classList.contains('apparel-table') && !isFirearm && !table?.classList.contains('weapons-table');
+      const itemTitle = normalize(cells[0]?.textContent);
       const description = headers.map((header, index) => {
         if (/^(?:name|shield type|cost|weight|damage|armor class(?: \(ac\))?|properties|carrying capacity|examples)$/.test(header)) return '';
         const value = cleanField(cells[index]?.textContent);
         return value ? `${header}: ${value}` : '';
       }).filter(Boolean).join(' - ');
-      const specialDescription = specialWeaponDescriptions[normalize(cells[0]?.textContent).toLowerCase()];
+      const specialDescription = specialWeaponDescriptions[itemTitle.toLowerCase()];
       return {
         type: 'item',
-        title: normalize(cells[0]?.textContent) || name,
+        title: itemTitle || name,
         subtitle: isFirearm || isWeapon ? 'Weapon' : isArmor ? 'Armor' : 'Item',
         description: escapeText([description, specialDescription].filter(Boolean).join(' ')),
         cost: columnValue('cost'),
@@ -897,7 +902,7 @@
     });
     (discipline.abilities || []).forEach((ability) => {
       const metadata = disciplineMetadata(ability.title);
-      addChoice(metadata.name, 'Discipline Ability', () => {
+      addChoice(metadata.name, 'Psionic Discipline', () => {
         fillBuilder(disciplineAbilityCard(discipline, ability));
         status.textContent = `${metadata.name} loaded into Card Builder.`;
       });

@@ -10,10 +10,9 @@
   const displayNames = new Map(manifest.map((spell) => [spell.name.toLowerCase(), spell.name]));
 
   const escapePattern = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  // Auto-link only title-cased, multi-word spell names inside identified spell tables.
+  // Auto-link spell names inside identified spell tables, including one-word names.
   // references (for example, “fireball” or “shield”) link as well.
   const candidates = [...nameToId.keys()]
-    .filter((name) => name.includes(' '))
     .sort((left, right) => right.length - left.length);
   const titlePattern = new RegExp(`\\b(${candidates.map(escapePattern).join('|')})\\b`, 'g');
   const classNames = ['artificer', 'bard', 'cleric', 'druid', 'paladin', 'ranger', 'sorcerer', 'warlock', 'wizard'];
@@ -91,13 +90,34 @@
     return nodes;
   };
 
-  const isSpellTableText = (node) => {
-    const table = node.parentElement?.closest('table');
-    if (!table) return false;
+  const nearestPrecedingHeading = (element) => {
+    let current = element;
+    while (current && current !== document.body) {
+      for (let sibling = current.previousElementSibling; sibling; sibling = sibling.previousElementSibling) {
+        if (/^H[1-6]$/.test(sibling.tagName)) return sibling.textContent || '';
+      }
+      current = current.parentElement;
+    }
+    return '';
+  };
 
-    const section = table.closest('section, article, main');
-    const context = `${table.querySelector('thead')?.textContent || ''} ${section?.querySelector('h1, h2, h3')?.textContent || ''}`;
-    return /\bspell(?:s|casting)?\b/i.test(context);
+  const isSpellTable = (table) => {
+    if (!table) return false;
+    const context = [
+      table.querySelector('caption')?.textContent,
+      table.querySelector('thead')?.textContent,
+      nearestPrecedingHeading(table),
+    ].filter(Boolean).join(' ');
+    return /\b(?:spells?|cantrips?|spellcasting)\b/i.test(context);
+  };
+
+  const isSpellTableText = (node) => isSpellTable(node.parentElement?.closest('table'));
+
+  const isSpellReferenceContext = (link) => {
+    const table = link.closest('table');
+    if (table) return isSpellTable(table);
+    const prose = link.closest('p, li, dd, figcaption')?.textContent || link.parentElement?.textContent || '';
+    return /\b(?:spell|cantrip|cast(?:ing)?|magic(?:al)?|ritual)\b/i.test(prose);
   };
 
   document.querySelectorAll('a').forEach((link) => {
@@ -113,6 +133,10 @@
     // a name with a spell (for example, Divination). Keep their destination
     // intact instead of treating them as spell-name links.
     if (link.dataset.spellSchoolReference) return;
+    if ((link.classList.contains('spell-reference') || link.dataset.spellReference) && !isSpellReferenceContext(link)) {
+      link.replaceWith(document.createTextNode(link.textContent));
+      return;
+    }
     const text = link.textContent.trim();
     const match = text.match(new RegExp(`^(${classNames.join('|')})\\s+spell list$`, 'i'));
     if (match) {

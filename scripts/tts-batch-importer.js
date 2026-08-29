@@ -14,11 +14,15 @@
   const spellResults = document.querySelector('#spell-batch-results');
   const spellDownload = document.querySelector('#spell-batch-download');
   const spellStatus = document.querySelector('#spell-batch-status');
+  const catalogMode = document.querySelector('#catalog-batch-mode');
+  const catalogSearchLabel = document.querySelector('#catalog-batch-search-label');
   if (!classSelect || !levelSelect || !backgroundSelect || !raceSelect || !downloadButton || !status) return;
 
   const pageCache = new Map();
   const classCatalog = new Map();
   const selectedSpells = new Set();
+  const selectedPerks = new Set();
+  const selectedConditions = new Set();
   const text = (value) => String(value || '').replace(/\s+/g, ' ').trim();
   const safeName = (value) => text(value).replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase() || 'card';
   const page = async (url) => {
@@ -124,9 +128,9 @@
     ['leather', { item: 'Leather Armor', title: 'Leather Armor' }],
     ['chain mail', { item: 'Chain Mail Armor', title: 'Chain Mail Armor' }],
     ['shield', { item: 'Infantry shield', title: 'Shield (Infantry Shield)' }],
-    ['identity documents', { item: 'Book', title: 'Identity Documents (Book)' }],
-    ['district transit pass', { item: 'City Card', title: 'District Transit Pass (City Card)' }],
-    ['identity badge holder', { item: 'Map/Scroll Case', title: 'Identity Badge Holder (Map/Scroll Case)' }],
+    ['identity documents', { item: 'Wallet', title: 'Identity Documents (Wallet)' }],
+    ['district transit pass', { item: 'District Transit Pass', title: 'District Transit Pass' }],
+    ['identity badge holder', { item: 'Identity Badge Holder', title: 'Identity Badge Holder' }],
     ['sealed courier pouch', { item: 'Pouch', title: 'Sealed Courier Pouch (Pouch)' }],
     ['set of fine clothes', { item: 'Fine Clothes', title: 'Fine Clothes' }],
     ['bag of 1,000 ball bearings', { item: 'Ball Bearings (bag of 1,000)', title: 'Ball Bearings (bag of 1,000)' }],
@@ -142,14 +146,63 @@
     ['book of lore', { item: 'Book', title: 'Book of Lore (Book)' }],
     ['little bag of sand', { item: 'Pouch', title: 'Little Bag of Sand (Pouch)' }],
     ['small knife', { item: 'Dagger', title: 'Small Knife (Dagger)' }],
+    ['battered backpack', { item: 'Backpack', title: 'Battered Backpack (Backpack)' }],
+    ['city card with no balance', { item: 'City Card', title: 'City Card with No Balance (City Card)' }],
+    ['service token or old unit patch', { item: 'Identity Badge Holder', title: 'Service Token or Old Unit Patch (Identity Badge Holder)' }],
+    ['notebook of names', { item: 'Notebook', title: 'Notebook of Names (Notebook)' }],
+    ['tool you are proficient with', { item: "Tinker's Tools", title: "Chosen Proficient Tool (Tinker's Tools)" }],
+    ['formal black, red, and gold clothing', { item: 'Fine Clothes', title: 'Formal Black, Red, and Gold Clothing (Fine Clothes)' }],
+    ['famiglia badge or token', { item: 'Identity Badge Holder', title: 'Famiglia Badge or Token (Identity Badge Holder)' }],
+    ['notebook listing local titles and forms of address', { item: 'Notebook', title: 'Notebook of Titles and Forms of Address (Notebook)' }],
+    ['black formal outfit', { item: 'Fine Clothes', title: 'Black Formal Outfit (Fine Clothes)' }],
+    ['sealed envelope bearing an index mark', { item: 'Map/Scroll Case', title: 'Sealed Index Envelope (Map/Scroll Case)' }],
+    ['durable bright or light-colored jacket', { item: "Traveler's Clothes", title: "Durable Bright Jacket (Traveler's Clothes)" }],
+    ['notebook recording favors and grudges', { item: 'Notebook', title: 'Notebook of Favors and Grudges (Notebook)' }],
+    ['chain or keepsake symbolizing solidarity', { item: 'Chain (10 ft)', title: 'Chain or Keepsake of Solidarity (Chain)' }],
+    ["artist's tool set and materials", { item: "Painter's Supplies", title: "Artist's Tool Set and Materials (Painter's Supplies)" }],
+    ['clean white clothing', { item: 'Fine Clothes', title: 'Clean White Clothing (Fine Clothes)' }],
+    ['sketchbook', { item: 'Book', title: 'Sketchbook (Book)' }],
+    ['clothing suitable for two social roles', { item: 'Costume', title: 'Clothing for Two Social Roles (Costume)' }],
+    ['notebook with deliberately incomplete contact information', { item: 'Notebook', title: 'Notebook of Incomplete Contacts (Notebook)' }],
+    ['seal stamp', { item: 'Signet Ring', title: 'Seal Stamp (Signet Ring)' }],
+    ['bundle of blank forms', { item: 'Paper (1 sheet)', title: 'Bundle of Blank Forms (Paper)' }],
+    ['light shield', { item: 'Light Shield', title: 'Light Shield' }],
+    ['calipers', { item: "Cartographer's Tools", title: "Calipers (Cartographer's Tools)" }],
+    ['work gloves', { item: "Traveler's Clothes", title: "Work Gloves (Traveler's Clothes)" }],
+    ['plain formal clothing', { item: 'Fine Clothes', title: 'Plain Formal Clothing (Fine Clothes)' }],
+    ['fine clothing', { item: 'Fine Clothes', title: 'Fine Clothes' }],
+    ['written copy of duel etiquette', { item: 'Book', title: 'Written Copy of Duel Etiquette (Book)' }],
+    ['rations', { item: 'Rations (1 day)', title: 'Rations (1 day)' }],
+    ['work clothes', { item: 'Common Clothes', title: 'Work Clothes (Common Clothes)' }],
+    ['field notebook', { item: 'Notebook', title: 'Field Notebook (Notebook)' }],
+    ['field glasses', { item: 'Glasses', title: 'Field Glasses (Glasses)' }],
+    ['sample containers', { item: 'Vial', title: 'Sample Containers (Vial)' }],
+    ['spellbook or study book', { item: 'Spellbook', title: 'Spellbook or Study Book (Spellbook)' }],
+    ['quiet set of common clothes', { item: 'Common Clothes', title: 'Quiet Common Clothes (Common Clothes)' }],
+    ['formal clothing', { item: 'Fine Clothes', title: 'Formal Clothing (Fine Clothes)' }],
+    ['contract folio', { item: 'Map/Scroll Case', title: 'Contract Folio (Map/Scroll Case)' }],
+    ['holy symbol', { item: 'Emblem', title: 'Holy Symbol (Emblem)' }],
+    ['common clothing', { item: 'Common Clothes', title: 'Common Clothes' }],
+    ['packet of archival paper', { item: 'Paper (1 sheet)', title: 'Packet of Archival Paper (Paper)' }],
+    ['pencils', { item: 'Pencils (5)', title: 'Pencils (5)' }],
   ]);
   const ammunition = /\b(?:ammunition|ammo|arrows?|bolts?|bullets?|needles?)\b/i;
   const itemCache = new Map();
-  const equipmentNames = (value) => text(value)
-    .replace(/^\s*(?:a|an|the)\s+/i, '')
-    .split(/(?:\s*,\s*|\s+and\s+)/i)
-    .map((part) => part.replace(/^\s*\d+\s+/, '').replace(/^\s*(?:a|an|the)\s+/i, '').trim())
-    .filter((part) => part && !/^\$[\d,]+$/.test(part) && !ammunition.test(part));
+  const normalizeEquipmentName = (value) => text(value)
+    .replace(/^\s*\d+\s+/, '')
+    .replace(/^\s*(?:a|an|the|one|and)\s+/i, '')
+    .replace(/[.;]+$/, '')
+    .trim();
+  const equipmentNames = (value) => {
+    const source = text(value);
+    const segments = source.includes(';') ? source.split(/\s*;\s*/) : source.split(/\s*,\s*/);
+    return segments.flatMap((segment) => {
+      const whole = normalizeEquipmentName(segment);
+      if (!whole || /^\$[\d,]+$/.test(whole) || ammunition.test(whole)) return [];
+      if (equipmentAliases.has(whole.toLowerCase())) return [whole];
+      return whole.split(/\s+and\s+/i).map(normalizeEquipmentName);
+    }).filter((part) => part && !/^\$[\d,]+$/.test(part) && !ammunition.test(part));
+  };
   const itemCard = async (name) => {
     const key = name.toLowerCase();
     if (itemCache.has(key)) return itemCache.get(key);
@@ -196,8 +249,8 @@
     return cards;
   };
   const listedEquipment = (nodes) => Array.from(nodes).flatMap((node) => Array.from(node.querySelectorAll?.('li') || []))
-    .filter((item) => /^equipment\.?$/i.test(text(item.querySelector('strong')?.textContent)))
-    .map((item) => text(item.textContent).replace(/^equipment\.\s*/i, ''));
+    .filter((item) => /^(?:additional\s+)?equipment\.?$/i.test(text(item.querySelector('strong')?.textContent)))
+    .map((item) => text(item.textContent).replace(/^(?:additional\s+)?equipment\.\s*/i, ''));
   const displayEquipmentChoices = async () => {
     equipmentOptions.replaceChildren();
     if (!classSelect.value) { equipmentOptions.hidden = true; return; }
@@ -374,22 +427,43 @@
     }
     return zip(files);
   };
-  const updateSpellReady = () => {
-    spellDownload.disabled = selectedSpells.size === 0;
-    spellStatus.textContent = selectedSpells.size
-      ? `${selectedSpells.size} spell${selectedSpells.size === 1 ? '' : 's'} selected for export.`
-      : 'Select one or more spells to enable the export.';
+  const perkCard = (perk) => ({ type: 'perk', title: perk.name, subtitle: 'Perk', description: perk.description || '', requirement: perk.requirements || '' });
+  const conditionEntries = async () => {
+    const conditionsUrl = new URL('../systems/rules/conditions.html?v=2', document.baseURI);
+    const documentFragment = await page(conditionsUrl.href);
+    return Array.from(documentFragment.querySelectorAll('#conditions > h2')).map((heading) => ({
+      id: safeName(text(heading.textContent)),
+      name: text(heading.textContent),
+      description: following(heading, 'h2'),
+    }));
   };
-  const renderSpellResults = () => {
+  const perksMode = () => catalogMode?.value === 'perks';
+  const conditionsMode = () => catalogMode?.value === 'conditions';
+  const catalogName = () => conditionsMode() ? 'condition' : (perksMode() ? 'perk' : 'spell');
+  const selectedCatalog = () => conditionsMode() ? selectedConditions : (perksMode() ? selectedPerks : selectedSpells);
+  const updateSpellReady = () => {
+    const selected = selectedCatalog();
+    const name = catalogName();
+    spellDownload.disabled = selected.size === 0;
+    spellDownload.textContent = `Download ${name[0].toUpperCase()}${name.slice(1)} ZIP`;
+    spellStatus.textContent = selected.size
+      ? `${selected.size} ${name}${selected.size === 1 ? '' : 's'} selected for export.`
+      : `Select one or more ${name}s to enable the export.`;
+  };
+  const renderSpellResults = async () => {
     const query = text(spellSearch.value).toLowerCase();
-    const spells = (window.SPELLS || []).filter((spell) => {
-      const searchable = [spell.name, spell.school, ...(spell.classes || [])].join(' ').toLowerCase();
+    const isPerks = perksMode();
+    const isConditions = conditionsMode();
+    const spells = (isConditions ? await conditionEntries() : (isPerks ? (window.PERKS || []) : (window.SPELLS || []))).filter((spell) => {
+      const searchable = isPerks
+        ? [spell.name, spell.requirements, spell.description].join(' ').toLowerCase()
+        : (isConditions ? [spell.name, spell.description].join(' ').toLowerCase() : [spell.name, spell.school, ...(spell.classes || [])].join(' ').toLowerCase());
       return !query || searchable.includes(query);
     }).sort((first, second) => first.name.localeCompare(second.name));
     spellResults.replaceChildren();
     if (!spells.length) {
       const empty = document.createElement('p');
-      empty.textContent = 'No spells match that search.';
+      empty.textContent = `No ${isConditions ? 'conditions' : (isPerks ? 'perks' : 'spells')} match that search.`;
       spellResults.appendChild(empty);
       return;
     }
@@ -397,28 +471,37 @@
       const label = document.createElement('label');
       const input = document.createElement('input');
       input.type = 'checkbox';
-      input.checked = selectedSpells.has(spell.id);
+      input.checked = selectedCatalog().has(spell.id);
       input.addEventListener('change', () => {
-        if (input.checked) selectedSpells.add(spell.id);
-        else selectedSpells.delete(spell.id);
+        if (input.checked) selectedCatalog().add(spell.id);
+        else selectedCatalog().delete(spell.id);
         updateSpellReady();
       });
-      const level = spell.level === 0 ? 'Cantrip' : `${spell.level}${spell.level === 1 ? 'st' : spell.level === 2 ? 'nd' : spell.level === 3 ? 'rd' : 'th'} level`;
-      label.append(input, document.createTextNode(`${spell.name} — ${level} ${spell.school}`));
+      const detail = isPerks
+        ? (spell.requirements ? `Requirement: ${spell.requirements}` : 'Perk')
+        : (isConditions ? 'Condition' : `${spell.level === 0 ? 'Cantrip' : `${spell.level}${spell.level === 1 ? 'st' : spell.level === 2 ? 'nd' : spell.level === 3 ? 'rd' : 'th'} level`} ${spell.school}`);
+      label.append(input, document.createTextNode(`${spell.name} — ${detail}`));
       spellResults.appendChild(label);
     });
   };
   const buildSpellZip = async () => {
-    const cards = [...selectedSpells].map((id) => window.TTSSpellCatalog.get(id)).filter(Boolean);
-    if (!cards.length) throw new Error('Select one or more spells to export.');
+    const isPerks = perksMode();
+    const isConditions = conditionsMode();
+    const cards = isConditions
+      ? (await conditionEntries()).filter((condition) => selectedConditions.has(condition.id)).map((condition) => card('condition', condition.name, 'Condition', condition.description))
+      : (isPerks
+      ? [...selectedPerks].map((id) => (window.PERKS || []).find((perk) => perk.id === id)).filter(Boolean).map(perkCard)
+      : [...selectedSpells].map((id) => window.TTSSpellCatalog.get(id)).filter(Boolean));
+    if (!cards.length) throw new Error(`Select one or more ${isConditions ? 'conditions' : (isPerks ? 'perks' : 'spells')} to export.`);
+    const category = isConditions ? 'Conditions' : (isPerks ? 'Perks' : 'Spells');
     const files = [];
     for (const size of ['portrait', 'square']) {
       const folder = size === 'portrait' ? 'normal' : 'square';
       const back = await window.TTSCardRenderer.backJpeg(size);
-      files.push({ path: `Spells/${folder}/00-elysium-card-back.jpg`, bytes: new Uint8Array(await back.arrayBuffer()) });
+      files.push({ path: `${category}/${folder}/00-elysium-card-back.jpg`, bytes: new Uint8Array(await back.arrayBuffer()) });
       for (let index = 0; index < cards.length; index += 1) {
         const image = await window.TTSCardRenderer.jpeg(cards[index], size);
-        files.push({ path: `Spells/${folder}/${String(index + 1).padStart(3, '0')}-${safeName(cards[index].title)}.jpg`, bytes: new Uint8Array(await image.arrayBuffer()) });
+        files.push({ path: `${category}/${folder}/${String(index + 1).padStart(3, '0')}-${safeName(cards[index].title)}.jpg`, bytes: new Uint8Array(await image.arrayBuffer()) });
       }
     }
     return zip(files);
@@ -428,19 +511,31 @@
   backgroundSelect.addEventListener('change', async () => { await displayBackgroundOptions(); updateReady(); });
   raceSelect.addEventListener('change', async () => { await displayRaceOptions(); updateReady(); });
   spellSearch.addEventListener('input', renderSpellResults);
+  catalogMode?.addEventListener('change', () => {
+    const isPerks = perksMode();
+    const isConditions = conditionsMode();
+    catalogSearchLabel.childNodes[0].nodeValue = isConditions ? 'Find conditions\n              ' : (isPerks ? 'Find perks\n              ' : 'Find spells\n              ');
+    spellSearch.placeholder = isConditions ? 'Search by condition name or effect' : (isPerks ? 'Search by perk name, requirement, or effect' : 'Search by spell name, school, or class');
+    spellSearch.value = '';
+    renderSpellResults();
+    updateSpellReady();
+  });
   spellDownload.addEventListener('click', async () => {
     spellDownload.disabled = true;
-    spellStatus.textContent = 'Rendering spell cards and building the ZIP…';
+    const isPerks = perksMode();
+    const name = catalogName();
+    spellStatus.textContent = `Rendering ${isPerks ? 'perk' : 'spell'} cards and building the ZIP…`;
+    if (conditionsMode()) spellStatus.textContent = 'Rendering condition cards and building the ZIP...';
     try {
       const archive = await buildSpellZip();
       const link = document.createElement('a');
       link.href = URL.createObjectURL(archive);
-      link.download = 'elysium-spell-cards.zip';
+      link.download = `elysium-${name}-cards.zip`;
       link.click();
       window.setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-      spellStatus.textContent = 'Spell ZIP downloaded.';
+      spellStatus.textContent = `${name[0].toUpperCase()}${name.slice(1)} ZIP downloaded.`;
     } catch (error) {
-      spellStatus.textContent = error.message || 'The spell export could not be completed.';
+      spellStatus.textContent = error.message || `The ${name} export could not be completed.`;
     } finally { updateSpellReady(); }
   });
   renderSpellResults();

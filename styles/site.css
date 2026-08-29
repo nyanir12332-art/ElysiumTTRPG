@@ -73,7 +73,7 @@
   min-width: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 3px 0;
+  padding: 0;
   position: fixed;
   z-index: 150;
 }

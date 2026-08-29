@@ -286,7 +286,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "detect-evil-and-good",
-    "name": "Detect Evil and Good"
+    "name": "Detect Planar Creatures"
   },
   {
     "id": "detect-magic",
@@ -914,7 +914,7 @@ window.SPELL_MANIFEST = [
   },
   {
     "id": "protection-from-evil-and-good",
-    "name": "Protection from Evil and Good"
+    "name": "Protection from Planar Creatures"
   },
   {
     "id": "protection-from-poison",

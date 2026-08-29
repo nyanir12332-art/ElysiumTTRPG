@@ -178,7 +178,8 @@
   gap: 4px;
 }
 
-.tts-component-options input[type="checkbox"] {
+.tts-component-options input[type="checkbox"],
+.tts-component-options input[type="radio"] {
   appearance: none;
   background: rgba(3, 7, 4, 0.9);
   border: 1px solid var(--line);
@@ -190,13 +191,27 @@
   width: 13px;
 }
 
+#technique-level {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+#technique-level::-webkit-inner-spin-button,
+#technique-level::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
 .tts-component-options input[type="checkbox"]:hover,
-.tts-component-options input[type="checkbox"]:focus-visible {
+.tts-component-options input[type="checkbox"]:focus-visible,
+.tts-component-options input[type="radio"]:hover,
+.tts-component-options input[type="radio"]:focus-visible {
   border-color: var(--green);
   outline: 0;
 }
 
-.tts-component-options input[type="checkbox"]:checked {
+.tts-component-options input[type="checkbox"]:checked,
+.tts-component-options input[type="radio"]:checked {
   background: var(--green);
   box-shadow: inset 0 0 0 3px var(--black);
 }

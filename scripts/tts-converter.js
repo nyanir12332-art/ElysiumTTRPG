@@ -20,6 +20,9 @@
   const title = document.querySelector('#card-title');
   const subtitle = document.querySelector('#card-subtitle');
   const description = document.querySelector('#card-description');
+  const titleField = document.querySelector('#card-title-field');
+  const subtitleField = document.querySelector('#card-subtitle-field');
+  const descriptionField = document.querySelector('#card-description-field');
   const itemFields = document.querySelector('#item-fields');
   const itemCost = document.querySelector('#item-cost');
   const itemWeight = document.querySelector('#item-weight');
@@ -37,6 +40,20 @@
   const spellMaterial = document.querySelector('#spell-material');
   const spellTags = document.querySelector('#spell-tags');
   const spellMaterialField = document.querySelector('#spell-material-field');
+  const techniqueFields = document.querySelector('#technique-fields');
+  const techniqueUsageDaily = document.querySelector('#technique-usage-daily');
+  const techniqueUsageAtWill = document.querySelector('#technique-usage-at-will');
+  const techniqueUsageEncounter = document.querySelector('#technique-usage-encounter');
+  const techniqueUsageAsterisk = document.querySelector('#technique-usage-asterisk');
+  const techniqueUsageNoteField = document.querySelector('#technique-usage-note-field');
+  const techniqueUsageNote = document.querySelector('#technique-usage-note');
+  const techniqueSavingStrength = document.querySelector('#technique-saving-strength');
+  const techniqueSavingDexterity = document.querySelector('#technique-saving-dexterity');
+  const techniqueLevel = document.querySelector('#technique-level');
+  const techniqueActionTime = document.querySelector('#technique-action-time');
+  const techniqueRange = document.querySelector('#technique-range');
+  const techniqueDuration = document.querySelector('#technique-duration');
+  const techniqueRequirements = document.querySelector('#technique-requirements');
   const disciplineFields = document.querySelector('#discipline-fields');
   const disciplinePsiCost = document.querySelector('#discipline-psi-cost');
   const disciplineDuration = document.querySelector('#discipline-duration');
@@ -44,9 +61,19 @@
   const perkFields = document.querySelector('#perk-fields');
   const perkRequirement = document.querySelector('#perk-requirement');
   const perkRequiredBy = document.querySelector('#perk-required-by');
+  const objectiveFields = document.querySelector('#objective-fields');
+  const objectiveTopSubtitle = document.querySelector('#objective-top-subtitle');
+  const objectiveTopDescription = document.querySelector('#objective-top-description');
+  const objectiveBottomSubtitle = document.querySelector('#objective-bottom-subtitle');
+  const objectiveBottomDescription = document.querySelector('#objective-bottom-description');
   const status = document.querySelector('#tts-status');
 
   if (!front || !back) return;
+
+  // Clear values embedded by older cached versions of the editor.
+  if (title.value === 'Placeholder') title.value = '';
+  if (subtitle.value === 'Feature') subtitle.value = '';
+  if (description.value === 'Description') description.value = '';
 
   const frontContext = front.getContext('2d');
   const backContext = back.getContext('2d');
@@ -56,10 +83,12 @@
   };
   const iconSources = {
     feature: '../Images/FEAT.png',
+    condition: '../Images/Condition.png?v=1',
+    objective: '../Images/Objective.png?v=1',
     race: '../Images/RACE.png',
     class: '../Images/CLASS.png',
     spell: '../Images/SPELL.png',
-    discipline: '../Images/SPELL.png',
+    discipline: '../Images/Psionic Ability.png?v=1',
     technique: '../Images/TECHNIQUE.png',
     item: '../Images/ITEM.png',
     perk: '../Images/PERK.png?v=2',
@@ -491,6 +520,34 @@
     const spellTagLine = type.value === 'spell' && spellTags.value.trim()
       ? `<b>TAGS</b>  ${spellTags.value.trim()}`
       : '';
+    const techniqueUsageValue = [
+      techniqueUsageDaily.checked ? 'D' : '',
+      techniqueUsageAtWill.checked ? 'AW' : '',
+      techniqueUsageEncounter.checked ? 'E' : '',
+    ].filter(Boolean).join(', ');
+    const techniqueUsage = techniqueUsageValue
+      ? `${techniqueUsageValue}${techniqueUsageAsterisk.checked ? '*' : ''}`
+      : '';
+    const techniqueUsageFootnote = type.value === 'technique' && techniqueUsageAsterisk.checked && techniqueUsageNote.value.trim()
+      ? `* ${techniqueUsageNote.value.trim()}`
+      : '';
+    const techniqueSavingThrow = [
+      techniqueSavingStrength.checked ? 'Strength' : '',
+      techniqueSavingDexterity.checked ? 'Dexterity' : '',
+    ].filter(Boolean).join(', ');
+    const techniqueTiming = [
+      techniqueActionTime.value.trim() ? `<b>WINDUP TIME</b>  ${techniqueActionTime.value.trim()}` : '',
+      techniqueRange.value.trim() ? `<b>RANGE</b>  ${techniqueRange.value.trim()}` : '',
+    ].filter(Boolean).join('    ');
+    const techniqueMeta = type.value === 'technique'
+      ? [
+        techniqueSavingThrow ? `<b>SAVING THROW</b>  ${techniqueSavingThrow}` : '',
+        techniqueUsage ? `<b>USAGE</b>  ${techniqueUsage}` : '',
+        techniqueTiming,
+        techniqueDuration.value.trim() ? `<b>DURATION</b>  ${techniqueDuration.value.trim()}` : '',
+        techniqueRequirements.value.trim() ? `<b>REQUIREMENTS</b>  ${techniqueRequirements.value.trim()}` : '',
+      ].filter(Boolean).join('\n')
+      : '';
     const disciplineMeta = type.value === 'discipline'
       ? [
         disciplinePsiCost.value.trim() ? `<b>PSI POINT COST</b>  ${disciplinePsiCost.value.trim()}` : '',
@@ -500,7 +557,9 @@
     const disciplineTagLine = type.value === 'discipline' && disciplineTags.value.trim()
       ? `<b>TAGS</b>  ${disciplineTags.value.trim()}`
       : '';
-    const body = [spellMeta, disciplineMeta, description.value, spellTagLine, disciplineTagLine, itemMeta, perkMeta].filter((value) => value && value.trim()).join('\n\n');
+    const body = [spellMeta, techniqueMeta, disciplineMeta, description.value, techniqueUsageFootnote, spellTagLine, disciplineTagLine, itemMeta, perkMeta]
+      .filter((value) => value && value.trim())
+      .join('\n\n');
     const bodyStart = subtitleBodyStart + (itemDetailLines.length ? (itemDetailLines.length * 22) : 0);
     drawFittedTextBlock(context, body, 18, bodyStart, 264, height - bodyStart - 14, 11, COLORS.soft);
     context.restore();
@@ -566,7 +625,62 @@
     context.restore();
   };
 
+  const drawObjectiveSection = (context, sectionSubtitle, sectionDescription, top, bottom) => {
+    const sectionTitle = sectionSubtitle.trim().toUpperCase();
+    let titleSize = 28;
+    let titleLines = [];
+    while (sectionTitle && titleSize > 14) {
+      context.font = `700 ${titleSize}px ${CARD_FONT}`;
+      titleLines = wrapText(context, sectionTitle, 670);
+      if (titleLines.length <= 2) break;
+      titleSize -= 1;
+    }
+    if (sectionTitle) {
+      context.fillStyle = COLORS.soft;
+      context.font = `700 ${titleSize}px ${CARD_FONT}`;
+      const titleLineHeight = Math.ceil(titleSize * 1.08);
+      titleLines.slice(0, 2).forEach((line, index) => context.fillText(line, 40, top + (index * titleLineHeight)));
+    }
+    const descriptionStart = top + (titleLines.length ? (titleLines.length * Math.ceil(titleSize * 1.08)) + 20 : 0);
+    drawFittedTextBlock(context, sectionDescription, 40, descriptionStart, 670, Math.max(0, bottom - descriptionStart), 24, COLORS.soft);
+  };
+
+  const drawObjectiveFront = () => {
+    const context = frontContext;
+    context.clearRect(0, 0, WIDTH, HEIGHT);
+    context.fillStyle = COLORS.black;
+    context.fillRect(0, 0, WIDTH, HEIGHT);
+    context.strokeStyle = COLORS.line;
+    context.lineWidth = 2;
+    context.strokeRect(30, CARD_TOP, 690, CARD_BOTTOM - CARD_TOP);
+    context.strokeRect(31, 26, 104, 64);
+    context.beginPath();
+    context.moveTo(30, 90);
+    context.lineTo(720, 90);
+    context.stroke();
+
+    drawTintedIcon(context, icons.objective, 60, 35, 46);
+    context.fillStyle = COLORS.green;
+    context.font = `700 31px ${CARD_FONT}`;
+    context.fillText('Objective', 150, 67);
+
+    const sectionTop = 125;
+    const dividerY = Math.round((sectionTop + CARD_BOTTOM) / 2);
+    context.strokeStyle = COLORS.line;
+    context.lineWidth = 2;
+    context.beginPath();
+    context.moveTo(30, dividerY);
+    context.lineTo(720, dividerY);
+    context.stroke();
+    drawObjectiveSection(context, objectiveTopSubtitle.value, objectiveTopDescription.value, sectionTop, dividerY - 24);
+    drawObjectiveSection(context, objectiveBottomSubtitle.value, objectiveBottomDescription.value, dividerY + 32, CARD_BOTTOM - 18);
+  };
+
   const drawFront = () => {
+    if (type.value === 'objective') {
+      drawObjectiveFront();
+      return;
+    }
     const context = frontContext;
     const cardType = type.value;
     context.clearRect(0, 0, WIDTH, HEIGHT);
@@ -660,6 +774,34 @@
     const spellTagLine = cardType === 'spell' && spellTags.value.trim()
       ? `<b>TAGS</b>  ${spellTags.value.trim()}`
       : '';
+    const techniqueUsageValue = [
+      techniqueUsageDaily.checked ? 'D' : '',
+      techniqueUsageAtWill.checked ? 'AW' : '',
+      techniqueUsageEncounter.checked ? 'E' : '',
+    ].filter(Boolean).join(', ');
+    const techniqueUsage = techniqueUsageValue
+      ? `${techniqueUsageValue}${techniqueUsageAsterisk.checked ? '*' : ''}`
+      : '';
+    const techniqueUsageFootnote = cardType === 'technique' && techniqueUsageAsterisk.checked && techniqueUsageNote.value.trim()
+      ? `* ${techniqueUsageNote.value.trim()}`
+      : '';
+    const techniqueSavingThrow = [
+      techniqueSavingStrength.checked ? 'Strength' : '',
+      techniqueSavingDexterity.checked ? 'Dexterity' : '',
+    ].filter(Boolean).join(', ');
+    const techniqueTiming = [
+      techniqueActionTime.value.trim() ? `<b>WINDUP TIME</b>  ${techniqueActionTime.value.trim()}` : '',
+      techniqueRange.value.trim() ? `<b>RANGE</b>  ${techniqueRange.value.trim()}` : '',
+    ].filter(Boolean).join('    ');
+    const techniqueMeta = cardType === 'technique'
+      ? [
+        techniqueSavingThrow ? `<b>SAVING THROW</b>  ${techniqueSavingThrow}` : '',
+        techniqueUsage ? `<b>USAGE</b>  ${techniqueUsage}` : '',
+        techniqueTiming,
+        techniqueDuration.value.trim() ? `<b>DURATION</b>  ${techniqueDuration.value.trim()}` : '',
+        techniqueRequirements.value.trim() ? `<b>REQUIREMENTS</b>  ${techniqueRequirements.value.trim()}` : '',
+      ].filter(Boolean).join('\n')
+      : '';
     const disciplineMeta = cardType === 'discipline'
       ? [
         disciplinePsiCost.value.trim() ? `<b>PSI POINT COST</b>  ${disciplinePsiCost.value.trim()}` : '',
@@ -669,7 +811,9 @@
     const disciplineTagLine = cardType === 'discipline' && disciplineTags.value.trim()
       ? `<b>TAGS</b>  ${disciplineTags.value.trim()}`
       : '';
-    const body = [spellMeta, disciplineMeta, description.value, spellTagLine, disciplineTagLine, itemMeta, perkMeta].filter((value) => value && value.trim()).join('\n\n');
+    const body = [spellMeta, techniqueMeta, disciplineMeta, description.value, techniqueUsageFootnote, spellTagLine, disciplineTagLine, itemMeta, perkMeta]
+      .filter((value) => value && value.trim())
+      .join('\n\n');
     // Do not reserve the subtitle band when it is empty. Keep a small reading
     // gap below the title divider, then give the description the full height.
     const bodyStart = subtitleBodyStart + (itemDetailLines.length ? (itemDetailLines.length * 45) : 0);
@@ -748,10 +892,32 @@
   };
 
   const draw = () => {
+    const isObjective = type.value === 'objective';
+    const isTechnique = type.value === 'technique';
+    if (isObjective) {
+      title.value = 'Objective';
+      title.dataset.objectiveTitle = 'true';
+    } else if (title.dataset.objectiveTitle === 'true') {
+      title.value = '';
+      delete title.dataset.objectiveTitle;
+    }
+    if (isTechnique) {
+      const level = Number(techniqueLevel.value);
+      const ordinal = level % 100 >= 11 && level % 100 <= 13
+        ? 'th'
+        : ({ 1: 'st', 2: 'nd', 3: 'rd' }[level % 10] || 'th');
+      subtitle.value = techniqueLevel.value === '' ? '' : `${level}${level === 0 ? '' : ordinal}-Level Attack`;
+    }
+    titleField.hidden = isObjective;
+    subtitleField.hidden = isObjective || isTechnique;
+    descriptionField.hidden = isObjective;
     itemFields.hidden = type.value !== 'item';
     spellFields.hidden = type.value !== 'spell';
+    techniqueFields.hidden = type.value !== 'technique';
+    techniqueUsageNoteField.hidden = !isTechnique || !techniqueUsageAsterisk.checked;
     disciplineFields.hidden = type.value !== 'discipline';
     perkFields.hidden = type.value !== 'perk';
+    objectiveFields.hidden = !isObjective;
     spellMaterialField.hidden = type.value !== 'spell' || !spellComponentM.checked;
     drawFront();
     drawBack();
@@ -787,6 +953,12 @@
     field.addEventListener('input', draw);
     field.addEventListener('change', draw);
   });
+  techniqueLevel.addEventListener('input', () => {
+    if (techniqueLevel.value === '') return;
+    const level = Number(techniqueLevel.value);
+    if (Number.isFinite(level)) techniqueLevel.value = String(Math.min(9, Math.max(0, Math.trunc(level))));
+    draw();
+  });
   document.querySelector('#download-front').addEventListener('click', () => download(front, `${(title.value || 'card').trim().replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-front.jpg`));
   document.querySelector('#download-back').addEventListener('click', () => download(back, 'elysium-card-back.jpg'));
   document.querySelector('#reset-card').addEventListener('click', () => {
@@ -803,12 +975,15 @@
     type, cardSize, title, subtitle, description,
     itemCost, itemWeight, itemDamage, itemArmorClass, itemCarryingCapacity, itemProperties,
     spellCastingTime, spellRange, spellDuration, spellComponentV, spellComponentS, spellComponentM,
-    spellMaterial, spellTags, disciplinePsiCost, disciplineDuration, disciplineTags, perkRequirement, perkRequiredBy,
+    spellMaterial, spellTags, techniqueUsageDaily, techniqueUsageAtWill, techniqueUsageEncounter, techniqueUsageAsterisk, techniqueUsageNote, techniqueSavingStrength, techniqueSavingDexterity, techniqueLevel,
+    techniqueActionTime, techniqueRange, techniqueDuration, techniqueRequirements,
+    disciplinePsiCost, disciplineDuration, disciplineTags, perkRequirement, perkRequiredBy,
+    objectiveTopSubtitle, objectiveTopDescription, objectiveBottomSubtitle, objectiveBottomDescription,
   };
-  const snapshot = () => Object.fromEntries(Object.entries(batchFields).map(([name, field]) => [name, field.type === 'checkbox' ? field.checked : field.value]));
+  const snapshot = () => Object.fromEntries(Object.entries(batchFields).map(([name, field]) => [name, ['checkbox', 'radio'].includes(field.type) ? field.checked : field.value]));
   const restore = (values) => Object.entries(batchFields).forEach(([name, field]) => {
     const value = values[name];
-    if (field.type === 'checkbox') field.checked = Boolean(value);
+    if (['checkbox', 'radio'].includes(field.type)) field.checked = Boolean(value);
     else field.value = value || '';
   });
   const applyCard = (card, size) => {
@@ -831,11 +1006,27 @@
     spellComponentM.checked = Boolean(card.componentM);
     spellMaterial.value = card.material || '';
     spellTags.value = card.tags || '';
+    techniqueUsageDaily.checked = Boolean(card.usageDaily);
+    techniqueUsageAtWill.checked = Boolean(card.usageAtWill);
+    techniqueUsageEncounter.checked = Boolean(card.usageEncounter);
+    techniqueUsageAsterisk.checked = Boolean(card.usageAsterisk);
+    techniqueUsageNote.value = card.usageNote || '';
+    techniqueSavingStrength.checked = Boolean(card.savingThrowStrength);
+    techniqueSavingDexterity.checked = Boolean(card.savingThrowDexterity);
+    techniqueLevel.value = card.level ?? '';
+    techniqueActionTime.value = card.actionTime || '';
+    techniqueRange.value = card.range || '';
+    techniqueDuration.value = card.duration || '';
+    techniqueRequirements.value = card.requirements || '';
     disciplinePsiCost.value = card.psiCost || '';
     disciplineDuration.value = card.duration || '';
     disciplineTags.value = card.tags || '';
     perkRequirement.value = card.requirement || '';
     perkRequiredBy.value = card.requiredBy || '';
+    objectiveTopSubtitle.value = card.topSubtitle || '';
+    objectiveTopDescription.value = card.topDescription || '';
+    objectiveBottomSubtitle.value = card.bottomSubtitle || '';
+    objectiveBottomDescription.value = card.bottomDescription || '';
     updateCanvasSize();
   };
   window.TTSCardRenderer = {

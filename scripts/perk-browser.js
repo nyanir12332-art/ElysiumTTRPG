@@ -264,7 +264,7 @@
   const renderRequirementLinks = (value) => {
     if (!value) return '';
 
-    const raceRequirement = value.match(/^(Be one of the following races:\s*)(.+?)(,\s*does not have\s+(?:Magnify|Minify))$/i);
+    const raceRequirement = value.match(/^(Be one of the following races:\s*)(.+?)(,\s*does not have\s+(?:Giant Blood|Broonie Blood))$/i);
     if (raceRequirement) {
       const racePaths = {
         changeling: 'changeling.html', goliath: 'goliath.html', minotaur: 'minotaur.html', dragonborn: 'dragonborn.html',

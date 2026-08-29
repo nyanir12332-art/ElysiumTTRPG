@@ -29,9 +29,23 @@
 }
 
 .item-results {
+  display: flex;
+  flex-direction: column;
   grid-column: 1 / -1;
   grid-row: 2;
   min-width: 0;
+}
+
+.item-panel[data-category="mounts-and-vehicles"] {
+  order: 1;
+}
+
+.item-panel[data-category="relics"] {
+  order: 2;
+}
+
+.item-no-results {
+  order: 3;
 }
 
 .item-search input {
@@ -609,6 +623,12 @@
   background-color: #000000 !important;
 }
 
+/* Attachments use the same visual language as the firearms tables. */
+.attachments-section > .item-group-title:hover,
+.attachments-section > .item-group-title:focus-visible {
+  background-color: #000000 !important;
+}
+
 .explosives-section > .item-group-title {
   background-color: #000000 !important;
 }
@@ -893,6 +913,71 @@
 
 .apparel-table.firearms-table th:nth-child(7),
 .apparel-table.firearms-table td:nth-child(7) { width: auto; }
+
+.attachments-section .item-column-headings--attachments,
+.attachments-section .attachment-card {
+  grid-template-columns: minmax(240px, 29%) 130px 90px minmax(0, 1fr) 30px;
+}
+
+.attachments-section .attachment-card .item-card__heading > span:nth-of-type(3) {
+  align-self: center;
+  color: var(--green-soft);
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  grid-column: 4;
+  grid-row: 1;
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachments-section .attachment-card .item-card__heading > span:nth-of-type(3)::before {
+  content: none !important;
+}
+
+.attachments-section .attachment-card.attachment-card.is-expanded p {
+  display: block !important;
+  grid-column: 1 / -2 !important;
+  grid-row: 2 !important;
+}
+
+/* Attachments use three fixed data columns. Do not let the generic expanded
+   card rules reinterpret the third field as an Attributes field. */
+.attachments-section .attachment-card > .item-card__heading > h3 {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+}
+
+.attachments-section .attachment-card > .item-card__heading > span:nth-of-type(1) {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+}
+
+.attachments-section .attachment-card > .item-card__heading > span:nth-of-type(2) {
+  display: block !important;
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+  margin: 0 !important;
+}
+
+.attachments-section .attachment-card > .item-card__heading > span:nth-of-type(3) {
+  display: block !important;
+  grid-column: 4 !important;
+  grid-row: 1 !important;
+  margin: 0 !important;
+}
+
+.attachments-section .attachment-card > p {
+  display: none;
+}
+
+.attachments-section .attachment-card.is-expanded > p {
+  display: block !important;
+}
 
 .explosives-section + .explosives-section > .item-group-title {
   border-top: 0;

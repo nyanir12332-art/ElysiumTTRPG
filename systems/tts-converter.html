@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
-    <link rel="stylesheet" href="../styles/site.css?v=26">
+    <link rel="stylesheet" href="../styles/site.css?v=27">
     <link rel="stylesheet" href="../styles/classes.css">
-    <link rel="stylesheet" href="../styles/tts-converter.css?v=19">
+    <link rel="stylesheet" href="../styles/tts-converter.css?v=21">
     <link rel="stylesheet" href="../styles/search.css?v=13">
     <title>TTS Converter - Fable</title>
   </head>
@@ -39,10 +39,12 @@
             <label>Card type
               <select id="card-type">
                 <option value="feature">Feature</option>
+                <option value="condition">Condition</option>
+                <option value="objective">Objective</option>
                 <option value="race">Race</option>
                 <option value="class">Class</option>
                 <option value="spell">Spell</option>
-                <option value="discipline">Discipline Ability</option>
+                <option value="discipline">Psionic Discipline</option>
                 <option value="technique">Technique</option>
                 <option value="item">Item</option>
                 <option value="perk">Perk</option>
@@ -54,13 +56,13 @@
                 <option value="square">Small square (750 × 750)</option>
               </select>
             </label>
-            <label>Title
-              <input id="card-title" type="text" value="Placeholder" maxlength="52">
+            <label id="card-title-field">Title
+              <input id="card-title" type="text" maxlength="52">
             </label>
-            <label>Subtitle / category
-              <input id="card-subtitle" type="text" value="Feature" maxlength="52">
+            <label id="card-subtitle-field">Subtitle / category
+              <input id="card-subtitle" type="text" maxlength="52">
             </label>
-            <label class="tts-description-label">Description
+            <label class="tts-description-label" id="card-description-field">Description
               <span class="tts-help" tabindex="0" aria-describedby="rich-formatting-help">i
                 <span class="tts-help__tooltip" id="rich-formatting-help" role="tooltip">
                   <strong>Rich formatting</strong><br>
@@ -73,39 +75,39 @@
                   <code>&lt;ol&gt;&lt;li&gt;text&lt;/li&gt;&lt;/ol&gt;</code> numbered list
                 </span>
               </span>
-              <span class="crt-scrollbar-textarea-host" data-crt-scrollbar><textarea id="card-description" data-crt-scroll-target rows="8">Description</textarea></span>
+              <span class="crt-scrollbar-textarea-host" data-crt-scrollbar><textarea id="card-description" data-crt-scroll-target rows="8"></textarea></span>
             </label>
             <fieldset id="item-fields" hidden>
               <legend>Item details</legend>
               <label>Cost
-                <input id="item-cost" type="text" placeholder="$50">
+                <input id="item-cost" type="text">
               </label>
               <label>Weight
-                <input id="item-weight" type="text" placeholder="2 lb.">
+                <input id="item-weight" type="text">
               </label>
               <label>Damage
-                <input id="item-damage" type="text" placeholder="1d6 piercing">
+                <input id="item-damage" type="text">
               </label>
               <label>Armor Class
-                <input id="item-armor-class" type="text" placeholder="15">
+                <input id="item-armor-class" type="text">
               </label>
               <label>Carrying Capacity
-                <input id="item-carrying-capacity" type="text" placeholder="1 cubic foot/30 pounds of gear">
+                <input id="item-carrying-capacity" type="text">
               </label>
               <label>Properties
-                <input id="item-properties" type="text" placeholder="Light, thrown">
+                <input id="item-properties" type="text">
               </label>
             </fieldset>
             <fieldset id="spell-fields" hidden>
               <legend>Spell details</legend>
               <label>Casting Time
-                <input id="spell-casting-time" type="text" placeholder="1 action">
+                <input id="spell-casting-time" type="text">
               </label>
               <label>Range
-                <input id="spell-range" type="text" placeholder="30 feet">
+                <input id="spell-range" type="text">
               </label>
               <label>Duration
-                <input id="spell-duration" type="text" placeholder="1 minute">
+                <input id="spell-duration" type="text">
               </label>
               <div class="tts-component-options" aria-label="Spell components">
                 <span>Components</span>
@@ -114,31 +116,79 @@
                 <label title="Material component">M <input id="spell-component-m" type="checkbox" aria-label="Material component"></label>
               </div>
               <label id="spell-material-field" hidden>Material component
-                <input id="spell-material" type="text" placeholder="a tiny strip of white cloth">
+                <input id="spell-material" type="text">
               </label>
               <label>Tags
                 <input id="spell-tags" type="text">
               </label>
             </fieldset>
-            <fieldset id="discipline-fields" hidden>
-              <legend>Discipline ability details</legend>
-              <label>Psi Point Cost
-                <input id="discipline-psi-cost" type="text" placeholder="3 psi">
+            <fieldset id="technique-fields" hidden>
+              <legend>Technique details</legend>
+              <div class="tts-component-options" aria-label="Technique saving throw">
+                <span>Saving Throw</span>
+                <label title="Strength">S <input id="technique-saving-strength" name="technique-saving-throw" type="radio" aria-label="Strength saving throw"></label>
+                <label title="Dexterity">D <input id="technique-saving-dexterity" name="technique-saving-throw" type="radio" aria-label="Dexterity saving throw"></label>
+              </div>
+              <div class="tts-component-options" aria-label="Technique usage">
+                <span>Usage</span>
+                <label title="Daily">D <input id="technique-usage-daily" name="technique-usage" type="radio" aria-label="Daily"></label>
+                <label title="At-Will">AW <input id="technique-usage-at-will" name="technique-usage" type="radio" aria-label="At-Will"></label>
+                <label title="Encounter">E <input id="technique-usage-encounter" name="technique-usage" type="radio" aria-label="Encounter"></label>
+                <label title="Add a footnote to the selected usage">* <input id="technique-usage-asterisk" type="checkbox" aria-label="Add usage footnote"></label>
+              </div>
+              <label id="technique-usage-note-field" hidden>Usage footnote
+                <input id="technique-usage-note" type="text">
+              </label>
+              <label>Level
+                <input id="technique-level" type="number" min="0" max="9" step="1">
+              </label>
+              <label>Windup Time
+                <input id="technique-action-time" type="text">
+              </label>
+              <label>Range
+                <input id="technique-range" type="text">
               </label>
               <label>Duration
-                <input id="discipline-duration" type="text" placeholder="1 minute">
+                <input id="technique-duration" type="text">
+              </label>
+              <label>Requirements
+                <input id="technique-requirements" type="text">
+              </label>
+            </fieldset>
+            <fieldset id="discipline-fields" hidden>
+              <legend>Psionic discipline details</legend>
+              <label>Psi Point Cost
+                <input id="discipline-psi-cost" type="text">
+              </label>
+              <label>Duration
+                <input id="discipline-duration" type="text">
               </label>
               <label>Tags
-                <input id="discipline-tags" type="text" placeholder="Concentration">
+                <input id="discipline-tags" type="text">
               </label>
             </fieldset>
             <fieldset id="perk-fields" hidden>
               <legend>Perk details</legend>
               <label>Requirements
-                <input id="perk-requirement" type="text" placeholder="Fey Affiliate">
+                <input id="perk-requirement" type="text">
               </label>
               <label>Required By
-                <input id="perk-required-by" type="text" placeholder="Fey Related">
+                <input id="perk-required-by" type="text">
+              </label>
+            </fieldset>
+            <fieldset id="objective-fields" hidden>
+              <legend>Objective sections</legend>
+              <label>Top subtitle
+                <input id="objective-top-subtitle" type="text" maxlength="52">
+              </label>
+              <label>Top description
+                <span class="crt-scrollbar-textarea-host" data-crt-scrollbar><textarea id="objective-top-description" data-crt-scroll-target rows="5"></textarea></span>
+              </label>
+              <label>Bottom subtitle
+                <input id="objective-bottom-subtitle" type="text" maxlength="52">
+              </label>
+              <label>Bottom description
+                <span class="crt-scrollbar-textarea-host" data-crt-scrollbar><textarea id="objective-bottom-description" data-crt-scroll-target rows="5"></textarea></span>
               </label>
             </fieldset>
 
@@ -201,11 +251,18 @@
           </section>
           <section class="tts-editor tts-batch-importer" aria-labelledby="tts-spell-batch-title">
             <div class="tts-editor__intro">
-              <h2 id="tts-spell-batch-title">Spell Batch Importer</h2>
-              <p>Select any number of spells to export as card JPGs in one ZIP file.</p>
+              <h2 id="tts-spell-batch-title">Spell, Perk, and Condition Batch Importer</h2>
+              <p>Switch between spells, perks, and conditions, then select any number of entries to export as card JPGs in one ZIP file.</p>
             </div>
-            <label>Find spells
-              <input id="spell-batch-search" type="search" placeholder="Search by spell name, school, or class" autocomplete="off">
+            <label>Import type
+              <select id="catalog-batch-mode">
+                <option value="spells">Spells</option>
+                <option value="perks">Perks</option>
+                <option value="conditions">Conditions</option>
+              </select>
+            </label>
+            <label id="catalog-batch-search-label">Find spells
+              <input id="spell-batch-search" type="search" autocomplete="off">
             </label>
             <div class="tts-batch-options tts-spell-batch__results" id="spell-batch-results" aria-live="polite"></div>
             <div class="tts-actions">
@@ -228,16 +285,16 @@
         </section>
       </main>
     </div>
-    <script src="../scripts/search.js?v=12"></script>
-    <script src="../scripts/spells.js?v=9"></script>
-    <script src="../scripts/perks.js?v=7"></script>
-    <script src="../scripts/spell-manifest.js?v=4"></script>
-    <script src="../scripts/spell-links.js?v=13" data-spell-index="spellcasting.html"></script>
-  <script src="../scripts/tts-converter.js?v=64"></script>
+    <script src="../scripts/search.js?v=13"></script>
+    <script src="../scripts/spells.js?v=10"></script>
+    <script src="../scripts/perks.js?v=8"></script>
+    <script src="../scripts/spell-manifest.js?v=5"></script>
+    <script src="../scripts/spell-links.js?v=15" data-spell-index="spellcasting.html"></script>
+    <script src="../scripts/tts-converter.js?v=80"></script>
     <script src="../scripts/elysium-item-prices.js?v=20"></script>
     <script src="../scripts/psionic-disciplines-data.js?v=1"></script>
-    <script src="../scripts/tts-importer.js?v=44"></script>
-    <script src="../scripts/tts-batch-importer.js?v=13"></script>
+<script src="../scripts/tts-importer.js?v=52"></script>
+    <script src="../scripts/tts-batch-importer.js?v=19"></script>
     <script src="../scripts/select-menu.js?v=2"></script>
     <script src="../scripts/crt-scrollbar.js?v=5"></script>
   </body>

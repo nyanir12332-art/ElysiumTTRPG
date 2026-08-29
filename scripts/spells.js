@@ -1646,7 +1646,7 @@ window.SPELLS = [
   },
   {
     "id": "detect-evil-and-good",
-    "name": "Detect Evil and Good",
+    "name": "Detect Planar Creatures",
     "level": 1,
     "school": "Divination",
     "castingTime": "1 action",
@@ -1658,7 +1658,7 @@ window.SPELLS = [
       "paladin"
     ],
     "description": [
-      "For the duration, you know if there is an aberration, celestial, elemental, fey, fiend, or undead within 30 feet of you, as well as where the creature is located. Similarly, you know if there is a place or object within 30 feet of you that has been magically consecrated or desecrated.",
+      "For the duration, you know if there is a planar creature within 30 feet of you, as well as where the creature is located. Planar creatures include aberrations, celestials, elementals, fey, fiends, and undead. Similarly, you know if there is a place or object within 30 feet of you that has been magically consecrated or desecrated.",
       "The spell can penetrate most barriers, but it is blocked by 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood or dirt."
     ],
     "higherLevel": [],
@@ -4243,7 +4243,7 @@ window.SPELLS = [
     ],
     "description": [
       "Your body falls into a catatonic state as your soul leaves it and enters the container you used for the spell's material component. While your soul inhabits the container, you are aware of your surroundings as if you were in the container's space. You can't move or use reactions. The only action you can take is to project your soul up to 100 feet out of the container, either returning to your living body (and ending the spell) or attempting to possess a humanoid's body.",
-      "You can attempt to possess any humanoid within 100 feet of you that you can see (creatures warded by a protection from evil and good or magic circle spell can't be possessed). The target must make a Charisma saving throw. On a failure, your soul moves into the target's body, and the target's soul becomes trapped in the container. On a success, the target resists your efforts to possess it, and you can't attempt to possess it again for 24 hours.",
+      "You can attempt to possess any humanoid within 100 feet of you that you can see (creatures warded by a protection from planar creatures or magic circle spell can't be possessed). The target must make a Charisma saving throw. On a failure, your soul moves into the target's body, and the target's soul becomes trapped in the container. On a success, the target resists your efforts to possess it, and you can't attempt to possess it again for 24 hours.",
       "Once you possess a creature's body, you control it. Your game statistics are replaced by the statistics of the creature, though you retain your alignment and your Intelligence, Wisdom, and Charisma scores. You retain the benefit of your own class features. If the target has any class levels, you can't use any of its class features.",
       "Meanwhile, the possessed creature's soul can perceive from the container using its own senses, but it can't move or take actions at all.",
       "While possessing a body, you can use your action to return from the host body to the container if it is within 100 feet of you, returning the host creature's soul to its body. If the host body dies while you're in it, the creature dies, and you must make a Charisma saving throw against your own spellcasting DC. On a success, you return to the container if it is within 100 feet of you. Otherwise, you die.",
@@ -5299,7 +5299,7 @@ window.SPELLS = [
   },
   {
     "id": "protection-from-evil-and-good",
-    "name": "Protection from Evil and Good",
+    "name": "Protection from Planar Creatures",
     "level": 1,
     "school": "Abjuration",
     "castingTime": "1 action",
@@ -5313,8 +5313,8 @@ window.SPELLS = [
       "wizard"
     ],
     "description": [
-      "Until the spell ends, one willing creature you touch is protected against certain types of creatures: aberrations, celestials, elementals, fey, fiends, and undead.",
-      "The protection grants several benefits. Creatures of those types have disadvantage on attack rolls against the target. The target also can't be charmed, frightened, or possessed by them. If the target is already charmed, frightened, or possessed by such a creature, the target has advantage on any new saving throw against the relevant effect."
+      "Until the spell ends, one willing creature you touch is protected against planar creatures: aberrations, celestials, elementals, fey, fiends, and undead.",
+      "The protection grants several benefits. Planar creatures have disadvantage on attack rolls against the target. The target also can't be charmed, frightened, or possessed by them. If the target is already charmed, frightened, or possessed by a planar creature, the target has advantage on any new saving throw against the relevant effect."
     ],
     "higherLevel": [],
     "ritual": false,
