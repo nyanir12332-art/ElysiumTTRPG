@@ -118,9 +118,46 @@
     return Array.from(list.children).filter((item) => item.matches('li')).map((item) => text(item.textContent));
   };
   const choicesFromEquipment = (line) => {
-    const choices = [...line.matchAll(/\([a-z]\)\s*([\s\S]*?)(?=\s+or\s+\([a-z]\)|$)/gi)].map((match) => text(match[1]));
-    return choices.length ? choices : [line.replace(/^\([a-z]\)\s*/i, '')];
+    const markers = [...line.matchAll(/\([a-z]\)\s*/gi)];
+    if (!markers.length) return [line.replace(/^\([a-z]\)\s*/i, '')];
+    return markers.map((marker, index) => text(line.slice(
+      marker.index + marker[0].length,
+      markers[index + 1]?.index ?? line.length,
+    )).replace(/(?:,?\s*or)?\s*,?$/i, '').trim()).filter(Boolean);
   };
+  // Class equipment often grants a category rather than a named item.  Keep
+  // those choices explicit: a generic category must never turn into a
+  // fallback card during export.
+  const genericEquipmentChoices = [
+    { pattern: /\b(?:any\s+two|two)\s+simple\s+melee\s+weapons?\b/gi, categories: ['Simple Melee Weapons'], count: 2, label: 'simple melee weapons' },
+    { pattern: /\b(?:any\s+two|two)\s+simple\s+weapons?\b/gi, categories: ['Simple Melee Weapons', 'Simple Ranged Weapons'], count: 2, label: 'simple weapons' },
+    { pattern: /\btwo\s+martial\s+weapons?\b/gi, categories: ['Martial Melee Weapons', 'Martial Ranged Weapons'], count: 2, label: 'martial weapons' },
+    { pattern: /\b(?:a|an|any)\s+simple\s+melee\s+weapon\b/gi, categories: ['Simple Melee Weapons'], count: 1, label: 'simple melee weapon' },
+    { pattern: /\b(?:a|an|any)\s+martial\s+melee\s+weapon\b/gi, categories: ['Martial Melee Weapons'], count: 1, label: 'martial melee weapon' },
+    { pattern: /\b(?:a|an|any)\s+simple\s+weapon\b/gi, categories: ['Simple Melee Weapons', 'Simple Ranged Weapons'], count: 1, label: 'simple weapon' },
+    { pattern: /\b(?:a|an|any)\s+martial\s+weapon\b/gi, categories: ['Martial Melee Weapons', 'Martial Ranged Weapons'], count: 1, label: 'martial weapon' },
+    { pattern: /\b(?:a|an|any)\s+basic\s+firearm\b/gi, categories: ['Basic Firearms'], count: 1, label: 'basic firearm' },
+    { pattern: /\b(?:a|an|any)\s+advanced\s+firearm\b/gi, categories: ['Advanced Firearms'], count: 1, label: 'advanced firearm' },
+  ];
+  let equipmentChoiceCatalog;
+  const equipmentChoiceItems = async () => {
+    if (!equipmentChoiceCatalog) equipmentChoiceCatalog = (async () => {
+      const itemPage = await page(new URL('../items/index.html', document.baseURI).href);
+      const categories = new Map();
+      itemPage.querySelectorAll('.weapons-section, .firearms-section').forEach((section) => {
+        const category = text(section.querySelector(':scope > .item-group-title')?.textContent);
+        if (!category) return;
+        const names = Array.from(section.querySelectorAll('tbody tr')).map((row) => text(row.cells?.[0]?.textContent)).filter(Boolean);
+        categories.set(category, names);
+      });
+      return categories;
+    })();
+    return equipmentChoiceCatalog;
+  };
+  const genericSelections = (choice) => genericEquipmentChoices.flatMap((definition) => {
+    definition.pattern.lastIndex = 0;
+    return [...choice.matchAll(definition.pattern)].flatMap(() => Array.from({ length: definition.count }, () => definition));
+  });
   const equipmentAliases = new Map([
     ['professional clothing', { item: 'Fine Clothes', title: 'Professional Clothing (Fine Clothes)' }],
     ['fine or professional clothing', { item: 'Fine Clothes', title: 'Professional Clothing (Fine Clothes)' }],
@@ -248,6 +285,24 @@
     }
     return cards;
   };
+  const selectedEquipmentText = (choiceRow) => {
+    const input = choiceRow.querySelector('input[type="radio"]:checked');
+    if (!input) return '';
+    const selectedByDefinition = new Map();
+    choiceRow.querySelectorAll('.tts-equipment-picker__select').forEach((select) => {
+      if (!select.value) throw new Error(`Select ${select.options[0]?.textContent?.replace(/^Select\s+/i, '') || 'an equipment item'} before exporting.`);
+      const key = Number(select.dataset.genericChoice);
+      if (!selectedByDefinition.has(key)) selectedByDefinition.set(key, []);
+      selectedByDefinition.get(key).push(select.value);
+    });
+    let resolved = input.value;
+    genericEquipmentChoices.forEach((definition, definitionIndex) => {
+      const selections = selectedByDefinition.get(definitionIndex) || [];
+      definition.pattern.lastIndex = 0;
+      resolved = resolved.replace(definition.pattern, () => selections.shift() || '');
+    });
+    return resolved;
+  };
   const listedEquipment = (nodes) => Array.from(nodes).flatMap((node) => Array.from(node.querySelectorAll?.('li') || []))
     .filter((item) => /^(?:additional\s+)?equipment\.?$/i.test(text(item.querySelector('strong')?.textContent)))
     .map((item) => text(item.textContent).replace(/^(?:additional\s+)?equipment\.\s*/i, ''));
@@ -261,12 +316,16 @@
     const intro = document.createElement('p');
     intro.textContent = 'Choose the starting equipment option from each class choice.';
     equipmentOptions.appendChild(intro);
+    const equipmentCatalog = await equipmentChoiceItems();
     choices.forEach((line, choiceIndex) => {
       const group = document.createElement('div');
+      group.className = 'tts-equipment-choice-group';
       const groupTitle = document.createElement('p');
       groupTitle.textContent = `Equipment choice ${choiceIndex + 1}`;
       group.appendChild(groupTitle);
       choicesFromEquipment(line).forEach((choice, optionIndex) => {
+        const choiceRow = document.createElement('div');
+        choiceRow.className = 'tts-equipment-choice';
         const label = document.createElement('label');
         const input = document.createElement('input');
         input.type = 'radio';
@@ -274,7 +333,42 @@
         input.value = choice;
         input.checked = optionIndex === 0;
         label.append(input, document.createTextNode(choice));
-        group.appendChild(label);
+        choiceRow.appendChild(label);
+
+        const selections = genericSelections(choice);
+        if (selections.length) {
+          const picker = document.createElement('div');
+          picker.className = 'tts-equipment-picker';
+          selections.forEach((selection, selectionIndex) => {
+            const select = document.createElement('select');
+            select.className = 'tts-equipment-picker__select';
+            select.dataset.genericChoice = String(genericEquipmentChoices.indexOf(selection));
+            select.required = true;
+            select.appendChild(new Option(`Select ${selection.label}`, '', true, true));
+            const names = selection.categories.flatMap((category) => equipmentCatalog.get(category) || [])
+              .sort((first, second) => first.localeCompare(second));
+            names.forEach((name) => select.appendChild(new Option(name, name)));
+            select.setAttribute('aria-label', `${selectionIndex + 1} ${selection.label}`);
+            picker.appendChild(select);
+          });
+          const syncPicker = () => {
+            picker.hidden = !input.checked;
+            picker.querySelectorAll('select').forEach((select) => { select.disabled = !input.checked; });
+          };
+          input.addEventListener('change', syncPicker);
+          syncPicker();
+          choiceRow.appendChild(picker);
+        }
+        group.appendChild(choiceRow);
+      });
+      group.addEventListener('change', () => {
+        group.querySelectorAll('.tts-equipment-choice').forEach((choiceRow) => {
+          const isSelected = choiceRow.querySelector('input[type="radio"]')?.checked;
+          const picker = choiceRow.querySelector('.tts-equipment-picker');
+          if (!picker) return;
+          picker.hidden = !isSelected;
+          picker.querySelectorAll('select').forEach((select) => { select.disabled = !isSelected; });
+        });
       });
       equipmentOptions.appendChild(group);
     });
@@ -329,7 +423,10 @@
       if (!allowed.has(featureName.toLowerCase())) return;
       cards.push(card('feature', featureName, `${className} Class Feature`, following(heading)));
     });
-    for (const input of equipmentOptions.querySelectorAll('input:checked')) cards.push(...await equipmentCards(input.value));
+    for (const choiceRow of equipmentOptions.querySelectorAll('.tts-equipment-choice')) {
+      const selected = selectedEquipmentText(choiceRow);
+      if (selected) cards.push(...await equipmentCards(selected));
+    }
     if (subclassSelect.value) {
       const subclassDocument = await page(subclassSelect.value);
       const subclassName = text(subclassSelect.selectedOptions[0].textContent);
@@ -467,7 +564,7 @@
       spellResults.appendChild(empty);
       return;
     }
-    spells.slice(0, 80).forEach((spell) => {
+    spells.forEach((spell) => {
       const label = document.createElement('label');
       const input = document.createElement('input');
       input.type = 'checkbox';
@@ -515,7 +612,7 @@
     const isPerks = perksMode();
     const isConditions = conditionsMode();
     catalogSearchLabel.childNodes[0].nodeValue = isConditions ? 'Find conditions\n              ' : (isPerks ? 'Find perks\n              ' : 'Find spells\n              ');
-    spellSearch.placeholder = isConditions ? 'Search by condition name or effect' : (isPerks ? 'Search by perk name, requirement, or effect' : 'Search by spell name, school, or class');
+    spellSearch.removeAttribute('placeholder');
     spellSearch.value = '';
     renderSpellResults();
     updateSpellReady();

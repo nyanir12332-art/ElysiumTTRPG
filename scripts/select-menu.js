@@ -86,8 +86,8 @@
     trigger.addEventListener('click', () => {
       const opening = list.hidden;
       closeAll(select);
-      if (opening) positionList();
       list.hidden = !opening;
+      if (opening) positionList();
       trigger.setAttribute('aria-expanded', String(opening));
       shell.classList.toggle('is-open', opening);
       if (opening) list.querySelector('[aria-selected="true"]')?.focus();

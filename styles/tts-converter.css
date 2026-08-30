@@ -388,6 +388,48 @@
   box-shadow: inset 0 0 0 3px var(--black);
 }
 
+.tts-equipment-choice-group {
+  display: grid;
+  gap: 6px;
+}
+
+.tts-equipment-choice-group > p {
+  margin: 0;
+}
+
+.tts-equipment-choice {
+  display: grid;
+  gap: 6px;
+}
+
+.tts-equipment-picker {
+  display: grid;
+  gap: 6px;
+  margin-left: 22px;
+}
+
+.tts-equipment-picker[hidden] {
+  display: none;
+}
+
+.tts-equipment-picker__select {
+  appearance: auto;
+  background: rgba(2, 5, 3, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--green-soft);
+  font: inherit;
+  min-height: 36px;
+  padding: 7px 9px;
+  max-width: 360px;
+  width: 100%;
+}
+
+.tts-equipment-picker__select:focus-visible {
+  border-color: var(--green);
+  outline: none;
+}
+
 .tts-spell-batch__results {
   max-height: 300px;
   overflow-y: auto;

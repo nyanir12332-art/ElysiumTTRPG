@@ -82,6 +82,15 @@
   display: none;
 }
 
+/* Dropdown option lists remain scrollable without displaying a scrollbar. */
+.select-menu__list {
+  scrollbar-width: none;
+}
+
+.select-menu__list::-webkit-scrollbar {
+  display: none;
+}
+
 .select-menu__option {
   background: transparent;
   border: 0;
