@@ -224,6 +224,7 @@
     ['pencils', { item: 'Pencils (5)', title: 'Pencils (5)' }],
   ]);
   const ammunition = /\b(?:ammunition|ammo|arrows?|bolts?|bullets?|needles?)\b/i;
+  const quantityWords = new Map([['one', 1], ['two', 2], ['three', 3], ['four', 4], ['five', 5], ['six', 6], ['seven', 7], ['eight', 8], ['nine', 9], ['ten', 10]]);
   const itemCache = new Map();
   const normalizeEquipmentName = (value) => text(value)
     .replace(/^\s*\d+\s+/, '')
@@ -237,7 +238,13 @@
       const whole = normalizeEquipmentName(segment);
       if (!whole || /^\$[\d,]+$/.test(whole) || ammunition.test(whole)) return [];
       if (equipmentAliases.has(whole.toLowerCase())) return [whole];
-      return whole.split(/\s+and\s+/i).map(normalizeEquipmentName);
+      return whole.split(/\s+and\s+/i).flatMap((part) => {
+        const normalized = normalizeEquipmentName(part);
+        const match = normalized.match(/^(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(.+)$/i);
+        if (!match) return normalized;
+        const count = /^\d+$/.test(match[1]) ? Number(match[1]) : quantityWords.get(match[1].toLowerCase());
+        return Array.from({ length: count || 1 }, () => normalizeEquipmentName(match[2]));
+      });
     }).filter((part) => part && !/^\$[\d,]+$/.test(part) && !ammunition.test(part));
   };
   const itemCard = async (name) => {
