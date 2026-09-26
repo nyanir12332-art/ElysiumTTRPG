@@ -6,7 +6,8 @@
   if (!browser || perks.length === 0) return;
 
   const searchInput = browser.querySelector('[data-perk-search]');
-  const requirementsInput = browser.querySelector('[data-perk-requirements]');
+  const typeButtons = [...browser.querySelectorAll('[data-perk-type]')];
+  let selectedType = 'all';
   const tbody = browser.querySelector('tbody');
   const emptyRow = browser.querySelector('[data-perk-empty]');
   const perkById = new Map(perks.map((perk) => [perk.id, perk]));
@@ -101,6 +102,78 @@
     });
   });
 
+  const perkByName = new Map(perks.map((perk) => [perk.name.toLowerCase(), perk]));
+  const dependencyInfo = new Map(perks.map((perk) => {
+    const named = [];
+    const groups = [];
+    perk.requirements.split(/[,/]/).forEach((rawRequirement) => {
+      const requirement = rawRequirement.trim();
+      if (!requirement || /^No\b/i.test(requirement)) return;
+      const groupMatch = requirement.match(/^\d+\s+(.+?)\s+(?:perks|feats)$/i);
+      if (groupMatch) {
+        groups.push(groupMatch[1].trim().toLowerCase());
+        return;
+      }
+      const normalized = requirement.replace(/^\d+\s+/, '').replace(/\s+(?:perks|feats)$/i, '').toLowerCase();
+      const target = perkByName.get(normalized) || perkByName.get(`${normalized}er`);
+      if (target && target.id !== perk.id && !named.includes(target)) named.push(target);
+    });
+    return [perk.id, { named, groups }];
+  }));
+
+  const curseIds = new Set(perks
+    .filter((perk) => /\bCurse$/i.test(perk.name) || /\bcurse perks\b/i.test(perk.requirements))
+    .map((perk) => perk.id));
+  let addedCurse = true;
+  while (addedCurse) {
+    addedCurse = false;
+    perks.forEach((perk) => {
+      if (!curseIds.has(perk.id) && dependencyInfo.get(perk.id).named.some((parent) => curseIds.has(parent.id))) {
+        curseIds.add(perk.id);
+        addedCurse = true;
+      }
+    });
+  }
+
+  const rootCache = new Map();
+  const lineRoots = (perk, visiting = new Set()) => {
+    if (rootCache.has(perk.id)) return rootCache.get(perk.id);
+    if (visiting.has(perk.id)) return new Set([perk.id]);
+    const nextVisiting = new Set(visiting).add(perk.id);
+    const info = dependencyInfo.get(perk.id);
+    const parents = info.named.filter((parent) => !curseIds.has(parent.id));
+    const roots = new Set();
+    parents.forEach((parent) => lineRoots(parent, nextVisiting).forEach((root) => roots.add(root)));
+    info.groups.forEach((group) => {
+      const groupRoots = perks.filter((candidate) => {
+        const candidateInfo = dependencyInfo.get(candidate.id);
+        return !curseIds.has(candidate.id) && candidateInfo.named.length === 0
+          && candidateInfo.groups.length === 0 && containsWordSequence(candidate.name, group);
+      });
+      if (groupRoots.length) groupRoots.forEach((root) => roots.add(root.id));
+      else roots.add(`group:${group}`);
+    });
+    if (roots.size === 0) roots.add(perk.id);
+    rootCache.set(perk.id, roots);
+    return roots;
+  };
+
+  const perkTypeById = new Map(perks.map((perk) => {
+    if (curseIds.has(perk.id)) return [perk.id, 'curse'];
+    const info = dependencyInfo.get(perk.id);
+    if (info.named.length === 0 && info.groups.length === 0) return [perk.id, 'primary'];
+    // A numbered group requirement (for example, "2 Athlete perks") always
+    // stays within one named perk line and is therefore a Branch perk.
+    if (info.named.length === 0 && info.groups.length === 1) return [perk.id, 'branch'];
+    return [perk.id, lineRoots(perk).size > 1 ? 'fusion' : 'branch'];
+  }));
+  const perkTypes = [
+    { id: 'primary', label: 'Primary Perks' },
+    { id: 'branch', label: 'Branch Perks' },
+    { id: 'fusion', label: 'Fusion Perks' },
+    { id: 'curse', label: 'Curse Perks' }
+  ];
+
   const escapeHtml = (value) => String(value || '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -153,9 +226,9 @@
       const feature = featureByName.get(lookup);
       output += escapeHtml(text.slice(cursor, offset));
       if (spell && shouldLinkSpell(text, matched, offset)) {
-        output += `<a class="spell-reference" data-spell-reference="${escapeHtml(spell.id)}" href="${spellHref(spell)}">${escapeHtml(spell.name)}</a>`;
+        output += `<a class="spell-reference perk-browser__reference" data-spell-reference="${escapeHtml(spell.id)}" href="${spellHref(spell)}">${escapeHtml(spell.name)}</a>`;
       } else if (school) {
-        output += `<a class="spell-reference" data-spell-school-reference="${escapeHtml(school)}" href="${schoolHref(school)}">${escapeHtml(school)}</a>`;
+        output += `<a class="spell-reference perk-browser__reference" data-spell-school-reference="${escapeHtml(school)}" href="${schoolHref(school)}">${escapeHtml(school)}</a>`;
       } else if (feature) {
         output += `<a class="perk-browser__reference" href="${feature.href}">${escapeHtml(feature.name)}</a>`;
       } else {
@@ -334,10 +407,8 @@
     const query = searchInput.value.trim().toLowerCase();
     let matching = perks.slice();
 
-    // A search should be able to find any matching perk, including perks with
-    // requirements. The checkbox controls the default unsearched list.
-    if (requirementsInput && !requirementsInput.checked && !query) {
-      matching = matching.filter((perk) => perk.requirements.trim().length === 0);
+    if (selectedType !== 'all') {
+      matching = matching.filter((perk) => perkTypeById.get(perk.id) === selectedType);
     }
 
     if (query) {
@@ -361,7 +432,7 @@
       : '';
 
     return `<tr class="perk-browser__detail" data-perk-detail="${escapeHtml(perk.id)}" hidden>
-      <td colspan="2">
+      <td colspan="3">
         <div class="perk-browser__detail-copy">
           ${renderDescription(perk.description)}
           ${requiredBy}
@@ -383,10 +454,14 @@
       return;
     }
 
-    const markup = matching.map((perk) => `<tr data-perk-row="${escapeHtml(perk.id)}">
-      <td><button class="perk-browser__toggle" type="button" data-perk-toggle="${escapeHtml(perk.id)}" aria-expanded="false"><span aria-hidden="true">+</span>${escapeHtml(perk.name)}</button></td>
-      <td>${perk.requirements.trim() ? renderRequirementLinks(perk.requirements) : '&mdash;'}</td>
-    </tr>${detailMarkup(perk)}`).join('');
+    const markup = matching.map((perk) => {
+      const type = perkTypes.find((entry) => entry.id === perkTypeById.get(perk.id));
+      return `<tr data-perk-row="${escapeHtml(perk.id)}">
+        <td><button class="perk-browser__toggle" type="button" data-perk-toggle="${escapeHtml(perk.id)}" aria-expanded="false"><span aria-hidden="true">+</span>${escapeHtml(perk.name)}</button></td>
+        <td><span class="perk-browser__type perk-browser__type--${type.id}">${escapeHtml(type.label.replace(/ Perks$/, ''))}</span></td>
+        <td>${perk.requirements.trim() ? renderRequirementLinks(perk.requirements) : '&mdash;'}</td>
+      </tr>${detailMarkup(perk)}`;
+    }).join('');
 
     emptyRow.insertAdjacentHTML('beforebegin', markup);
   };
@@ -413,7 +488,11 @@
   };
 
   searchInput.addEventListener('input', renderRows);
-  if (requirementsInput) requirementsInput.addEventListener('change', renderRows);
+  typeButtons.forEach((button) => button.addEventListener('click', () => {
+    selectedType = button.dataset.perkType;
+    typeButtons.forEach((candidate) => candidate.setAttribute('aria-pressed', String(candidate === button)));
+    renderRows();
+  }));
   tbody.addEventListener('click', (event) => {
     const row = event.target.closest('[data-perk-row]');
     if (row && tbody.contains(row)) togglePerk(row);
@@ -426,9 +505,8 @@
   const linkedPerk = parameters.get('perk');
   const targetPerk = linkedPerk ? perkById.get(linkedPerk) : null;
   if (linkedSearch || targetPerk) {
-    // A linked perk must remain reachable even when the caller had filtered
-    // the list to perks without requirements.
-    if ((linkedSearch || targetPerk) && requirementsInput) requirementsInput.checked = true;
+    selectedType = 'all';
+    typeButtons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.perkType === 'all')));
     searchInput.value = linkedSearch || targetPerk.name;
     renderRows();
     if (targetPerk) openPerk(targetPerk.id);

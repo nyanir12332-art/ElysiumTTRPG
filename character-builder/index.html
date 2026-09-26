@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
+    <link rel="stylesheet" href="../styles/site.css?v=31">
+    <link rel="stylesheet" href="../styles/character-launcher.css?v=10">
+    <link rel="stylesheet" href="character-builder.css?v=142">
+    <title>Character Builder - Fable</title>
+  </head>
+  <body>
+    <div class="screen character-builder">
+      <header><nav class="topbar" aria-label="Site header"><a class="home-link" href="../index.html">Fable</a><a href="../classes/classes.html">Classes</a><a href="../races/index.html">Races</a><a href="../backgrounds/index.html">Backgrounds</a><a href="../items/index.html">Items</a><a href="../perks/index.html">Perks</a><a href="../systems/index.html">Systems</a><a href="../lore/index.html">Lore</a><a href="../records/index.html">Records</a></nav></header>
+      <main>
+        <div class="builder-heading"><h1 class="prompt" id="builder-page-title">Character Builder</h1></div>
+        <section id="builder-validation-notice" class="builder-validation-notice" role="alert" aria-live="assertive" hidden></section>
+        <section class="sheet-dashboard sheet-only" aria-label="Character sheet overview">
+          <article class="sheet-dashboard__identity sheet-box"><button class="sheet-edit-button" type="button" data-sheet-edit="identity" aria-label="Edit character identity"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4M4 16l4 4"/></svg></button><canvas id="sheet-avatar" width="160" height="160"></canvas><div><h2 id="sheet-name">Unknown Wanderer</h2><p id="sheet-origin">Choose a class, race, and background.</p><div class="sheet-identity-fields"><p><span>Level</span><strong id="sheet-level">1</strong></p><p><span>Proficiency bonus</span><strong id="sheet-proficiency">+2</strong></p><p><span>Spellcasting</span><strong id="sheet-spellcaster-level">—</strong></p><p><span>Creature type</span><strong id="sheet-creature-type">Humanoid</strong></p><label class="sheet-size"><span>Size</span><select id="sheet-character-size"><option>Tiny</option><option>Small</option><option selected>Medium</option><option>Large</option><option>Huge</option><option>Gargantuan</option></select></label></div></div></article>
+          <article class="sheet-dashboard__abilities sheet-box"><h2>Ability Scores</h2><button class="sheet-edit-button" type="button" data-sheet-edit="feature" data-effect-type="ability" aria-label="Add an ability score feature"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4M4 16l4 4"/></svg></button><div id="sheet-abilities"></div></article>
+          <article class="sheet-dashboard__combat sheet-box"><h2>Combat</h2><button class="sheet-edit-button" type="button" data-sheet-edit="feature" data-effect-type="ac" aria-label="Add a combat statistic feature"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4M4 16l4 4"/></svg></button><div class="sheet-hit-points"><p><span>Current HP</span><strong id="sheet-hp">0</strong></p><p><span>Maximum HP</span><strong id="sheet-hp-max">0</strong></p><p><span>Temporary HP</span><strong id="sheet-temp-hp">0</strong></p><button class="sheet-edit-button" type="button" data-sheet-edit="hp" aria-label="Edit current and temporary hit points"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4M4 16l4 4"/></svg></button></div><div class="sheet-combat-values"><p><strong id="sheet-ac">10</strong><span>Armor Class</span></p><p><strong id="sheet-initiative">+0</strong><span>Initiative</span></p></div><div class="sheet-movement-values"><p><strong id="sheet-speed-walk">30<small> ft.</small></strong><span>Walk</span></p><p><strong id="sheet-speed-burrow">0<small> ft.</small></strong><span>Burrow</span></p><p><strong id="sheet-speed-climb">0<small> ft.</small></strong><span>Climb</span></p><p><strong id="sheet-speed-fly">0<small> ft.</small></strong><span>Fly</span></p><p><strong id="sheet-speed-swim">0<small> ft.</small></strong><span>Swim</span></p></div></article>
+          <article class="sheet-dashboard__conditions sheet-box"><h2>Conditions</h2><button class="sheet-edit-button" type="button" data-sheet-edit="conditions" aria-label="Apply or remove conditions"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4M4 16l4 4"/></svg></button><p id="sheet-conditions">None active</p><ul id="sheet-condition-effects"><li>No condition effects.</li></ul></article>
+          <article class="sheet-dashboard__saves sheet-box"><h2>Saving Throws</h2><button class="sheet-edit-button" type="button" data-sheet-edit="feature" data-effect-type="saveProficiency" aria-label="Add a saving throw feature"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4M4 16l4 4"/></svg></button><div class="sheet-save-list" id="sheet-saving-throws"></div></article>
+          <article class="sheet-dashboard__passives sheet-box"><h2>Passive Senses</h2><button class="sheet-edit-button" type="button" data-sheet-edit="feature" data-effect-type="skillBonus" aria-label="Add a passive sense feature"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4M4 16l4 4"/></svg></button><div class="sheet-passive-values"><p><strong id="sheet-passive-perception">10</strong><span>Passive Perception</span></p><p><strong id="sheet-passive-insight">10</strong><span>Passive Insight</span></p></div></article>
+        </section>
+        <section class="character-summary" aria-label="Character identity">
+          <section class="portrait-controls" aria-label="Portrait controls"><div class="avatar-upload"><input id="avatar-file" type="file" accept="image/png,image/jpeg"><canvas id="avatar-canvas" width="240" height="240" aria-label="Character avatar"></canvas><label class="avatar-crop" for="avatar-scale"><span>Zoom</span><input id="avatar-scale" type="range" min="1" max="3" step=".05" value="1" aria-label="Crop scale"></label><button type="button" id="avatar-change">Take Photo</button></div></section>
+          <section class="identity-controls" aria-label="Character information"><label>Enter Name<input id="character-name" type="text" aria-label="Character name"></label><div class="summary-stats"><span>Level <strong id="level-value">1</strong></span><span>Proficiency <strong id="proficiency-value">+2</strong></span><span>HP <strong id="hp-value">0</strong></span></div></section>
+        </section>
+
+        <section class="builder-grid" aria-label="Character origins">
+          <article class="builder-card"><h2>Class</h2><select id="class-select"><option value="">Select Class</option><option value="artificer.html">Artificer</option><option value="barbarian.html">Barbarian</option><option value="bard.html">Bard</option><option value="blood-hunter.html">Blood Hunter</option><option value="cleric.html">Cleric</option><option value="druid.html">Druid</option><option value="fighter.html">Fighter</option><option value="monk.html">Monk</option><option value="mystic.html">Mystic</option><option value="paladin.html">Paladin</option><option value="ranger.html">Ranger</option><option value="rogue.html">Rogue</option><option value="sorcerer.html">Sorcerer</option><option value="warlock.html">Warlock</option><option value="wizard.html">Wizard</option></select><div id="class-details" class="choice-details" data-crt-scrollbar data-crt-scrollbar-plain><div class="choice-details__content" data-crt-scroll-target></div></div></article>
+          <article class="builder-card"><h2>Race</h2><select id="race-select"><option value="">Select Race</option></select><div id="race-details" class="choice-details" data-crt-scrollbar data-crt-scrollbar-plain><div class="choice-details__content" data-crt-scroll-target></div></div></article>
+          <article class="builder-card"><h2>Background</h2><select id="background-select"><option value="">Select Background</option></select><div id="background-details" class="choice-details" data-crt-scrollbar data-crt-scrollbar-plain><div class="choice-details__content" data-crt-scroll-target></div></div></article>
+        </section>
+
+        <section class="builder-card ability-card"><div class="ability-card__heading"><h2>Configure Array</h2><section class="perk-setting"><label><span>Perk Each Level</span><input type="checkbox" id="perks-per-level" aria-label="Enable perk each level"></label></section></div><div id="ability-scores" class="ability-scores"></div><section id="race-ability-increase-choice" class="race-ability-increases" hidden><h3>Choose ability score increases</h3><div id="racial-ability-increases"></div></section><section id="ability-score-exchange-choice" class="race-ability-increases"><h3>Ability Score Exchange</h3><div id="ability-score-exchanges"></div><button type="button" id="add-ability-score-exchange">Add −2 / +1 Exchange</button></section><section id="origin-choice-section" class="origin-choice-section" hidden><div id="origin-choice-controls"><label id="level-one-perk-choice" class="human-perk-choice" hidden><span>Perk</span><select id="level-one-perk"><option value="">Choose a perk</option></select></label><label id="level-one-perk-ability-choice" class="human-perk-choice" hidden><span>Perk ability score increase</span><select id="level-one-perk-ability"><option value="">Choose an ability</option></select></label><label id="perk-skill-choice" class="human-perk-choice" hidden><span>Skilled proficiency</span><select id="perk-skill"><option value="">Choose a skill</option></select></label><div id="race-choice-controls"><label id="human-perk-choice" class="human-perk-choice" hidden><span>Specialized</span><select id="human-perk"><option value="">Choose a perk</option></select></label><label id="human-perk-ability-choice" class="human-perk-choice" hidden><span>Perk ability score increase</span><select id="human-perk-ability"><option value="">Choose an ability</option></select></label><label id="human-skill-choice" class="human-perk-choice" hidden><span>Skill proficiency</span><select id="human-skill"><option value="">Choose a skill</option></select></label></div><div id="class-choice-controls"></div><div id="background-choice-controls"></div><section id="intelligence-proficiency-choices" class="class-skill-proficiencies" hidden></section></div></section></section>
+        <section
+          id="level-up-builder"
+          class="level-up-builder"
+          aria-labelledby="level-up-title"
+        >
+          <header>
+            <span>Character Advancement</span>
+            <h2 id="level-up-title">Choose a Class Level</h2>
+            <p>Race and background choices remain unchanged while leveling.</p>
+          </header>
+          <div class="level-up-grid">
+            <label>
+              Class to advance
+              <select id="level-up-class-select">
+                <option value="">Choose a class</option>
+              </select>
+            </label>
+            <div class="level-up-stats">
+              <p>
+                <span>Character level</span>
+                <strong id="level-up-character-level">2</strong>
+              </p>
+              <p>
+                <span>Class level</span>
+                <strong id="level-up-class-level">—</strong>
+              </p>
+              <p>
+                <span>Spellcasting</span>
+                <strong id="level-up-spellcasting">—</strong>
+              </p>
+            </div>
+          </div>
+          <section id="level-up-features" class="level-up-features">
+            <p>Choose a class to preview its next level.</p>
+          </section>
+          <label id="level-up-subclass-choice" hidden>
+            Arcane Tradition
+            <select id="level-up-subclass-select">
+              <option value="">Choose an arcane tradition</option>
+            </select>
+          </label>
+          <label id="level-up-perk-choice" hidden>
+            Perk for this level
+            <select id="level-up-perk-select">
+              <option value="">Choose a perk</option>
+            </select>
+          </label>
+          <label id="level-up-perk-ability-choice" hidden>
+            Perk ability score increase
+            <select id="level-up-perk-ability"><option value="">Choose an ability</option></select>
+          </label>
+          <label id="level-up-asi-choice" hidden>
+            Ability Score Improvement (+1)
+            <select id="level-up-asi"><option value="">Choose an ability</option></select>
+          </label>
+          <footer>
+            <button type="button" id="cancel-level-up">Cancel</button>
+            <button type="button" id="apply-level-up">Apply Level</button>
+          </footer>
+        </section>
+        <section class="xp-card sheet-only">
+          <h2>Level Advancement</h2>
+          <label>Experience <input id="xp-input" type="number" min="0" max="10000" step="1" value="0"></label>
+          <div class="xp-meter" role="progressbar" aria-label="Experience toward next level" aria-valuemin="0" aria-valuemax="10000" aria-valuenow="0"><span id="xp-meter-fill"></span></div>
+          <strong id="xp-text">0 / 10,000 XP</strong>
+          <button type="button" id="open-level-up" disabled>Level Up</button>
+        </section>
+
+        <section class="sheet-sections sheet-only" aria-label="Character sheet sections">
+          <div class="sheet-tabs" role="tablist"><button role="tab" aria-selected="true" data-sheet-tab="skills">Skills &amp; Actions</button><button role="tab" aria-selected="false" data-sheet-tab="inventory">Inventory</button><button role="tab" aria-selected="false" data-sheet-tab="spellcasting">Spellcasting</button><button role="tab" aria-selected="false" data-sheet-tab="features">Perks &amp; Features</button><button role="tab" aria-selected="false" data-sheet-tab="details">Details</button><button role="tab" aria-selected="false" data-sheet-tab="notes">Notes</button></div>
+          <div id="sheet-panel"></div>
+        </section>
+        <button type="button" id="print-character" class="print-character">Print</button>
+      </main>
+    </div>
+    <dialog id="sheet-editor-dialog"><form method="dialog" id="sheet-editor-form" class="sheet-editor"><header><div><span id="sheet-editor-context">Character Sheet Editor</span><h2 id="sheet-editor-title">Edit</h2></div><button type="button" data-sheet-editor-close aria-label="Close editor">&#215;</button></header><div id="sheet-editor-body"></div><footer><button type="button" data-sheet-editor-cancel>Cancel</button><button type="submit">Apply</button></footer></form></dialog>
+    <script src="builder-runtime.js?v=76"></script>
+    <script src="inventory-builder.js?v=37"></script>
+    <script src="../scripts/select-menu.js?v=10"></script>
+    <script src="../scripts/crt-scrollbar.js?v=4"></script>
+    <script src="../scripts/character-launcher.js?v=10"></script>
+  </body>
+</html>

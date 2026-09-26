@@ -1,0 +1,66 @@
+.campaign-records {
+  margin-top: 28px;
+  width: 100%;
+}
+
+.campaign-record,
+.session-record {
+  border: 1px solid var(--line);
+  background: rgba(2, 5, 3, 0.72);
+}
+
+.record-toggle {
+  background: transparent;
+  border: 0;
+  color: var(--green);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 700;
+  text-align: left;
+  width: 100%;
+}
+
+.campaign-record__toggle {
+  font-size: clamp(1.2rem, 3vw, 1.7rem);
+  font-weight: 400;
+  padding: 14px 18px;
+  text-shadow: 0 0 12px rgba(57, 255, 136, 0.55);
+  text-transform: uppercase;
+}
+
+.session-record__toggle {
+  color: var(--green);
+  font-size: 1.15rem;
+  padding: 11px 14px;
+  text-shadow: 0 0 12px rgba(57, 255, 136, 0.55);
+}
+
+.record-toggle::after {
+  content: "+";
+  float: right;
+}
+
+.record-toggle[aria-expanded="true"]::after {
+  content: "−";
+}
+
+.campaign-record__sessions {
+  border-top: 1px solid var(--line);
+  padding: 12px;
+}
+
+.campaign-record__sessions[hidden],
+.session-record article[hidden] {
+  display: none;
+}
+
+.session-record article {
+  border-top: 1px solid var(--line);
+  color: var(--green-soft);
+  line-height: 1.65;
+  padding: 4px 14px 14px;
+}
+
+.session-record article p {
+  margin: 14px 0 0;
+}

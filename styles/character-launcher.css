@@ -1,0 +1,83 @@
+.character-launcher {
+  align-items: center;
+  background: #020503;
+  border: 1px solid var(--green);
+  bottom: auto;
+  color: var(--green);
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-size: 1.65rem;
+  height: 36px;
+  justify-content: center;
+  line-height: 1;
+  left: 22px;
+  position: fixed;
+  right: auto;
+  top: 22px;
+  transform: none;
+  width: 36px;
+  z-index: 1000;
+}
+
+.character-launcher:hover,
+.character-launcher:focus-visible {
+  background: var(--green);
+  color: #020503;
+  outline: none;
+}
+
+.character-modal[hidden] { display: none; }
+.character-modal {
+  align-items: center;
+  background: rgba(0, 0, 0, .78);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 22px;
+  position: fixed;
+  z-index: 1100;
+}
+.character-modal__panel {
+  background: #020503;
+  border: 1px solid var(--green);
+  box-shadow: 0 0 28px rgba(57,255,136,.18);
+  max-width: 460px;
+  padding: 24px;
+  width: 100%;
+}
+.character-modal h2 { margin-top: 0; }
+.character-modal .prompt { font-size: clamp(1.25rem, 2.4vw, 1.65rem); margin: 0 0 22px; padding-bottom: 14px; text-align: center; }
+.character-modal input[type="file"] { display: none; }
+.character-modal__file {
+  border: 1px solid var(--line);
+  color: var(--green-soft);
+  cursor: pointer;
+  display: block;
+  margin: 18px 0;
+  padding: 12px;
+}
+.character-modal__actions { display: flex; flex-direction: row; flex-wrap: nowrap; gap: 10px; }
+.character-modal button,
+.character-builder button,
+.character-builder select,
+.character-builder input,
+.character-builder textarea {
+  background: #020503;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--green-soft);
+  font: inherit;
+  padding: 10px 12px;
+}
+.character-modal__actions button,
+.character-builder button { cursor: pointer; }
+.character-modal__actions button:hover,
+.character-modal__actions button:focus-visible,
+.character-builder button:not(.select-menu__option):not(.select-menu__trigger):hover,
+.character-builder button:not(.select-menu__option):not(.select-menu__trigger):focus-visible { background: var(--green); color: #020503; outline: none; }
+.character-modal__actions button { flex: 1 1 50%; font-size: 1.2rem; min-height: 58px; white-space: nowrap; }
+
+@media (max-width: 620px) {
+  .character-launcher { bottom: auto; left: 14px; right: auto; top: 14px; }
+}

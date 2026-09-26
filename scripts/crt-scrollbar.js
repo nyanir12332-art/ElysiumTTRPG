@@ -1,4 +1,7 @@
 (() => {
+  // Detail panels populate asynchronously, so their scrollbar must be refreshable
+  // after the first enhancement rather than treated as a one-time setup.
+  const embeddedUpdates = new WeakMap();
   const createParts = (className) => {
     const track = document.createElement('div');
     const up = document.createElement('div');
@@ -15,19 +18,26 @@
   };
 
   const enhance = (element) => {
-    if (!element || element.dataset.crtScrollbarReady) return;
+    if (!element) return;
+    if (element.dataset.crtScrollbarReady) {
+      embeddedUpdates.get(element)?.();
+      return;
+    }
     element.dataset.crtScrollbarReady = 'true';
     element.classList.add('crt-scrollbar-host');
     const scrollTarget = element.querySelector('[data-crt-scroll-target]') || element;
     scrollTarget.classList.add('crt-scrollbar-native-hidden');
     const { track, up, thumb, down } = createParts('crt-scrollbar crt-scrollbar--embedded');
+    const buttonSpace = element.hasAttribute('data-crt-scrollbar-plain') ? 0 : 16;
+    track.classList.toggle('crt-scrollbar--plain', buttonSpace === 0);
     element.appendChild(track);
 
     const update = () => {
+      // Restore the track if a host using this shared component replaces it.
+      if (track.parentElement !== element) element.appendChild(track);
       const maxScroll = scrollTarget.scrollHeight - scrollTarget.clientHeight;
       track.hidden = scrollTarget.clientHeight <= 32 || maxScroll <= 0;
       if (track.hidden) return;
-      const buttonSpace = 16;
       const trackHeight = scrollTarget.clientHeight - (buttonSpace * 2);
       const thumbHeight = Math.max(42, trackHeight * (scrollTarget.clientHeight / scrollTarget.scrollHeight));
       thumb.style.height = `${thumbHeight}px`;
@@ -38,7 +48,6 @@
     down.addEventListener('click', () => scrollByAmount(scrollTarget.clientHeight * 0.85));
     track.addEventListener('click', (event) => {
       if ([up, down, thumb].includes(event.target)) return;
-      const buttonSpace = 16;
       const trackHeight = scrollTarget.clientHeight - (buttonSpace * 2);
       const maxScroll = scrollTarget.scrollHeight - scrollTarget.clientHeight;
       const position = Math.min(Math.max(event.clientY - track.getBoundingClientRect().top - buttonSpace, 0), trackHeight);
@@ -47,7 +56,7 @@
     thumb.addEventListener('pointerdown', (event) => {
       event.preventDefault();
       const maxScroll = scrollTarget.scrollHeight - scrollTarget.clientHeight;
-      const trackHeight = scrollTarget.clientHeight - 32;
+      const trackHeight = scrollTarget.clientHeight - (buttonSpace * 2);
       const thumbHeight = thumb.offsetHeight;
       const startY = event.clientY;
       const startScroll = scrollTarget.scrollTop;
@@ -66,6 +75,7 @@
     scrollTarget.addEventListener('scroll', update, { passive: true });
     new ResizeObserver(update).observe(scrollTarget);
     new MutationObserver(() => requestAnimationFrame(update)).observe(element, { childList: true });
+    embeddedUpdates.set(element, update);
     requestAnimationFrame(update);
   };
 
@@ -123,5 +133,12 @@
   }
 
   document.querySelectorAll('[data-crt-scrollbar]').forEach(enhance);
-  window.CRTScrollbar = { enhance };
+  window.CRTScrollbar = {
+    enhance,
+    refresh: (element) => {
+      const update = embeddedUpdates.get(element);
+      if (update) update();
+      else enhance(element);
+    }
+  };
 })();

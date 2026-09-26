@@ -255,8 +255,24 @@
   padding-top: 0;
 }
 
-#lore-panel .lore-overview {
+#lore-panel h2,
+#lore-panel h3 {
+  color: var(--green);
+  font-family: inherit;
+  font-weight: 400;
+  line-height: 1.35;
+  text-shadow:
+    0 0 8px rgba(57, 255, 136, 0.8),
+    0 0 26px rgba(57, 255, 136, 0.35);
+  text-transform: uppercase;
+}
+
+#lore-panel h2 {
   font-size: 1.45rem;
+}
+
+#lore-panel h3 {
+  font-size: 1.2rem;
 }
 
 .lore-directory {
@@ -421,18 +437,26 @@
   color: var(--green);
   font-family: inherit;
   font-size: 1.45rem;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.35;
   margin: 28px 0 14px;
+  text-shadow:
+    0 0 8px rgba(57, 255, 136, 0.8),
+    0 0 26px rgba(57, 255, 136, 0.35);
+  text-transform: uppercase;
 }
 
 .general-entry h3 {
   color: var(--green);
   font-family: inherit;
   font-size: 1.2rem;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.35;
   margin: 24px 0 10px;
+  text-shadow:
+    0 0 8px rgba(57, 255, 136, 0.8),
+    0 0 26px rgba(57, 255, 136, 0.35);
+  text-transform: uppercase;
 }
 
 .general-entry h4 {

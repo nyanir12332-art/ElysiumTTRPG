@@ -6,7 +6,7 @@ window.PERKS = [
   {
     "id": "monster-blood",
     "name": "Monster Blood",
-    "description": "You learn a cantrip of your choice from the sorcerer spell list. In addition, choose a 1st-level spell from the sorcerer spell list. You can cast that spell without expending spell points. Once you cast it this way, you can't cast it this way again until you finish a long rest. You can also cast it using spell points you have. Constitution is your spellcasting ability for these spells.",
+    "description": "You learn a cantrip of your choice from the sorcerer spell list. In addition, choose a 1st-level spell from the sorcerer spell list. You can cast that spell without expending spell points. Once you cast it this way, you can't cast it this way again until you finish a long term rest. You can also cast it using spell points you have. Constitution is your spellcasting ability for these spells.",
     "requirements": ""
   },
   {
@@ -72,7 +72,7 @@ window.PERKS = [
   {
     "id": "artificer-studies",
     "name": "Artificer Studies",
-    "description": "You can cast this perk's 1st-level spell without expending spell points. Once you cast it this way, you can't cast it this way again until you finish a long rest. You can also cast it using spell points you have.",
+    "description": "You can cast this perk's 1st-level spell without expending spell points. Once you cast it this way, you can't cast it this way again until you finish a long term rest. You can also cast it using spell points you have.",
     "requirements": "Artificer Initiate"
   },
   {
@@ -120,7 +120,7 @@ window.PERKS = [
   {
     "id": "cartomancer-s-ace",
     "name": "Cartomancer's Ace",
-    "description": "When you finish a long rest, you can choose one spell from your class’s spell list and imbue that spell into a card. The chosen spell must have a casting time of 1 action, and it must be a level for which you have spell slots. The card remains imbued with this spell for 8 hours. While the card is imbued with the spell, you can use a bonus action to flourish the card and cast the spell within. The card then immediately loses its magic.",
+    "description": "When you finish a long term rest, you can choose one spell from your class’s spell list and imbue that spell into a card. The chosen spell must have a casting time of 1 action, and it must be a level for which you have spell slots. The card remains imbued with this spell for 8 hours. While the card is imbued with the spell, you can use a bonus action to flourish the card and cast the spell within. The card then immediately loses its magic.",
     "requirements": "Cartomancer Initiate"
   },
   {
@@ -162,19 +162,19 @@ window.PERKS = [
   {
     "id": "chef-initiate",
     "name": "Chef Initiate",
-    "description": "You gain proficiency with cook's utensils if you don't have it already. As part of a short rest, you can cook special food, provided you have cook's utensils on hand and expend up to $50 in ingredients. You can prepare enough of this food for a number of creatures for each $5 you spent for ingredients. At the end of the short rest, anyone who eats the food regains 6 + your Constitution modifier hit points.",
+    "description": "You gain proficiency with cook's utensils if you don't have it already. As part of a short term rest, you can cook special food, provided you have cook's utensils on hand and expend up to $50 in ingredients. You can prepare enough of this food for a number of creatures for each $5 you spent for ingredients. At the end of the short term rest, anyone who eats the food regains 6 + your Constitution modifier hit points.",
     "requirements": ""
   },
   {
     "id": "chef-s-treats",
     "name": "Chef's Treats",
-    "description": "With one hour of work or when you finish a long rest, you can cook a number of treats equal to your proficiency bonus. These special treats last until you take a long rest or for a day. A creature can use a bonus action to eat one of those treats to gain temporary hit points equal to your proficiency bonus or your Constitution modifier, whichever is the highest.",
+    "description": "With one hour of work or when you finish a long term rest, you can cook a number of treats equal to your proficiency bonus. These special treats last until you take a long term rest or for a day. A creature can use a bonus action to eat one of those treats to gain temporary hit points equal to your proficiency bonus or your Constitution modifier, whichever is the highest.",
     "requirements": "Chef Initiate"
   },
   {
     "id": "chef-s-kiss",
     "name": "Chef's Kiss",
-    "description": "You gain a number of d4s equal to your proficiency bonus or your Constitution modifier, whichever is the highest. These d4s are your Chef dice and you may roll 1 whenever a creature gains temporary hit points or heals from eating your food, add the result to the value of temporary hit points or hit points they heal. You regain all of your Chef dice when you finish a long rest.",
+    "description": "You gain a number of d4s equal to your proficiency bonus or your Constitution modifier, whichever is the highest. These d4s are your Chef dice and you may roll 1 whenever a creature gains temporary hit points or heals from eating your food, add the result to the value of temporary hit points or hit points they heal. You regain all of your Chef dice when you finish a long term rest.",
     "requirements": "Chef Initiate"
   },
   {
@@ -360,13 +360,13 @@ window.PERKS = [
   {
     "id": "fey-affiliate",
     "name": "Fey Affiliate",
-    "description": "You learn the Misty Step spell. You can cast it without expending spell points. Once you cast it this way, you can't cast it this way again until you finish a long rest. You can also cast it using spell points you have.",
+    "description": "You learn the Misty Step spell. You can cast it without expending spell points. Once you cast it this way, you can't cast it this way again until you finish a long term rest. You can also cast it using spell points you have.",
     "requirements": ""
   },
   {
     "id": "fey-related",
     "name": "Fey Related",
-    "description": "You learn a 1st-level spell of your choice. The 1st-level spell must be from the Divination or Enchantment school of magic. You can cast it without expending spell points. Once you cast it this way, you can't cast it this way again until you finish a long rest. You can also cast it using spell points you have. The spell's spellcasting ability is Intelligence, Wisdom, or Charisma (choose when you select this perk).",
+    "description": "You learn a 1st-level spell of your choice. The 1st-level spell must be from the Divination or Enchantment school of magic. You can cast it without expending spell points. Once you cast it this way, you can't cast it this way again until you finish a long term rest. You can also cast it using spell points you have. The spell's spellcasting ability is Intelligence, Wisdom, or Charisma (choose when you select this perk).",
     "requirements": "Fey Affiliate"
   },
   {
@@ -444,7 +444,7 @@ window.PERKS = [
   {
     "id": "tricky-shooting",
     "name": "Tricky Shooting",
-    "description": "You learn one Trick Shot of your choice from among those available to the Gunslinger archetype in the fighter class. The trick shot save DC = 8 + your proficiency bonus + your Dexterity modifier. You gain 1 grit point, you regain 1 expended grit point each time you get a Critical Success for an attack with a firearm, or deal a killing blow to a creature of significant threat (DM's discretion). You regain all expended grit points after a short or long rest.",
+    "description": "You learn one Trick Shot of your choice from among those available to the Gunslinger archetype in the fighter class. The trick shot save DC = 8 + your proficiency bonus + your Dexterity modifier. You gain 1 grit point, you regain 1 expended grit point each time you get a Critical Success for an attack with a firearm, or deal a killing blow to a creature of significant threat (DM's discretion). You regain all expended grit points after a short term or long term rest.",
     "requirements": "Gunner"
   },
   {
@@ -468,13 +468,13 @@ window.PERKS = [
   {
     "id": "healer-s-patchwork",
     "name": "Healer's Patchwork",
-    "description": "As an action you can spend one use of a trauma kit to tend to a creature and restore 1d6 + 4 hit points to it, plus your level. The creature can't regain hit points from this perk again until it finishes a short or long rest.",
+    "description": "As an action you can spend one use of a trauma kit to tend to a creature and restore 1d6 + 4 hit points to it, plus your level. The creature can't regain hit points from this perk again until it finishes a short term or long term rest.",
     "requirements": "Healer Initiate"
   },
   {
     "id": "healer-s-supply-line",
     "name": "Healer's Supply Line",
-    "description": "At the end of a long rest, you regain 1d4+1 uses of a trauma kit you have. Additionally, you may expend $25 to regain 5 more uses of your trauma kit.",
+    "description": "At the end of a long term rest, you regain 1d4+1 uses of a trauma kit you have. Additionally, you may expend $25 to regain 5 more uses of your trauma kit.",
     "requirements": "Healer Initiate"
   },
   {
@@ -486,19 +486,19 @@ window.PERKS = [
   {
     "id": "feather-wearer",
     "name": "Feather-Wearer",
-    "description": "You gain proficiency with light armor, or medium armor if you're already proficient.",
+    "description": "You gain proficiency with light armor and light shields, or medium armor and medium shields if you're already proficient with light armor.",
     "requirements": ""
   },
   {
     "id": "leather-wearer",
     "name": "Leather-Wearer",
-    "description": "You gain proficiency with medium armor, or heavy armor if you're already proficient.",
+    "description": "You gain proficiency with medium armor and medium shields, or heavy armor and heavy shields if you're already proficient with medium armor.",
     "requirements": "Feather-Wear"
   },
   {
     "id": "steel-wearer",
     "name": "Steel-Wearer",
-    "description": "You gain proficiency with heavy armor.",
+    "description": "You gain proficiency with heavy armor and heavy shields.",
     "requirements": "Leather-Wear"
   },
   {
@@ -576,13 +576,13 @@ window.PERKS = [
   {
     "id": "magic-student",
     "name": "Magic Student",
-    "description": "Choose a 1st-level spell from the class's spell list you chose with Magic Initiate. You can cast the spell once at its lowest level without expending spell points. Once you cast it this way, you can't cast it this way again until you finish a long rest. You can also cast it using spell points you have. Your spellcasting ability for this spell is the same as the spells you chose for Magic Initiate.",
+    "description": "Choose a 1st-level spell from the class's spell list you chose with Magic Initiate. You can cast the spell once at its lowest level without expending spell points. Once you cast it this way, you can't cast it this way again until you finish a long term rest. You can also cast it using spell points you have. Your spellcasting ability for this spell is the same as the spells you chose for Magic Initiate.",
     "requirements": "Magic Initiate"
   },
   {
     "id": "magic-recovery",
     "name": "Magic Recovery",
-    "description": "Once every long rest, as a bonus action, you may expend and roll one of your hit dice. You regain spell points equal to half the amount rolled (rounded down). These spell points disappear after you finish a long rest.",
+    "description": "Once every long term rest, as a bonus action, you may expend and roll one of your hit dice. You regain spell points equal to half the amount rolled (rounded down). These spell points disappear after you finish a long term rest.",
     "requirements": "Magic Initiate"
   },
   {
@@ -600,7 +600,7 @@ window.PERKS = [
   {
     "id": "metamagic-initiate",
     "name": "Metamagic Initiate",
-    "description": "You learn one Metamagic options of your choice from the sorcerer class. You can use only one Metamagic option on a spell when you cast it, unless the option says otherwise. You gain 1 sorcery point to spend on Metamagic (these points are added to any sorcery points you have from another source but can be used only on Metamagic). You regain all spent sorcery points when you finish a long rest.",
+    "description": "You learn one Metamagic options of your choice from the sorcerer class. You can use only one Metamagic option on a spell when you cast it, unless the option says otherwise. You gain 1 sorcery point to spend on Metamagic (these points are added to any sorcery points you have from another source but can be used only on Metamagic). You regain all spent sorcery points when you finish a long term rest.",
     "requirements": "Spellcasting or Pact Magic feature"
   },
   {
@@ -612,7 +612,7 @@ window.PERKS = [
   {
     "id": "recycling-metamagic",
     "name": "Recycling Metamagic",
-    "description": "You regain 1 of your expended sorcery points after finishing a short rest.",
+    "description": "You regain 1 of your expended sorcery points after finishing a short term rest.",
     "requirements": "Metamagic Initiate"
   },
   {
@@ -894,13 +894,13 @@ window.PERKS = [
   {
     "id": "shadow-haunted",
     "name": "Shadow Haunted",
-    "description": "You learn the Invisibility spell. You can cast it without expending spell points. Once you cast it this way, you can't cast it this way again until you finish a long rest. You can also cast it using spell points you have.",
+    "description": "You learn the Invisibility spell. You can cast it without expending spell points. Once you cast it this way, you can't cast it this way again until you finish a long term rest. You can also cast it using spell points you have.",
     "requirements": ""
   },
   {
     "id": "shadow-engrossed",
     "name": "Shadow Engrossed",
-    "description": "You learn a 1st-level spell of your choice. The 1st-level spell must be from the Illusion or Necromancy school of magic. You can cast it without expending spell points. Once you cast it this way, you can't cast it this way again until you finish a long rest. You can also cast it using spell points you have. The spell's spellcasting ability is Intelligence, Wisdom, or Charisma (choose when you select this perk).",
+    "description": "You learn a 1st-level spell of your choice. The 1st-level spell must be from the Illusion or Necromancy school of magic. You can cast it without expending spell points. Once you cast it this way, you can't cast it this way again until you finish a long term rest. You can also cast it using spell points you have. The spell's spellcasting ability is Intelligence, Wisdom, or Charisma (choose when you select this perk).",
     "requirements": "Shadow Haunted"
   },
   {
@@ -1122,7 +1122,7 @@ window.PERKS = [
   {
     "id": "stringed-thoughts",
     "name": "Stringed Thoughts",
-    "description": "You can cast the Detect Thoughts spell without expending spell points or components. Once you cast it this way, you can't cast it this way again until you finish a long rest. You can also cast it using spell points you have. Your spellcasting ability for the spell is Intelligence, Wisdom, or Charisma (choose when you select this perk).",
+    "description": "You can cast the Detect Thoughts spell without expending spell points or components. Once you cast it this way, you can't cast it this way again until you finish a long term rest. You can also cast it using spell points you have. Your spellcasting ability for the spell is Intelligence, Wisdom, or Charisma (choose when you select this perk).",
     "requirements": "Telepathic"
   },
   {
@@ -1134,7 +1134,7 @@ window.PERKS = [
   {
     "id": "hivemind",
     "name": "Hivemind",
-    "description": "At the end of a long rest, you may select creatures up to your proficiency bonus to be added to your network of thoughts. Until your next long rest, when you cast a spell of 3rd level or lower with a range of self, you may instead select a creature within 60 feet that is in your network to receive the effects of the spell instead of you. Additionally, whenever you cast a cantrip with an attack, the point of origin for the attack can be a creature within 60 feet of you that is in your network instead of you, meaning spells that have a range of touch can be used on enemies that are within touching distance of creatures in your network. You are still required to be able to see the target.",
+    "description": "At the end of a long term rest, you may select creatures up to your proficiency bonus to be added to your network of thoughts. Until your next long term rest, when you cast a spell of 3rd level or lower with a range of self, you may instead select a creature within 60 feet that is in your network to receive the effects of the spell instead of you. Additionally, whenever you cast a cantrip with an attack, the point of origin for the attack can be a creature within 60 feet of you that is in your network instead of you, meaning spells that have a range of touch can be used on enemies that are within touching distance of creatures in your network. You are still required to be able to see the target.",
     "requirements": "Fey Touched, Evolved Mind/Expanded Mind"
   },
   {
@@ -1278,7 +1278,7 @@ window.PERKS = [
   {
     "id": "medic-s-patchwork",
     "name": "Medic's Patchwork",
-    "description": "During a short rest, you can clean and bind the wounds of up to six willing beasts and humanoids. Make a DC 15 Wisdom (Medicine) check for each creature. On a success, if a creature spends a Hit Die during this rest, that creature can forgo the roll and instead regain the maximum number of hit points the die can restore. A creature can do so only once per rest, regardless of how many Hit Dice it spends.",
+    "description": "During a short term rest, you can clean and bind the wounds of up to six willing beasts and humanoids. Make a DC 15 Wisdom (Medicine) check for each creature. On a success, if a creature spends a Hit Die during this rest, that creature can forgo the roll and instead regain the maximum number of hit points the die can restore. A creature can do so only once per rest, regardless of how many Hit Dice it spends.",
     "requirements": "Medical Arts"
   },
   {
@@ -1320,7 +1320,7 @@ window.PERKS = [
   {
     "id": "nature-s-boon",
     "name": "Nature's Boon",
-    "description": "You learn the Druidcraft and Detect Poison and Disease spells. You can cast Detect Poison and Disease once without expending spell points. You regain the ability to do so when you finish a long rest. You can also cast it using spell points you have.",
+    "description": "You learn the Druidcraft and Detect Poison and Disease spells. You can cast Detect Poison and Disease once without expending spell points. You regain the ability to do so when you finish a long term rest. You can also cast it using spell points you have.",
     "requirements": "Naturalist"
   },
   {
@@ -1357,31 +1357,61 @@ window.PERKS = [
   {"id":"whip-crack","name":"Whip Crack","description":"As a bonus action, you can increase your reach with a whip by 5 feet until the start of your next turn.","requirements":"Whipper"},
   {"id":"whippers-agility","name":"Whipper's Agility","description":"Increase your Strength or Dexterity score by 1, to a maximum of 20.","requirements":"Whip Crack"},
   {"id":"whip-tricks","name":"Whip Tricks","description":"When you take the Attack action and make an attack with a whip, you can make a shove or grapple attempt instead, using the whip's reach. The DC uses your Dexterity modifier instead of your Strength modifier. When you shove a creature this way, you pull it up to 5 feet toward you instead of pushing it away. If you grapple a creature this way, the grapple ends if you use the whip to interact with another creature, such as by attacking a creature other than the grappled creature.","requirements":"Whipper's Agility"},
-  {"id":"occult-initiate","name":"Occult Initiate","description":"You learn Divine Favor. You can cast it once without expending spell points, regaining the ability to do so when you finish a long rest. You can also cast it using spell points. When you cast it, it deals necrotic damage instead of radiant damage.","requirements":""},
-  {"id":"occult-teachings","name":"Occult Teachings","description":"Choose a 1st-level Divination or Necromancy spell. You can cast it once without expending spell points, regaining the ability to do so when you finish a long rest. You can also cast it using spell points. Constitution, Wisdom, or Charisma is your spellcasting ability for it (choose when you select this perk).","requirements":"Occult Initiate"},
+  {"id":"occult-initiate","name":"Occult Initiate","description":"You learn Divine Favor. You can cast it once without expending spell points, regaining the ability to do so when you finish a long term rest. You can also cast it using spell points. When you cast it, it deals necrotic damage instead of radiant damage.","requirements":""},
+  {"id":"occult-teachings","name":"Occult Teachings","description":"Choose a 1st-level Divination or Necromancy spell. You can cast it once without expending spell points, regaining the ability to do so when you finish a long term rest. You can also cast it using spell points. Constitution, Wisdom, or Charisma is your spellcasting ability for it (choose when you select this perk).","requirements":"Occult Initiate"},
   {"id":"occult-weird","name":"Occult Weird","description":"You can target an unwilling creature with a healing spell that rolls dice. The target makes a basic Wisdom saving throw. On a failure, it takes damage equal to the healing the spell would restore. When you cast a healing spell this way, you either regain 1 spell point or add one additional die to the spell's healing.","requirements":"Occult Initiate"},
   {"id":"occult-belief","name":"Occult Belief","description":"Increase your Constitution, Wisdom, or Charisma score by 1, to a maximum of 20.","requirements":"2 Occult perks"},
-  {"id":"rise-from-the-deep","name":"Rise from the Deep","description":"As a bonus action, you cause a tentacle to sprout from an unoccupied space you can see within 30 feet. It is an extension of you, cannot move, and any attack or spell that targets it targets you. You can dismiss it for free on your turn or as a reaction. You can cast spells as if you occupied its space or attack from its space as if wielding a whip, with which you are proficient. You can use the spellcasting ability chosen for Occult Teachings for its attack and damage rolls. The tentacle lasts for 1 minute, disappears if you become unconscious, and cannot be summoned again until you finish a short or long rest.","requirements":"Occult Teachings, Whip Crack/Occult Belief"},
+  {"id":"rise-from-the-deep","name":"Rise from the Deep","description":"As a bonus action, you cause a tentacle to sprout from an unoccupied space you can see within 30 feet. It is an extension of you, cannot move, and any attack or spell that targets it targets you. You can dismiss it for free on your turn or as a reaction. You can cast spells as if you occupied its space or attack from its space as if wielding a whip, with which you are proficient. You can use the spellcasting ability chosen for Occult Teachings for its attack and damage rolls. The tentacle lasts for 1 minute, disappears if you become unconscious, and cannot be summoned again until you finish a short term or long term rest.","requirements":"Occult Teachings, Whip Crack/Occult Belief"},
   {"id":"the-deeps-favor","name":"The Deep's Favor","description":"When you cast a leveled spell, you can also summon a tentacle using Rise from the Deep. You can have a number of tentacles equal to your proficiency bonus at one time and can dismiss them at any time.","requirements":"Rise from the Deep"},
   {"id":"lycan-curse","name":"Lycan Curse","description":"Decrease your Intelligence or Charisma score by 1. The DM can introduce unforeseen circumstances around full moons. You can take a perk that requires Lycan Curse only when you gain a level.","requirements":"No other curse perks, DM's permission"},
   {"id":"werewolf","name":"Werewolf","description":"Your hit point maximum increases by twice your level and increases by 2 whenever you gain a level. You gain vulnerability to silver, advantage on Wisdom (Perception) checks that rely on hearing or smell, and the following natural melee weapons: Claw. It deals 1d8 slashing damage; you can gain temporary hit points equal to half the damage dealt until the start of your next turn. Bite. It deals 2d4 piercing damage. A humanoid hit by it must succeed on a DC 12 Constitution saving throw or replace one of its perks with Lycan Curse.","requirements":"Lycan Curse"},
   {"id":"kitsune","name":"Kitsune","description":"Increase your Wisdom or Charisma score by 1, to a maximum of 20. You can take the Dash action as a bonus action. You gain foxfire, a natural ranged weapon with a normal range of 20 feet and a long range of 40 feet. It deals 1d4 fire or cold damage, and you add the ability modifier increased by this perk to its attack and damage rolls. You can transform into a fox following the druid's Wild Shape rules and can use foxfire while transformed.\nFox\nTiny beast, unaligned\nArmor Class 12\nHit Points 2 (1d4)\nSpeed 30 ft.\nSTR 3 (-4) DEX 15 (+2) CON 10 (+0) INT 3 (-4) WIS 12 (+1) CHA 7 (-2)\nSkills Perception +3, Stealth +4\nSenses passive Perception 13\nLanguages -\nChallenge 0\nKeen Hearing and Smell. The fox has advantage on Wisdom (Perception) checks that rely on hearing or smell.\nActions\nBite. Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 1 piercing damage.","requirements":"Lycan Curse"},
   {"id":"rat","name":"Rat","description":"Increase your Dexterity score by 1, to a maximum of 20. Your size becomes Small if it is not already. You gain resistance to poison damage, advantage on saving throws against being poisoned, and darkvision out to 60 feet. You cannot discern color in darkness. Your vicious incisors are finesse natural melee weapons that deal 1d4 + your Dexterity modifier piercing damage and benefit from Sneak Attack. For Sneak Attack's extra damage, you count as a rogue of half your character level if you do not already have that feature.","requirements":"Lycan Curse"},
   {"id":"rotting-curse","name":"Rotting Curse","description":"Decrease your Strength or Constitution score by 1. You gain resistance to necrotic and poison damage. You can take a perk that requires Rotting Curse only when you gain a level.","requirements":"No other curse perks, DM's permission"},
-  {"id":"zombie","name":"Zombie","description":"Decrease your Intelligence score by 1 and your speed by 5 feet. You gain immunity to the poisoned condition and disease, and your creature type becomes Undead. Your jaws are natural melee weapons that deal 1d8 piercing damage. When you hit a creature with them while crawling, its speed is halved until the end of its next turn. You can crawl without spending extra movement, do not have disadvantage on attacks while crawling, and gain 5 feet of speed until the end of your turn if you start it prone. You cannot make nonlethal unarmed strikes. When damage reduces you to 0 hit points, make a Constitution saving throw (DC 5 + damage taken), unless the damage is radiant or from a critical success. On a success, you drop to 1 hit point; on a failure, you gain 2 exhaustion levels. You cannot remove exhaustion through a long rest unless you have eaten fresh humanoid flesh since your last long rest.","requirements":"Rotting Curse"},
-  {"id":"vampire","name":"Vampire","description":"Increase your Charisma score by 1, to a maximum of 20. You gain immunity to necrotic damage, vulnerability to radiant damage, darkvision out to 60 feet, and the Undead creature type. You regain 4 hit points at the start of each turn while you have at least 1 hit point and are not in sunlight or running water. Direct sunlight deals 4 radiant damage to you at the start of your turn; running water deals 4 acid damage. You cannot enter a residence without an invitation from an occupant. Your bite is a finesse natural melee weapon that deals 1d8 piercing damage. You cannot remove exhaustion through a long rest unless you have drunk humanoid blood since your last long rest. You can transform into a bat following the druid's Wild Shape rules.\nBat\nTiny beast, unaligned\nArmor Class 12\nHit Points 1 (1d4 - 1)\nSpeed 5 ft., fly 30 ft.\nSTR 2 (-4) DEX 15 (+2) CON 8 (-1) INT 2 (-4) WIS 12 (+1) CHA 4 (-3)\nSenses blindsight 60 ft., passive Perception 11\nLanguages -\nChallenge 0\nEcholocation. The bat cannot use its blindsight while deafened.\nKeen Hearing. The bat has advantage on Wisdom (Perception) checks that rely on hearing.\nActions\nBite. Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 1 piercing damage.","requirements":"Rotting Curse"},
-  {"id":"skeleton","name":"Skeleton","description":"Decrease your Constitution score by 1. You gain immunity to poison damage, the poisoned condition, and disease; vulnerability to necrotic and radiant damage; and the Undead creature type. When you take necrotic damage, regain hit points equal to half that damage. You cannot be healed by spells or drink potions, and do not need to eat or sleep. During a long rest, you can remain motionless but conscious. When damage reduces you to 0 hit points, make a Constitution saving throw (DC 5 + damage taken), unless the damage is radiant or from a critical success. On a success, you drop to 1 hit point; on a failure, gain 2 exhaustion levels.","requirements":"Rotting Curse"},
+  {"id":"zombie","name":"Zombie","description":"Decrease your Intelligence score by 1 and your speed by 5 feet. You gain immunity to the poisoned condition and disease, and your creature type becomes Undead. Your jaws are natural melee weapons that deal 1d8 piercing damage. When you hit a creature with them while crawling, its speed is halved until the end of its next turn. You can crawl without spending extra movement, do not have disadvantage on attacks while crawling, and gain 5 feet of speed until the end of your turn if you start it prone. You cannot make nonlethal unarmed strikes. When damage reduces you to 0 hit points, make a Constitution saving throw (DC 5 + damage taken), unless the damage is radiant or from a critical success. On a success, you drop to 1 hit point; on a failure, you gain 2 exhaustion levels. You cannot remove exhaustion through a short term or long term rest unless you have eaten fresh humanoid flesh since your last rest.","requirements":"Rotting Curse"},
+  {"id":"vampire","name":"Vampire","description":"Increase your Charisma score by 1, to a maximum of 20. You gain immunity to necrotic damage, vulnerability to radiant damage, darkvision out to 60 feet, and the Undead creature type. You regain 4 hit points at the start of each turn while you have at least 1 hit point and are not in sunlight or running water. Direct sunlight deals 4 radiant damage to you at the start of your turn; running water deals 4 acid damage. You cannot enter a residence without an invitation from an occupant. Your bite is a finesse natural melee weapon that deals 1d8 piercing damage. You cannot remove exhaustion through a short term or long term rest unless you have drunk humanoid blood since your last rest. You can transform into a bat following the druid's Wild Shape rules.\nBat\nTiny beast, unaligned\nArmor Class 12\nHit Points 1 (1d4 - 1)\nSpeed 5 ft., fly 30 ft.\nSTR 2 (-4) DEX 15 (+2) CON 8 (-1) INT 2 (-4) WIS 12 (+1) CHA 4 (-3)\nSenses blindsight 60 ft., passive Perception 11\nLanguages -\nChallenge 0\nEcholocation. The bat cannot use its blindsight while deafened.\nKeen Hearing. The bat has advantage on Wisdom (Perception) checks that rely on hearing.\nActions\nBite. Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 1 piercing damage.","requirements":"Rotting Curse"},
+  {"id":"skeleton","name":"Skeleton","description":"Decrease your Constitution score by 1. You gain immunity to poison damage, the poisoned condition, and disease; vulnerability to necrotic and radiant damage; and the Undead creature type. When you take necrotic damage, regain hit points equal to half that damage. You cannot be healed by spells or drink potions, and do not need to eat or sleep. During a long term rest, you can remain motionless but conscious. When damage reduces you to 0 hit points, make a Constitution saving throw (DC 5 + damage taken), unless the damage is radiant or from a critical success. On a success, you drop to 1 hit point; on a failure, gain 2 exhaustion levels.","requirements":"Rotting Curse"},
   {"id":"mana-curse","name":"Mana Curse","description":"Decrease your Constitution, Wisdom, or Charisma score by 1. You gain blindsight out to 10 feet while conscious; within that range, you perceive each creature's shape but not specific details or color, and attackers cannot gain advantage on melee attacks against you because of flanking or being hidden. This sense functions while blinded. You can take a perk that requires Mana Curse only when you gain a level.","requirements":"No other curse perks, DM's permission, Spellcasting or Pact Magic feature"},
   {"id":"oozekin","name":"Oozekin","description":"You gain immunity to acid damage, vulnerability to fire damage, and the Ooze creature type. You can move through a space as narrow as 1 inch without squeezing. Creatures grappled by you take 1d6 acid damage at the start of their turns. When you cast a fire-damage spell, convert its damage to acid or take fire damage equal to its spell point cost. Your unarmed strikes can deal 1d6 + your Constitution modifier acid damage. On a critical success with acid damage, the target takes a -1 AC penalty for 1 hour, or -2 if wearing armor until it is repaired. You can digest 2-inch-thick non-Relic metal in 6 seconds.","requirements":"Mana Curse"},
-  {"id":"beholderkin","name":"Beholderkin","description":"You gain the Aberration creature type and can hover instead of falling, descending 10 feet every 6 seconds or at the end of your turn; you cannot do so while overencumbered. You learn Counterspell and can cast it once without spell points per long rest, or using spell points. Intelligence, Wisdom, or Charisma is your spellcasting ability for Counterspell (choose when you select this perk). Your eyes are a spellcasting focus and remove the need for a free hand to cast spells. At the start of your turn, you can gain one additional action usable only to cast a spell; a leveled spell cast with it does not count against your action spell limit. Once used, you cannot use this ability again until a short or long rest.","requirements":"Mana Curse"},
-  {"id":"rootkin","name":"Rootkin","description":"You gain the Plant creature type, resistance to bludgeoning and piercing damage, vulnerability to fire damage, and deal double damage to objects and structures. You roll twice when attempting to pass as a plant. You can animate two plants or trees you can see within 60 feet. They copy your statistics but cannot speak. Plants are Tiny, have 1 hit point, cannot move, and can cast only your cantrips. Trees are Medium, have one-quarter of your hit points, and copy your unarmed strikes or gain a 1d6 bludgeoning slam. Once used, you cannot use this ability again until a long rest.","requirements":"Mana Curse"},
-  {"id":"fairy","name":"Fairy","description":"You gain the Fey creature type, decrease your Strength score by 1, and gain Broonie Blood, ignoring its requirements. If you have Giant Blood, you must replace it with a perk for which you meet the requirements. You can hover instead of falling, descending 10 feet every 6 seconds or at the end of your turn; you cannot do so while overencumbered. You learn Fly and can cast it once without spell points per long rest, or using spell points.","requirements":"Mana Curse"},
+  {"id":"beholderkin","name":"Beholderkin","description":"You gain the Aberration creature type and can hover instead of falling, descending 10 feet every 6 seconds or at the end of your turn; you cannot do so while overencumbered. You learn Counterspell and can cast it once without spell points per long term rest, or using spell points. Intelligence, Wisdom, or Charisma is your spellcasting ability for Counterspell (choose when you select this perk). Your eyes are a spellcasting focus and remove the need for a free hand to cast spells. At the start of your turn, you can gain one additional action usable only to cast a spell; a leveled spell cast with it does not count against your action spell limit. Once used, you cannot use this ability again until a short term or long term rest.","requirements":"Mana Curse"},
+  {"id":"rootkin","name":"Rootkin","description":"You gain the Plant creature type, resistance to bludgeoning and piercing damage, vulnerability to fire damage, and deal double damage to objects and structures. You roll twice when attempting to pass as a plant. You can animate two plants or trees you can see within 60 feet. They copy your statistics but cannot speak. Plants are Tiny, have 1 hit point, cannot move, and can cast only your cantrips. Trees are Medium, have one-quarter of your hit points, and copy your unarmed strikes or gain a 1d6 bludgeoning slam. Once used, you cannot use this ability again until a long term rest.","requirements":"Mana Curse"},
+  {"id":"fairy","name":"Fairy","description":"You gain the Fey creature type, decrease your Strength score by 1, and gain Broonie Blood, ignoring its requirements. If you have Giant Blood, you must replace it with a perk for which you meet the requirements. You can hover instead of falling, descending 10 feet every 6 seconds or at the end of your turn; you cannot do so while overencumbered. You learn Fly and can cast it once without spell points per long term rest, or using spell points.","requirements":"Mana Curse"},
   {"id":"magnify","name":"Giant Blood","description":"Decrease your Dexterity score by 2 and increase your Constitution score by 1, to a maximum of 20. Your speed increases by 5 feet and your size becomes Large. See the size rules for equipment and carrying capacity. A feature that treats you as one size larger cannot increase your carrying capacity beyond Large.","requirements":"Character Size Medium"},
   {"id":"minify","name":"Broonie Blood","description":"Increase your Dexterity score by 2, to a maximum of 20, and decrease your Strength score by 1. Your race's speed decreases by 5 feet, unless that speed is 25 feet, and your size becomes Tiny. See the size rules for equipment and carrying capacity.","requirements":"Character Size Small"},
+  {
+    "id": "giant-attunement",
+    "name": "Giant Attunement",
+    "description": "When you attune to a relic, you can increase its size to Large while it is attuned to you. You can have up to three relics enlarged this way at a time.",
+    "requirements": "Giant Blood"
+  },
+  {
+    "id": "broonie-attunement",
+    "name": "Broonie Attunement",
+    "description": "When you attune to a relic, you can decrease its size to Tiny while it is attuned to you. You can have up to three relics reduced this way at a time.",
+    "requirements": "Broonie Blood"
+  },
+  {
+    "id": "giant-collateral",
+    "name": "Giant Collateral",
+    "description": "When you score a Critical Success with a melee attack, you may choose to deal normal damage to the target instead of the Critical Success's damage. If you do, roll an attack with the same weapon against every other creature adjacent to the target.",
+    "requirements": "Giant Blood"
+  },
+  {
+    "id": "broonie-bounce",
+    "name": "Broonie Bounce",
+    "description": "When you score a Critical Success with a melee attack, you may move up to 10 feet away from the target to an unoccupied space. If you end this movement adjacent to another creature, you may immediately make a melee attack against it with the same weapon.",
+    "requirements": "Broonie Blood, No Broonie Brawn"
+  },
+  {
+    "id": "broonie-brawn",
+    "name": "Broonie Brawn",
+    "description": "Increase your Strength score by 4, to a maximum of 20, and decrease your Dexterity score by 2.",
+    "requirements": "Broonie Blood, No Broonie Bounce"
+  },
   {"id":"vehicular-shield-slaughter","name":"Vehicular Shield-Slaughter","description":"When you use Momentum, you can attack with your shield instead. Use your proficiency bonus and Strength modifier for the attack roll. On a hit, it deals 1d6 + your Strength modifier bludgeoning damage for each 10 feet you moved before the attack.","requirements":"Momentum, Ramming"},
   {"id":"meteor","name":"Meteor","description":"You can make Vehicular Shield-Slaughter deal fire damage instead of bludgeoning damage. You can take a -5 penalty to its attack roll; on a hit, add your AC to the damage.","requirements":"Vehicular Shield-Slaughter"},
   {"id":"high-noon","name":"High Noon","description":"When combat begins, enemy creatures provoke opportunity attacks from you as though you used Quick Finger. You have advantage on those attacks.","requirements":"Quick Finger, Inhuman Senses"},
-  {"id":"lights-camera-action","name":"Lights, Camera, Action!","description":"Choose a willing NPC. As a reaction when an enemy creature ends its turn, the NPC can take an additional turn. You can use this feature a number of times equal to your proficiency bonus per long rest. If opposing parties contain more creatures than your party, or if you expend an additional use, you can target a PC instead.","requirements":"Writer's Wit, Actor's Charisma"},
+  {"id":"lights-camera-action","name":"Lights, Camera, Action!","description":"Choose a willing NPC. As a reaction when an enemy creature ends its turn, the NPC can take an additional turn. You can use this feature a number of times equal to your proficiency bonus per long term rest. If opposing parties contain more creatures than your party, or if you expend an additional use, you can target a PC instead.","requirements":"Writer's Wit, Actor's Charisma"},
   {"id":"star-struck","name":"Star Struck","description":"Once per turn, one attack you make with a flail gains reach and deals force damage instead of its normal damage. On a critical success with that attack, add 1d4 force damage.","requirements":"Flail Bypass, Awareness of Magic"},
   {"id":"weakpoint-mark","name":"Weakpoint Mark","description":"Once per turn when your thrown weapon attack hits a creature, you have advantage on your next off-hand thrown weapon attack against that creature.","requirements":"Vital Strikes, Thrown Arms Power"},
   {"id":"paper-cuts","name":"Paper Cuts","description":"You can give your cards the explosive property (5 feet). When you do, increase the card's damage die by two sides, to a maximum of d12, and reduce the cost of your Playing Card Set by $1. If its cost becomes $0, it is destroyed.","requirements":"Explosive Thrower, Cartomancer's Cunning"}

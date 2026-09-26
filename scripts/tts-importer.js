@@ -48,6 +48,17 @@
     const cleaned = normalize(value);
     return /^(?:-|—)$/.test(cleaned) ? '' : cleaned;
   };
+  const expandShieldProficiency = (value) => {
+    const armor = normalize(value);
+    const allShields = 'light shields, medium shields, heavy shields';
+    if (/(?:^|,\s*)shields(?:\s|,|\(|$)/i.test(armor)) return armor.replace(/(?:^|,\s*)shields(?=\s|,|\(|$)/i, (match) => `${match.startsWith(',') ? ', ' : ''}${allShields}`);
+    if (/\b(?:light|medium|heavy) shields\b/i.test(armor)) return armor;
+    if (/\b(?:all|heavy) armor\b/i.test(armor)) return `${armor}, ${allShields}`;
+    if (/\bmedium armor\b/i.test(armor)) return `${armor}, light shields, medium shields`;
+    if (/\blight armor\b/i.test(armor)) return `${armor}, light shields`;
+    return armor;
+  };
+  const normalizeClassShieldMarkup = (markup) => markup.replace(/(<b>Armor:<\/b>\s*)([^<]*)/gi, (match, label, value) => `${label}${escapeText(expandShieldProficiency(value))}`);
   const escapeText = (value) => String(value)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -577,7 +588,7 @@
       type: kind === 'race' ? 'race' : kind === 'class' ? 'class' : 'feature',
       title: kind === 'system' ? cleanTitle(entry.title) : titleFromPrompt(document, entry.title),
       subtitle: kind === 'race' ? 'Race' : kind === 'background' ? 'Background' : kind === 'class' ? classSubtitleFromPrompt(document, entry.title) : kind === 'system' ? 'System' : 'Feature',
-      description: serialize(content),
+      description: kind === 'class' ? normalizeClassShieldMarkup(serialize(content)) : serialize(content),
     };
   };
 
@@ -589,7 +600,7 @@
       type: kind === 'race' ? 'race' : kind === 'class' ? 'class' : 'feature',
       title: kind === 'system' ? cleanTitle(entry.title) : titleFromPrompt(document, entry.title),
       subtitle: kind === 'race' ? 'Race' : kind === 'background' ? 'Background' : kind === 'class' ? classSubtitleFromPrompt(document, entry.title) : kind === 'system' ? 'System' : 'Feature',
-      description: serialize(content),
+      description: kind === 'class' ? normalizeClassShieldMarkup(serialize(content)) : serialize(content),
     };
   };
 

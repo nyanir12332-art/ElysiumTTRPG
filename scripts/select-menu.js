@@ -1,5 +1,33 @@
 (() => {
   const enhanced = new WeakMap();
+  let preview;
+
+  const hidePreview = () => {
+    if (preview) preview.hidden = true;
+  };
+
+  const showPreview = (choice, text) => {
+    if (!text) { hidePreview(); return; }
+    if (!preview) {
+      preview = document.createElement('span');
+      preview.className = 'select-menu__preview';
+      preview.setAttribute('role', 'tooltip');
+      document.body.append(preview);
+    }
+    // Keep modal previews in the dialog's top layer so the backdrop cannot dim them.
+    const previewHost = choice.closest('dialog') || document.body;
+    if (preview.parentElement !== previewHost) previewHost.append(preview);
+    preview.textContent = text;
+    preview.hidden = false;
+    const choiceRect = choice.getBoundingClientRect();
+    const previewRect = preview.getBoundingClientRect();
+    const gap = 8;
+    let left = choiceRect.right + gap;
+    if (left + previewRect.width > window.innerWidth - gap) left = Math.max(gap, choiceRect.left - previewRect.width - gap);
+    const top = Math.max(gap, Math.min(choiceRect.top, window.innerHeight - previewRect.height - gap));
+    preview.style.left = `${left}px`;
+    preview.style.top = `${top}px`;
+  };
 
   const close = (menu) => {
     const state = enhanced.get(menu);
@@ -7,6 +35,7 @@
     state.list.hidden = true;
     state.trigger.setAttribute('aria-expanded', 'false');
     state.shell.classList.remove('is-open');
+    hidePreview();
   };
 
   const closeAll = (except) => {
@@ -56,6 +85,7 @@
     enhanced.set(select, state);
 
     const render = () => {
+      hidePreview();
       const selected = select.options[select.selectedIndex];
       value.textContent = selected ? selected.textContent.trim() : '';
       trigger.disabled = select.disabled;
@@ -72,6 +102,11 @@
         choice.classList.toggle('is-selected', option.selected);
         choice.textContent = option.textContent.trim();
         choice.disabled = option.disabled;
+        const previewText = option.dataset.preview || '';
+        choice.addEventListener('mouseenter', () => showPreview(choice, previewText));
+        choice.addEventListener('mouseleave', hidePreview);
+        choice.addEventListener('focus', () => showPreview(choice, previewText));
+        choice.addEventListener('blur', hidePreview);
         choice.addEventListener('click', () => {
           select.value = option.value;
           select.dispatchEvent(new Event('change', { bubbles: true }));
@@ -109,6 +144,7 @@
     });
 
     list.addEventListener('wheel', (event) => {
+      hidePreview();
       event.preventDefault();
       event.stopPropagation();
       list.scrollTop += event.deltaY;

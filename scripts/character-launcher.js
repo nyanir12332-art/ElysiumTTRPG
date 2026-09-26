@@ -1,0 +1,20 @@
+(() => {
+  const own = document.currentScript;
+  if (!own || document.querySelector('.character-launcher')) return;
+  const root = new URL('../', own.src);
+  const css = document.createElement('link');
+  css.rel = 'stylesheet'; css.href = new URL('styles/character-launcher.css?v=10', root);
+  document.head.append(css);
+  const button = document.createElement('button');
+  button.type = 'button'; button.className = 'character-launcher'; button.textContent = '+'; button.setAttribute('aria-label', 'Open character builder');
+  const modal = document.createElement('div'); modal.className = 'character-modal'; modal.hidden = true;
+  modal.innerHTML = '<div class="character-modal__panel" role="dialog" aria-modal="true" aria-labelledby="character-modal-title"><h2 id="character-modal-title" class="prompt">Insert ID</h2><input type="file" accept="application/json,.json"><div class="character-modal__actions"><button type="button" data-character-create>Create</button><button type="button" data-character-insert>Insert</button></div></div>';
+  document.body.append(button, modal);
+  const builder = new URL('character-builder/index.html', root).href;
+  const file = modal.querySelector('input[type=file]');
+  button.addEventListener('click', () => { modal.hidden = false; });
+  modal.addEventListener('click', (event) => { if (event.target === modal) modal.hidden = true; });
+  modal.querySelector('[data-character-create]').addEventListener('click', () => { sessionStorage.removeItem('fable-character-import'); location.href = builder; });
+  modal.querySelector('[data-character-insert]').addEventListener('click', () => file.click());
+  file.addEventListener('change', () => { const selected = file.files[0]; if (!selected) return; const reader = new FileReader(); reader.onload = () => { try { JSON.parse(reader.result); sessionStorage.setItem('fable-character-import', reader.result); location.href = builder; } catch { alert('That file is not a valid Fable character sheet.'); } }; reader.readAsText(selected); });
+})();

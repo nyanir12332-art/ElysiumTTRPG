@@ -1,10 +1,12 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
-    <link rel="stylesheet" href="../styles/site.css?v=26">
+    <link rel="stylesheet" href="../styles/site.css?v=29">
+    <link rel="stylesheet" href="../styles/records.css?v=1">
+    <link rel="stylesheet" href="../styles/search.css?v=13">
     <title>Records - Fable</title>
   </head>
   <body>
@@ -15,7 +17,6 @@
           <a href="../classes/classes.html">Classes</a>
           <a href="../races/index.html">Races</a>
           <a href="../backgrounds/index.html">Backgrounds</a>
-          <a href="../systems/spellcasting.html">Spells</a>
           <a href="../items/index.html">Items</a>
           <a href="../feats/index.html">Perks</a>
           <a href="../systems/index.html">Systems</a>
@@ -24,9 +25,28 @@
         </nav>
       </header>
       <main class="page-shell">
-        <h1>Records</h1>
-        <p class="page-intro">Campaign records and saved references will appear here.</p>
+        <h1 class="prompt">Records</h1>
+        <section class="campaign-records" aria-label="Campaign records">
+          <section class="campaign-record" data-record-campaign>
+            <button class="record-toggle campaign-record__toggle" type="button" aria-expanded="false" aria-controls="enter-elysium-sessions">Enter Elysium</button>
+            <div class="campaign-record__sessions" id="enter-elysium-sessions" hidden>
+              <section class="session-record" data-record-session>
+                <button class="record-toggle session-record__toggle" type="button" aria-expanded="false" aria-controls="enter-elysium-session-1">Session 1</button>
+                <article id="enter-elysium-session-1" hidden>
+                  <p>The group received the letter from Ozwald and headed to its destination: the wonderful ivory casino, Gates of Horns and Ivory. They went inside its marbled halls, a place of gambling and night services. Vivi tried to be sly and steal Osiris' equipment, but everyone knew what Vivi was doing, so the attempt failed.</p>
+                  <p>After some interaction with the receptionist, Eliza, the group eventually went upstairs to room 4B. There were some interesting shenanigans before 4B, including interactions between old acquaintances and, of course, Vivi attempting to check someone's bag once more. When Marigold opened the door, they saw the individuals inside the room: Sir Barnaby, the man whose speech had quaked the air and shivered the souls of man. Someone immediately closed the door in disbelief, but eventually everyone went inside.</p>
+                  <p>After introductions and conversation with Sir Barnaby, the group waited for their actual contact, Ozwald. As soon as he entered, he immediately closed the door—whether by magical lock or simply by closing it depended on who you asked. Ozwald explained that he could make their wishes come true, as long as the group signed a contract to become Fixers for the Folklore Office.</p>
+                  <p>Once the contract was signed, the floor ticked and ticked until an explosion collapsed it beneath them. The group fell; some were hurt, while Snake, a subordinate of Sir Barnaby, died from the fall. When they hit the ground, they found themselves in the middle of a conflict between the Mafia and the police: the Thumb and the Zwei.</p>
+                </article>
+              </section>
+            </div>
+          </section>
+        </section>
       </main>
     </div>
+    <script src="../scripts/search.js?v=13"></script>
+    <script src="records.js?v=1"></script>
+    <script src="../scripts/crt-scrollbar.js?v=1"></script>
+    <script src="../scripts/character-launcher.js?v=10"></script>
   </body>
 </html>
