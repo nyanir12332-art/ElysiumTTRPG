@@ -24,7 +24,7 @@
   };
   const standardArray = [15, 14, 13, 12, 10, 8];
   const XP_TO_LEVEL = 10000;
-  const state = { level: 1, xp: 0, classLevels: {}, abilityArray: {}, racial: [], racialMode: 'three', abilityScoreExchanges: [], abilityScoreIncreases: [], perkAbilityChoices: {}, intelligenceProficiencies: [], intelligenceProficiencyTypes: [], skills: [], expertise: [], classFeatureChoices: {}, classSpells: {}, spellcasting: {}, spellcastingLevel: 0, subclass: '', subclassFeatureChoices: {}, equipmentChoices: {}, equipmentItems: {}, classTools: [], classFixedTools: [], raceOption: '', raceLanguages: [], raceFixedLanguages: [], raceTools: [], raceFixedTools: [], backgroundOption: '', backgroundLicenseGrade: '', backgroundSkills: [], backgroundLanguages: [], backgroundFixedLanguages: [], backgroundTools: [], backgroundFixedTools: [], backgroundEquipment: [], cash: 0, perksPerLevel: false, levelOnePerk: '', humanPerk: '', perkSkill: '', humanSkill: '', inventory: [], details: {}, notes: '', conditions: [], exhaustionLevel: 0, customFeatures: [], entryEdits: {}, levelUpFeatures: [], addedPerks: [], customPerks: [], currentHp: null, temporaryHp: 0, levelHpBonus: 0, hitDieSides: 0, hitDiceRemaining: null, hitDicePools: {} };
+  const state = { level: 1, xp: 0, classLevels: {}, abilityArray: {}, racial: [], racialMode: 'three', abilityScoreExchanges: [], abilityScoreIncreases: [], perkAbilityChoices: {}, intelligenceProficiencies: [], intelligenceProficiencyTypes: [], skills: [], expertise: [], classFeatureChoices: {}, classSpells: {}, spellcasting: {}, spellcastingLevel: 0, subclass: '', subclassFeatureChoices: {}, equipmentChoices: {}, equipmentItems: {}, classTools: [], classFixedTools: [], raceOption: '', raceLanguages: [], raceFixedLanguages: [], raceTools: [], raceFixedTools: [], raceSizeOptions: [], size: 'Medium', backgroundOption: '', backgroundLicenseGrade: '', backgroundSkills: [], backgroundLanguages: [], backgroundFixedLanguages: [], backgroundTools: [], backgroundFixedTools: [], backgroundEquipment: [], cash: 0, levelOnePerk: '', humanPerk: '', perkSkill: '', humanSkill: '', inventory: [], details: {}, notes: '', conditions: [], exhaustionLevel: 0, customFeatures: [], entryEdits: {}, levelUpFeatures: [], addedPerks: [], customPerks: [], currentHp: null, temporaryHp: 0, levelHpBonus: 0, hitDieSides: 0, hitDiceRemaining: null, hitDicePools: {} };
   const hitDiceSizes = [6, 8, 10, 12];
   let avatar = null;
   const avatarPan = { x: 0, y: 0 };
@@ -32,6 +32,7 @@
   let classFeatureChoiceDefinitions = [];
   let classSpellChoiceDefinitions = [];
   let classSpellProgression = [];
+  const spellProgressions = {};
   let classSkillDefinition = null;
   let spellCatalog;
   let sheetEntryEditorPresets = new Map();
@@ -63,6 +64,7 @@
   ].map(([name, category]) => ({ name, category }));
 
   const clean = (value) => String(value || '').replace(/\s+/g, ' ').trim();
+  const stableChoices = (saved, count, isValid) => Array.from({ length: count }, (_, index) => isValid(saved?.[index]) ? saved[index] : '');
   const classHitDieSides = (className) => {
     const value = clean(className).toLowerCase();
     if (/barbarian/.test(value)) return 12;
@@ -197,7 +199,7 @@
   const loadPerks = async () => {
     if (perks.length) return perks;
     try {
-      const source = await fetch('../scripts/perks.js').then((response) => response.text());
+      const source = await fetch('../scripts/perks.js?v=16').then((response) => response.text());
       const perkPattern = /"id"\s*:\s*"([^"]+)"\s*,\s*"name"\s*:\s*"([^"]+)"\s*,\s*"description"\s*:\s*"((?:\\.|[^"\\])*)"\s*,\s*"requirements"\s*:\s*"([^"]*)"/g;
       const parsedPerks = [...source.matchAll(perkPattern)].map((match) => {
         const [, value, label, description, requirements] = match;
@@ -209,7 +211,8 @@
           // Use the captured text as-is.
         }
 
-        const increaseText = decodedDescription.match(/Increase (?:your |one )?(.+?)(?: score)? by 1\b/i)?.[1] || '';
+        const increaseMatch = decodedDescription.match(/(?:^|[.!?]\s+)Increase (?:your |one )?(.+?)(?: score)? by 1,? to a maximum of 20\b/i);
+        const increaseText = increaseMatch?.[1] || '';
         let abilityIncreaseOptions = abilities.filter((ability) => new RegExp(`\\b${ability}\\b`, 'i').test(increaseText));
         if (/ability score of your choice|ability score you chose/i.test(increaseText)) abilityIncreaseOptions = [...abilities];
         return {
@@ -217,7 +220,8 @@
           label,
           description: decodedDescription,
           requirements,
-          abilityIncreaseOptions
+          abilityIncreaseOptions,
+          grantsAbilityIncrease: Boolean(increaseMatch)
         };
       });
 
@@ -266,7 +270,7 @@
     const levelOneSelect = $('#level-one-perk');
     const levelOneLabel = levelOneChoice?.querySelector('span');
     if (levelOneLabel) levelOneLabel.textContent = 'Level 1 Perk';
-    if (levelOneChoice) levelOneChoice.hidden = !state.perksPerLevel;
+    if (levelOneChoice) levelOneChoice.hidden = false;
     populatePerkSelect(levelOneSelect, state.levelOnePerk);
     renderPerkAbilityChoice('level-one-perk', state.levelOnePerk);
     const humanChoice = $('#human-perk-choice');
@@ -290,7 +294,40 @@
     renderIntelligenceProficiencyChoices();
     updateOriginChoiceSection();
   };
-  const perkIncreaseOptions = (perkValue) => perks.find((perk) => perk.value === perkValue)?.abilityIncreaseOptions || [];
+  const perkIncreaseOptions = (perkValue) => {
+    const perk = perks.find((candidate) => candidate.value === perkValue);
+    return perk?.grantsAbilityIncrease ? perk.abilityIncreaseOptions || [] : [];
+  };
+  const ownedPerkValues = () => unique([state.levelOnePerk, state.humanPerk, ...(state.addedPerks || [])]);
+  const perkRequirementsMet = (perk, ownedValues = ownedPerkValues()) => {
+    if (!perk) return false;
+    const owned = ownedValues.map((value) => perks.find((candidate) => candidate.value === value)).filter(Boolean);
+    const ownedNames = new Set(owned.map((candidate) => candidate.label.toLowerCase()));
+    const byName = new Map(perks.map((candidate) => [candidate.label.toLowerCase(), candidate]));
+    const dependsOn = (candidate, wanted, seen = new Set()) => {
+      if (!candidate || seen.has(candidate.value)) return false;
+      if (candidate.label.toLowerCase() === wanted) return true;
+      const nextSeen = new Set(seen).add(candidate.value);
+      return candidate.requirements.split(/[,/]/).some((part) => dependsOn(byName.get(clean(part).replace(/^\d+\s+/, '').replace(/\s+(?:perks|feats)$/i, '').toLowerCase()), wanted, nextSeen));
+    };
+    return perk.requirements.split(',').map(clean).filter(Boolean).every((clause) => {
+      if (/^DM(?:'s|’s) permission$/i.test(clause)) return true;
+      if (/^Spellcasting or Pact Magic feature$/i.test(clause)) return effectiveSpellcasterLevel() > 0 || Number(state.classLevels?.['warlock.html']) > 0;
+      const size = clause.match(/^Character Size (Tiny|Small|Medium|Large|Huge|Gargantuan)$/i)?.[1];
+      if (size) return clean(state.size).toLowerCase() === size.toLowerCase();
+      if (/^No other curse perks$/i.test(clause)) return !owned.some((candidate) => candidate.typeLabel === 'Curse');
+      const excluded = clause.match(/^No (.+)$/i)?.[1];
+      if (excluded) return !ownedNames.has(excluded.toLowerCase());
+      const group = clause.match(/^(\d+)\s+(.+?)\s+(?:perks|feats)$/i);
+      if (group) {
+        const count = Number(group[1]), groupName = group[2].toLowerCase();
+        const roots = [`${groupName} initiate`, groupName];
+        return owned.filter((candidate) => roots.some((root) => dependsOn(candidate, root)) || candidate.label.toLowerCase().includes(groupName)).length >= count;
+      }
+      const alternatives = clause.split('/').map((part) => clean(part).replace(/^\d+\s+/, '').replace(/\s+(?:perks|feats)$/i, '').toLowerCase()).filter(Boolean);
+      return alternatives.some((requirement) => ownedNames.has(requirement));
+    });
+  };
   const renderPerkAbilityChoice = (prefix, perkValue) => {
     const wrapper = $(`#${prefix}-ability-choice`);
     const select = $(`#${prefix}-ability`);
@@ -313,6 +350,25 @@
     const hasIntelligenceChoices = !$('#intelligence-proficiency-choices')?.hidden;
     const section = $('#origin-choice-section');
     if (section) section.hidden = !hasRaceChoice && !hasBackgroundChoice && !hasClassChoice && !hasPerkChoice && !hasPerkSkillChoice && !hasIntelligenceChoices;
+  };
+  const setCharacterSize = (size) => {
+    if (!['Tiny', 'Small', 'Medium', 'Large', 'Huge', 'Gargantuan'].includes(size)) return;
+    state.size = size;
+    if ($('#sheet-character-size')) $('#sheet-character-size').value = size;
+  };
+  const renderRaceSizeChoice = (traits) => {
+    const host = $('#race-choice-controls');
+    host?.querySelector('[data-race-size-choice]')?.remove();
+    const sizeText = clean((traits || []).find((trait) => /^Size$/i.test(trait.label))?.text);
+    const options = unique([...sizeText.matchAll(/\b(Tiny|Small|Medium|Large|Huge|Gargantuan)\b/gi)].map((match) => title(match[1])));
+    state.raceSizeOptions = options;
+    if (!options.length) return;
+    if (!options.includes(state.size)) setCharacterSize(options[0]);
+    if (options.length > 1) {
+      host?.insertAdjacentHTML('beforeend', `<section data-race-size-choice><label><span>Size</span><select id="race-size-select" required><option value="">Choose a size</option>${options.map((size) => `<option value="${size}"${state.size === size ? ' selected' : ''}>${size}</option>`).join('')}</select></label></section>`);
+      $('#race-size-select')?.addEventListener('change', (event) => setCharacterSize(event.target.value));
+    }
+    updateOriginChoiceSection();
   };
   const loadEquipmentCatalog = async () => {
     if (!equipmentCatalog) equipmentCatalog = (async () => {
@@ -609,16 +665,45 @@
     return nodes;
   };
   const sectionText = (heading) => sectionNodes(heading).filter((node) => node.matches('p, ul, ol')).map((node) => clean(node.textContent));
-  const featureDescription = (doc, featureName) => {
+  const sanitizeEntryMarkup = (markup, baseUrl = '') => {
+    const template = document.createElement('template');
+    template.innerHTML = String(markup || '');
+    const allowedTags = new Set(['A', 'B', 'BLOCKQUOTE', 'BR', 'CAPTION', 'DD', 'DETAILS', 'DIV', 'DL', 'DT', 'EM', 'H3', 'H4', 'H5', 'I', 'LI', 'OL', 'P', 'SMALL', 'SPAN', 'STRONG', 'SUB', 'SUMMARY', 'SUP', 'TABLE', 'TBODY', 'TD', 'TFOOT', 'TH', 'THEAD', 'TR', 'UL']);
+    [...template.content.querySelectorAll('*')].forEach((node) => {
+      if (!allowedTags.has(node.tagName)) {
+        node.replaceWith(...node.childNodes);
+        return;
+      }
+      [...node.attributes].forEach((attribute) => {
+        const allowed = attribute.name === 'class'
+          || (node.tagName === 'A' && attribute.name === 'href')
+          || (['TD', 'TH'].includes(node.tagName) && ['colspan', 'rowspan', 'scope'].includes(attribute.name));
+        if (!allowed) node.removeAttribute(attribute.name);
+      });
+      if (node.tagName === 'A' && node.hasAttribute('href')) {
+        try {
+          const href = new URL(node.getAttribute('href'), baseUrl || location.href);
+          if (!['http:', 'https:'].includes(href.protocol)) node.removeAttribute('href');
+          else node.setAttribute('href', href.href);
+        } catch { node.removeAttribute('href'); }
+      }
+    });
+    return template.innerHTML;
+  };
+  const plainEntryMarkup = (value) => String(value || '').trim().split(/\n\s*\n/).filter(Boolean).map((paragraph) => `<p>${paragraph.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/\n/g, '<br>')}</p>`).join('');
+  const featureContent = (doc, featureName, baseUrl = '') => {
     const target = clean(featureName).replace(/\s*\([^)]*\)\s*$/, '').replace(/\s+feature$/i, '').toLowerCase();
     const heading = [...doc.querySelectorAll('h2, h3, h4')].find((candidate) => clean(candidate.textContent).replace(/\s*\([^)]*\)\s*$/, '').replace(/\s+feature$/i, '').toLowerCase() === target);
-    if (!heading) return '';
+    if (!heading) return { text: '', markup: '' };
     const copy = [];
     for (let node = heading.nextElementSibling; node; node = node.nextElementSibling) {
       if (/^H[2-4]$/.test(node.tagName) && !node.classList.contains('minor-heading')) break;
-      if (node.matches('p, ul, ol')) copy.push(clean(node.textContent));
+      copy.push(node);
     }
-    return copy.join(' ');
+    return {
+      text: clean(copy.map((node) => node.textContent).join(' ')),
+      markup: sanitizeEntryMarkup(copy.map((node) => node.outerHTML).join(''), baseUrl)
+    };
   };
   const sourceTableCards = (tables) => tables.flatMap((table) => {
     const caption = clean(table.querySelector('caption')?.textContent) || 'Statistics';
@@ -666,7 +751,7 @@
     const otherLanguages = isRace
       ? [...state.backgroundLanguages, ...state.backgroundFixedLanguages]
       : [...state.raceLanguages, ...state.raceFixedLanguages];
-    const selected = state[stateKey].filter((language) => languages.some((entry) => entry.name === language) && !definition.fixed.includes(language) && !otherLanguages.includes(language)).slice(0, definition.count);
+    const selected = stableChoices(state[stateKey], definition.count, (language) => languages.some((entry) => entry.name === language) && !definition.fixed.includes(language) && !otherLanguages.includes(language));
     state[stateKey] = selected;
     const fields = Array.from({ length: definition.count }, (_, index) => `<label><span>${isRace ? 'Racial' : 'Background'} language ${definition.count > 1 ? index + 1 : ''}</span><select data-language-source="${source}" data-language-index="${index}"><option value="">Choose language</option>${languages.map((language) => `<option value="${language.name}" data-preview="${language.category} language"${selected[index] === language.name ? ' selected' : ''}${selected[index] !== language.name && (selected.includes(language.name) || otherLanguages.includes(language.name) || definition.fixed.includes(language.name)) ? ' hidden' : ''}>${language.name} — ${language.category}</option>`).join('')}</select></label>`).join('');
     host.insertAdjacentHTML('beforeend', `<section ${sectionAttribute} class="class-skill-proficiencies origin-language-choices"><h3>Choose ${isRace ? 'racial' : 'background'} ${definition.count === 1 ? 'language' : 'languages'}</h3><div>${fields}</div></section>`);
@@ -802,10 +887,10 @@
     if (!definition) { state.backgroundSkills = []; box.hidden = true; box.replaceChildren(); return; }
     const selected = definition.fixed.length
       ? definition.fixed
-      : state.backgroundSkills.filter((skill) => definition.options.includes(skill)).slice(0, definition.count);
+      : stableChoices(state.backgroundSkills, definition.count, (skill) => definition.options.includes(skill));
     state.backgroundSkills = selected;
     const reconcile = () => {
-      state.skills = state.skills.filter((skill) => !state.backgroundSkills.includes(skill));
+      state.skills = state.skills.map((skill) => state.backgroundSkills.includes(skill) ? '' : skill);
       if (state.backgroundSkills.includes(state.humanSkill)) state.humanSkill = '';
       if (state.backgroundSkills.includes(state.perkSkill)) state.perkSkill = '';
       if (classSkillDefinition) renderSkillChoices(classSkillDefinition);
@@ -932,14 +1017,14 @@
     box.innerHTML = classSpellChoiceDefinitions.map((definition) => {
       const options = typeof definition.options === 'function' ? definition.options() : definition.options;
       const count = Math.max(0, typeof definition.count === 'function' ? definition.count() : definition.count);
-      const selected = (state.classSpells[definition.key] || []).filter((choice) => options.some((option) => option.value === choice)).slice(0, count);
+      const selected = stableChoices(state.classSpells[definition.key], count, (choice) => options.some((option) => option.value === choice));
       state.classSpells[definition.key] = selected;
       if (!count) return '';
       const fields = Array.from({ length: count }, (_, index) => `<label><span>${escapeAttribute(definition.label)} ${index + 1}</span><select data-class-spell="${definition.key}" data-spell-index="${index}"><option value="">Choose ${escapeAttribute(definition.label.toLowerCase())}</option>${options.map((option) => `<option value="${escapeAttribute(option.value)}" data-preview="${escapeAttribute(option.preview)}"${selected[index] === option.value ? ' selected' : ''}${selected[index] !== option.value && selected.includes(option.value) ? ' hidden' : ''}>${escapeAttribute(option.label)}</option>`).join('')}</select></label>`).join('');
       return `<section><h4>${escapeAttribute(definition.feature)}</h4><div>${fields}</div></section>`;
     }).join('');
     box.querySelectorAll('[data-class-spell]').forEach((select) => select.addEventListener('change', () => {
-      const selected = state.classSpells[select.dataset.classSpell] || [];
+      const selected = [...(state.classSpells[select.dataset.classSpell] || [])];
       selected[Number(select.dataset.spellIndex)] = select.value;
       state.classSpells[select.dataset.classSpell] = selected;
       renderClassSpellChoices();
@@ -950,13 +1035,13 @@
     if (!box) return;
     box.innerHTML = classFeatureChoiceDefinitions.map((definition) => {
       const options = (typeof definition.options === 'function' ? definition.options() : definition.options).map((option) => typeof option === 'string' ? { label: option, value: option, preview: '' } : option);
-      const selected = (state.classFeatureChoices[definition.key] || []).filter((choice) => options.some((option) => option.value === choice)).slice(0, definition.count);
+      const selected = stableChoices(state.classFeatureChoices[definition.key], definition.count, (choice) => options.some((option) => option.value === choice));
       state.classFeatureChoices[definition.key] = selected;
       const fields = Array.from({ length: definition.count }, (_, index) => `<label><span>${definition.label}${definition.count > 1 ? ` ${index + 1}` : ''}</span><select data-class-feature="${definition.key}" data-feature-index="${index}"><option value="">Choose ${definition.label.toLowerCase()}</option>${options.map((option) => `<option value="${escapeAttribute(option.value)}" data-preview="${escapeAttribute(option.preview)}"${selected[index] === option.value ? ' selected' : ''}${selected[index] !== option.value && selected.includes(option.value) ? ' hidden' : ''}>${escapeAttribute(option.label)}</option>`).join('')}</select></label>`).join('');
       return `<section><h4>${escapeAttribute(definition.feature)}</h4><div>${fields}</div></section>`;
     }).join('');
     box.querySelectorAll('[data-class-feature]').forEach((select) => select.addEventListener('change', () => {
-      const selected = state.classFeatureChoices[select.dataset.classFeature] || [];
+      const selected = [...(state.classFeatureChoices[select.dataset.classFeature] || [])];
       selected[Number(select.dataset.featureIndex)] = select.value;
       state.classFeatureChoices[select.dataset.classFeature] = selected;
       renderClassFeatureChoices();
@@ -965,7 +1050,7 @@
   const renderSkillChoices = (skills) => {
     const box = $('#class-skill-proficiencies');
     if (!box) return;
-    const selected = state.skills.filter((skill) => skills.options.includes(skill)).slice(0, skills.count);
+    const selected = stableChoices(state.skills, skills.count, (skill) => skills.options.includes(skill));
     state.skills = selected;
     box.innerHTML = Array.from({ length: skills.count }, (_, index) => `<label>Skill ${index + 1}<select data-class-skill="${index}"><option value="">Choose skill</option>${skills.options.map((skill) => `<option value="${skill}" data-preview="${escapeAttribute(skillPreviews[skill])}"${selected[index] === skill ? ' selected' : ''}${selected[index] !== skill && (selected.includes(skill) || state.backgroundSkills.includes(skill) || state.humanSkill === skill || state.perkSkill === skill) ? ' hidden' : ''}>${skill}</option>`).join('')}</select></label>`).join('');
     box.querySelectorAll('[data-class-skill]').forEach((select) => select.addEventListener('change', () => { state.skills[Number(select.dataset.classSkill)] = select.value; renderSkillChoices(skills); renderExpertiseChoices(); renderClassFeatureChoices(); renderPerkChoices(); }));
@@ -974,7 +1059,7 @@
     const box = $('#class-expertise-choices');
     if (!box) return;
     const options = [...new Set([...state.skills.filter(Boolean), ...state.backgroundSkills.filter(Boolean), "Thieves' tools"])];
-    const selected = state.expertise.filter((choice) => options.includes(choice)).slice(0, 2);
+    const selected = stableChoices(state.expertise, 2, (choice) => options.includes(choice));
     state.expertise = selected;
     box.innerHTML = Array.from({ length: 2 }, (_, index) => `<label>Expertise ${index + 1}<select data-expertise="${index}"><option value="">Choose proficiency</option>${options.map((option) => `<option value="${option}" data-preview="${escapeAttribute(skillPreviews[option])}"${selected[index] === option ? ' selected' : ''}${selected[index] !== option && selected.includes(option) ? ' hidden' : ''}>${option}</option>`).join('')}</select></label>`).join('');
     box.querySelectorAll('[data-expertise]').forEach((select) => select.addEventListener('change', () => { state.expertise[Number(select.dataset.expertise)] = select.value; renderExpertiseChoices(); }));
@@ -1061,13 +1146,13 @@
       const renderChoices = () => {
         if (!choiceBox) return;
         choiceBox.innerHTML = choices.map((definition) => {
-          const selected = (state.subclassFeatureChoices[definition.key] || []).filter((choice) => definition.options.some((option) => option.value === choice)).slice(0, definition.count);
+          const selected = stableChoices(state.subclassFeatureChoices[definition.key], definition.count, (choice) => definition.options.some((option) => option.value === choice));
           state.subclassFeatureChoices[definition.key] = selected;
           const fields = Array.from({ length: definition.count }, (_, index) => `<label><span>${escapeAttribute(definition.label)}${definition.count > 1 ? ` ${index + 1}` : ''}</span><select data-subclass-feature="${definition.key}" data-feature-index="${index}"><option value="">Choose ${escapeAttribute(definition.label.toLowerCase())}</option>${definition.options.map((option) => `<option value="${escapeAttribute(option.value)}" data-preview="${escapeAttribute(option.preview)}"${selected[index] === option.value ? ' selected' : ''}${selected[index] !== option.value && selected.includes(option.value) ? ' hidden' : ''}>${escapeAttribute(option.label)}</option>`).join('')}</select></label>`).join('');
           return `<section><h4>${escapeAttribute(definition.feature)}</h4><div>${fields}</div></section>`;
         }).join('');
         choiceBox.querySelectorAll('[data-subclass-feature]').forEach((select) => select.addEventListener('change', () => {
-          const selected = state.subclassFeatureChoices[select.dataset.subclassFeature] || [];
+          const selected = [...(state.subclassFeatureChoices[select.dataset.subclassFeature] || [])];
           selected[Number(select.dataset.featureIndex)] = select.value;
           state.subclassFeatureChoices[select.dataset.subclassFeature] = selected;
           renderChoices();
@@ -1095,6 +1180,7 @@
       state.classSpells = {};
       state.spellcasting = {};
       state.spellcastingLevel = 0;
+      state.activeSpellcastingClass = select.value.replace(/\.html$/i, '').toLowerCase();
       state.levelUpFeatures = [];
       state.levelHpBonus = 0;
       state.classTools = [];
@@ -1107,7 +1193,8 @@
     classSpellProgression = [];
     classSkillDefinition = null;
     try {
-      const doc = await fetchDocument(`../classes/${select.value}`);
+      const classUrl = new URL(`../classes/${select.value}`, location.href);
+      const doc = await fetchDocument(classUrl);
       const headings = [...doc.querySelectorAll('h2, h3, h4')];
       const proficiencyHeading = headings.find((heading) => /^proficiencies$/i.test(clean(heading.textContent)) || /^skill proficiencies$/i.test(clean(heading.textContent)));
       const proficiencyLines = sectionText(proficiencyHeading).map(expandShieldProficiency);
@@ -1130,6 +1217,7 @@
         level: Number.parseInt(clean(row.cells[0]?.textContent), 10) || 0,
         values: Object.fromEntries(headers.map((header, index) => [clean(header.textContent).toLowerCase(), clean(row.cells[index]?.textContent)]))
       })).filter((entry) => entry.level) : [];
+      spellProgressions[select.value.replace(/\.html$/i, '').toLowerCase()] = classSpellProgression;
       const features = firstRow ? clean(firstRow.cells[featureColumn].textContent).split(',').filter(Boolean) : [];
       const classId = select.value.replace(/\.html$/i, '').toLowerCase();
       const tableCount = (label) => {
@@ -1154,13 +1242,9 @@
       }
       const featureDetails = features.map((feature) => {
         const name = clean(feature).replace(/\s*\([^)]*\)\s*$/, '');
-        const heading = headings.find((candidate) => clean(candidate.textContent).replace(/\s*\([^)]*\)\s*$/, '').toLowerCase() === name.toLowerCase());
-        const copy = [];
-        for (let node = heading && heading.nextElementSibling; node; node = node.nextElementSibling) {
-          if (/^H[2-4]$/.test(node.tagName) && !node.classList.contains('minor-heading')) break;
-          if (node.matches('p, ul, ol')) copy.push(clean(node.textContent));
-        }
-        return `<details><summary>${feature}<span>+</span></summary><p>${copy.join(' ') || 'See the selected class page for this feature.'}</p></details>`;
+        const content = featureContent(doc, name, classUrl);
+        const markup = content.markup || plainEntryMarkup('See the selected class page for this feature.');
+        return `<details><summary>${escapeAttribute(feature)}<span>+</span></summary><div class="feature-source-content">${markup}</div></details>`;
       }).join('');
       const hpText = [...doc.querySelectorAll('p')].map((node) => clean(node.textContent)).find((line) => /^Hit Points at 1st Level:/i.test(line)) || '';
       $('#hp-value').textContent = (hpText.match(/:\s*(\d+)/) || [])[1] || '0';
@@ -1227,7 +1311,7 @@
     const select = $(`#${kind}-select`); const details = $(`#${kind}-details`);
     if (!select.value) {
       clearDetail(details);
-      if (kind === 'race') { raceLanguageDefinition = null; toolDefinitions.race = null; state.raceLanguages = []; state.raceFixedLanguages = []; state.raceTools = []; state.raceFixedTools = []; $('#race-choice-controls')?.querySelectorAll('[data-race-language-choice], [data-race-tool-choice]').forEach((node) => node.remove()); renderRacialIncreases(); }
+      if (kind === 'race') { raceLanguageDefinition = null; toolDefinitions.race = null; state.raceLanguages = []; state.raceFixedLanguages = []; state.raceTools = []; state.raceFixedTools = []; state.raceSizeOptions = []; $('#race-choice-controls')?.querySelectorAll('[data-race-language-choice], [data-race-tool-choice], [data-race-size-choice]').forEach((node) => node.remove()); renderRacialIncreases(); }
       if (kind === 'background') { backgroundLanguageDefinition = null; toolDefinitions.background = null; state.backgroundLanguages = []; state.backgroundFixedLanguages = []; state.backgroundTools = []; state.backgroundFixedTools = []; $('#background-choice-controls')?.replaceChildren(); updateOriginChoiceSection(); }
       return;
     }
@@ -1248,6 +1332,7 @@
         raceChoices?.querySelector('[data-race-subcategory-choice]')?.remove();
         const subraceControl = subraceHeadings.length ? `<section data-race-subcategory-choice class="class-subclass-choice"><label><span>Subrace or lineage</span><select id="race-subcategory-select"><option value="">Choose subrace or lineage</option>${subraceHeadings.map((heading) => { const label = clean(heading.textContent); return `<option value="${escapeAttribute(label)}">${escapeAttribute(label)}</option>`; }).join('')}</select></label><section id="race-subcategory-details" class="race-subcategory-details" hidden></section></section>` : '';
         if (subraceControl) raceChoices?.insertAdjacentHTML('beforeend', subraceControl);
+        renderRaceSizeChoice(traits);
         setLanguageDefinition('race', traits);
         setToolDefinition('race', traits.filter((trait) => /^Tool Proficienc|^Tinker$/i.test(trait.label)).map((trait) => trait.text).join(' '));
         updateOriginChoiceSection();
@@ -1266,6 +1351,7 @@
           subraceDetails.innerHTML = heading ? `<h3>${escapeAttribute(clean(heading.textContent))}</h3>${intro ? `<p>${escapeAttribute(intro)}</p>` : ''}${subtraits.length ? `<h3>Traits and statistics</h3><div class="race-trait-list">${backgroundCards(subtraits)}</div>` : ''}${tableCards.length ? `<h3>Tables and options</h3><div class="race-trait-list">${backgroundCards(tableCards)}</div>` : ''}${!intro && !subtraits.length && !tableCards.length ? '<p>See the selected race page for this option.</p>' : ''}` : '';
           setLanguageDefinition('race', [...traits, ...subtraits]);
           setToolDefinition('race', [...traits, ...subtraits].filter((trait) => /^Tool Proficienc|^Tinker$/i.test(trait.label)).map((trait) => trait.text).join(' '));
+          renderRaceSizeChoice([...traits, ...subtraits]);
           renderLanguageChoices('background');
           updateOriginChoiceSection();
           refreshDetailScrollbar(details);
@@ -1284,12 +1370,16 @@
   const proficiencyBonus = () => Math.ceil(characterLevel() / 4) + 1;
   const renderExperience = () => {
     state.xp = Math.max(0, Math.min(XP_TO_LEVEL, Math.floor(Number(state.xp) || 0)));
+    if ($('.sheet-experience label > span')) $('.sheet-experience label > span').textContent = 'EXP';
     if ($('#xp-input')) $('#xp-input').value = String(state.xp);
     if ($('#xp-text')) $('#xp-text').textContent = `${state.xp.toLocaleString()} / ${XP_TO_LEVEL.toLocaleString()} XP`;
     if ($('#xp-meter-fill')) $('#xp-meter-fill').style.width = `${state.xp / XP_TO_LEVEL * 100}%`;
     const meter = $('.xp-meter');
     if (meter) meter.setAttribute('aria-valuenow', String(state.xp));
-    if ($('#open-level-up')) $('#open-level-up').disabled = state.xp < XP_TO_LEVEL;
+    if ($('#open-level-up')) {
+      $('#open-level-up').disabled = state.xp < XP_TO_LEVEL;
+      $('#open-level-up').hidden = state.xp < XP_TO_LEVEL;
+    }
   };
   const effectiveSpellcasterLevel = (classLevels = state.classLevels) => {
     const levelOf = (name) => Math.max(0, Math.floor(Number(classLevels?.[`${name}.html`]) || 0));
@@ -1540,6 +1630,35 @@
       body.innerHTML = `<label>Name<input name="entryName" value="${escapeAttribute(edited.name || source.name)}" required></label><label>Description<textarea name="entryDescription" required>${escapeAttribute(edited.description ?? source.description)}</textarea></label>${state.entryEdits?.[preset.entryKey] ? '<button class="sheet-editor-delete" type="button" data-reset-entry>Reset changes</button>' : ''}`;
       body.querySelector('[data-reset-entry]')?.addEventListener('click', () => { delete state.entryEdits[preset.entryKey]; dialog.close(); refreshSheet(); });
       form.onsubmit = (event) => { event.preventDefault(); const data = new FormData(form); state.entryEdits ||= {}; state.entryEdits[preset.entryKey] = { name: clean(data.get('entryName')), description: clean(data.get('entryDescription')) }; dialog.close(); refreshSheet(); };
+    } else if (mode === 'ability-array') {
+      heading.textContent = 'Configure Array';
+      const draftArray = Object.fromEntries(abilities.map((ability) => [ability, String(state.abilityArray[ability] || '')]));
+      const abilityBonus = (ability) => baseScore(ability) - Number(state.abilityArray[ability] || 0) + (state.abilityScoreIncreases || []).filter((choice) => choice === ability).length + perkAbilityIncrease(ability);
+      const renderArrayEditor = () => {
+        const assigned = Object.values(draftArray).filter(Boolean);
+        body.innerHTML = `<div class="ability-scores sheet-ability-array-editor">${abilities.map((ability) => {
+          const selected = draftArray[ability];
+          const total = selected ? Math.min(20, Number(selected) + abilityBonus(ability)) : 0;
+          return `<label><span>${ability.slice(0, 3).toUpperCase()}${selected ? ` · ${total}` : ''}</span><select name="${ability}" data-array-ability="${ability}" required><option value="">Select Score</option>${standardArray.map((number) => `<option value="${number}"${selected === String(number) ? ' selected' : ''}${selected !== String(number) && assigned.includes(String(number)) ? ' hidden' : ''}>${selected === String(number) && total !== number ? `${number} + ${total - number} = ${total}` : number}</option>`).join('')}</select></label>`;
+        }).join('')}</div>`;
+        body.querySelectorAll('[data-array-ability]').forEach((select) => select.addEventListener('change', () => {
+          draftArray[select.dataset.arrayAbility] = select.value;
+          renderArrayEditor();
+        }));
+      };
+      renderArrayEditor();
+      form.onsubmit = (event) => {
+        event.preventDefault();
+        if (abilities.some((ability) => !draftArray[ability]) || new Set(Object.values(draftArray)).size !== abilities.length) return;
+        state.abilityArray = { ...draftArray };
+        reconcileAbilityScoreExchanges();
+        renderAbilityScoreExchanges();
+        renderAbilities();
+        renderClassSpellChoices();
+        renderIntelligenceProficiencyChoices();
+        dialog.close();
+        refreshSheet();
+      };
     } else if (mode === 'identity') {
       heading.textContent = 'Edit Identity';
       body.innerHTML = `<label>Character name<input name="characterName" value="${escapeAttribute($('#character-name')?.value || '')}" required></label>`;
@@ -1690,13 +1809,13 @@
     window.setTimeout(() => body.querySelector('input:not([type="checkbox"]), select, textarea')?.focus(), 0);
   };
 
-  const selectedClassId = () => clean($('#class-select')?.value).replace(/\.html$/i, '').toLowerCase();
+  const selectedClassId = () => clean(state.activeSpellcastingClass || $('#class-select')?.value).replace(/\.html$/i, '').toLowerCase();
   const selectedClassLevel = () => {
-    const classValue = clean($('#class-select')?.value);
+    const classValue = `${selectedClassId()}.html`;
     return Math.max(1, Math.floor(Number(state.classLevels?.[classValue]) || Number(state.level) || Number($('#sheet-level')?.textContent) || 1));
   };
   const spellProgressionValue = (level, ...labels) => {
-    const row = classSpellProgression.find((entry) => entry.level === level);
+    const row = (spellProgressions[selectedClassId()] || classSpellProgression).find((entry) => entry.level === level);
     if (!row) return 0;
     for (const label of labels) {
       const raw = row.values[label.toLowerCase()];
@@ -1704,7 +1823,7 @@
     }
     return 0;
   };
-  const spellProgressionHas = (label) => classSpellProgression.some((entry) => Object.hasOwn(entry.values, label.toLowerCase()));
+  const spellProgressionHas = (label) => (spellProgressions[selectedClassId()] || classSpellProgression).some((entry) => Object.hasOwn(entry.values, label.toLowerCase()));
   const fallbackMaxSpellLevel = (profile, level) => {
     if (level < profile.starts) return 0;
     if (selectedClassId() === 'artificer') return Math.min(5, Math.max(1, Math.ceil(level / 4)));
@@ -1760,10 +1879,13 @@
     record.prepared = record.prepared.filter((id) => profile.mode !== 'spellbook' || record.spellbook.includes(id));
     const selectedSpell = byId.get(record.selectedSpell) || byId.get(record.prepared[0]) || byId.get(record.known[0]) || byId.get(record.spellbook[0]) || cantrips[0] || leveledSpells[0];
     if (selectedSpell) record.selectedSpell = selectedSpell.id;
-    const spellRow = (spell, actions = '') => `<article class="spellcasting-spell" data-spell-row data-spell-name="${escapeAttribute(spell.name.toLowerCase())}" data-spell-level="${Number(spell.level)}"><button type="button" class="spellcasting-spell__name${record.selectedSpell === spell.id ? ' is-selected' : ''}" data-view-spell="${escapeAttribute(spell.id)}"><strong>${escapeAttribute(spell.name)}</strong><small>${spellLevelLabel(spell.level)} · ${escapeAttribute(spell.school)}</small></button><div>${actions}</div></article>`;
+    const spellRow = (spell, actions = '') => {
+      const metadata = `${spellLevelLabel(spell.level)} · ${clean(spell.school)}`;
+      return `<article class="spellcasting-spell" data-spell-row data-spell-name="${escapeAttribute(spell.name.toLowerCase())}" data-spell-level="${Number(spell.level)}"><button type="button" class="spellcasting-spell__name${record.selectedSpell === spell.id ? ' is-selected' : ''}" data-view-spell="${escapeAttribute(spell.id)}"><strong title="${escapeAttribute(spell.name)}">${escapeAttribute(spell.name)}</strong><small title="${escapeAttribute(metadata)}">${escapeAttribute(metadata)}</small></button><div>${actions}</div></article>`;
+    };
     const actionButton = (action, spell, active, label, disabled = false) => `<button type="button" data-spell-action="${action}" data-spell-id="${escapeAttribute(spell.id)}" aria-pressed="${active}"${disabled ? ' disabled' : ''}>${label}</button>`;
     const cantripRows = cantrips.map((spell) => spellRow(spell, actionButton('cantrip', spell, record.cantrips.includes(spell.id), record.cantrips.includes(spell.id) ? 'Known' : 'Learn', !record.cantrips.includes(spell.id) && cantripLimit > 0 && record.cantrips.length >= cantripLimit))).join('');
-    const cantripMarkup = hasCantrips ? `<section class="spellcasting-cantrips"><header><h3>Cantrips</h3><span>${record.cantrips.length} / ${cantripLimit} known</span></header><div class="spellcasting-list">${cantripRows || '<p class="sheet-empty">No cantrips in the class list.</p>'}</div></section>` : '';
+    const cantripMarkup = hasCantrips ? `<section class="spellcasting-cantrips"><header><h3>Cantrips</h3><span>${record.cantrips.length} / ${cantripLimit} known</span></header><div class="spellcasting-list"><div class="spellcasting-scroll-viewport" data-crt-scroll-target>${cantripRows || '<p class="sheet-empty">No cantrips in the class list.</p>'}</div></div></section>` : '';
     let ownedTitle = 'Known Spells';
     let catalogTitle = 'Class Spell List';
     let ownedSpells = record.known.map((id) => byId.get(id)).filter(Boolean);
@@ -1791,13 +1913,16 @@
       }).join('');
       ownedCount = `${record.prepared.length} / ${preparedLimit} prepared · ${ownedSpells.length} in book`;
     }
-    const detail = selectedSpell ? `<aside class="spellcasting-detail"><header><span>${spellLevelLabel(selectedSpell.level)} · ${escapeAttribute(selectedSpell.school)}</span><h3>${escapeAttribute(selectedSpell.name)}</h3></header><dl><div><dt>Casting time</dt><dd>${escapeAttribute(selectedSpell.castingTime)}</dd></div><div><dt>Range</dt><dd>${escapeAttribute(selectedSpell.range)}</dd></div><div><dt>Duration</dt><dd>${escapeAttribute(selectedSpell.duration)}</dd></div><div><dt>Components</dt><dd>${escapeAttribute(selectedSpell.components)}</dd></div></dl>${(selectedSpell.description || []).map((paragraph) => `<p>${escapeAttribute(paragraph)}</p>`).join('')}${(selectedSpell.higherLevel || []).map((paragraph) => `<p><strong>At higher levels.</strong> ${escapeAttribute(paragraph)}</p>`).join('')}</aside>` : '';
-    panel.innerHTML = `<section class="spellcasting-sheet">${editButton('feature', 'Add a spellcasting statistic feature', 'spellAttack')}<div class="spellcasting-stats"><article><span>Spellcasting Ability</span><strong>${profile.ability}</strong></article><article><span>Spell Attack Bonus</span><strong>${signed(attackBonus)}</strong></article><article><span>Spell Save DC</span><strong>${saveDc}</strong></article><article><span>${spellPoints ? 'Spell Points' : 'Maximum Spell Level'}</span><strong>${spellPoints || maxSpellLevel || '—'}</strong></article></div>${level < profile.starts ? `<section class="spellcasting-empty"><strong>Spellcasting begins at class level ${profile.starts}</strong></section>` : `${cantripMarkup}<div class="spellcasting-browser"><section class="spellcasting-column"><header><h3>${ownedTitle}</h3><span>${ownedCount}</span></header><div class="spellcasting-list">${ownedRows || '<p class="sheet-empty">None selected.</p>'}</div></section><section class="spellcasting-column spellcasting-catalog"><header><h3>${catalogTitle}</h3><input type="search" data-spell-search aria-label="Search spells" placeholder="Search spells"></header><div class="spellcasting-list">${catalogRows || '<p class="sheet-empty">No spells available at this level.</p>'}</div></section>${detail}</div>`}</section>`;
+    const detail = selectedSpell ? `<aside class="spellcasting-detail"><div class="spellcasting-detail__viewport" data-crt-scroll-target><header><h3 title="${escapeAttribute(selectedSpell.name)}">${escapeAttribute(selectedSpell.name)}</h3></header><dl><div><dt>Level</dt><dd>${spellLevelLabel(selectedSpell.level)}</dd></div><div><dt>School of Magic</dt><dd>${escapeAttribute(selectedSpell.school)}</dd></div><div><dt>Casting Time</dt><dd>${escapeAttribute(selectedSpell.castingTime)}</dd></div><div><dt>Range</dt><dd>${escapeAttribute(selectedSpell.range)}</dd></div><div><dt>Duration</dt><dd>${escapeAttribute(selectedSpell.duration)}</dd></div><div><dt>Components</dt><dd>${escapeAttribute(selectedSpell.components)}</dd></div></dl>${(selectedSpell.description || []).map((paragraph) => `<p>${escapeAttribute(paragraph)}</p>`).join('')}${(selectedSpell.higherLevel || []).map((paragraph) => `<p><strong>At higher levels.</strong> ${escapeAttribute(paragraph)}</p>`).join('')}</div></aside>` : '';
+    const casterClasses = Object.entries(state.classLevels || {}).filter(([value, levels]) => Number(levels) > 0 && spellcastingProfiles[value.replace(/\.html$/i, '').toLowerCase()]);
+    const classChoice = casterClasses.length > 1 ? `<label class="spellcasting-class-choice"><span>Spellcasting class</span><select data-spellcasting-class>${casterClasses.map(([value]) => { const id = value.replace(/\.html$/i, '').toLowerCase(); return `<option value="${escapeAttribute(id)}"${id === classId ? ' selected' : ''}>${escapeAttribute(title(value))}</option>`; }).join('')}</select></label>` : '';
+    panel.innerHTML = `<section class="spellcasting-sheet">${classChoice}${editButton('feature', 'Add a spellcasting statistic feature', 'spellAttack')}<div class="spellcasting-stats"><article><span>Spellcasting Ability</span><strong>${profile.ability}</strong></article><article><span>Spell Attack Bonus</span><strong>${signed(attackBonus)}</strong></article><article><span>Spell Save DC</span><strong>${saveDc}</strong></article><article><span>${spellPoints ? 'Spell Points' : 'Maximum Spell Level'}</span><strong>${spellPoints || maxSpellLevel || '—'}</strong></article></div>${level < profile.starts ? `<section class="spellcasting-empty"><strong>Spellcasting begins at class level ${profile.starts}</strong></section>` : `${cantripMarkup}<div class="spellcasting-browser"><section class="spellcasting-column"><header><h3>${ownedTitle}</h3><span>${ownedCount}</span></header><div class="spellcasting-list"><div class="spellcasting-scroll-viewport" data-crt-scroll-target>${ownedRows || '<p class="sheet-empty">None selected.</p>'}</div></div></section><section class="spellcasting-column spellcasting-catalog"><header><h3>${catalogTitle}</h3><input type="search" data-spell-search aria-label="Search spells" placeholder="Search spells"></header><div class="spellcasting-list"><div class="spellcasting-scroll-viewport" data-crt-scroll-target>${catalogRows || '<p class="sheet-empty">No spells available at this level.</p>'}</div></div></section>${detail}</div>`}</section>`;
+    panel.querySelector('[data-spellcasting-class]')?.addEventListener('change', (event) => { state.activeSpellcastingClass = event.target.value; renderSpellcastingPanel(panel); });
     const enhanceSpellScrollbars = () => {
       const scrollablePanels = panel.querySelectorAll('.spellcasting-list, .spellcasting-detail');
 
       scrollablePanels.forEach((element) => {
-        element.dataset.crtScrollbarPlain = '';
+        element.removeAttribute('data-crt-scrollbar-plain');
         window.CRTScrollbar?.enhance(element);
       });
     };
@@ -1822,6 +1947,7 @@
       catalogRows.forEach((row) => {
         row.hidden = Boolean(query) && !row.dataset.spellName.includes(query);
       });
+      window.CRTScrollbar?.refresh(panel.querySelector('.spellcasting-catalog .spellcasting-list'));
     });
 
     panel.querySelectorAll('[data-spell-action]').forEach((button) => button.addEventListener('click', () => {
@@ -1901,17 +2027,21 @@
       sheetEntryEditorPresets = new Map();
       const originalPerkValues = unique([state.levelOnePerk, state.humanPerk]);
       const perkValues = unique([...originalPerkValues, ...(state.addedPerks || [])]);
-      const perkEntries = perkValues.map((value) => { const perk = perks.find((candidate) => candidate.value === value) || state.customPerks.find((candidate) => candidate.value === value); return { value, label: perk ? `${perk.label} — ${perk.typeLabel || 'Custom'}` : value, description: perk?.description || '', effects: perk?.effects || [], added: !originalPerkValues.includes(value) }; });
+      const perkEntries = perkValues.map((value) => { const perk = perks.find((candidate) => candidate.value === value) || state.customPerks.find((candidate) => candidate.value === value); return { value, label: perk ? `${perk.label} — ${perk.typeLabel || 'Custom'}` : value, description: perk?.description || '', requirements: perk?.requirements || '', effects: perk?.effects || [], added: !originalPerkValues.includes(value) }; });
       const initialClassFeatures = [...document.querySelectorAll('#class-details .level-one-features summary')].map((node) => clean(node.childNodes[0]?.textContent || node.textContent.replace(/\+$/, '')));
       const gainedClassFeatures = (state.levelUpFeatures || []).flatMap((entry) => (entry.features || []).map((feature) => `${entry.className} ${entry.classLevel}: ${feature}`));
       const classFeatures = [...initialClassFeatures, ...gainedClassFeatures];
       const initialClassFeatureEntries = [...document.querySelectorAll('#class-details .level-one-features details')].map((detail) => {
         const summary = detail.querySelector('summary'), name = clean(summary?.childNodes[0]?.textContent || summary?.textContent.replace(/\+$/, ''));
-        return { key: `class:${$('#class-select').value}:1:${name}`, name, description: clean(detail.querySelector('p')?.textContent) };
+        const content = detail.querySelector('.feature-source-content');
+        return { key: `class:${$('#class-select').value}:1:${name}`, name, description: clean(content?.textContent), markup: sanitizeEntryMarkup(content?.innerHTML) };
       });
       const gainedClassFeatureEntries = (state.levelUpFeatures || []).flatMap((entry) => (entry.features || []).map((feature) => {
-        const name = typeof feature === 'string' ? feature : clean(feature?.name), description = typeof feature === 'string' ? clean(entry.featureDetails?.[feature]) : clean(feature?.description);
-        return { key: `class:${entry.classValue}:${entry.classLevel}:${name}`, name: `${entry.className} ${entry.classLevel}: ${name}`, description };
+        const name = typeof feature === 'string' ? feature : clean(feature?.name);
+        const savedContent = typeof feature === 'string' ? entry.featureDetails?.[feature] : feature;
+        const description = typeof savedContent === 'object' ? clean(savedContent?.text || savedContent?.description) : clean(savedContent);
+        const markup = typeof savedContent === 'object' ? sanitizeEntryMarkup(savedContent?.markup) : '';
+        return { key: `class:${entry.classValue}:${entry.classLevel}:${name}`, name: `${entry.className} ${entry.classLevel}: ${name}`, description, markup };
       }));
       const classFeatureEntries = [...new Map([...initialClassFeatureEntries, ...gainedClassFeatureEntries].map((feature) => [feature.key, feature])).values()];
       const selections = sheetSelections();
@@ -1919,17 +2049,18 @@
         const displayHeading = heading === 'Level 1 Class Features' && characterLevel() > 1 ? 'Class Features' : heading;
         return `<article><h3>${displayHeading}</h3>${entries.length ? `<ul class="sheet-list">${entries.map((entry) => `<li>${escapeAttribute(entry)}</li>`).join('')}</ul>` : '<p class="sheet-empty">None selected.</p>'}</article>`;
       };
-      const dropdown = ({ key, name, description, effects = [], removable = false, value = '' }) => {
-        const source = { kind: key.startsWith('perk:') ? 'perk' : 'feature', name, description: description || 'No description saved for this feature.' };
+      const dropdown = ({ key, name, description, markup = '', requirements = '', effects = [], removable = false, value = '' }) => {
+        const source = { kind: key.startsWith('perk:') ? 'perk' : 'feature', name, description: description || 'No description saved for this feature.', markup };
         sheetEntryEditorPresets.set(key, source);
         const edited = state.entryEdits?.[key] || {}, displayName = edited.name || source.name, displayDescription = edited.description ?? source.description;
-        return `<details class="sheet-feature-entry"><summary>${escapeAttribute(displayName)}<span>+</span></summary><div class="sheet-feature-entry__body">${editButton('sheet-entry', `Edit ${displayName}`, '', '', key)}<p>${escapeAttribute(displayDescription)}</p>${effects.length ? `<ul>${effects.map((effect) => `<li>${escapeAttribute(effectSummary(effect))}</li>`).join('')}</ul>` : ''}${removable ? `<button class="sheet-feature-entry__remove" type="button" data-remove-added-perk="${escapeAttribute(value)}">Remove</button>` : ''}</div></details>`;
+        const displayMarkup = state.entryEdits?.[key] ? plainEntryMarkup(displayDescription) : sanitizeEntryMarkup(source.markup) || plainEntryMarkup(displayDescription);
+        return `<details class="sheet-feature-entry"><summary>${escapeAttribute(displayName)}<span>+</span></summary><div class="sheet-feature-entry__body">${editButton('sheet-entry', `Edit ${displayName}`, '', '', key)}${requirements ? `<p class="sheet-feature-entry__requirements"><strong>Requirements</strong>${escapeAttribute(requirements)}</p>` : ''}<div class="sheet-feature-entry__content">${displayMarkup}</div>${effects.length ? `<ul class="sheet-feature-entry__effects">${effects.map((effect) => `<li>${escapeAttribute(effectSummary(effect))}</li>`).join('')}</ul>` : ''}${removable ? `<button class="sheet-feature-entry__remove" type="button" data-remove-added-perk="${escapeAttribute(value)}">Remove</button>` : ''}</div></details>`;
       };
       const customFeatures = (state.customFeatures || []).map((feature) => `<article class="sheet-feature-card"><h4>${escapeAttribute(feature.name)}</h4>${editButton('feature', `Edit ${feature.name}`, '', feature.id)}${feature.description ? `<p>${escapeAttribute(feature.description)}</p>` : ''}${feature.effects?.length ? `<ul>${feature.effects.map((effect) => `<li>${escapeAttribute(effectSummary(effect))}</li>`).join('')}</ul>` : '<p class="sheet-empty">Descriptive feature; no calculated effects.</p>'}</article>`).join('');
       panel.innerHTML = `<div class="sheet-panel-grid"><article class="sheet-editable-box"><h3>Perks</h3>${editButton('listed-perk', 'Add a listed perk')}${perkEntries.length ? `<ul class="sheet-list sheet-perk-list">${perkEntries.map((perk) => `<li><span><strong>${escapeAttribute(perk.label)}</strong>${perk.description ? `<small>${escapeAttribute(perk.description)}</small>` : ''}${perk.effects.length ? `<small class="sheet-perk-effects">${perk.effects.map(effectSummary).map(escapeAttribute).join(' · ')}</small>` : ''}</span>${perk.added ? `<button type="button" data-remove-added-perk="${escapeAttribute(perk.value)}" aria-label="Remove ${escapeAttribute(perk.label)}">Remove</button>` : ''}</li>`).join('')}</ul>` : '<p class="sheet-empty">None selected.</p>'}</article><article class="sheet-editable-box sheet-custom-features"><h3>Added Features</h3>${editButton('feature', 'Add a custom feature')}${customFeatures || '<p class="sheet-empty">Add features here to modify calculated statistics.</p>'}</article>${section('Level 1 Class Features', unique(classFeatures))}${section('Feature & Spell Choices', selections)}</div>`;
       panel.innerHTML = `<div class="sheet-panel-grid"><article class="sheet-editable-box"><h3>Perks</h3>${editButton('listed-perk', 'Add a listed perk')}${perkEntries.length ? `<div class="sheet-feature-entries">${perkEntries.map((perk) => dropdown({ key: `perk:${perk.value}`, name: perk.label, description: perk.description, effects: perk.effects, removable: perk.added, value: perk.value })).join('')}</div>` : '<p class="sheet-empty">None selected.</p>'}</article><article class="sheet-editable-box sheet-custom-features"><h3>Added Features</h3>${editButton('feature', 'Add a custom feature')}${customFeatures || '<p class="sheet-empty">Add features here to modify calculated statistics.</p>'}</article><article><h3>${characterLevel() > 1 ? 'Class Features' : 'Level 1 Class Features'}</h3>${classFeatureEntries.length ? `<div class="sheet-feature-entries">${classFeatureEntries.map((feature) => dropdown(feature)).join('')}</div>` : '<p class="sheet-empty">None selected.</p>'}</article>${section('Feature & Spell Choices', selections)}</div>`;
       if (tab === 'perks') {
-        panel.innerHTML = `<div class="sheet-panel-grid sheet-perks-grid"><article class="sheet-editable-box"><h3>Perks</h3>${editButton('listed-perk', 'Add a listed perk')}${perkEntries.length ? `<div class="sheet-feature-entries">${perkEntries.map((perk) => dropdown({ key: `perk:${perk.value}`, name: perk.label, description: perk.description, effects: perk.effects, removable: perk.added, value: perk.value })).join('')}</div>` : '<p class="sheet-empty">None selected.</p>'}</article></div>`;
+        panel.innerHTML = `<div class="sheet-panel-grid sheet-perks-grid"><article class="sheet-editable-box"><h3>Perks</h3>${editButton('listed-perk', 'Add a listed perk')}${perkEntries.length ? `<div class="sheet-feature-entries">${perkEntries.map((perk) => dropdown({ key: `perk:${perk.value}`, name: perk.label, description: perk.description, requirements: perk.requirements, effects: perk.effects, removable: perk.added, value: perk.value })).join('')}</div>` : '<p class="sheet-empty">None selected.</p>'}</article></div>`;
       } else {
         panel.innerHTML = `<div class="sheet-panel-grid sheet-features-grid"><article class="sheet-editable-box sheet-custom-features"><h3>Added Features</h3>${editButton('feature', 'Add a custom feature')}${customFeatures || '<p class="sheet-empty">Add features here to modify calculated statistics.</p>'}</article><article><h3>${characterLevel() > 1 ? 'Class Features' : 'Level 1 Class Features'}</h3>${classFeatureEntries.length ? `<div class="sheet-feature-entries">${classFeatureEntries.map((feature) => dropdown(feature)).join('')}</div>` : '<p class="sheet-empty">None selected.</p>'}</article>${section('Feature & Spell Choices', selections)}</div>`;
       }
@@ -2013,17 +2144,14 @@
       return Number(explicit) || (matchesWalking ? state.baseSpeed : 0);
     };
     state.speeds = { walk: state.baseSpeed, burrow: movementSpeed('burrow'), climb: movementSpeed('climb'), fly: movementSpeed('fly'), swim: movementSpeed('swim') };
-    const size = raceText.match(/\bSize:?[^.]{0,80}\b(Tiny|Small|Medium|Large|Huge|Gargantuan)\b/i)?.[1];
-    if (size) $('#sheet-character-size').value = size[0].toUpperCase() + size.slice(1).toLowerCase();
-    const selectedPerkNames = unique([state.levelOnePerk, state.humanPerk, ...(state.addedPerks || [])]).map((value) => perks.find((perk) => perk.value === value)?.label || state.customPerks.find((perk) => perk.value === value)?.label || value);
-    if (selectedPerkNames.some((perk) => /^Giant Blood$/i.test(perk))) $('#sheet-character-size').value = 'Large';
-    if (selectedPerkNames.some((perk) => /^(?:Broonie Blood|Fairy)$/i.test(perk))) $('#sheet-character-size').value = 'Tiny';
     if (!state.equipmentScaleLocked) {
-      state.equipmentScaleSize = selectedPerkNames.some((perk) => /^Giant Blood$/i.test(perk)) ? 'Large' : selectedPerkNames.some((perk) => /^Broonie Blood$/i.test(perk)) ? 'Tiny' : 'Medium';
+      const selectedPerkNames = ownedPerkValues().map((value) => perks.find((perk) => perk.value === value)?.label || value);
+      state.equipmentScaleSize = selectedPerkNames.some((perk) => /^Giant Blood$/i.test(perk)) ? 'Large' : selectedPerkNames.some((perk) => /^(?:Broonie Blood|Fairy)$/i.test(perk)) ? 'Tiny' : 'Medium';
+      if (state.equipmentScaleSize !== 'Medium') setCharacterSize(state.equipmentScaleSize);
       state.equipmentScaleLocked = true;
     }
     state.scores = scores;
-    state.size = $('#sheet-character-size').value;
+    $('#sheet-character-size').value = state.size || 'Medium';
     [...$('#sheet-character-size').options].forEach((option) => option.toggleAttribute('selected', option.value === state.size));
     const saveProficiencies = unique([...classSaveProficiencies(), ...featureEffects().filter((effect) => effect.type === 'saveProficiency').map((effect) => effect.target)]);
     $('#sheet-saving-throws').innerHTML = abilities.map((ability) => { const proficient = includesName(saveProficiencies, ability); const disadvantaged = state.encumbrance === 'heavy' && ['Strength', 'Dexterity', 'Constitution'].includes(ability); const value = modifier(scores[ability]) + (proficient ? proficiencyBonus() : 0) - manualExhaustionLevel(); return `<span data-save="${ability}"${disadvantaged ? ' class="is-disadvantaged" title="Heavily encumbered: this saving throw has disadvantage"' : ''}><i class="sheet-proficiency-dot${proficient ? ' is-filled' : ''}" aria-hidden="true"></i><b>${ability}</b>${disadvantaged ? '<em>DIS</em>' : ''}<strong>${signed(value)}</strong></span>`; }).join('');
@@ -2079,8 +2207,8 @@
       ...(state.addedPerks || [])
     ];
     const chosen = new Set(chosenPerks.filter(Boolean));
-    select.innerHTML = `<option value="">Choose a perk</option>${perks.map((perk) => `<option value="${escapeAttribute(perk.value)}" data-preview="${escapeAttribute(previewSnippet(perk.description))}"${chosen.has(perk.value) ? ' disabled' : ''}>${escapeAttribute(perk.label)} — ${escapeAttribute(perk.typeLabel)}</option>`).join('')}`;
-    $('#level-up-perk-choice').hidden = !state.perksPerLevel;
+    select.innerHTML = `<option value="">Choose a perk</option>${perks.map((perk) => `<option value="${escapeAttribute(perk.value)}" data-preview="${escapeAttribute(previewSnippet(perk.description))}"${chosen.has(perk.value) || !perkRequirementsMet(perk, [...chosen]) ? ' disabled' : ''}>${escapeAttribute(perk.label)} — ${escapeAttribute(perk.typeLabel)}</option>`).join('')}`;
+    $('#level-up-perk-choice').hidden = false;
     renderLevelUpPermanentChoices();
   };
   const updateLevelUpApplyState = () => {
@@ -2089,11 +2217,10 @@
     let complete = Boolean(pendingLevelUp);
     if (pendingLevelUp?.requiresSubclass) complete = complete && Boolean(pendingLevelUp.subclass);
     const perkValue = clean($('#level-up-perk-select')?.value);
-    if (state.perksPerLevel) {
-      complete = complete && Boolean(perkValue);
-      const options = perkIncreaseOptions(perkValue);
-      if (options.length > 1) complete = complete && options.includes(clean($('#level-up-perk-ability')?.value));
-    }
+    complete = complete && Boolean(perkValue);
+    complete = complete && perkRequirementsMet(perks.find((perk) => perk.value === perkValue));
+    const options = perkIncreaseOptions(perkValue);
+    if (options.length > 1) complete = complete && options.includes(clean($('#level-up-perk-ability')?.value));
     const hasAsi = Boolean(pendingLevelUp?.features?.some((feature) => /^Ability Score Improvement$/i.test(typeof feature === 'string' ? feature : feature?.name)));
     if (hasAsi) complete = complete && abilities.includes(clean($('#level-up-asi')?.value));
     button.disabled = !complete;
@@ -2104,9 +2231,11 @@
     const perkWrapper = $('#level-up-perk-ability-choice');
     const perkSelect = $('#level-up-perk-ability');
     if (perkWrapper && perkSelect) {
-      perkWrapper.hidden = !state.perksPerLevel || perkOptions.length < 2;
+      const showPerkAbility = perkOptions.length > 1;
+      perkWrapper.toggleAttribute('hidden', !showPerkAbility);
       const selected = perkOptions.includes(perkSelect.value) ? perkSelect.value : '';
       perkSelect.innerHTML = `<option value="">Choose an ability</option>${perkOptions.map((ability) => `<option value="${ability}"${selected === ability ? ' selected' : ''}${permanentScore(ability) >= 20 ? ' disabled' : ''}>${ability}</option>`).join('')}`;
+      if (!showPerkAbility) perkSelect.value = '';
     }
     const hasAsi = Boolean(pendingLevelUp?.features?.some((feature) => /^Ability Score Improvement$/i.test(feature)));
     const asiWrapper = $('#level-up-asi-choice');
@@ -2147,7 +2276,8 @@
     $('#level-up-spellcasting').textContent = spellcastingSummary(prospectiveLevels);
     features.innerHTML = '<p>Loading class features…</p>';
     try {
-      const doc = await fetchDocument(`../classes/${classValue}`);
+      const classUrl = new URL(`../classes/${classValue}`, location.href);
+      const doc = await fetchDocument(classUrl);
       if (select.value !== classValue) return;
       const table = [...doc.querySelectorAll('table')].find((candidate) => {
         const headers = [...candidate.querySelectorAll('thead th')];
@@ -2163,7 +2293,8 @@
         : null;
       const gainedFeatures = row && featureIndex >= 0 ? clean(row.cells[featureIndex]?.textContent).split(',').map(clean).filter((feature) => feature && feature !== '—' && feature !== '-') : [];
       const progression = row ? headers.map((header, index) => ({ label: header, value: clean(row.cells[index]?.textContent) })).filter((entry, index) => index > 0 && index !== featureIndex && entry.value && !/^—|-$/i.test(entry.value)) : [];
-      const featureDetails = Object.fromEntries(gainedFeatures.map((feature) => [feature, featureDescription(doc, feature)]));
+      spellProgressions[classValue.replace(/\.html$/i, '').toLowerCase()] = table ? [...table.querySelectorAll('tbody tr')].map((tableRow) => ({ level: Number.parseInt(clean(tableRow.cells[0]?.textContent), 10) || 0, values: Object.fromEntries(headers.map((header, index) => [header.toLowerCase(), clean(tableRow.cells[index]?.textContent)])) })).filter((entry) => entry.level) : [];
+      const featureDetails = Object.fromEntries(gainedFeatures.map((feature) => [feature, featureContent(doc, feature, classUrl)]));
       const className = clean(select.selectedOptions[0]?.textContent) || title(classValue);
       const requiresWizardTradition = classValue === 'wizard.html' && nextClassLevel === 2 && !state.subclass;
 
@@ -2232,8 +2363,14 @@
   const applyLevelUp = () => {
     if (!pendingLevelUp) return;
     const perkValue = clean($('#level-up-perk-select').value);
-    if (state.perksPerLevel && !perkValue) {
+    if (!perkValue) {
       $('#level-up-perk-select').focus();
+      return;
+    }
+    if (!perkRequirementsMet(perks.find((perk) => perk.value === perkValue))) {
+      $('#level-up-perk-select').value = '';
+      $('#level-up-perk-select').focus();
+      updateLevelUpApplyState();
       return;
     }
     const perkOptions = perkIncreaseOptions(perkValue);
@@ -2259,6 +2396,8 @@
     state.level = Object.values(state.classLevels).reduce((total, value) => total + (Number(value) || 0), 0);
     state.xp = 0;
     state.spellcastingLevel = effectiveSpellcasterLevel();
+    const leveledClassId = classValue.replace(/\.html$/i, '').toLowerCase();
+    if (spellcastingProfiles[leveledClassId]) state.activeSpellcastingClass = leveledClassId;
     state.levelUpFeatures = Array.isArray(state.levelUpFeatures) ? state.levelUpFeatures : [];
     state.levelUpFeatures.push({ level: state.level, classValue, className, classLevel, features: [...features], featureDetails: { ...featureDetails } });
     if (pendingLevelUp.subclass) {
@@ -2270,6 +2409,8 @@
       state.addedPerks.push(perkValue);
       if (perkOptions.length === 1) state.perkAbilityChoices[perkValue] = perkOptions[0];
       else if (perkAbility) state.perkAbilityChoices[perkValue] = perkAbility;
+      if (perkValue === 'magnify') setCharacterSize('Large');
+      if (perkValue === 'minify' || perkValue === 'fairy') setCharacterSize('Tiny');
     }
     if (hasAsi) state.abilityScoreIncreases.push(asiAbility);
     const die = classHitDieSides(classValue);
@@ -2330,6 +2471,9 @@
     const raceValue = clean(data.race);
     const backgroundValue = clean(data.background);
     Object.assign(state, data);
+    delete state.perksPerLevel;
+    state.size = ['Tiny', 'Small', 'Medium', 'Large', 'Huge', 'Gargantuan'].includes(data.size) ? data.size : 'Medium';
+    state.raceSizeOptions = Array.isArray(data.raceSizeOptions) ? data.raceSizeOptions.filter((size) => ['Tiny', 'Small', 'Medium', 'Large', 'Huge', 'Gargantuan'].includes(size)) : [];
     state.xp = Math.max(0, Math.min(XP_TO_LEVEL, Math.floor(Number(data.xp) || 0)));
     state.abilityArray = { ...(data.abilityArray || {}) };
     state.racial = Array.isArray(data.racial) ? data.racial.slice(0, 3) : [];
@@ -2338,18 +2482,18 @@
     state.perkAbilityChoices = data.perkAbilityChoices && typeof data.perkAbilityChoices === 'object' && !Array.isArray(data.perkAbilityChoices) ? { ...data.perkAbilityChoices } : {};
     state.intelligenceProficiencies = Array.isArray(data.intelligenceProficiencies) ? data.intelligenceProficiencies.map((entry) => clean(entry)) : [];
     state.intelligenceProficiencyTypes = Array.isArray(data.intelligenceProficiencyTypes) ? data.intelligenceProficiencyTypes.filter((type) => typeof type === 'string') : [];
-    state.skills = Array.isArray(data.skills) ? data.skills.filter(Boolean) : [];
-    state.expertise = Array.isArray(data.expertise) ? data.expertise.filter(Boolean) : [];
-    state.backgroundSkills = Array.isArray(data.backgroundSkills) ? data.backgroundSkills.filter(Boolean) : [];
-    state.classTools = Array.isArray(data.classTools) ? data.classTools.filter(Boolean) : [];
+    state.skills = Array.isArray(data.skills) ? data.skills.map(clean) : [];
+    state.expertise = Array.isArray(data.expertise) ? data.expertise.map(clean) : [];
+    state.backgroundSkills = Array.isArray(data.backgroundSkills) ? data.backgroundSkills.map(clean) : [];
+    state.classTools = Array.isArray(data.classTools) ? data.classTools.map(clean) : [];
     state.classFixedTools = Array.isArray(data.classFixedTools) ? data.classFixedTools.filter(Boolean) : [];
-    state.raceLanguages = Array.isArray(data.raceLanguages) ? data.raceLanguages.filter(Boolean) : [];
+    state.raceLanguages = Array.isArray(data.raceLanguages) ? data.raceLanguages.map(clean) : [];
     state.raceFixedLanguages = Array.isArray(data.raceFixedLanguages) ? data.raceFixedLanguages.filter(Boolean) : [];
-    state.raceTools = Array.isArray(data.raceTools) ? data.raceTools.filter(Boolean) : [];
+    state.raceTools = Array.isArray(data.raceTools) ? data.raceTools.map(clean) : [];
     state.raceFixedTools = Array.isArray(data.raceFixedTools) ? data.raceFixedTools.filter(Boolean) : [];
-    state.backgroundLanguages = Array.isArray(data.backgroundLanguages) ? data.backgroundLanguages.filter(Boolean) : [];
+    state.backgroundLanguages = Array.isArray(data.backgroundLanguages) ? data.backgroundLanguages.map(clean) : [];
     state.backgroundFixedLanguages = Array.isArray(data.backgroundFixedLanguages) ? data.backgroundFixedLanguages.filter(Boolean) : [];
-    state.backgroundTools = Array.isArray(data.backgroundTools) ? data.backgroundTools.filter(Boolean) : [];
+    state.backgroundTools = Array.isArray(data.backgroundTools) ? data.backgroundTools.map(clean) : [];
     state.backgroundFixedTools = Array.isArray(data.backgroundFixedTools) ? data.backgroundFixedTools.filter(Boolean) : [];
     state.backgroundEquipment = Array.isArray(data.backgroundEquipment) ? data.backgroundEquipment.filter(Boolean) : [];
     state.inventory = Array.isArray(data.inventory) ? data.inventory : [];
@@ -2382,7 +2526,6 @@
     } finally { restoringImport = false; }
     renderAbilityScoreExchanges();
     renderAbilities();
-    $('#perks-per-level').checked = Boolean(state.perksPerLevel);
     renderPerkChoices();
     if (data.avatar) await new Promise((resolve) => {
       avatar = new Image();
@@ -2431,7 +2574,7 @@
     avatarCanvas.addEventListener('pointerup', endAvatarDrag);
     avatarCanvas.addEventListener('pointercancel', endAvatarDrag);
     $('#class-select').addEventListener('change', loadClass);
-    $('#race-select').addEventListener('change', () => { state.raceOption = ''; state.raceLanguages = []; state.raceFixedLanguages = []; state.raceTools = []; state.raceFixedTools = []; loadSimpleDetails('race', '../races/index.html'); renderPerkChoices(); });
+    $('#race-select').addEventListener('change', () => { state.raceOption = ''; state.raceLanguages = []; state.raceFixedLanguages = []; state.raceTools = []; state.raceFixedTools = []; state.raceSizeOptions = []; state.size = ''; state.equipmentScaleLocked = false; loadSimpleDetails('race', '../races/index.html'); renderPerkChoices(); });
     $('#background-select').addEventListener('change', () => {
       state.backgroundOption = '';
       state.backgroundLicenseGrade = '';
@@ -2447,7 +2590,6 @@
       updateOriginChoiceSection();
       loadSimpleDetails('background', '../backgrounds/index.html');
     });
-    $('#perks-per-level').addEventListener('change', (event) => { state.perksPerLevel = event.target.checked; if (!state.perksPerLevel) state.levelOnePerk = ''; renderPerkChoices(); renderAbilities(); });
     $('#add-ability-score-exchange').addEventListener('click', () => {
       if (state.abilityScoreExchanges.length >= 2) return;
       state.abilityScoreExchanges.push({ decrease: '', increase: '' });
@@ -2473,7 +2615,7 @@
     $('#level-up-asi').addEventListener('change', updateLevelUpApplyState);
     $('#perk-skill').addEventListener('change', (event) => {
       state.perkSkill = event.target.value;
-      state.skills = state.skills.filter((skill) => skill !== state.perkSkill);
+      state.skills = state.skills.map((skill) => skill === state.perkSkill ? '' : skill);
       if (state.humanSkill === state.perkSkill) state.humanSkill = '';
       if (classSkillDefinition) renderSkillChoices(classSkillDefinition);
       renderExpertiseChoices();
@@ -2481,7 +2623,7 @@
     });
     $('#human-skill').addEventListener('change', (event) => {
       state.humanSkill = event.target.value;
-      state.skills = state.skills.filter((skill) => skill !== state.humanSkill);
+      state.skills = state.skills.map((skill) => skill === state.humanSkill ? '' : skill);
       if (state.perkSkill === state.humanSkill) state.perkSkill = '';
       if (classSkillDefinition) renderSkillChoices(classSkillDefinition);
       renderExpertiseChoices();
@@ -2520,7 +2662,7 @@
       document.querySelectorAll('[data-sheet-tab]').forEach((tab) => tab.setAttribute('aria-selected', String(tab === button)));
       renderSheetPanel(button.dataset.sheetTab);
     }));
-    $('#sheet-character-size').addEventListener('change', (event) => { state.size = event.target.value; });
+    $('#sheet-character-size').addEventListener('change', (event) => { setCharacterSize(event.target.value); if (activeSheetTab === 'inventory') renderSheetPanel('inventory'); });
     await Promise.all([appendOptions('race', '../races/index.html'), appendOptions('background', '../backgrounds/index.html'), loadPerks()]);
     renderPerkChoices();
     const imported = sessionStorage.getItem('fable-character-import');

@@ -278,7 +278,18 @@
     return catalog;
   };
 
-  const catalogItem = (name) => { const key = normalized(name); return catalog.find((item) => normalized(item.name) === key) || catalog.find((item) => normalized(item.name).includes(key) || key.includes(normalized(item.name))); };
+  const catalogItem = (name) => {
+    const key = normalized(name);
+    const exact = catalog.find((item) => normalized(item.name) === key);
+    if (exact) return exact;
+    return catalog
+      .filter((item) => {
+        const itemKey = normalized(item.name);
+        return ` ${itemKey} `.includes(` ${key} `) || ` ${key} `.includes(` ${itemKey} `);
+      })
+      .sort((left, right) => normalized(right.name).length - normalized(left.name).length)[0];
+  };
+  const containsItemName = (source, itemName) => ` ${normalized(source)} `.includes(` ${normalized(itemName)} `);
   const createItem = (source, state, overrides = {}) => {
     const size = overrides.size || 'Medium';
     return syncItemHp(scaleForSize({ ...source, ...overrides, id: freshId(), rotation: 0, x: null, y: null, fractionSlot: 0, size, characterSized: overrides.characterSized ?? false }, size), true);
@@ -296,7 +307,7 @@
       return items;
     }
     if (exact && normalized(exact.name) === normalized(source)) return [createItem(exact, state, { sourceSeed: source, size: state.equipmentScaleSize || 'Medium', characterSized: true })];
-    const matches = catalog.filter((item) => normalized(item.name).length > 3 && normalized(source).includes(normalized(item.name))).sort((left, right) => right.name.length - left.name.length);
+    const matches = catalog.filter((item) => normalized(item.name).length > 3 && containsItemName(source, item.name)).sort((left, right) => right.name.length - left.name.length);
     const accepted = matches.filter((item, index) => !matches.slice(0, index).some((other) => normalized(other.name).includes(normalized(item.name))));
     if (accepted.length) return accepted.flatMap((item) => Array.from({ length: Math.min(20, quantityBefore(source, item.name)) }, () => createItem(item, state, { sourceSeed: source, size: state.equipmentScaleSize || 'Medium', characterSized: true })));
     if (/\bor\b|choose|weapon|firearm|armor|pack/i.test(source)) return [];
@@ -305,6 +316,14 @@
   const seedInventory = (state) => {
     state.inventory ||= []; state.seededEquipment ||= [];
     (state.startingEquipment || []).filter(Boolean).forEach((source) => { if (!state.seededEquipment.includes(source)) { state.inventory.push(...expandSeed(source, state)); state.seededEquipment.push(source); } });
+  };
+  const removeLegacyPhantomCart = (state) => {
+    if (state.inventoryCatalogFixVersion >= 1) return;
+    state.inventory = (state.inventory || []).filter((item) => {
+      if (normalized(item.name) !== 'cart' || !item.sourceSeed) return true;
+      return containsItemName(item.sourceSeed, 'Cart');
+    });
+    state.inventoryCatalogFixVersion = 1;
   };
   const resizeCharacterEquipment = (state, size = state.size || 'Medium') => {
     state.inventory ||= [];
@@ -577,6 +596,7 @@
   };
   const sync = async (state) => {
     await loadCatalog();
+    removeLegacyPhantomCart(state);
     seedInventory(state);
     applyInitialEquipmentScale(state);
     state.inventory.forEach((item) => { item.category ||= catalogItem(item.name)?.category; item.size ||= 'Medium'; if (item.workshop === undefined) item.workshop = /(?:^|,)\s*workshop\s*(?:,|$)/i.test(item.properties || ''); syncItemHp(item); });
