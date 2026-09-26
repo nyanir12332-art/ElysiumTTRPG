@@ -148,6 +148,44 @@
     const pounds = Math.max(0, Number(item.loadedWeight ?? item.weight) || 0);
     return pounds <= 0.5 ? 0.25 : Math.max(1, Math.floor(pounds));
   };
+  const rotateCells = (cells, rotation = 0) => {
+    let rotated = cells.map((cell) => ({ ...cell }));
+    for (let turn = 0; turn < ((rotation % 360) + 360) % 360 / 90; turn += 1) {
+      const height = Math.max(...rotated.map((cell) => cell.y)) + 1;
+      rotated = rotated.map((cell) => ({ x: height - 1 - cell.y, y: cell.x }));
+    }
+    const left = Math.min(...rotated.map((cell) => cell.x)), top = Math.min(...rotated.map((cell) => cell.y));
+    return rotated.map((cell) => ({ x: cell.x - left, y: cell.y - top }));
+  };
+  const weaponCells = (item, whole) => {
+    if (!isWeapon(item) || whole < 2) return null;
+    const name = normalized(item.name), firearm = /firearm/i.test(`${item.type || ''} ${item.category || ''}`), cells = [];
+    const shaftWithHead = (headWidth = 3) => {
+      const width = Math.min(headWidth, Math.max(2, whole - 1)), handleX = Math.floor(width / 2);
+      for (let x = 0; x < width; x += 1) cells.push({ x, y: 0 });
+      for (let y = 1; cells.length < whole; y += 1) cells.push({ x: handleX, y });
+    };
+    if (/maul|hammer|mallet|pick|axe|hatchet|mace|morningstar/.test(name)) shaftWithHead(/maul|great|battle|morningstar/.test(name) ? 3 : 2);
+    else if (/crossbow|trident|glaive|halberd/.test(name)) shaftWithHead(3);
+    else if (/bow/.test(name) && whole >= 4) {
+      cells.push({ x: 1, y: 0 }, { x: 0, y: 0 });
+      for (let y = 1; cells.length < whole - 1; y += 1) cells.push({ x: 0, y });
+      cells.push({ x: 1, y: Math.max(1, whole - 3) });
+    } else if ((firearm || /rifle|musket|shotgun|carbine|pistol|revolver|blunderbuss|pepperbox|gatling|rpg|smg/.test(name)) && whole >= 3) {
+      for (let y = 0; y < whole - 1; y += 1) cells.push({ x: 0, y });
+      cells.push({ x: 1, y: whole - 2 });
+    } else if (/sword|blade|rapier|scimitar|saber|sabre|katana/.test(name) && whole >= 5) {
+      for (let y = 0; cells.length < whole - 4; y += 1) cells.push({ x: 1, y });
+      const guardY = Math.max(1, whole - 4);
+      cells.push({ x: 0, y: guardY }, { x: 1, y: guardY }, { x: 2, y: guardY }, { x: 1, y: guardY + 1 });
+    } else if (/flail|whip|chain|sickle/.test(name) && whole >= 4) {
+      for (let y = 0; y < whole - 2; y += 1) cells.push({ x: 0, y });
+      cells.push({ x: 1, y: whole - 3 }, { x: 1, y: whole - 2 });
+    } else {
+      for (let y = 0; y < whole; y += 1) cells.push({ x: 0, y });
+    }
+    return cells;
+  };
   const capacity = (state) => {
     const strength = Math.max(0, Number(state.scores?.Strength) || 0), multiplier = capacityMultiplier(state.size), rows = Math.floor(strength * multiplier);
     return { strength, multiplier, rows, clear: rows * 5, heavy: rows * 10, total: rows * 15 };
@@ -156,21 +194,44 @@
     const units = cubeUnits(item), whole = Math.max(1, Math.ceil(units));
     const container = isPortableContainer(item);
     const exactRectangle = () => { let width = Math.min(5, Math.floor(Math.sqrt(whole))); while (width > 1 && whole % width) width -= 1; return { width, height: whole / width }; };
-    let width, height;
+    let width, height, cells = null;
     if (container) { width = Math.min(5, whole); height = Math.ceil(whole / 5); }
     else if (item.customShape && !(item.contentsWeight > 0)) { width = Math.min(columns, Math.max(1, Math.floor(Number(item.customShape.w) || 1))); height = Math.max(1, Math.floor(Number(item.customShape.h) || 1)); }
-    else if (/sword|dagger|knife|spear|javelin|pike|polearm|staff|bow|crossbow|rifle|firearm|musket|hammer|axe/i.test(item.name)) { width = 1; height = whole; }
-    else { ({ width, height } = exactRectangle()); }
-    let cells = container ? Array.from({ length: whole }, (_, index) => ({ x: index % 5, y: Math.floor(index / 5) })) : null;
-    if (container && (item.rotation || 0) % 180) {
-      const originalHeight = height;
-      cells = cells.map((cell) => ({ x: originalHeight - 1 - cell.y, y: cell.x }));
-      [width, height] = [height, width];
-    } else if (!container && (item.rotation || 0) % 180) [width, height] = [height, width];
+    else {
+      cells = weaponCells(item, whole);
+      if (!cells) ({ width, height } = exactRectangle());
+    }
+    if (container) cells = Array.from({ length: whole }, (_, index) => ({ x: index % 5, y: Math.floor(index / 5) }));
+    if (cells) {
+      cells = rotateCells(cells, item.rotation || 0);
+      width = Math.max(...cells.map((cell) => cell.x)) + 1;
+      height = Math.max(...cells.map((cell) => cell.y)) + 1;
+    } else if ((item.rotation || 0) % 180) [width, height] = [height, width];
     const fractional = units === 0.25;
-    return { width, height, units, occupiedUnits: fractional ? 0.25 : container ? whole : width * height, fractional, cells };
+    return { width, height, units, occupiedUnits: fractional ? 0.25 : cells ? cells.length : width * height, fractional, cells };
   };
   const shapeCells = (shape) => shape.cells || Array.from({ length: shape.width * shape.height }, (_, index) => ({ x: index % shape.width, y: Math.floor(index / shape.width) }));
+  const shapeSegments = (shape) => {
+    const rowRuns = [];
+    for (let row = 0; row < shape.height; row += 1) {
+      const xs = shapeCells(shape).filter((cell) => cell.y === row).map((cell) => cell.x).sort((left, right) => left - right);
+      xs.forEach((x) => {
+        const previous = rowRuns.at(-1);
+        if (previous?.row === row && previous.start + previous.width === x) previous.width += 1;
+        else rowRuns.push({ row, start: x, width: 1, height: 1 });
+      });
+    }
+    return rowRuns.reduce((segments, run) => {
+      let previous = null;
+      for (let index = segments.length - 1; index >= 0; index -= 1) {
+        const segment = segments[index];
+        if (segment.start === run.start && segment.width === run.width && segment.row + segment.height === run.row) { previous = segment; break; }
+      }
+      if (previous) previous.height += 1;
+      else segments.push({ ...run });
+      return segments;
+    }, []);
+  };
   const scaledDamage = (damage, size) => {
     const multiplier = equipmentSizeMultiplier(size);
     return String(damage || '').replace(/\b(\d+)d(\d+)\b/gi, (_, count, die) => `${Math.max(1, Math.floor(Number(count) * multiplier))}d${die}`);
@@ -351,21 +412,13 @@
   };
   const renderItem = (item) => {
     const shape = itemShape(item), container = isPortableContainer(item), fractionClass = shape.fractional ? ' inventory-item--fraction' : '', verticalClass = !shape.fractional && shape.width <= 2 && shape.height > shape.width * 1.5 ? ' inventory-item--vertical' : '', containerClass = container ? ' inventory-item--container' : '', zone = item.x + shape.width > 10 ? 'heavy' : item.x + shape.width > 5 ? 'encumbered' : 'clear', displayWeight = Number(item.loadedWeight ?? item.weight) || 0;
-    if (container && shape.cells) {
-      const rows = Array.from({ length: shape.height }, (_, row) => {
-        const rowCells = shape.cells.filter((cell) => cell.y === row);
-        return { row, start: Math.min(...rowCells.map((cell) => cell.x)), width: rowCells.length };
-      });
-      const segments = rows.reduce((runs, row) => {
-        const previous = runs.at(-1);
-        if (previous && previous.start === row.start && previous.width === row.width && previous.row + previous.height === row.row) previous.height += 1;
-        else runs.push({ row: row.row, start: row.start, width: row.width, height: 1 });
-        return runs;
-      }, []);
+    if (shape.cells) {
+      const segments = shapeSegments(shape);
+      const labelSegment = segments.reduce((best, segment, index) => segment.width * segment.height > segments[best].width * segments[best].height ? index : best, 0);
       return segments.map((segment, index) => {
         const isVertical = segment.width <= 2 && segment.height > segment.width * 1.5;
-        const label = index === 0 ? `<span class="inventory-item__label" aria-hidden="true">${itemLabelMarkup(item, shape)}${bagIcon}</span>` : '';
-        return `<button type="button" class="inventory-item inventory-item--container inventory-item--container-segment${isVertical ? ' inventory-item--vertical' : ''}" data-item-id="${escapeHtml(item.id)}" data-container-id="${escapeHtml(item.id)}" data-shape-row="${segment.row}" data-shape-column="${segment.start}" data-shape-height="${segment.height}" data-shape-width="${segment.width}" data-zone="${zone}" draggable="true"${index ? ' tabindex="-1"' : ''} style="grid-column:${item.x + segment.start + 1} / span ${segment.width};grid-row:${item.y + segment.row + 1} / span ${segment.height}" title="${escapeHtml(item.name)}, ${displayWeight} lb., drop items here" aria-label="${escapeHtml(item.name)}, ${displayWeight} pounds, item container">${label}</button>`;
+        const label = index === labelSegment ? `<span class="inventory-item__label" aria-hidden="true">${itemLabelMarkup(item, shape)}${container ? bagIcon : ''}</span>` : '';
+        return `<button type="button" class="inventory-item inventory-item--shape-segment${container ? ' inventory-item--container inventory-item--container-segment' : ' inventory-item--weapon-segment'}${isVertical ? ' inventory-item--vertical' : ''}" data-item-id="${escapeHtml(item.id)}"${container ? ` data-container-id="${escapeHtml(item.id)}"` : ''} data-shape-row="${segment.row}" data-shape-column="${segment.start}" data-shape-height="${segment.height}" data-shape-width="${segment.width}" data-zone="${zone}" draggable="true"${index === labelSegment ? '' : ' tabindex="-1" aria-hidden="true"'} style="grid-column:${item.x + segment.start + 1} / span ${segment.width};grid-row:${item.y + segment.row + 1} / span ${segment.height}" title="${escapeHtml(item.name)} · ${displayWeight} lb.${container ? ' · Drop items here' : ''}" aria-label="${escapeHtml(item.name)}, ${displayWeight} pounds${container ? ', item container' : ''}">${label}</button>`;
       }).join('');
     }
     return `<button type="button" class="inventory-item${fractionClass}${verticalClass}${containerClass}" data-item-id="${escapeHtml(item.id)}"${container ? ` data-container-id="${escapeHtml(item.id)}"` : ''} data-zone="${zone}" data-fraction-slot="${item.fractionSlot || 0}" draggable="true" style="grid-column:${item.x + 1} / span ${shape.width};grid-row:${item.y + 1} / span ${shape.height}" title="${escapeHtml(item.name)} · ${displayWeight} lb.${container ? ' · Drop items here' : ''}" aria-label="${escapeHtml(item.name)}, ${displayWeight} pounds${container ? ', item container' : ''}"><span class="inventory-item__label" aria-hidden="true">${itemLabelMarkup(item, shape)}${container ? bagIcon : ''}</span></button>`;
@@ -425,7 +478,7 @@
     aside.querySelector('[data-cubes]').onchange = (event) => { item.customCubes = Math.max(0.25, Math.floor((Number(event.target.value) || 0.25) * 4) / 4); item.x = null; item.y = null; item.manuallyPlaced = false; refresh(); };
     const updateShape = () => { item.customShape = { w: Number(aside.querySelector('[data-width]').value) || 1, h: Number(aside.querySelector('[data-height]').value) || 1 }; item.customCubes = item.customShape.w * item.customShape.h; item.rotation = 0; item.x = null; item.y = null; item.manuallyPlaced = false; refresh(); };
     aside.querySelector('[data-width]').onchange = updateShape; aside.querySelector('[data-height]').onchange = updateShape;
-    aside.querySelector('[data-rotate]').onclick = () => { item.rotation = ((item.rotation || 0) + 90) % 180; item.x = null; item.y = null; item.manuallyPlaced = false; refresh(); };
+    aside.querySelector('[data-rotate]').onclick = () => { item.rotation = ((item.rotation || 0) + 90) % (isWeapon(item) && !item.customShape ? 360 : 180); item.x = null; item.y = null; item.manuallyPlaced = false; refresh(); };
     aside.querySelector('[data-export]').onclick = () => { const exported = { ...item, id: undefined, x: null, y: null, loadedWeight: undefined, contentsWeight: undefined, containerId: undefined }; download(item.name || 'item', { format: 'fable-inventory-item', version: 1, item: exported }); };
     aside.querySelector('[data-delete]').onclick = () => { contentsFor(state, item).forEach((content) => { delete content.containerId; content.x = null; content.y = null; content.manuallyPlaced = false; }); state.selectedInventoryItemId = ''; state.inventory = state.inventory.filter((entry) => entry.id !== item.id); refresh(); };
   };

@@ -24,7 +24,7 @@
   };
   const standardArray = [15, 14, 13, 12, 10, 8];
   const XP_TO_LEVEL = 10000;
-  const state = { level: 1, xp: 0, classLevels: {}, abilityArray: {}, racial: [], racialMode: 'three', abilityScoreExchanges: [], abilityScoreIncreases: [], perkAbilityChoices: {}, intelligenceProficiencies: [], intelligenceProficiencyTypes: [], skills: [], expertise: [], classFeatureChoices: {}, classSpells: {}, spellcasting: {}, spellcastingLevel: 0, subclass: '', subclassFeatureChoices: {}, equipmentChoices: {}, equipmentItems: {}, classTools: [], classFixedTools: [], raceOption: '', raceLanguages: [], raceFixedLanguages: [], raceTools: [], raceFixedTools: [], backgroundOption: '', backgroundLicenseGrade: '', backgroundSkills: [], backgroundLanguages: [], backgroundFixedLanguages: [], backgroundTools: [], backgroundFixedTools: [], backgroundEquipment: [], cash: 0, perksPerLevel: false, levelOnePerk: '', humanPerk: '', perkSkill: '', humanSkill: '', inventory: [], details: {}, notes: '', conditions: [], exhaustionLevel: 0, customFeatures: [], levelUpFeatures: [], addedPerks: [], customPerks: [], currentHp: null, temporaryHp: 0, levelHpBonus: 0, hitDieSides: 0, hitDiceRemaining: null, hitDicePools: {} };
+  const state = { level: 1, xp: 0, classLevels: {}, abilityArray: {}, racial: [], racialMode: 'three', abilityScoreExchanges: [], abilityScoreIncreases: [], perkAbilityChoices: {}, intelligenceProficiencies: [], intelligenceProficiencyTypes: [], skills: [], expertise: [], classFeatureChoices: {}, classSpells: {}, spellcasting: {}, spellcastingLevel: 0, subclass: '', subclassFeatureChoices: {}, equipmentChoices: {}, equipmentItems: {}, classTools: [], classFixedTools: [], raceOption: '', raceLanguages: [], raceFixedLanguages: [], raceTools: [], raceFixedTools: [], backgroundOption: '', backgroundLicenseGrade: '', backgroundSkills: [], backgroundLanguages: [], backgroundFixedLanguages: [], backgroundTools: [], backgroundFixedTools: [], backgroundEquipment: [], cash: 0, perksPerLevel: false, levelOnePerk: '', humanPerk: '', perkSkill: '', humanSkill: '', inventory: [], details: {}, notes: '', conditions: [], exhaustionLevel: 0, customFeatures: [], entryEdits: {}, levelUpFeatures: [], addedPerks: [], customPerks: [], currentHp: null, temporaryHp: 0, levelHpBonus: 0, hitDieSides: 0, hitDiceRemaining: null, hitDicePools: {} };
   const hitDiceSizes = [6, 8, 10, 12];
   let avatar = null;
   const avatarPan = { x: 0, y: 0 };
@@ -34,6 +34,7 @@
   let classSpellProgression = [];
   let classSkillDefinition = null;
   let spellCatalog;
+  let sheetEntryEditorPresets = new Map();
   let restoringImport = false;
   let raceLanguageDefinition = null;
   let backgroundLanguageDefinition = null;
@@ -214,7 +215,7 @@
         return {
           value,
           label,
-          description: previewSnippet(decodedDescription),
+          description: decodedDescription,
           requirements,
           abilityIncreaseOptions
         };
@@ -258,7 +259,7 @@
         return selectedPerk && requirementsFor(selectedPerk).every((requirement) => replacementNames.has(requirement));
       });
     };
-    select.innerHTML = `<option value="">Choose a perk</option>${perks.map((perk) => `<option value="${perk.value}" data-preview="${escapeAttribute(perk.description)}"${selected === perk.value ? ' selected' : ''}${!isValidReplacement(perk) && selected !== perk.value ? ' disabled' : ''}>${perk.label} — ${perk.typeLabel}</option>`).join('')}`;
+    select.innerHTML = `<option value="">Choose a perk</option>${perks.map((perk) => `<option value="${perk.value}" data-preview="${escapeAttribute(previewSnippet(perk.description))}"${selected === perk.value ? ' selected' : ''}${!isValidReplacement(perk) && selected !== perk.value ? ' disabled' : ''}>${perk.label} — ${perk.typeLabel}</option>`).join('')}`;
   };
   const renderPerkChoices = () => {
     const levelOneChoice = $('#level-one-perk-choice');
@@ -545,7 +546,7 @@
       return `<section class="ability-score-exchange"><label><span>Decrease −2</span><select data-exchange-decrease="${index}"><option value="">Choose ability</option>${decreaseOptions}</select></label><label><span>Increase +1</span><select data-exchange-increase="${index}"><option value="">Choose ability</option>${increaseOptions}</select></label><button type="button" data-remove-ability-score-exchange="${index}" aria-label="Remove ability score exchange">Remove</button></section>`;
     }).join('');
     box.innerHTML = rows;
-    addButton.disabled = state.abilityScoreExchanges.length >= 2;
+    addButton.hidden = state.abilityScoreExchanges.length >= 2;
     box.querySelectorAll('[data-exchange-decrease], [data-exchange-increase]').forEach((select) => select.addEventListener('change', () => {
       const index = Number(select.dataset.exchangeDecrease ?? select.dataset.exchangeIncrease);
       const key = select.matches('[data-exchange-decrease]') ? 'decrease' : 'increase';
@@ -608,6 +609,17 @@
     return nodes;
   };
   const sectionText = (heading) => sectionNodes(heading).filter((node) => node.matches('p, ul, ol')).map((node) => clean(node.textContent));
+  const featureDescription = (doc, featureName) => {
+    const target = clean(featureName).replace(/\s*\([^)]*\)\s*$/, '').replace(/\s+feature$/i, '').toLowerCase();
+    const heading = [...doc.querySelectorAll('h2, h3, h4')].find((candidate) => clean(candidate.textContent).replace(/\s*\([^)]*\)\s*$/, '').replace(/\s+feature$/i, '').toLowerCase() === target);
+    if (!heading) return '';
+    const copy = [];
+    for (let node = heading.nextElementSibling; node; node = node.nextElementSibling) {
+      if (/^H[2-4]$/.test(node.tagName) && !node.classList.contains('minor-heading')) break;
+      if (node.matches('p, ul, ol')) copy.push(clean(node.textContent));
+    }
+    return copy.join(' ');
+  };
   const sourceTableCards = (tables) => tables.flatMap((table) => {
     const caption = clean(table.querySelector('caption')?.textContent) || 'Statistics';
     const headers = [...table.querySelectorAll('thead th')].map((cell) => clean(cell.textContent));
@@ -1405,7 +1417,7 @@
   ]);
 
   const pencilIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4M4 16l4 4"/></svg>';
-  const editButton = (mode, label, effectType = '', featureId = '') => `<button class="sheet-edit-button" type="button" data-sheet-edit="${mode}"${effectType ? ` data-effect-type="${effectType}"` : ''}${featureId ? ` data-feature-id="${escapeAttribute(featureId)}"` : ''} aria-label="${escapeAttribute(label)}" title="${escapeAttribute(label)}">${pencilIcon}</button>`;
+  const editButton = (mode, label, effectType = '', featureId = '', entryKey = '') => `<button class="sheet-edit-button" type="button" data-sheet-edit="${mode}"${effectType ? ` data-effect-type="${effectType}"` : ''}${featureId ? ` data-feature-id="${escapeAttribute(featureId)}"` : ''}${entryKey ? ` data-entry-key="${escapeAttribute(entryKey)}"` : ''} aria-label="${escapeAttribute(label)}" title="${escapeAttribute(label)}">${pencilIcon}</button>`;
   const featureEffects = () => [
     ...(state.customFeatures || []).flatMap((feature) => (feature.effects || []).map((effect) => ({ ...effect, feature: feature.name }))),
     ...(state.customPerks || []).filter((perk) => (state.addedPerks || []).includes(perk.value)).flatMap((perk) => (perk.effects || []).map((effect) => ({ ...effect, feature: perk.label })))
@@ -1514,13 +1526,21 @@
         window.setTimeout(() => (invalid.closest('[data-select-menu]')?.querySelector('.select-menu__trigger') || invalid).focus(), 0);
       }, true);
     }
-    dialog.classList.toggle('sheet-editor--feature', mode === 'feature');
+    dialog.classList.toggle('sheet-editor--feature', mode === 'feature' || mode === 'sheet-entry');
     dialog.classList.toggle('sheet-editor--listed-perk', mode === 'listed-perk');
     if (context) {
-      context.hidden = mode === 'feature' || mode === 'listed-perk';
+      context.hidden = mode === 'feature' || mode === 'listed-perk' || mode === 'sheet-entry';
       context.textContent = mode === 'identity' ? 'Identity Record' : mode === 'cash' ? 'Funds Record' : mode === 'hp' || mode === 'combat' ? 'Combat Record' : mode === 'conditions' ? 'Condition Record' : mode === 'spellbook-purchase' ? 'Wizard Spellbook' : '';
     }
-    if (mode === 'identity') {
+    if (mode === 'sheet-entry') {
+      const source = sheetEntryEditorPresets.get(preset.entryKey);
+      if (!source) return;
+      const edited = state.entryEdits?.[preset.entryKey] || {};
+      heading.textContent = source.kind === 'perk' ? 'Edit Perk' : 'Edit Class Feature';
+      body.innerHTML = `<label>Name<input name="entryName" value="${escapeAttribute(edited.name || source.name)}" required></label><label>Description<textarea name="entryDescription" required>${escapeAttribute(edited.description ?? source.description)}</textarea></label>${state.entryEdits?.[preset.entryKey] ? '<button class="sheet-editor-delete" type="button" data-reset-entry>Reset changes</button>' : ''}`;
+      body.querySelector('[data-reset-entry]')?.addEventListener('click', () => { delete state.entryEdits[preset.entryKey]; dialog.close(); refreshSheet(); });
+      form.onsubmit = (event) => { event.preventDefault(); const data = new FormData(form); state.entryEdits ||= {}; state.entryEdits[preset.entryKey] = { name: clean(data.get('entryName')), description: clean(data.get('entryDescription')) }; dialog.close(); refreshSheet(); };
+    } else if (mode === 'identity') {
       heading.textContent = 'Edit Identity';
       body.innerHTML = `<label>Character name<input name="characterName" value="${escapeAttribute($('#character-name')?.value || '')}" required></label>`;
       form.onsubmit = (event) => { event.preventDefault(); $('#character-name').value = clean(new FormData(form).get('characterName')); dialog.close(); refreshSheet(); };
@@ -1607,7 +1627,7 @@
         heading.textContent = perkMode === 'custom' ? 'Add Custom Perk' : 'Add Listed Perk';
         fields.innerHTML = perkMode === 'custom'
           ? `<section class="custom-perk-fields"><label>Perk name<input name="customPerkName" value="${escapeAttribute(draftPerkName)}" required></label><label>Description<textarea name="customPerkDescription" required>${escapeAttribute(draftPerkDescription)}</textarea></label></section><fieldset class="feature-effect-editor perk-effect-editor"><legend>Mechanical changes</legend><div data-perk-effect-rows></div><button class="sheet-add-effect" type="button" data-add-perk-effect><span aria-hidden="true">+</span>Add mechanical effect</button></fieldset>`
-          : `<section class="listed-perk-field"><label>Choose a perk<select name="perk" required><option value="">Choose a listed perk</option>${perks.map((perk) => `<option value="${escapeAttribute(perk.value)}" data-preview="${escapeAttribute(perk.description)}">${escapeAttribute(perk.label)} — ${escapeAttribute(perk.typeLabel)}</option>`).join('')}</select></label></section>`;
+          : `<section class="listed-perk-field"><label>Choose a perk<select name="perk" required><option value="">Choose a listed perk</option>${perks.map((perk) => `<option value="${escapeAttribute(perk.value)}" data-preview="${escapeAttribute(previewSnippet(perk.description))}">${escapeAttribute(perk.label)} — ${escapeAttribute(perk.typeLabel)}</option>`).join('')}</select></label></section>`;
         if (perkMode === 'custom') { renderPerkEffectRows(); fields.querySelector('[data-add-perk-effect]').onclick = () => { draftPerkEffects = readPerkEffectRows(); draftPerkEffects.push({ type: 'skillBonus', target: '', value: 1 }); renderPerkEffectRows(); }; }
         else {
           const perkSelect = fields.querySelector('[name="perk"]');
@@ -1877,20 +1897,42 @@
       renderSpellcastingPanel(panel);
       return;
     }
-    if (tab === 'features') {
+    if (tab === 'features' || tab === 'perks') {
+      sheetEntryEditorPresets = new Map();
       const originalPerkValues = unique([state.levelOnePerk, state.humanPerk]);
       const perkValues = unique([...originalPerkValues, ...(state.addedPerks || [])]);
       const perkEntries = perkValues.map((value) => { const perk = perks.find((candidate) => candidate.value === value) || state.customPerks.find((candidate) => candidate.value === value); return { value, label: perk ? `${perk.label} — ${perk.typeLabel || 'Custom'}` : value, description: perk?.description || '', effects: perk?.effects || [], added: !originalPerkValues.includes(value) }; });
       const initialClassFeatures = [...document.querySelectorAll('#class-details .level-one-features summary')].map((node) => clean(node.childNodes[0]?.textContent || node.textContent.replace(/\+$/, '')));
       const gainedClassFeatures = (state.levelUpFeatures || []).flatMap((entry) => (entry.features || []).map((feature) => `${entry.className} ${entry.classLevel}: ${feature}`));
       const classFeatures = [...initialClassFeatures, ...gainedClassFeatures];
+      const initialClassFeatureEntries = [...document.querySelectorAll('#class-details .level-one-features details')].map((detail) => {
+        const summary = detail.querySelector('summary'), name = clean(summary?.childNodes[0]?.textContent || summary?.textContent.replace(/\+$/, ''));
+        return { key: `class:${$('#class-select').value}:1:${name}`, name, description: clean(detail.querySelector('p')?.textContent) };
+      });
+      const gainedClassFeatureEntries = (state.levelUpFeatures || []).flatMap((entry) => (entry.features || []).map((feature) => {
+        const name = typeof feature === 'string' ? feature : clean(feature?.name), description = typeof feature === 'string' ? clean(entry.featureDetails?.[feature]) : clean(feature?.description);
+        return { key: `class:${entry.classValue}:${entry.classLevel}:${name}`, name: `${entry.className} ${entry.classLevel}: ${name}`, description };
+      }));
+      const classFeatureEntries = [...new Map([...initialClassFeatureEntries, ...gainedClassFeatureEntries].map((feature) => [feature.key, feature])).values()];
       const selections = sheetSelections();
       const section = (heading, entries) => {
         const displayHeading = heading === 'Level 1 Class Features' && characterLevel() > 1 ? 'Class Features' : heading;
         return `<article><h3>${displayHeading}</h3>${entries.length ? `<ul class="sheet-list">${entries.map((entry) => `<li>${escapeAttribute(entry)}</li>`).join('')}</ul>` : '<p class="sheet-empty">None selected.</p>'}</article>`;
       };
+      const dropdown = ({ key, name, description, effects = [], removable = false, value = '' }) => {
+        const source = { kind: key.startsWith('perk:') ? 'perk' : 'feature', name, description: description || 'No description saved for this feature.' };
+        sheetEntryEditorPresets.set(key, source);
+        const edited = state.entryEdits?.[key] || {}, displayName = edited.name || source.name, displayDescription = edited.description ?? source.description;
+        return `<details class="sheet-feature-entry"><summary>${escapeAttribute(displayName)}<span>+</span></summary><div class="sheet-feature-entry__body">${editButton('sheet-entry', `Edit ${displayName}`, '', '', key)}<p>${escapeAttribute(displayDescription)}</p>${effects.length ? `<ul>${effects.map((effect) => `<li>${escapeAttribute(effectSummary(effect))}</li>`).join('')}</ul>` : ''}${removable ? `<button class="sheet-feature-entry__remove" type="button" data-remove-added-perk="${escapeAttribute(value)}">Remove</button>` : ''}</div></details>`;
+      };
       const customFeatures = (state.customFeatures || []).map((feature) => `<article class="sheet-feature-card"><h4>${escapeAttribute(feature.name)}</h4>${editButton('feature', `Edit ${feature.name}`, '', feature.id)}${feature.description ? `<p>${escapeAttribute(feature.description)}</p>` : ''}${feature.effects?.length ? `<ul>${feature.effects.map((effect) => `<li>${escapeAttribute(effectSummary(effect))}</li>`).join('')}</ul>` : '<p class="sheet-empty">Descriptive feature; no calculated effects.</p>'}</article>`).join('');
       panel.innerHTML = `<div class="sheet-panel-grid"><article class="sheet-editable-box"><h3>Perks</h3>${editButton('listed-perk', 'Add a listed perk')}${perkEntries.length ? `<ul class="sheet-list sheet-perk-list">${perkEntries.map((perk) => `<li><span><strong>${escapeAttribute(perk.label)}</strong>${perk.description ? `<small>${escapeAttribute(perk.description)}</small>` : ''}${perk.effects.length ? `<small class="sheet-perk-effects">${perk.effects.map(effectSummary).map(escapeAttribute).join(' · ')}</small>` : ''}</span>${perk.added ? `<button type="button" data-remove-added-perk="${escapeAttribute(perk.value)}" aria-label="Remove ${escapeAttribute(perk.label)}">Remove</button>` : ''}</li>`).join('')}</ul>` : '<p class="sheet-empty">None selected.</p>'}</article><article class="sheet-editable-box sheet-custom-features"><h3>Added Features</h3>${editButton('feature', 'Add a custom feature')}${customFeatures || '<p class="sheet-empty">Add features here to modify calculated statistics.</p>'}</article>${section('Level 1 Class Features', unique(classFeatures))}${section('Feature & Spell Choices', selections)}</div>`;
+      panel.innerHTML = `<div class="sheet-panel-grid"><article class="sheet-editable-box"><h3>Perks</h3>${editButton('listed-perk', 'Add a listed perk')}${perkEntries.length ? `<div class="sheet-feature-entries">${perkEntries.map((perk) => dropdown({ key: `perk:${perk.value}`, name: perk.label, description: perk.description, effects: perk.effects, removable: perk.added, value: perk.value })).join('')}</div>` : '<p class="sheet-empty">None selected.</p>'}</article><article class="sheet-editable-box sheet-custom-features"><h3>Added Features</h3>${editButton('feature', 'Add a custom feature')}${customFeatures || '<p class="sheet-empty">Add features here to modify calculated statistics.</p>'}</article><article><h3>${characterLevel() > 1 ? 'Class Features' : 'Level 1 Class Features'}</h3>${classFeatureEntries.length ? `<div class="sheet-feature-entries">${classFeatureEntries.map((feature) => dropdown(feature)).join('')}</div>` : '<p class="sheet-empty">None selected.</p>'}</article>${section('Feature & Spell Choices', selections)}</div>`;
+      if (tab === 'perks') {
+        panel.innerHTML = `<div class="sheet-panel-grid sheet-perks-grid"><article class="sheet-editable-box"><h3>Perks</h3>${editButton('listed-perk', 'Add a listed perk')}${perkEntries.length ? `<div class="sheet-feature-entries">${perkEntries.map((perk) => dropdown({ key: `perk:${perk.value}`, name: perk.label, description: perk.description, effects: perk.effects, removable: perk.added, value: perk.value })).join('')}</div>` : '<p class="sheet-empty">None selected.</p>'}</article></div>`;
+      } else {
+        panel.innerHTML = `<div class="sheet-panel-grid sheet-features-grid"><article class="sheet-editable-box sheet-custom-features"><h3>Added Features</h3>${editButton('feature', 'Add a custom feature')}${customFeatures || '<p class="sheet-empty">Add features here to modify calculated statistics.</p>'}</article><article><h3>${characterLevel() > 1 ? 'Class Features' : 'Level 1 Class Features'}</h3>${classFeatureEntries.length ? `<div class="sheet-feature-entries">${classFeatureEntries.map((feature) => dropdown(feature)).join('')}</div>` : '<p class="sheet-empty">None selected.</p>'}</article>${section('Feature & Spell Choices', selections)}</div>`;
+      }
       return;
     }
     if (tab === 'details') {
@@ -1911,7 +1953,9 @@
           : `<li>${escapeAttribute(entry)}</li>`;
       };
       panel.innerHTML = `<div class="sheet-panel-grid sheet-details-grid"><article><h3>Identity</h3><p><strong>Race:</strong> ${escapeAttribute(race)}</p><p><strong>Class:</strong> ${escapeAttribute(className)}</p><p><strong>Background:</strong> ${escapeAttribute(background)}</p><p><strong>Creature type:</strong> ${escapeAttribute($('#sheet-creature-type')?.textContent || 'Humanoid')}</p>${license ? `<p><strong>Identification:</strong> ${escapeAttribute(license)}</p>` : ''}</article><article class="sheet-character-details"><h3>Character Details</h3><div class="sheet-details-fields"><label><span>Age</span><input data-character-detail="age" value="${escapeAttribute(details.age)}"></label><label><span>Height</span><input data-character-detail="height" value="${escapeAttribute(details.height)}"></label><label><span>Weight</span><input data-character-detail="weight" value="${escapeAttribute(details.weight)}"></label><label><span>Eyes</span><input data-character-detail="eyes" value="${escapeAttribute(details.eyes)}"></label><label><span>Skin</span><input data-character-detail="skin" value="${escapeAttribute(details.skin)}"></label><label><span>Hair</span><input data-character-detail="hair" value="${escapeAttribute(details.hair)}"></label><label class="sheet-details-fields__wide"><span>Appearance</span><textarea data-character-detail="appearance">${escapeAttribute(details.appearance)}</textarea></label></div></article><article class="sheet-editable-box"><h3>Proficiencies</h3>${editButton('feature', 'Add another proficiency', 'proficiency')}<ul class="sheet-list">${unique([...classProficiencies, ...(knownIntelligenceWeapons.length ? [`Weapons: ${knownIntelligenceWeapons.join(', ')}`] : []), ...(knownTools.length ? [`Tools: ${knownTools.join(', ')}`] : []), ...(knownLanguages.length ? [`Languages: ${knownLanguages.join(', ')}`] : []), ...addedProficiencies]).map(proficiencyEntry).join('')}</ul></article><article id="sheet-intelligence-proficiency-choices" class="class-skill-proficiencies" hidden></article></div>`;
+      panel.querySelector('.sheet-details-grid')?.insertAdjacentHTML('beforeend', `<article class="sheet-character-notes"><h3>Character Notes</h3><textarea data-character-notes aria-label="Character notes" placeholder="Record character notes here.">${escapeAttribute(state.notes)}</textarea></article>`);
       panel.querySelectorAll('[data-character-detail]').forEach((control) => control.addEventListener('input', () => { state.details = { ...(state.details || {}), [control.dataset.characterDetail]: control.value }; }));
+      panel.querySelector('[data-character-notes]')?.addEventListener('input', (event) => { state.notes = event.target.value; });
       renderIntelligenceProficiencyChoices($('#sheet-intelligence-proficiency-choices'));
       return;
     }
@@ -2035,9 +2079,24 @@
       ...(state.addedPerks || [])
     ];
     const chosen = new Set(chosenPerks.filter(Boolean));
-    select.innerHTML = `<option value="">Choose a perk</option>${perks.map((perk) => `<option value="${escapeAttribute(perk.value)}" data-preview="${escapeAttribute(perk.description)}"${chosen.has(perk.value) ? ' disabled' : ''}>${escapeAttribute(perk.label)} — ${escapeAttribute(perk.typeLabel)}</option>`).join('')}`;
+    select.innerHTML = `<option value="">Choose a perk</option>${perks.map((perk) => `<option value="${escapeAttribute(perk.value)}" data-preview="${escapeAttribute(previewSnippet(perk.description))}"${chosen.has(perk.value) ? ' disabled' : ''}>${escapeAttribute(perk.label)} — ${escapeAttribute(perk.typeLabel)}</option>`).join('')}`;
     $('#level-up-perk-choice').hidden = !state.perksPerLevel;
     renderLevelUpPermanentChoices();
+  };
+  const updateLevelUpApplyState = () => {
+    const button = $('#apply-level-up');
+    if (!button) return;
+    let complete = Boolean(pendingLevelUp);
+    if (pendingLevelUp?.requiresSubclass) complete = complete && Boolean(pendingLevelUp.subclass);
+    const perkValue = clean($('#level-up-perk-select')?.value);
+    if (state.perksPerLevel) {
+      complete = complete && Boolean(perkValue);
+      const options = perkIncreaseOptions(perkValue);
+      if (options.length > 1) complete = complete && options.includes(clean($('#level-up-perk-ability')?.value));
+    }
+    const hasAsi = Boolean(pendingLevelUp?.features?.some((feature) => /^Ability Score Improvement$/i.test(typeof feature === 'string' ? feature : feature?.name)));
+    if (hasAsi) complete = complete && abilities.includes(clean($('#level-up-asi')?.value));
+    button.disabled = !complete;
   };
   const renderLevelUpPermanentChoices = () => {
     const perkValue = clean($('#level-up-perk-select')?.value);
@@ -2045,7 +2104,7 @@
     const perkWrapper = $('#level-up-perk-ability-choice');
     const perkSelect = $('#level-up-perk-ability');
     if (perkWrapper && perkSelect) {
-      perkWrapper.hidden = perkOptions.length < 2;
+      perkWrapper.hidden = !state.perksPerLevel || perkOptions.length < 2;
       const selected = perkOptions.includes(perkSelect.value) ? perkSelect.value : '';
       perkSelect.innerHTML = `<option value="">Choose an ability</option>${perkOptions.map((ability) => `<option value="${ability}"${selected === ability ? ' selected' : ''}${permanentScore(ability) >= 20 ? ' disabled' : ''}>${ability}</option>`).join('')}`;
     }
@@ -2057,6 +2116,7 @@
       const selected = abilities.includes(asiSelect.value) ? asiSelect.value : '';
       asiSelect.innerHTML = `<option value="">Choose an ability</option>${abilities.map((ability) => `<option value="${ability}"${selected === ability ? ' selected' : ''}${permanentScore(ability) >= 20 ? ' disabled' : ''}>${ability}</option>`).join('')}`;
     }
+    updateLevelUpApplyState();
   };
   const renderLevelUpPreview = async () => {
     const select = $('#level-up-class-select');
@@ -2069,7 +2129,7 @@
     renderLevelUpPermanentChoices();
     subclassChoice.hidden = true;
     subclassSelect.innerHTML = '<option value="">Choose an arcane tradition</option>';
-    $('#apply-level-up').disabled = !classValue;
+    updateLevelUpApplyState();
     if (!classValue) {
       $('#level-up-class-level').textContent = '—';
       $('#level-up-spellcasting').textContent = spellcastingSummary();
@@ -2103,6 +2163,7 @@
         : null;
       const gainedFeatures = row && featureIndex >= 0 ? clean(row.cells[featureIndex]?.textContent).split(',').map(clean).filter((feature) => feature && feature !== '—' && feature !== '-') : [];
       const progression = row ? headers.map((header, index) => ({ label: header, value: clean(row.cells[index]?.textContent) })).filter((entry, index) => index > 0 && index !== featureIndex && entry.value && !/^—|-$/i.test(entry.value)) : [];
+      const featureDetails = Object.fromEntries(gainedFeatures.map((feature) => [feature, featureDescription(doc, feature)]));
       const className = clean(select.selectedOptions[0]?.textContent) || title(classValue);
       const requiresWizardTradition = classValue === 'wizard.html' && nextClassLevel === 2 && !state.subclass;
 
@@ -2111,6 +2172,7 @@
         className,
         classLevel: nextClassLevel,
         features: gainedFeatures,
+        featureDetails,
         requiresSubclass: requiresWizardTradition,
         subclass: ''
       };
@@ -2132,13 +2194,13 @@
         subclassChoice.hidden = false;
       }
       features.innerHTML = `<h3>${escapeAttribute(className)} ${nextClassLevel}</h3>${gainedFeatures.length ? `<ul>${gainedFeatures.map((feature) => `<li>${escapeAttribute(feature)}</li>`).join('')}</ul>` : '<p>No new named class features at this level.</p>'}${progression.length ? `<p class="level-up-progression">${progression.map((entry) => `<span><strong>${escapeAttribute(entry.label)}:</strong> ${escapeAttribute(entry.value)}</span>`).join('')}</p>` : ''}`;
-      $('#apply-level-up').disabled = requiresWizardTradition;
+      updateLevelUpApplyState();
     } catch (error) {
       console.error('Unable to preview class level', error);
       features.innerHTML = '<p>Class features could not be loaded. You can still apply this class level.</p>';
       pendingLevelUp = { classValue, className: clean(select.selectedOptions[0]?.textContent) || title(classValue), classLevel: nextClassLevel, features: [] };
       renderLevelUpPermanentChoices();
-      $('#apply-level-up').disabled = false;
+      updateLevelUpApplyState();
     }
   };
   const closeLevelUpBuilder = () => {
@@ -2163,7 +2225,7 @@
     $('#level-up-character-level').textContent = String(characterLevel() + 1);
     $('.character-builder').classList.remove('sheet-ready');
     $('.character-builder').classList.add('level-up-mode');
-    $('#builder-page-title').textContent = `Level Up to ${characterLevel() + 1}`;
+    $('#builder-page-title').textContent = 'Level Up';
     renderLevelUpPreview();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -2191,14 +2253,14 @@
       return;
     }
 
-    const { classValue, className, classLevel, features } = pendingLevelUp;
+    const { classValue, className, classLevel, features, featureDetails = {} } = pendingLevelUp;
     const pools = normalizeHitDicePools();
     state.classLevels = { ...(state.classLevels || {}), [classValue]: classLevel };
     state.level = Object.values(state.classLevels).reduce((total, value) => total + (Number(value) || 0), 0);
     state.xp = 0;
     state.spellcastingLevel = effectiveSpellcasterLevel();
     state.levelUpFeatures = Array.isArray(state.levelUpFeatures) ? state.levelUpFeatures : [];
-    state.levelUpFeatures.push({ level: state.level, classValue, className, classLevel, features: [...features] });
+    state.levelUpFeatures.push({ level: state.level, classValue, className, classLevel, features: [...features], featureDetails: { ...featureDetails } });
     if (pendingLevelUp.subclass) {
       state.subclass = pendingLevelUp.subclass;
       state.subclassFeatureChoices = {};
@@ -2295,6 +2357,7 @@
     state.conditions = Array.isArray(data.conditions) ? data.conditions.filter((condition) => condition && clean(condition).toLowerCase() !== 'exhaustion') : [];
     state.exhaustionLevel = Math.max(0, Math.min(10, Math.floor(Number(data.exhaustionLevel ?? (Array.isArray(data.conditions) && data.conditions.some((condition) => clean(condition).toLowerCase() === 'exhaustion') ? 1 : 0)) || 0)));
     state.customFeatures = Array.isArray(data.customFeatures) ? data.customFeatures.filter((feature) => feature?.name) : [];
+    state.entryEdits = data.entryEdits && typeof data.entryEdits === 'object' && !Array.isArray(data.entryEdits) ? { ...data.entryEdits } : {};
     state.levelUpFeatures = Array.isArray(data.levelUpFeatures) ? data.levelUpFeatures.filter((entry) => entry?.classValue && Number(entry.classLevel)) : [];
     state.levelHpBonus = Math.max(0, Number(data.levelHpBonus) || 0);
     state.addedPerks = Array.isArray(data.addedPerks) ? data.addedPerks.filter(Boolean) : [];
@@ -2398,7 +2461,7 @@
       if (!pendingLevelUp) return;
 
       pendingLevelUp.subclass = event.target.value;
-      $('#apply-level-up').disabled = pendingLevelUp.requiresSubclass && !pendingLevelUp.subclass;
+      updateLevelUpApplyState();
     });
     $('#apply-level-up').addEventListener('click', applyLevelUp);
     $('#level-one-perk').addEventListener('change', (event) => { state.levelOnePerk = event.target.value; renderPerkChoices(); renderAbilities(); });
@@ -2406,6 +2469,8 @@
     $('#level-one-perk-ability').addEventListener('change', (event) => { if (state.levelOnePerk) state.perkAbilityChoices[state.levelOnePerk] = event.target.value; renderPerkChoices(); renderAbilities(); });
     $('#human-perk-ability').addEventListener('change', (event) => { if (state.humanPerk) state.perkAbilityChoices[state.humanPerk] = event.target.value; renderPerkChoices(); renderAbilities(); });
     $('#level-up-perk-select').addEventListener('change', renderLevelUpPermanentChoices);
+    $('#level-up-perk-ability').addEventListener('change', updateLevelUpApplyState);
+    $('#level-up-asi').addEventListener('change', updateLevelUpApplyState);
     $('#perk-skill').addEventListener('change', (event) => {
       state.perkSkill = event.target.value;
       state.skills = state.skills.filter((skill) => skill !== state.perkSkill);
@@ -2430,15 +2495,16 @@
       const edit = event.target.closest('[data-sheet-edit]');
       if (edit) {
         if (edit.dataset.sheetEdit === 'notes') {
-          document.querySelector('[data-sheet-tab="notes"]')?.click();
-          window.setTimeout(() => $('#sheet-panel textarea')?.focus(), 0);
-        } else openSheetEditor(edit.dataset.sheetEdit, { effectType: edit.dataset.effectType, target: edit.dataset.effectTarget, featureId: edit.dataset.featureId });
+          document.querySelector('[data-sheet-tab="details"]')?.click();
+          window.setTimeout(() => $('#sheet-panel [data-character-notes]')?.focus(), 0);
+        } else openSheetEditor(edit.dataset.sheetEdit, { effectType: edit.dataset.effectType, target: edit.dataset.effectTarget, featureId: edit.dataset.featureId, entryKey: edit.dataset.entryKey });
         return;
       }
       const removePerk = event.target.closest('[data-remove-added-perk]');
       if (removePerk) {
         state.addedPerks = state.addedPerks.filter((value) => value !== removePerk.dataset.removeAddedPerk);
         state.customPerks = state.customPerks.filter((perk) => perk.value !== removePerk.dataset.removeAddedPerk);
+        delete state.entryEdits?.[`perk:${removePerk.dataset.removeAddedPerk}`];
         refreshSheet();
       }
     });

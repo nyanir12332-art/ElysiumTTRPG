@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" href="../Images/ElysiumIcon.png">
     <link rel="stylesheet" href="../styles/site.css?v=31">
     <link rel="stylesheet" href="../styles/character-launcher.css?v=10">
-    <link rel="stylesheet" href="character-builder.css?v=142">
+    <link rel="stylesheet" href="character-builder.css?v=149">
     <title>Character Builder - Fable</title>
   </head>
   <body>
@@ -43,7 +43,6 @@
           <header>
             <span>Character Advancement</span>
             <h2 id="level-up-title">Choose a Class Level</h2>
-            <p>Race and background choices remain unchanged while leveling.</p>
           </header>
           <div class="level-up-grid">
             <label>
@@ -70,26 +69,28 @@
           <section id="level-up-features" class="level-up-features">
             <p>Choose a class to preview its next level.</p>
           </section>
-          <label id="level-up-subclass-choice" hidden>
-            Arcane Tradition
-            <select id="level-up-subclass-select">
-              <option value="">Choose an arcane tradition</option>
-            </select>
-          </label>
-          <label id="level-up-perk-choice" hidden>
-            Perk for this level
-            <select id="level-up-perk-select">
-              <option value="">Choose a perk</option>
-            </select>
-          </label>
-          <label id="level-up-perk-ability-choice" hidden>
-            Perk ability score increase
-            <select id="level-up-perk-ability"><option value="">Choose an ability</option></select>
-          </label>
-          <label id="level-up-asi-choice" hidden>
-            Ability Score Improvement (+1)
-            <select id="level-up-asi"><option value="">Choose an ability</option></select>
-          </label>
+          <div class="level-up-choices">
+            <label id="level-up-subclass-choice" hidden>
+              Arcane Tradition
+              <select id="level-up-subclass-select">
+                <option value="">Choose an arcane tradition</option>
+              </select>
+            </label>
+            <label id="level-up-perk-choice" hidden>
+              Perk for this level
+              <select id="level-up-perk-select">
+                <option value="">Choose a perk</option>
+              </select>
+            </label>
+            <label id="level-up-perk-ability-choice" hidden>
+              Perk ability score increase
+              <select id="level-up-perk-ability"><option value="">Choose an ability</option></select>
+            </label>
+            <label id="level-up-asi-choice" hidden>
+              Ability Score Improvement (+1)
+              <select id="level-up-asi"><option value="">Choose an ability</option></select>
+            </label>
+          </div>
           <footer>
             <button type="button" id="cancel-level-up">Cancel</button>
             <button type="button" id="apply-level-up">Apply Level</button>
@@ -104,15 +105,15 @@
         </section>
 
         <section class="sheet-sections sheet-only" aria-label="Character sheet sections">
-          <div class="sheet-tabs" role="tablist"><button role="tab" aria-selected="true" data-sheet-tab="skills">Skills &amp; Actions</button><button role="tab" aria-selected="false" data-sheet-tab="inventory">Inventory</button><button role="tab" aria-selected="false" data-sheet-tab="spellcasting">Spellcasting</button><button role="tab" aria-selected="false" data-sheet-tab="features">Perks &amp; Features</button><button role="tab" aria-selected="false" data-sheet-tab="details">Details</button><button role="tab" aria-selected="false" data-sheet-tab="notes">Notes</button></div>
+          <div class="sheet-tabs" role="tablist"><button role="tab" aria-selected="true" data-sheet-tab="skills">Skills &amp; Actions</button><button role="tab" aria-selected="false" data-sheet-tab="inventory">Inventory</button><button role="tab" aria-selected="false" data-sheet-tab="spellcasting">Spellcasting</button><button role="tab" aria-selected="false" data-sheet-tab="perks">Perks</button><button role="tab" aria-selected="false" data-sheet-tab="features">Features</button><button role="tab" aria-selected="false" data-sheet-tab="details">Details &amp; Notes</button></div>
           <div id="sheet-panel"></div>
         </section>
         <button type="button" id="print-character" class="print-character">Print</button>
       </main>
     </div>
     <dialog id="sheet-editor-dialog"><form method="dialog" id="sheet-editor-form" class="sheet-editor"><header><div><span id="sheet-editor-context">Character Sheet Editor</span><h2 id="sheet-editor-title">Edit</h2></div><button type="button" data-sheet-editor-close aria-label="Close editor">&#215;</button></header><div id="sheet-editor-body"></div><footer><button type="button" data-sheet-editor-cancel>Cancel</button><button type="submit">Apply</button></footer></form></dialog>
-    <script src="builder-runtime.js?v=76"></script>
-    <script src="inventory-builder.js?v=37"></script>
+    <script src="builder-runtime.js?v=80"></script>
+    <script src="inventory-builder.js?v=38"></script>
     <script src="../scripts/select-menu.js?v=10"></script>
     <script src="../scripts/crt-scrollbar.js?v=4"></script>
     <script src="../scripts/character-launcher.js?v=10"></script>
