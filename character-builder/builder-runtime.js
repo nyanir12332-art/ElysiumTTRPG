@@ -211,17 +211,29 @@
           // Use the captured text as-is.
         }
 
-        const increaseMatch = decodedDescription.match(/(?:^|[.!?]\s+)Increase (?:your |one )?(.+?)(?: score)? by 1,? to a maximum of 20\b/i);
-        const increaseText = increaseMatch?.[1] || '';
-        let abilityIncreaseOptions = abilities.filter((ability) => new RegExp(`\\b${ability}\\b`, 'i').test(increaseText));
-        if (/ability score of your choice|ability score you chose/i.test(increaseText)) abilityIncreaseOptions = [...abilities];
+        const abilityEffects = [...decodedDescription.matchAll(/\b(Increase|Decrease)\s+(?:your\s+|one\s+)?(.+?)(?:\s+score)?\s+by\s+(\d+)/gi)].map((effect) => {
+          const targetText = clean(effect[2]);
+          let options = abilities.filter((ability) => new RegExp(`\\b${ability}\\b`, 'i').test(targetText));
+          if (/ability score of your choice/i.test(targetText)) options = [...abilities];
+          const reference = targetText.match(/ability score you chose for (.+)$/i)?.[1] || '';
+          return { modifier: /^increase$/i.test(effect[1]) ? Number(effect[3]) : -Number(effect[3]), options, choice: options.length > 1 || /of your choice/i.test(targetText), reference };
+        });
+        let abilityChoiceOptions = unique(abilityEffects.filter((effect) => effect.choice).flatMap((effect) => effect.options));
+        if (!abilityChoiceOptions.length && /choose an ability score/i.test(decodedDescription)) abilityChoiceOptions = [...abilities];
+        if (!abilityChoiceOptions.length) {
+          const spellcastingChoice = decodedDescription.match(/[^.]*spellcasting ability[^.]*(?:choose when|when you select)[^.]*\.?/i)?.[0] || '';
+          abilityChoiceOptions = abilities.filter((ability) => new RegExp(`\\b${ability}\\b`, 'i').test(spellcastingChoice));
+        }
+        const abilityIncreaseOptions = unique(abilityEffects.filter((effect) => effect.modifier > 0).flatMap((effect) => effect.options));
         return {
           value,
           label,
           description: decodedDescription,
           requirements,
+          abilityEffects,
+          abilityChoiceOptions,
           abilityIncreaseOptions,
-          grantsAbilityIncrease: Boolean(increaseMatch)
+          grantsAbilityIncrease: abilityEffects.some((effect) => effect.modifier > 0)
         };
       });
 
@@ -294,10 +306,7 @@
     renderIntelligenceProficiencyChoices();
     updateOriginChoiceSection();
   };
-  const perkIncreaseOptions = (perkValue) => {
-    const perk = perks.find((candidate) => candidate.value === perkValue);
-    return perk?.grantsAbilityIncrease ? perk.abilityIncreaseOptions || [] : [];
-  };
+  const perkAbilityChoiceOptions = (perkValue) => perks.find((candidate) => candidate.value === perkValue)?.abilityChoiceOptions || [];
   const ownedPerkValues = () => unique([state.levelOnePerk, state.humanPerk, ...(state.addedPerks || [])]);
   const perkRequirementsMet = (perk, ownedValues = ownedPerkValues()) => {
     if (!perk) return false;
@@ -332,8 +341,11 @@
     const wrapper = $(`#${prefix}-ability-choice`);
     const select = $(`#${prefix}-ability`);
     if (!wrapper || !select) return;
-    const options = perkIncreaseOptions(perkValue);
+    const options = perkAbilityChoiceOptions(perkValue);
+    const perk = perks.find((candidate) => candidate.value === perkValue);
     wrapper.hidden = options.length < 2;
+    const label = wrapper.querySelector('span');
+    if (label) label.textContent = perk?.grantsAbilityIncrease ? 'Perk ability score increase' : 'Perk ability choice';
     if (options.length === 1) state.perkAbilityChoices[perkValue] = options[0];
     if (!options.includes(state.perkAbilityChoices[perkValue])) state.perkAbilityChoices[perkValue] = '';
     select.innerHTML = `<option value="">Choose an ability</option>${options.map((ability) => `<option value="${ability}"${state.perkAbilityChoices[perkValue] === ability ? ' selected' : ''}>${ability}</option>`).join('')}`;
@@ -564,17 +576,28 @@
     context.beginPath(); context.arc(120, 184, 55, Math.PI, 0); context.stroke();
   };
 
-  const selectedPerkValues = () => unique([state.levelOnePerk, state.humanPerk, ...(state.addedPerks || [])]);
-  const perkAbilityIncrease = (ability) => selectedPerkValues().reduce((total, value) => {
-    const options = perkIncreaseOptions(value);
-    const chosen = options.length === 1 ? options[0] : state.perkAbilityChoices[value];
-    return total + (chosen === ability ? 1 : 0);
+  const selectedPerkValues = () => {
+    const selected = unique([state.levelOnePerk, state.humanPerk, ...(state.addedPerks || [])]);
+    if (selected.includes('fairy-manifestation') && !selected.includes('minify')) selected.push('minify');
+    return selected;
+  };
+  const perkAbilityModifier = (ability) => selectedPerkValues().reduce((total, value) => {
+    const perk = perks.find((candidate) => candidate.value === value);
+    return total + (perk?.abilityEffects || []).reduce((effectTotal, effect) => {
+      let chosen = '';
+      if (effect.reference) {
+        const referencedPerk = perks.find((candidate) => candidate.label.toLowerCase() === clean(effect.reference).toLowerCase());
+        chosen = referencedPerk ? state.perkAbilityChoices[referencedPerk.value] : '';
+      } else if (effect.choice) chosen = state.perkAbilityChoices[value];
+      else if (effect.options.length === 1) [chosen] = effect.options;
+      return effectTotal + (chosen === ability ? Number(effect.modifier) || 0 : 0);
+    }, 0);
   }, 0) + (state.customPerks || []).filter((perk) => (state.addedPerks || []).includes(perk.value)).flatMap((perk) => perk.effects || []).filter((effect) => effect.type === 'ability' && clean(effect.target).toLowerCase() === ability.toLowerCase()).reduce((total, effect) => total + (Number(effect.value) || 0), 0);
   const assignedAndRacialScore = (ability) => Number(state.abilityArray[ability] || 0) + state.racial.reduce((total, choice, index) => total + (choice === ability ? (state.racialMode === 'two' && index === 0 ? 2 : 1) : 0), 0);
   const validAbilityScoreExchanges = () => (state.abilityScoreExchanges || []).filter((exchange) => abilities.includes(exchange?.decrease) && abilities.includes(exchange?.increase) && exchange.decrease !== exchange.increase);
   const exchangeDelta = (ability) => validAbilityScoreExchanges().reduce((total, exchange) => total + (exchange.increase === ability ? 1 : 0) - (exchange.decrease === ability ? 2 : 0), 0);
   const baseScore = (ability) => assignedAndRacialScore(ability) + exchangeDelta(ability);
-  const permanentScore = (ability) => Math.min(20, baseScore(ability) + (state.abilityScoreIncreases || []).filter((choice) => choice === ability).length + perkAbilityIncrease(ability));
+  const permanentScore = (ability) => Math.min(20, baseScore(ability) + (state.abilityScoreIncreases || []).filter((choice) => choice === ability).length + perkAbilityModifier(ability));
   const score = (ability) => permanentScore(ability);
   const reconcileAbilityScoreExchanges = () => {
     state.abilityScoreExchanges = Array.isArray(state.abilityScoreExchanges) ? state.abilityScoreExchanges.slice(0, 2).map((exchange) => ({ decrease: clean(exchange?.decrease), increase: clean(exchange?.increase) })) : [];
@@ -1517,6 +1540,51 @@
   const hasEffect = (type, target) => featureEffects().some((effect) => effect.type === type && clean(effect.target).toLowerCase() === clean(target).toLowerCase());
   const temporaryAbilityEffectTotal = (ability) => (state.customFeatures || []).flatMap((feature) => feature.effects || []).filter((effect) => effect.type === 'ability' && clean(effect.target).toLowerCase() === ability.toLowerCase()).reduce((total, effect) => total + (Number(effect.value) || 0), 0);
   const calculatedScores = () => Object.fromEntries(abilities.map((ability) => [ability, Math.max(1, permanentScore(ability) + temporaryAbilityEffectTotal(ability))]));
+  const equippedItems = () => (state.inventory || []).filter((item) => item?.equipped);
+  const equipmentIsShield = (item) => /shield/i.test(`${item?.name || ''} ${item?.category || ''}`);
+  const armorProficiencyText = () => {
+    const row = [...document.querySelectorAll('#class-details .proficiency-row')].find((node) => /^Armor$/i.test(clean(node.querySelector('strong')?.textContent)));
+    const perkText = selectedPerkValues().map((value) => perks.find((perk) => perk.value === value)?.description || '').join(' ');
+    const added = featureEffects().filter((effect) => effect.type === 'proficiency').map((effect) => effect.target).join(', ');
+    return `${clean(row?.querySelector('span')?.textContent)} ${perkText} ${added}`.toLowerCase();
+  };
+  const proficientWithArmor = (item) => {
+    const proficiencies = armorProficiencyText(), category = clean(item?.category).toLowerCase();
+    if (!item || !/armor|shield/i.test(`${item.type || ''} ${item.category || ''}`)) return true;
+    if (/all armor/.test(proficiencies)) return true;
+    if (equipmentIsShield(item)) {
+      if (/\bshields?\b/.test(proficiencies) && !/(?:light|medium|heavy) shields?/.test(proficiencies)) return true;
+      return ['light', 'medium', 'heavy'].some((weight) => category.includes(weight) && proficiencies.includes(`${weight} shield`));
+    }
+    return ['light', 'medium', 'heavy'].some((weight) => category.includes(weight) && proficiencies.includes(`${weight} armor`));
+  };
+  const equipmentState = (scores = calculatedScores()) => {
+    const equipped = equippedItems(), armor = equipped.filter((item) => /armor|shield/i.test(`${item.type || ''} ${item.category || ''}`));
+    const body = armor.find((item) => !equipmentIsShield(item)), shields = armor.filter(equipmentIsShield);
+    const dexterity = modifier(scores.Dexterity), brokenPenalty = (item) => Number(item.hp) <= Number(item.maxHp) / 2 ? 1 : 0;
+    const armorValue = (item) => {
+      const formula = clean(item?.armorClass), base = Number(formula.match(/\d+/)?.[0]);
+      if (!Number.isFinite(base)) return 10 + dexterity;
+      if (/dex modifier/i.test(formula)) return base + (/max\s*2/i.test(formula) ? Math.min(2, dexterity) : dexterity);
+      return base;
+    };
+    const classValues = Object.entries(state.classLevels || {}).filter(([, levels]) => Number(levels) > 0).map(([value]) => value.toLowerCase());
+    const hasClass = (name) => classValues.some((value) => value.includes(name)) || clean($('#class-select')?.value).toLowerCase().includes(name);
+    let baseArmorClass = body ? armorValue(body) - brokenPenalty(body) : 10 + dexterity;
+    if (!body && hasClass('barbarian')) baseArmorClass = Math.max(baseArmorClass, 10 + dexterity + modifier(scores.Constitution));
+    if (!body && !shields.length && hasClass('monk')) baseArmorClass = Math.max(baseArmorClass, 10 + dexterity + modifier(scores.Wisdom));
+    const shieldBonus = shields.reduce((total, shield) => total + Math.max(0, Number(clean(shield.armorClass).match(/[+-]?\d+/)?.[0]) || 0) - brokenPenalty(shield), 0);
+    const nonProficient = armor.some((item) => !proficientWithArmor(item));
+    const stealth = armor.some((item) => item.stealthDisadvantage);
+    const strengthRequired = armor.reduce((maximum, item) => Math.max(maximum, Number(item.strengthRequirement) || 0), 0);
+    return { armorClass: baseArmorClass + shieldBonus + effectTotal('ac'), nonProficient, stealth, strengthRequired, strengthPenalty: strengthRequired > Number(scores.Strength) ? 10 : 0 };
+  };
+  const refreshEquipmentCalculations = () => {
+    if (!$('.character-builder')?.classList.contains('sheet-ready')) return;
+    state.equipmentPenalties = equipmentState(calculatedScores());
+    if ($('#sheet-ac')) $('#sheet-ac').textContent = String(state.equipmentPenalties.armorClass);
+    applyEncumbrance(state.encumbrance || 'clear');
+  };
   const classSaveProficiencies = () => {
     const row = [...document.querySelectorAll('#class-details .proficiency-row')].find((node) => /^Saving Throws$/i.test(clean(node.querySelector('strong')?.textContent)));
     const value = clean(row?.querySelector('span')?.textContent);
@@ -1633,7 +1701,7 @@
     } else if (mode === 'ability-array') {
       heading.textContent = 'Configure Array';
       const draftArray = Object.fromEntries(abilities.map((ability) => [ability, String(state.abilityArray[ability] || '')]));
-      const abilityBonus = (ability) => baseScore(ability) - Number(state.abilityArray[ability] || 0) + (state.abilityScoreIncreases || []).filter((choice) => choice === ability).length + perkAbilityIncrease(ability);
+      const abilityBonus = (ability) => baseScore(ability) - Number(state.abilityArray[ability] || 0) + (state.abilityScoreIncreases || []).filter((choice) => choice === ability).length + perkAbilityModifier(ability);
       const renderArrayEditor = () => {
         const assigned = Object.values(draftArray).filter(Boolean);
         body.innerHTML = `<div class="ability-scores sheet-ability-array-editor">${abilities.map((ability) => {
@@ -1752,10 +1820,10 @@
           const perkSelect = fields.querySelector('[name="perk"]');
           const abilityWrapper = document.createElement('label');
           abilityWrapper.hidden = true;
-          abilityWrapper.innerHTML = 'Ability score increase<select name="perkAbility"><option value="">Choose an ability</option></select>';
+          abilityWrapper.innerHTML = '<span>Perk ability choice</span><select name="perkAbility"><option value="">Choose an ability</option></select>';
           fields.querySelector('.listed-perk-field').append(abilityWrapper);
           const abilitySelect = abilityWrapper.querySelector('select');
-          const syncAbilityChoice = () => { const options = perkIncreaseOptions(perkSelect.value); abilityWrapper.hidden = options.length < 2; abilitySelect.required = options.length > 1; abilitySelect.innerHTML = `<option value="">Choose an ability</option>${options.map((ability) => `<option value="${ability}"${permanentScore(ability) >= 20 ? ' disabled' : ''}>${ability}</option>`).join('')}`; };
+          const syncAbilityChoice = () => { const perk = perks.find((candidate) => candidate.value === perkSelect.value), options = perkAbilityChoiceOptions(perkSelect.value); abilityWrapper.hidden = options.length < 2; abilityWrapper.querySelector('span').textContent = perk?.grantsAbilityIncrease ? 'Perk ability score increase' : 'Perk ability choice'; abilitySelect.required = options.length > 1; abilitySelect.innerHTML = `<option value="">Choose an ability</option>${options.map((ability) => `<option value="${ability}"${perk?.grantsAbilityIncrease && permanentScore(ability) >= 20 ? ' disabled' : ''}>${ability}</option>`).join('')}`; };
           perkSelect.addEventListener('change', syncAbilityChoice);
           syncAbilityChoice();
         }
@@ -1763,7 +1831,7 @@
       body.innerHTML = `<div class="perk-entry-mode" role="tablist" aria-label="Perk source"><button type="button" role="tab" data-perk-mode="listed" aria-pressed="true"><strong>Listed Perk</strong></button><button type="button" role="tab" data-perk-mode="custom" aria-pressed="false"><strong>Custom Perk</strong></button></div><div class="perk-entry-fields" data-perk-fields></div>`;
       renderPerkFields();
       body.querySelectorAll('[data-perk-mode]').forEach((button) => { button.onclick = () => { if (perkMode === 'custom') { draftPerkEffects = readPerkEffectRows(); draftPerkName = clean(form.elements.customPerkName?.value); draftPerkDescription = clean(form.elements.customPerkDescription?.value); } perkMode = button.dataset.perkMode; body.querySelectorAll('[data-perk-mode]').forEach((choice) => choice.setAttribute('aria-pressed', String(choice === button))); renderPerkFields(); }; });
-      form.onsubmit = (event) => { event.preventDefault(); const data = new FormData(form); if (perkMode === 'custom') { const label = clean(data.get('customPerkName')), description = clean(data.get('customPerkDescription')); if (!label || !description) return; const value = `custom-perk-${Date.now()}`; const effects = readPerkEffectRows().filter((effect) => effect.type && (!['ability', 'skillBonus', 'skillProficiency', 'skillExpertise', 'saveProficiency', 'proficiency', 'movement', 'condition', 'creatureType'].includes(effect.type) || effect.target)); state.customPerks.push({ value, label, description, effects }); state.addedPerks.push(value); } else { const value = clean(data.get('perk')), options = perkIncreaseOptions(value), ability = clean(data.get('perkAbility')); if (value && !state.addedPerks.includes(value)) { state.addedPerks.push(value); if (options.length === 1) state.perkAbilityChoices[value] = options[0]; else if (options.includes(ability)) state.perkAbilityChoices[value] = ability; } } dialog.close(); refreshSheet(); };
+      form.onsubmit = (event) => { event.preventDefault(); const data = new FormData(form); if (perkMode === 'custom') { const label = clean(data.get('customPerkName')), description = clean(data.get('customPerkDescription')); if (!label || !description) return; const value = `custom-perk-${Date.now()}`; const effects = readPerkEffectRows().filter((effect) => effect.type && (!['ability', 'skillBonus', 'skillProficiency', 'skillExpertise', 'saveProficiency', 'proficiency', 'movement', 'condition', 'creatureType'].includes(effect.type) || effect.target)); state.customPerks.push({ value, label, description, effects }); state.addedPerks.push(value); } else { const value = clean(data.get('perk')), options = perkAbilityChoiceOptions(value), ability = clean(data.get('perkAbility')); if (value && !state.addedPerks.includes(value)) { state.addedPerks.push(value); if (options.length === 1) state.perkAbilityChoices[value] = options[0]; else if (options.includes(ability)) state.perkAbilityChoices[value] = ability; } } dialog.close(); refreshSheet(); };
     } else {
       const existing = (state.customFeatures || []).find((feature) => feature.id === preset.featureId);
       const firstEffect = existing?.effects?.[0] || { type: preset.effectType || 'skillBonus', target: preset.target || '', value: 1 };
@@ -2005,7 +2073,7 @@
         const ability = sheetSkillAbilities[skill];
         const trained = includesName(proficiencySkills, skill);
         const expert = includesName(expertiseSkills, skill);
-        const disadvantaged = (state.encumbrance === 'heavy' && ['Strength', 'Dexterity', 'Constitution'].includes(ability)) || allSheetConditions().includes('Poisoned');
+        const disadvantaged = (state.encumbrance === 'heavy' && ['Strength', 'Dexterity', 'Constitution'].includes(ability)) || (state.equipmentPenalties?.nonProficient && ['Strength', 'Dexterity'].includes(ability)) || (state.equipmentPenalties?.stealth && skill === 'Stealth') || allSheetConditions().includes('Poisoned');
         const bonus = calculatedSkillBonus(skill, scores);
         return `<span${disadvantaged ? ' class="is-disadvantaged" title="An active condition gives this check disadvantage"' : ''}><i class="sheet-proficiency-dot${trained ? ' is-filled' : ''}${expert ? ' is-expert' : ''}" aria-hidden="true"></i><b>${skill}</b><small>${ability.slice(0, 3)}</small>${disadvantaged ? '<em>DIS</em>' : ''}<strong>${signed(bonus)}</strong></span>`;
       }).join('');
@@ -2124,7 +2192,8 @@
     $('#sheet-hp').textContent = String(state.currentHp);
     $('#sheet-hp-max').textContent = String(maximumHp);
     $('#sheet-temp-hp').textContent = String(Math.max(0, Number(state.temporaryHp) || 0));
-    $('#sheet-ac').textContent = String(10 + modifier(scores.Dexterity) + effectTotal('ac'));
+    state.equipmentPenalties = equipmentState(scores);
+    $('#sheet-ac').textContent = String(state.equipmentPenalties.armorClass);
     $('#sheet-initiative').textContent = signed(modifier(scores.Dexterity) + effectTotal('initiative') - manualExhaustionLevel());
     const combatValues = $('.sheet-combat-values');
     if (combatValues && !$('#sheet-hit-dice')) combatValues.insertAdjacentHTML('beforeend', '<p><strong id="sheet-hit-dice">0 / 1</strong><span id="sheet-hit-dice-label">Hit Dice</span></p>');
@@ -2154,7 +2223,7 @@
     $('#sheet-character-size').value = state.size || 'Medium';
     [...$('#sheet-character-size').options].forEach((option) => option.toggleAttribute('selected', option.value === state.size));
     const saveProficiencies = unique([...classSaveProficiencies(), ...featureEffects().filter((effect) => effect.type === 'saveProficiency').map((effect) => effect.target)]);
-    $('#sheet-saving-throws').innerHTML = abilities.map((ability) => { const proficient = includesName(saveProficiencies, ability); const disadvantaged = state.encumbrance === 'heavy' && ['Strength', 'Dexterity', 'Constitution'].includes(ability); const value = modifier(scores[ability]) + (proficient ? proficiencyBonus() : 0) - manualExhaustionLevel(); return `<span data-save="${ability}"${disadvantaged ? ' class="is-disadvantaged" title="Heavily encumbered: this saving throw has disadvantage"' : ''}><i class="sheet-proficiency-dot${proficient ? ' is-filled' : ''}" aria-hidden="true"></i><b>${ability}</b>${disadvantaged ? '<em>DIS</em>' : ''}<strong>${signed(value)}</strong></span>`; }).join('');
+    $('#sheet-saving-throws').innerHTML = abilities.map((ability) => { const proficient = includesName(saveProficiencies, ability); const disadvantaged = (state.encumbrance === 'heavy' && ['Strength', 'Dexterity', 'Constitution'].includes(ability)) || (state.equipmentPenalties.nonProficient && ['Strength', 'Dexterity'].includes(ability)); const value = modifier(scores[ability]) + (proficient ? proficiencyBonus() : 0) - manualExhaustionLevel(); return `<span data-save="${ability}"${disadvantaged ? ' class="is-disadvantaged" title="Equipment imposes disadvantage on this saving throw"' : ''}><i class="sheet-proficiency-dot${proficient ? ' is-filled' : ''}" aria-hidden="true"></i><b>${ability}</b>${disadvantaged ? '<em>DIS</em>' : ''}<strong>${signed(value)}</strong></span>`; }).join('');
     $('#sheet-passive-perception').textContent = String(10 + calculatedSkillBonus('Perception', scores));
     $('#sheet-passive-insight').textContent = String(10 + calculatedSkillBonus('Insight', scores));
     const creatureTypeEffect = featureEffects().filter((effect) => effect.type === 'creatureType').at(-1)?.target;
@@ -2177,7 +2246,8 @@
     const immobilized = activeConditions.some((condition) => ['Grappled', 'Restrained', 'Paralyzed', 'Petrified', 'Stunned', 'Unconscious'].includes(condition));
     const speedValues = { ...(state.speeds || {}), walk: baseSpeed };
     Object.entries(speedValues).forEach(([type, value]) => {
-      const speed = immobilized ? 0 : Math.max(0, Number(value) + movementEffectTotal(type) - reduction - exhaustionSpeedReduction);
+      const armorReduction = state.equipmentPenalties?.strengthPenalty || 0;
+      const speed = immobilized ? 0 : Math.max(0, Number(value) + movementEffectTotal(type) - reduction - exhaustionSpeedReduction - armorReduction);
       const field = $(`#sheet-speed-${type}`);
       if (field) field.innerHTML = `${speed}<small> ft.</small>`;
     });
@@ -2189,7 +2259,7 @@
       $('#sheet-condition-effects').innerHTML = rules.map((rule) => `<li>${escapeAttribute(rule)}</li>`).join('');
     }
     document.querySelectorAll('[data-save]').forEach((save) => {
-      const disadvantaged = (state.encumbrance === 'heavy' && ['Strength', 'Dexterity', 'Constitution'].includes(save.dataset.save)) || (activeConditions.includes('Restrained') && save.dataset.save === 'Dexterity');
+      const disadvantaged = (state.encumbrance === 'heavy' && ['Strength', 'Dexterity', 'Constitution'].includes(save.dataset.save)) || (state.equipmentPenalties?.nonProficient && ['Strength', 'Dexterity'].includes(save.dataset.save)) || (activeConditions.includes('Restrained') && save.dataset.save === 'Dexterity');
       save.classList.toggle('is-disadvantaged', disadvantaged);
       save.title = disadvantaged ? 'Heavily encumbered: this saving throw has disadvantage' : '';
       save.querySelector('em')?.remove();
@@ -2219,7 +2289,7 @@
     const perkValue = clean($('#level-up-perk-select')?.value);
     complete = complete && Boolean(perkValue);
     complete = complete && perkRequirementsMet(perks.find((perk) => perk.value === perkValue));
-    const options = perkIncreaseOptions(perkValue);
+    const options = perkAbilityChoiceOptions(perkValue);
     if (options.length > 1) complete = complete && options.includes(clean($('#level-up-perk-ability')?.value));
     const hasAsi = Boolean(pendingLevelUp?.features?.some((feature) => /^Ability Score Improvement$/i.test(typeof feature === 'string' ? feature : feature?.name)));
     if (hasAsi) complete = complete && abilities.includes(clean($('#level-up-asi')?.value));
@@ -2227,14 +2297,17 @@
   };
   const renderLevelUpPermanentChoices = () => {
     const perkValue = clean($('#level-up-perk-select')?.value);
-    const perkOptions = perkIncreaseOptions(perkValue);
+    const perkOptions = perkAbilityChoiceOptions(perkValue);
     const perkWrapper = $('#level-up-perk-ability-choice');
     const perkSelect = $('#level-up-perk-ability');
     if (perkWrapper && perkSelect) {
+      const perk = perks.find((candidate) => candidate.value === perkValue);
       const showPerkAbility = perkOptions.length > 1;
       perkWrapper.toggleAttribute('hidden', !showPerkAbility);
+      const label = perkWrapper.querySelector('span');
+      if (label) label.textContent = perk?.grantsAbilityIncrease ? 'Perk ability score increase' : 'Perk ability choice';
       const selected = perkOptions.includes(perkSelect.value) ? perkSelect.value : '';
-      perkSelect.innerHTML = `<option value="">Choose an ability</option>${perkOptions.map((ability) => `<option value="${ability}"${selected === ability ? ' selected' : ''}${permanentScore(ability) >= 20 ? ' disabled' : ''}>${ability}</option>`).join('')}`;
+      perkSelect.innerHTML = `<option value="">Choose an ability</option>${perkOptions.map((ability) => `<option value="${ability}"${selected === ability ? ' selected' : ''}${perk?.grantsAbilityIncrease && permanentScore(ability) >= 20 ? ' disabled' : ''}>${ability}</option>`).join('')}`;
       if (!showPerkAbility) perkSelect.value = '';
     }
     const hasAsi = Boolean(pendingLevelUp?.features?.some((feature) => /^Ability Score Improvement$/i.test(feature)));
@@ -2373,7 +2446,7 @@
       updateLevelUpApplyState();
       return;
     }
-    const perkOptions = perkIncreaseOptions(perkValue);
+    const perkOptions = perkAbilityChoiceOptions(perkValue);
     const perkAbility = clean($('#level-up-perk-ability').value);
     if (perkOptions.length > 1 && !perkOptions.includes(perkAbility)) {
       $('#level-up-perk-ability').focus();
@@ -2537,7 +2610,7 @@
     return true;
   };
 
-  window.FableCharacterBuilder = { renderPanel: renderSheetPanel, applyEncumbrance, editCash: () => openSheetEditor('cash') };
+  window.FableCharacterBuilder = { renderPanel: renderSheetPanel, refreshSheet, refreshEquipment: refreshEquipmentCalculations, applyEncumbrance, equipmentRules: (item) => ({ proficient: proficientWithArmor(item), penalties: state.equipmentPenalties || equipmentState() }), editCash: () => openSheetEditor('cash') };
 
   const init = async () => {
     drawAvatar(); renderAbilityScoreExchanges(); renderAbilities(); renderExperience();

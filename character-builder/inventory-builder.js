@@ -70,6 +70,9 @@
   };
   const isWeapon = (item) => /weapon|firearm/i.test(`${item?.type || ''} ${item?.category || ''}`);
   const isArmor = (item) => /armor|shield/i.test(`${item?.type || ''} ${item?.category || ''}`);
+  const isShield = (item) => /shield/i.test(`${item?.name || ''} ${item?.category || ''}`);
+  const isAttachment = (item) => /attachment/i.test(`${item?.type || ''} ${item?.category || ''}`);
+  const isFirearm = (item) => /firearm/i.test(`${item?.type || ''} ${item?.category || ''}`);
   const setWorkshopProperty = (item, enabled) => {
     const properties = String(item.properties || '').split(',').map((property) => property.trim()).filter((property) => property && !/^workshop$/i.test(property));
     if (enabled) properties.push('Workshop');
@@ -253,23 +256,24 @@
       if (!name) return;
       const description = text(card.querySelector('p, .tool-details')) || 'No catalog description.', pounds = parseWeight(fields[1]?.textContent);
       const type = text(card.closest('.item-group')?.querySelector('.item-group-title')) || 'Gear';
-      items.push({ name, weight: pounds, baseWeight: pounds, description, type, category: type, damage: '', properties: '' });
+      const attachableTo = card.classList.contains('attachment-card') ? text(fields[2]) : '';
+      items.push({ name, weight: pounds, baseWeight: pounds, description, type, category: type, damage: '', properties: '', attachableTo });
     });
     doc.querySelectorAll('table').forEach((table) => {
       const headers = [...table.querySelectorAll('thead th')].map((header) => text(header).toLowerCase());
       const nameIndex = headers.findIndex((header) => /name|shield type|ammunition/.test(header)), weightIndex = headers.findIndex((header) => /weight/.test(header));
       if (nameIndex < 0 || weightIndex < 0) return;
-      const damageIndex = headers.findIndex((header) => /damage/.test(header)), propertiesIndex = headers.findIndex((header) => /properties/.test(header)), armorIndex = headers.findIndex((header) => /armor class/.test(header));
+      const damageIndex = headers.findIndex((header) => /damage/.test(header)), propertiesIndex = headers.findIndex((header) => /properties/.test(header)), armorIndex = headers.findIndex((header) => /armor class/.test(header)), strengthIndex = headers.findIndex((header) => /^strength$/.test(header)), stealthIndex = headers.findIndex((header) => /^stealth$/.test(header));
       const sectionTitle = text(table.closest('section')?.querySelector('.item-group-title')) || 'Equipment';
       const type = /weapon/i.test(table.className) ? 'Weapon' : /apparel|shield|armor/i.test(`${table.className} ${sectionTitle}`) ? 'Armor' : sectionTitle;
       let apparelSubcategory = '';
       table.querySelectorAll('tbody tr').forEach((row) => {
         if (row.classList.contains('apparel-subcategory')) { apparelSubcategory = text(row); return; }
         const cells = [...row.cells]; if (!cells[nameIndex] || cells.length <= weightIndex) return;
-        const name = text(cells[nameIndex]), pounds = parseWeight(text(cells[weightIndex])), damage = damageIndex >= 0 ? text(cells[damageIndex]) : '', properties = propertiesIndex >= 0 ? text(cells[propertiesIndex]) : '', armor = armorIndex >= 0 ? text(cells[armorIndex]) : '';
+        const name = text(cells[nameIndex]), pounds = parseWeight(text(cells[weightIndex])), damage = damageIndex >= 0 ? text(cells[damageIndex]) : '', properties = propertiesIndex >= 0 ? text(cells[propertiesIndex]) : '', armor = armorIndex >= 0 ? text(cells[armorIndex]) : '', strength = strengthIndex >= 0 ? text(cells[strengthIndex]) : '', stealth = stealthIndex >= 0 ? text(cells[stealthIndex]) : '';
         const description = [damage && `Damage: ${damage}.`, armor && `Armor Class: ${armor}.`, properties && `Properties: ${properties}.`].filter(Boolean).join(' ') || 'See the item catalog for details.';
         const category = /^shield$/i.test(sectionTitle) && apparelSubcategory ? apparelSubcategory : sectionTitle;
-        if (name) items.push({ name, weight: pounds, baseWeight: pounds, description, type, category, damage, baseDamage: damage, properties });
+        if (name) items.push({ name, weight: pounds, baseWeight: pounds, description, type, category, damage, baseDamage: damage, properties, armorClass: armor, strengthRequirement: Number(strength.match(/\d+/)?.[0]) || 0, stealthDisadvantage: /disadvantage/i.test(stealth) });
       });
     });
     const byName = new Map();
@@ -279,17 +283,33 @@
   };
 
   const catalogItem = (name) => {
-    const key = normalized(name);
-    const exact = catalog.find((item) => normalized(item.name) === key);
+    const key = normalized(name).replace(/\bif proficient\b/g, '').trim();
+    const variants = (value) => uniqueStrings([normalized(value), normalized(value).replace(/\s+armor$/, '')]);
+    const exact = catalog.find((item) => variants(item.name).includes(key));
     if (exact) return exact;
     return catalog
       .filter((item) => {
-        const itemKey = normalized(item.name);
-        return ` ${itemKey} `.includes(` ${key} `) || ` ${key} `.includes(` ${itemKey} `);
+        return variants(item.name).some((itemKey) => ` ${itemKey} `.includes(` ${key} `) || ` ${key} `.includes(` ${itemKey} `));
       })
       .sort((left, right) => normalized(right.name).length - normalized(left.name).length)[0];
   };
-  const containsItemName = (source, itemName) => ` ${normalized(source)} `.includes(` ${normalized(itemName)} `);
+  const uniqueStrings = (values) => [...new Set(values.filter(Boolean))];
+  const containsItemName = (source, itemName) => uniqueStrings([normalized(itemName), normalized(itemName).replace(/\s+armor$/, '')]).some((name) => ` ${normalized(source).replace(/\bif proficient\b/g, '')} `.includes(` ${name} `));
+  const enrichItem = (item) => {
+    const source = catalogItem(item.name);
+    if (!source) return item;
+    ['type', 'category', 'armorClass', 'strengthRequirement', 'stealthDisadvantage', 'attachableTo'].forEach((key) => {
+      if (item[key] === undefined || item[key] === '') item[key] = source[key];
+    });
+    item.properties ||= source.properties;
+    item.damage ||= source.damage;
+    item.baseDamage ||= source.baseDamage;
+    return item;
+  };
+  const characterEquipmentOverrides = (item, state, overrides = {}) => {
+    const characterSized = isWeapon(item) || isArmor(item);
+    return { ...overrides, size: characterSized ? state.equipmentScaleSize || 'Medium' : 'Medium', characterSized };
+  };
   const createItem = (source, state, overrides = {}) => {
     const size = overrides.size || 'Medium';
     return syncItemHp(scaleForSize({ ...source, ...overrides, id: freshId(), rotation: 0, x: null, y: null, fractionSlot: 0, size, characterSized: overrides.characterSized ?? false }, size), true);
@@ -301,21 +321,46 @@
   const expandSeed = (source, state) => {
     const exact = catalogItem(source), packName = Object.keys(packContents).find((name) => normalized(name) === normalized(exact?.name || source));
     if (packName) {
-      const items = packContents[packName].flatMap(([name, quantity]) => { const found = catalogItem(name) || { name, weight: 0.25, baseWeight: 0.25, description: `Part of ${packName}.`, type: 'Gear' }; return Array.from({ length: quantity }, () => createItem(found, state, { sourceSeed: source, pack: packName, size: state.equipmentScaleSize || 'Medium', characterSized: true })); });
+      const items = packContents[packName].flatMap(([name, quantity]) => { const found = catalogItem(name) || { name, weight: 0.25, baseWeight: 0.25, description: `Part of ${packName}.`, type: 'Gear' }; return Array.from({ length: quantity }, () => createItem(found, state, characterEquipmentOverrides(found, state, { sourceSeed: source, pack: packName }))); });
       const backpack = items.find((item) => /\bbackpack\b/i.test(item.name));
       if (backpack) items.forEach((item) => { if (item !== backpack) storeInContainer(item, backpack); });
       return items;
     }
-    if (exact && normalized(exact.name) === normalized(source)) return [createItem(exact, state, { sourceSeed: source, size: state.equipmentScaleSize || 'Medium', characterSized: true })];
+    if (exact && [normalized(exact.name), normalized(exact.name).replace(/\s+armor$/, '')].includes(normalized(source).replace(/\s*\(if proficient\)\s*/i, ''))) return [createItem(exact, state, characterEquipmentOverrides(exact, state, { sourceSeed: source }))];
     const matches = catalog.filter((item) => normalized(item.name).length > 3 && containsItemName(source, item.name)).sort((left, right) => right.name.length - left.name.length);
     const accepted = matches.filter((item, index) => !matches.slice(0, index).some((other) => normalized(other.name).includes(normalized(item.name))));
-    if (accepted.length) return accepted.flatMap((item) => Array.from({ length: Math.min(20, quantityBefore(source, item.name)) }, () => createItem(item, state, { sourceSeed: source, size: state.equipmentScaleSize || 'Medium', characterSized: true })));
+    if (accepted.length) return accepted.flatMap((item) => Array.from({ length: Math.min(20, quantityBefore(source, item.name)) }, () => createItem(item, state, characterEquipmentOverrides(item, state, { sourceSeed: source }))));
+    const compound = String(source).split(/\s+and\s+/i).map((part) => cleanSeed(part)).filter(Boolean);
+    if (compound.length > 1) {
+      const expanded = compound.flatMap((part) => expandSeed(part, state));
+      if (expanded.length === compound.length) return expanded;
+    }
+    if (/^holy symbol$/i.test(normalized(source))) {
+      const symbol = { name: 'Holy Symbol', weight: 1, baseWeight: 1, description: 'A sacred symbol used as a spellcasting focus.', type: 'Holy Symbols', category: 'Holy Symbols' };
+      return [createItem(symbol, state, { sourceSeed: source, size: 'Medium' })];
+    }
+    if (/^shield$/i.test(normalized(source))) {
+      const shield = catalogItem('Light Shield') || { name: 'Light Shield', weight: 3, baseWeight: 3, description: 'A light shield.', type: 'Armor', category: 'Light shields', armorClass: '+1' };
+      return [createItem(shield, state, characterEquipmentOverrides(shield, state, { sourceSeed: source }))];
+    }
     if (/\bor\b|choose|weapon|firearm|armor|pack/i.test(source)) return [];
-    return [createItem({ name: source, weight: 0.25, baseWeight: 0.25, description: 'Equipment granted during character creation.', type: 'Gear' }, state, { sourceSeed: source, size: state.equipmentScaleSize || 'Medium', characterSized: true })];
+    const item = { name: source, weight: 0.25, baseWeight: 0.25, description: 'Equipment granted during character creation.', type: 'Gear' };
+    return [createItem(item, state, characterEquipmentOverrides(item, state, { sourceSeed: source }))];
   };
+  const cleanSeed = (value) => String(value || '').replace(/^\s*(?:a|an|the)\s+/i, '').replace(/[.,;]+$/g, '').trim();
   const seedInventory = (state) => {
     state.inventory ||= []; state.seededEquipment ||= [];
     (state.startingEquipment || []).filter(Boolean).forEach((source) => { if (!state.seededEquipment.includes(source)) { state.inventory.push(...expandSeed(source, state)); state.seededEquipment.push(source); } });
+  };
+  const repairLegacyEquipmentGrants = (state) => {
+    if (state.equipmentGrantFixVersion >= 1) return;
+    const replacements = state.inventory.filter((item) => /^gear$/i.test(item.type || '') && (/\bchain mail\b/i.test(item.sourceSeed || item.name) || /\bshield\b.*\bholy symbol\b/i.test(item.sourceSeed || item.name)));
+    replacements.forEach((item) => {
+      const source = item.sourceSeed || item.name;
+      state.inventory = state.inventory.filter((entry) => entry !== item);
+      state.inventory.push(...expandSeed(source, state));
+    });
+    state.equipmentGrantFixVersion = 1;
   };
   const removeLegacyPhantomCart = (state) => {
     if (state.inventoryCatalogFixVersion >= 1) return;
@@ -328,6 +373,23 @@
   const resizeCharacterEquipment = (state, size = state.size || 'Medium') => {
     state.inventory ||= [];
     state.inventory.forEach((item) => {
+      const catalogSource = catalogItem(item.name);
+      item.type ||= catalogSource?.type;
+      item.category ||= catalogSource?.category;
+      if (!isWeapon(item) && !isArmor(item)) {
+        if (item.characterSized === true) {
+          const previousSize = item.size;
+          scaleForSize(item, 'Medium');
+          syncItemHp(item);
+          item.characterSized = false;
+          if (previousSize !== item.size) {
+            item.x = null;
+            item.y = null;
+            item.manuallyPlaced = false;
+          }
+        }
+        return;
+      }
       if (item.characterSized === false) return;
       const previousSize = item.size;
       const previousWeight = Number(item.weight) || 0;
@@ -343,9 +405,9 @@
     });
   };
   const applyInitialEquipmentScale = (state) => {
-    if (state.inventoryScaleVersion === 2) return;
+    if (state.inventoryScaleVersion === 3) return;
     resizeCharacterEquipment(state, state.equipmentScaleSize || 'Medium');
-    state.inventoryScaleVersion = 2;
+    state.inventoryScaleVersion = 3;
   };
 
   const autoPlace = (state) => {
@@ -437,10 +499,10 @@
       return segments.map((segment, index) => {
         const isVertical = segment.width <= 2 && segment.height > segment.width * 1.5;
         const label = index === labelSegment ? `<span class="inventory-item__label" aria-hidden="true">${itemLabelMarkup(item, shape)}${container ? bagIcon : ''}</span>` : '';
-        return `<button type="button" class="inventory-item inventory-item--shape-segment${container ? ' inventory-item--container inventory-item--container-segment' : ' inventory-item--weapon-segment'}${isVertical ? ' inventory-item--vertical' : ''}" data-item-id="${escapeHtml(item.id)}"${container ? ` data-container-id="${escapeHtml(item.id)}"` : ''} data-shape-row="${segment.row}" data-shape-column="${segment.start}" data-shape-height="${segment.height}" data-shape-width="${segment.width}" data-zone="${zone}" draggable="true"${index === labelSegment ? '' : ' tabindex="-1" aria-hidden="true"'} style="grid-column:${item.x + segment.start + 1} / span ${segment.width};grid-row:${item.y + segment.row + 1} / span ${segment.height}" title="${escapeHtml(item.name)} · ${displayWeight} lb.${container ? ' · Drop items here' : ''}" aria-label="${escapeHtml(item.name)}, ${displayWeight} pounds${container ? ', item container' : ''}">${label}</button>`;
+        return `<button type="button" class="inventory-item inventory-item--shape-segment${container ? ' inventory-item--container inventory-item--container-segment' : ' inventory-item--weapon-segment'}${isVertical ? ' inventory-item--vertical' : ''}" data-item-id="${escapeHtml(item.id)}"${container ? ` data-container-id="${escapeHtml(item.id)}"` : ''} data-shape-row="${segment.row}" data-shape-column="${segment.start}" data-shape-height="${segment.height}" data-shape-width="${segment.width}" data-zone="${zone}" draggable="true"${index === labelSegment ? '' : ' tabindex="-1" aria-hidden="true"'} style="--inventory-label-cells:${segment.height};grid-column:${item.x + segment.start + 1} / span ${segment.width};grid-row:${item.y + segment.row + 1} / span ${segment.height}" title="${escapeHtml(item.name)} · ${displayWeight} lb.${container ? ' · Drop items here' : ''}" aria-label="${escapeHtml(item.name)}, ${displayWeight} pounds${container ? ', item container' : ''}">${label}</button>`;
       }).join('');
     }
-    return `<button type="button" class="inventory-item${fractionClass}${verticalClass}${containerClass}" data-item-id="${escapeHtml(item.id)}"${container ? ` data-container-id="${escapeHtml(item.id)}"` : ''} data-zone="${zone}" data-fraction-slot="${item.fractionSlot || 0}" draggable="true" style="grid-column:${item.x + 1} / span ${shape.width};grid-row:${item.y + 1} / span ${shape.height}" title="${escapeHtml(item.name)} · ${displayWeight} lb.${container ? ' · Drop items here' : ''}" aria-label="${escapeHtml(item.name)}, ${displayWeight} pounds${container ? ', item container' : ''}"><span class="inventory-item__label" aria-hidden="true">${itemLabelMarkup(item, shape)}${container ? bagIcon : ''}</span></button>`;
+    return `<button type="button" class="inventory-item${fractionClass}${verticalClass}${containerClass}" data-item-id="${escapeHtml(item.id)}"${container ? ` data-container-id="${escapeHtml(item.id)}"` : ''} data-zone="${zone}" data-fraction-slot="${item.fractionSlot || 0}" draggable="true" style="--inventory-label-cells:${shape.height};grid-column:${item.x + 1} / span ${shape.width};grid-row:${item.y + 1} / span ${shape.height}" title="${escapeHtml(item.name)} · ${displayWeight} lb.${container ? ' · Drop items here' : ''}" aria-label="${escapeHtml(item.name)}, ${displayWeight} pounds${container ? ', item container' : ''}"><span class="inventory-item__label" aria-hidden="true">${itemLabelMarkup(item, shape)}${container ? bagIcon : ''}</span></button>`;
   };
   const renderUnplacedItem = (item) => `<button type="button" class="inventory-unplaced__item${isPortableContainer(item) ? ' inventory-item--container' : ''}" data-item-id="${escapeHtml(item.id)}"${isPortableContainer(item) ? ` data-container-id="${escapeHtml(item.id)}"` : ''} draggable="true" title="Drag this item into an open area of the inventory grid">${escapeHtml(item.name)}${isPortableContainer(item) ? bagIcon : ''}</button>`;
   const overlapsAnotherItem = (state, item) => {
@@ -457,7 +519,31 @@
     const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })), link = document.createElement('a');
     link.hidden = true; link.href = url; link.download = name.replace(/[\\/:*?"<>|]+/g, '-') + '.json'; document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
-  const refresh = () => window.FableCharacterBuilder?.renderPanel('inventory');
+  const refresh = () => {
+    window.FableCharacterBuilder?.refreshSheet?.();
+    window.FableCharacterBuilder?.renderPanel('inventory');
+  };
+  const attachmentFits = (attachment, target) => {
+    const rule = String(attachment?.attachableTo || '').toLowerCase();
+    if (!rule || isAttachment(target)) return false;
+    if (/shield/.test(rule) && isShield(target)) return true;
+    if (!isFirearm(target)) return false;
+    if (/two-handed/.test(rule) && !/two-handed/i.test(target.properties || '')) return false;
+    if (/non-burst/.test(rule) && /burst fire|explosive/i.test(target.properties || '')) return false;
+    if (/advanced/.test(rule) && !/advanced/i.test(`${target.category || ''} ${target.type || ''}`)) return false;
+    return /firearm/.test(rule);
+  };
+  const attachmentTargets = (attachment, state) => state.inventory.filter((target) => attachmentFits(attachment, target) && !state.inventory.some((other) => other !== attachment && other.attachmentTargetId === target.id));
+  const toggleEquipped = (item, state) => {
+    if (item.equipped) { item.equipped = false; return true; }
+    if (isWeapon(item)) {
+      if (state.inventory.filter((entry) => entry.equipped && isWeapon(entry)).length >= 2) return false;
+    } else if (isArmor(item)) {
+      state.inventory.filter((entry) => entry.equipped && isArmor(entry) && isShield(entry) === isShield(item)).forEach((entry) => { entry.equipped = false; });
+    } else return false;
+    item.equipped = true;
+    return true;
+  };
 
   const openItem = (host, state, item) => {
     const aside = host.querySelector('.inventory-inspector'), shape = itemShape(item), container = isPortableContainer(item), contents = container ? contentsFor(state, item) : [], loaded = contents.length > 0;
@@ -466,6 +552,8 @@
     const workshop = workshopProfile(item);
     const weapon = isWeapon(item);
     const armor = isArmor(item);
+    const attachment = isAttachment(item);
+    const armorRules = armor ? window.FableCharacterBuilder?.equipmentRules?.(item) : null;
     const displayedProficiency = Math.max(2, Number(document.querySelector('#sheet-proficiency')?.textContent?.match(/\d+/)?.[0]) || 2);
     const workshopProficiency = Math.max(2, Number(item.workshopProficiencyBonus) || displayedProficiency);
     const workshopBonus = workshopProficiency * (item.workshopExpertise ? 2 : 1);
@@ -476,13 +564,21 @@
     const weaponMarkup = weapon ? `<label class="inventory-edit-fields__wide">Damage<input data-damage value="${escapeHtml(item.baseDamage || item.damage || '')}"></label><label class="inventory-edit-fields__wide">Properties<input data-properties value="${escapeHtml(item.properties || '')}"></label>` : '';
     const storageMarkup = !container && availableContainers.length ? `<section class="inventory-storage-actions"><span>Move to container</span><div>${availableContainers.map((target) => `<button type="button" data-store-in="${escapeHtml(target.id)}">${bagIcon}${escapeHtml(target.name)}</button>`).join('')}</div></section>` : '';
     const contentsMarkup = container ? `<section class="inventory-container-contents"><div class="inventory-container-contents__heading"><span>${bagIcon}<strong>Inside</strong></span><small>${contents.length} item${contents.length === 1 ? '' : 's'} · ${Number(item.contentsWeight || 0).toFixed(2)} lb.</small></div>${contents.length ? contents.map((content) => `<div class="inventory-container-content"><span>${escapeHtml(content.name)}<small>${Number(content.weight || 0).toFixed(2)} lb.</small></span><button type="button" data-remove-contained="${escapeHtml(content.id)}">Take out</button></div>`).join('') : '<p>Drag an item onto this container to store it.</p>'}</section>` : '';
-    aside.innerHTML = `<div class="inventory-inspector__heading"><div><span>${escapeHtml(item.type || 'Item')}</span><h3>${escapeHtml(item.name)}${container ? bagIcon : ''}</h3></div><button type="button" data-close aria-label="Close item details">×</button></div><p>${escapeHtml(item.description || 'No description.')}</p>${item.damage ? `<p><strong>Damage:</strong> ${escapeHtml(item.damage)}</p>` : ''}${item.properties ? `<p><strong>Properties:</strong> ${escapeHtml(item.properties)}</p>` : ''}${container ? `<p class="inventory-container-load"><strong>Loaded weight:</strong> ${Number(item.loadedWeight || item.weight || 0).toFixed(2)} lb. · ${shape.occupiedUnits} cubes</p>` : ''}${contentsMarkup}<div class="inventory-edit-fields"><label>Weight (lb.)<input data-weight type="number" min="0" step="0.01" value="${item.weight}"></label><label>HP (max ${item.maxHp})<input data-hp type="number" min="0" max="${item.maxHp}" step="1" value="${item.hp}"></label><label>Item size<select data-size>${Object.keys(equipmentSizeMultipliers).map((size) => `<option${item.size === size ? ' selected' : ''}>${size}</option>`).join('')}</select></label><label>Durability<select data-durability><option${item.durability === 'Fragile' ? ' selected' : ''}>Fragile</option><option${item.durability === 'Resilient' ? ' selected' : ''}>Resilient</option></select></label><label>Cubes<input data-cubes type="number" min="0.25" step="0.25" value="${shape.occupiedUnits}"${loaded ? ' disabled title="Loaded containers use their combined weight"' : ''}></label><label>Cube width<input data-width type="number" min="1" max="15" step="1" value="${shape.width}"${loaded ? ' disabled title="Loaded containers use their combined weight"' : ''}></label><label>Cube height<input data-height type="number" min="1" step="1" value="${shape.height}"${loaded ? ' disabled title="Loaded containers use their combined weight"' : ''}></label></div><div class="inventory-inspector__actions"><button type="button" data-rotate>Rotate</button><button type="button" data-export>Export Item</button><button type="button" data-delete>Delete</button></div>`;
+    const equippedWeapons = state.inventory.filter((entry) => entry.equipped && isWeapon(entry)).length;
+    const equipmentMarkup = weapon || armor ? `<section class="inventory-equipment"><header><strong>Equipment</strong><span>${item.equipped ? 'Equipped' : 'Unequipped'}</span></header>${armorRules ? `<p><b>Proficiency</b><span>${armorRules.proficient ? 'Proficient' : 'Not proficient'}</span></p>${!armorRules.proficient ? '<small>Strength and Dexterity checks, attacks, and saves have disadvantage while equipped.</small>' : ''}` : ''}${armor && item.armorClass ? `<p><b>Armor Class</b><span>${escapeHtml(item.armorClass)}</span></p>` : ''}${armor && item.strengthRequirement ? `<p><b>Strength</b><span>${item.strengthRequirement}</span></p>` : ''}${armor && item.stealthDisadvantage ? '<p><b>Stealth</b><span>Disadvantage</span></p>' : ''}<button type="button" data-equip${!item.equipped && weapon && equippedWeapons >= 2 ? ' disabled title="Unequip a weapon first"' : ''}>${item.equipped ? 'Unequip' : 'Equip'}</button></section>` : '';
+    const currentTarget = state.inventory.find((entry) => entry.id === item.attachmentTargetId);
+    const targets = attachment ? attachmentTargets(item, state) : [];
+    const attachmentMarkup = attachment ? `<section class="inventory-equipment"><header><strong>Attachment</strong><span>${escapeHtml(item.attachableTo || 'No valid targets')}</span></header><label>Attached to<select data-attachment-target><option value="">Not attached</option>${[...(currentTarget ? [currentTarget] : []), ...targets.filter((target) => target !== currentTarget)].map((target) => `<option value="${escapeHtml(target.id)}"${target.id === item.attachmentTargetId ? ' selected' : ''}>${escapeHtml(target.name)}</option>`).join('')}</select></label></section>` : '';
+    const attachedMarkup = weapon || armor ? state.inventory.filter((entry) => entry.attachmentTargetId === item.id).map((entry) => `<p class="inventory-attached"><strong>Attachment:</strong> ${escapeHtml(entry.name)}</p>`).join('') : '';
+    aside.innerHTML = `<div class="inventory-inspector__heading"><div><span>${escapeHtml(item.type || 'Item')}</span><h3>${escapeHtml(item.name)}${container ? bagIcon : ''}</h3></div><button type="button" data-close aria-label="Close item details">×</button></div><p>${escapeHtml(item.description || 'No description.')}</p>${item.damage ? `<p><strong>Damage:</strong> ${escapeHtml(item.damage)}</p>` : ''}${item.properties ? `<p><strong>Properties:</strong> ${escapeHtml(item.properties)}</p>` : ''}${attachedMarkup}${equipmentMarkup}${attachmentMarkup}${container ? `<p class="inventory-container-load"><strong>Loaded weight:</strong> ${Number(item.loadedWeight || item.weight || 0).toFixed(2)} lb. · ${shape.occupiedUnits} cubes</p>` : ''}${contentsMarkup}<div class="inventory-edit-fields"><label>Weight (lb.)<input data-weight type="number" min="0" step="0.01" value="${item.weight}"></label><label>HP (max ${item.maxHp})<input data-hp type="number" min="0" max="${item.maxHp}" step="1" value="${item.hp}"></label><label>Item size<select data-size>${Object.keys(equipmentSizeMultipliers).map((size) => `<option${item.size === size ? ' selected' : ''}>${size}</option>`).join('')}</select></label><label>Durability<select data-durability><option${item.durability === 'Fragile' ? ' selected' : ''}>Fragile</option><option${item.durability === 'Resilient' ? ' selected' : ''}>Resilient</option></select></label><label>Cubes<input data-cubes type="number" min="0.25" step="0.25" value="${shape.occupiedUnits}"${loaded ? ' disabled title="Loaded containers use their combined weight"' : ''}></label><label>Cube width<input data-width type="number" min="1" max="15" step="1" value="${shape.width}"${loaded ? ' disabled title="Loaded containers use their combined weight"' : ''}></label><label>Cube height<input data-height type="number" min="1" step="1" value="${shape.height}"${loaded ? ' disabled title="Loaded containers use their combined weight"' : ''}></label></div><div class="inventory-inspector__actions"><button type="button" data-rotate>Rotate</button><button type="button" data-export>Export Item</button><button type="button" data-delete>Delete</button></div>`;
     aside.hidden = false;
     if (storageMarkup) aside.querySelector('.inventory-edit-fields').insertAdjacentHTML('beforebegin', storageMarkup);
     if (workshopMarkup) aside.querySelector('.inventory-edit-fields').insertAdjacentHTML('beforebegin', workshopMarkup);
     aside.querySelector('.inventory-edit-fields').insertAdjacentHTML('beforebegin', conditionMarkup);
     if (weaponMarkup) aside.querySelector('.inventory-edit-fields').insertAdjacentHTML('afterbegin', weaponMarkup);
     aside.querySelector('[data-close]').onclick = () => { state.selectedInventoryItemId = ''; aside.hidden = true; };
+    aside.querySelector('[data-equip]')?.addEventListener('click', () => { if (toggleEquipped(item, state)) refresh(); });
+    aside.querySelector('[data-attachment-target]')?.addEventListener('change', (event) => { item.attachmentTargetId = event.target.value || ''; refresh(); });
     aside.querySelector('[data-workshop-toggle]')?.addEventListener('click', () => { item.workshop = !item.workshop; item.workshopProficiencyBonus ||= displayedProficiency; setWorkshopProperty(item, item.workshop); syncItemHp(item, true); refresh(); });
     aside.querySelector('[data-workshop-proficiency]')?.addEventListener('change', (event) => { item.workshopProficiencyBonus = Math.max(2, Math.floor(Number(event.target.value) || displayedProficiency)); syncItemHp(item, true); refresh(); });
     aside.querySelector('[data-workshop-expertise]')?.addEventListener('click', () => { item.workshopExpertise = !item.workshopExpertise; syncItemHp(item, true); refresh(); });
@@ -499,14 +595,15 @@
     aside.querySelector('[data-width]').onchange = updateShape; aside.querySelector('[data-height]').onchange = updateShape;
     aside.querySelector('[data-rotate]').onclick = () => { item.rotation = ((item.rotation || 0) + 90) % (isWeapon(item) && !item.customShape ? 360 : 180); item.x = null; item.y = null; item.manuallyPlaced = false; refresh(); };
     aside.querySelector('[data-export]').onclick = () => { const exported = { ...item, id: undefined, x: null, y: null, loadedWeight: undefined, contentsWeight: undefined, containerId: undefined }; download(item.name || 'item', { format: 'fable-inventory-item', version: 1, item: exported }); };
-    aside.querySelector('[data-delete]').onclick = () => { contentsFor(state, item).forEach((content) => { delete content.containerId; content.x = null; content.y = null; content.manuallyPlaced = false; }); state.selectedInventoryItemId = ''; state.inventory = state.inventory.filter((entry) => entry.id !== item.id); refresh(); };
+    aside.querySelector('[data-delete]').onclick = () => { contentsFor(state, item).forEach((content) => { delete content.containerId; content.x = null; content.y = null; content.manuallyPlaced = false; }); state.inventory.forEach((entry) => { if (entry.attachmentTargetId === item.id) entry.attachmentTargetId = ''; }); state.selectedInventoryItemId = ''; state.inventory = state.inventory.filter((entry) => entry.id !== item.id); refresh(); };
   };
 
   const render = async (host, state) => {
     await loadCatalog(); if (!host.isConnected) return;
-    seedInventory(state); applyInitialEquipmentScale(state); state.inventory.forEach((item) => { item.category ||= catalogItem(item.name)?.category; item.size ||= 'Medium'; if (item.workshop === undefined) item.workshop = /(?:^|,)\s*workshop\s*(?:,|$)/i.test(item.properties || ''); syncItemHp(item); }); autoPlace(state);
+    seedInventory(state); repairLegacyEquipmentGrants(state); applyInitialEquipmentScale(state); state.inventory.forEach((item) => { enrichItem(item); item.size ||= 'Medium'; if (item.workshop === undefined) item.workshop = /(?:^|,)\s*workshop\s*(?:,|$)/i.test(item.properties || ''); syncItemHp(item); }); autoPlace(state);
     const status = statusFor(state), rows = Math.max(1, status.rows);
     window.FableCharacterBuilder?.applyEncumbrance(status.mode);
+    window.FableCharacterBuilder?.refreshEquipment?.();
     const cells = Array.from({ length: rows * columns }, (_, index) => { const column = index % columns, zone = index >= status.total ? 'overflow' : column < 5 ? 'clear' : column < 10 ? 'encumbered' : 'heavy'; return `<span class="inventory-cell inventory-cell--${zone}" style="grid-column:${column + 1};grid-row:${Math.floor(index / columns) + 1}"></span>`; }).join('');
     const topLevel = carriedItems(state);
     const placedItems = topLevel.filter((item) => Number.isFinite(item.x) && Number.isFinite(item.y));
@@ -598,11 +695,13 @@
     await loadCatalog();
     removeLegacyPhantomCart(state);
     seedInventory(state);
+    repairLegacyEquipmentGrants(state);
     applyInitialEquipmentScale(state);
-    state.inventory.forEach((item) => { item.category ||= catalogItem(item.name)?.category; item.size ||= 'Medium'; if (item.workshop === undefined) item.workshop = /(?:^|,)\s*workshop\s*(?:,|$)/i.test(item.properties || ''); syncItemHp(item); });
+    state.inventory.forEach((item) => { enrichItem(item); item.size ||= 'Medium'; if (item.workshop === undefined) item.workshop = /(?:^|,)\s*workshop\s*(?:,|$)/i.test(item.properties || ''); syncItemHp(item); });
     autoPlace(state);
     const status = statusFor(state);
     window.FableCharacterBuilder?.applyEncumbrance(status.mode);
+    window.FableCharacterBuilder?.refreshEquipment?.();
     return status;
   };
   window.FableInventory = { render, sync };
